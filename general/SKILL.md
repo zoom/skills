@@ -178,6 +178,7 @@ Both receive event notifications, but differ in approach:
 - **[references/app-types.md](references/app-types.md)** - Decision guide for app types
 - **[references/scopes.md](references/scopes.md)** - OAuth scopes reference
 - **[references/marketplace.md](references/marketplace.md)** - Marketplace portal navigation
+- **[references/query-routing-playbook.md](references/query-routing-playbook.md)** - Route complex queries to the right specialized skills
 
 ## SDK Maintenance
 

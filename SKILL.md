@@ -2,7 +2,7 @@
 name: zoom-skills
 description: |
   Zoom Developer Platform skills organized by product. Each folder contains product-specific 
-  documentation and use cases. The general folder contains generic, cross-product skills 
+  documentation and use cases. The zoom-general folder contains generic, cross-product skills 
   and references.
 ---
 
@@ -54,15 +54,15 @@ To improve routing quality in any skill:
 - Add practical `triggers` for common user phrasing.
 - Avoid overlapping triggers between Meeting SDK, Video SDK, and REST API intents.
 
-## general (Hub)
+## zoom-general (Hub)
 
-The `general` folder contains:
+The `zoom-general` folder contains:
 
 - **Cross-product use cases** - Tasks that span multiple Zoom products
 - **Generic references** - Authentication, app types, scopes
 - **Shared documentation** - SDK maintenance, troubleshooting, marketplace publishing
 
-Use `general` when:
+Use `zoom-general` when:
 - You're starting a new Zoom integration and need to choose the right approach
 - Your use case involves multiple Zoom products
 - You need general platform documentation (auth, scopes, etc.)
@@ -72,12 +72,12 @@ Use `general` when:
 | I want to... | Use this skill |
 |--------------|----------------|
 | Make API calls (create meetings, manage users) | **zoom-rest-api** |
-| Receive event notifications (HTTP push) | **webhooks** |
+| Receive event notifications (HTTP push) | **zoom-webhooks** |
 | Receive event notifications (WebSocket) | **zoom-websockets** |
 | Embed Zoom meetings in my app | **zoom-meeting-sdk** |
 | Build custom video experiences | **zoom-video-sdk** |
 | Build an app inside Zoom client | **zoom-apps-sdk** |
-| Access live audio/video/transcripts | **rtms** |
+| Access live audio/video/transcripts | **zoom-rtms** |
 | Build Team Chat integrations | **zoom-team-chat** |
 | Build Contact Center integrations (apps/web/mobile) | **contact-center** |
 | Build Zoom Phone integrations (Smart Embed, APIs, webhooks, URI launch) | **phone** |
@@ -85,8 +85,8 @@ Use `general` when:
 | Run browser/device/network preflight diagnostics before join | **probe-sdk** |
 | Use pre-built video UI components | **zoom-ui-toolkit** |
 | Enable co-browsing for support | **zoom-cobrowse-sdk** |
-| Implement OAuth authentication | **oauth** |
-| General/cross-product guidance | **general** |
+| Implement OAuth authentication | **zoom-oauth** |
+| General/cross-product guidance | **zoom-general** |
 
 ## Resources
 
