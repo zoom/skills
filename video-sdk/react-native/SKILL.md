@@ -6,7 +6,7 @@ description: |
 triggers:
   - react native video sdk
   - zoom react native video sdk
-  - @zoom/react-native-videosdk
+  - "@zoom/react-native-videosdk"
   - custom video react native
   - react native session join
   - zoom videosdk react native
