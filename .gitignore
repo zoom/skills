@@ -1,0 +1,35 @@
+# Crawled raw documentation (not curated)
+raw-docs/
+
+# Tools and utilities
+tools/
+md-graph/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.env
+
+# Node
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Meta-documentation (development artifacts)
+learnings.md
+REVIEW.md
+review.md
+SUMMARY.md
+summary.md
+instructions.md
