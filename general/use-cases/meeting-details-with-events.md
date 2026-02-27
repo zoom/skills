@@ -6,6 +6,11 @@ Retrieve meeting details and subscribe to real-time meeting events.
 
 A common integration pattern: get meeting information via REST API, then receive real-time updates via webhooks when meeting events occur (started, ended, participants join/leave).
 
+For implementation-heavy orchestration patterns (token refresh locks, retries, queue-based webhook handling, circuit-breaker and reconciliation fallbacks), see:
+- [../references/automatic-skill-chaining-rest-webhooks.md](../references/automatic-skill-chaining-rest-webhooks.md)
+- [../references/meeting-webhooks-oauth-refresh-orchestration.md](../references/meeting-webhooks-oauth-refresh-orchestration.md)
+- [../references/distributed-meeting-fallback-architecture.md](../references/distributed-meeting-fallback-architecture.md)
+
 ## Skills Needed
 
 | Order | Skill | Purpose |
