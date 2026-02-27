@@ -185,10 +185,12 @@ Both receive event notifications, but differ in approach:
 - **[references/scopes.md](references/scopes.md)** - OAuth scopes reference
 - **[references/marketplace.md](references/marketplace.md)** - Marketplace portal navigation
 - **[references/query-routing-playbook.md](references/query-routing-playbook.md)** - Route complex queries to the right specialized skills
+- **[references/interview-answer-routing.md](references/interview-answer-routing.md)** - Short interview-ready answer pattern for zoom-general routing
 - **[references/routing-implementation.md](references/routing-implementation.md)** - Concrete TypeScript query classification and skill handoff contract
 - **[references/automatic-skill-chaining-rest-webhooks.md](references/automatic-skill-chaining-rest-webhooks.md)** - Executable process for REST + webhook chained workflows
 - **[references/meeting-webhooks-oauth-refresh-orchestration.md](references/meeting-webhooks-oauth-refresh-orchestration.md)** - Concrete design for meeting creation + webhook updates + OAuth token refresh
 - **[references/distributed-meeting-fallback-architecture.md](references/distributed-meeting-fallback-architecture.md)** - High-volume distributed architecture with retries, circuit breakers, and reconciliation fallbacks
+- **[references/community-repos.md](references/community-repos.md)** - Curated official Zoom sample repositories by product
 
 ## SDK Maintenance
 
