@@ -275,10 +275,10 @@ async function exitLayers() {
 
 ## Detailed Guides
 
-- **[zoom-apps-sdk SKILL.md](/zoom-apps-sdk/SKILL.md)** - Comprehensive SDK guide
-- **[Quick Start](/zoom-apps-sdk/examples/quick-start.md)** - Hello World app
-- **[In-Client OAuth](/zoom-apps-sdk/examples/in-client-oauth.md)** - Authorization flow
-- **[Layers API](/zoom-apps-sdk/references/layers-api.md)** - Immersive experiences
+- **[zoom-apps-sdk SKILL.md](../../zoom-apps-sdk/SKILL.md)** - Comprehensive SDK guide
+- **[Quick Start](../../zoom-apps-sdk/examples/quick-start.md)** - Hello World app
+- **[In-Client OAuth](../../zoom-apps-sdk/examples/in-client-oauth.md)** - Authorization flow
+- **[Layers API](../../zoom-apps-sdk/references/layers-api.md)** - Immersive experiences
 - **[Immersive Experiences](immersive-experiences.md)** - Custom video layouts
 - **[Collaborative Apps](collaborative-apps.md)** - Real-time shared state
 

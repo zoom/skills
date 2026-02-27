@@ -68,9 +68,9 @@ const { participants } = await zoomSdk.getMeetingParticipants();
 
 ## Detailed Guides
 
-- **[Layers Immersive Example](/zoom-apps-sdk/examples/layers-immersive.md)** - Complete podcast layout code
-- **[Layers API Reference](/zoom-apps-sdk/references/layers-api.md)** - All drawing methods
-- **[Camera Mode Example](/zoom-apps-sdk/examples/layers-camera.md)** - Virtual camera overlays
+- **[Layers Immersive Example](../../zoom-apps-sdk/examples/layers-immersive.md)** - Complete podcast layout code
+- **[Layers API Reference](../../zoom-apps-sdk/references/layers-api.md)** - All drawing methods
+- **[Camera Mode Example](../../zoom-apps-sdk/examples/layers-camera.md)** - Virtual camera overlays
 - **Sample app**: https://github.com/zoom/zoomapps-customlayout-js
 
 ## Skill Chain

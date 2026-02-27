@@ -77,9 +77,9 @@ const { meetingUUID } = await zoomSdk.getMeetingUUID();
 
 ## Detailed Guides
 
-- **[Collaborate Mode Example](/zoom-apps-sdk/examples/collaborate-mode.md)** - Complete implementation
-- **[App Communication](/zoom-apps-sdk/examples/app-communication.md)** - Instance messaging
-- **[Breakout Rooms](/zoom-apps-sdk/examples/breakout-rooms.md)** - Cross-room state sync
+- **[Collaborate Mode Example](../../zoom-apps-sdk/examples/collaborate-mode.md)** - Complete implementation
+- **[App Communication](../../zoom-apps-sdk/examples/app-communication.md)** - Instance messaging
+- **[Breakout Rooms](../../zoom-apps-sdk/examples/breakout-rooms.md)** - Cross-room state sync
 - **Sample app**: https://github.com/zoom/zoomapps-texteditor-vuejs
 
 ## Skill Chain
