@@ -46,6 +46,156 @@ Recovery Services
   -> Dead Letter Reprocessor
 ```
 
+## Command Plane Example (Meeting Creation Service)
+
+```ts
+type CreateMeetingInput = {
+  idempotencyKey: string;
+  hostUserId: string; // explicit user for S2S
+  topic: string;
+  startTime: string;
+  duration: number;
+};
+
+type QueuePublisher = { publish: (topic: string, payload: object) => Promise<void> };
+type IdempotencyStore = {
+  get: (key: string) => Promise<object | null>;
+  put: (key: string, value: object, ttlSec: number) => Promise<void>;
+};
+
+export async function createMeetingCommand(
+  input: CreateMeetingInput,
+  deps: {
+    tokenBroker: { getToken: () => Promise<string> };
+    idempotency: IdempotencyStore;
+    queue: QueuePublisher;
+    breaker: CircuitBreaker;
+  },
+) {
+  const cached = await deps.idempotency.get(input.idempotencyKey);
+  if (cached) return cached;
+
+  if (!deps.breaker.canCall()) {
+    // degraded mode: queue command for delayed processing
+    await deps.queue.publish('meeting.create.delayed', input);
+    return { accepted: true, mode: 'degraded_queued' };
+  }
+
+  const op = async () => {
+    const token = await deps.tokenBroker.getToken();
+    const res = await fetch(
+      `https://api.zoom.us/v2/users/${encodeURIComponent(input.hostUserId)}/meetings`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          topic: input.topic,
+          type: 2,
+          start_time: input.startTime,
+          duration: input.duration,
+        }),
+      },
+    );
+    if (!res.ok) {
+      const err = new Error(`zoom_create_failed:${res.status}`);
+      (err as any).status = res.status;
+      throw err;
+    }
+    return res.json();
+  };
+
+  try {
+    const created = await retry(
+      op,
+      { retries: 4, baseMs: 300, maxMs: 5000 },
+      (e) => [429, 500, 502, 503, 504].includes((e as any).status),
+    );
+
+    deps.breaker.recordSuccess();
+    await deps.idempotency.put(input.idempotencyKey, created, 3600);
+    await deps.queue.publish('meeting.created', { meetingId: created.id, hostUserId: input.hostUserId });
+    return created;
+  } catch (e) {
+    deps.breaker.recordFailure();
+    throw e;
+  }
+}
+```
+
+## Event Plane Example (Webhook Ingress + Queue + Projection)
+
+```ts
+import crypto from 'crypto';
+
+export function verifyWebhook(rawBody: string, ts: string, sig: string, secret: string): boolean {
+  // reject stale requests to reduce replay risk
+  const nowSec = Math.floor(Date.now() / 1000);
+  const tsSec = Number(ts || 0);
+  if (!Number.isFinite(tsSec) || Math.abs(nowSec - tsSec) > 300) return false;
+
+  const msg = `v0:${ts}:${rawBody}`;
+  const expected = `v0=${crypto.createHmac('sha256', secret).update(msg).digest('hex')}`;
+  return sig === expected;
+}
+
+export async function ingestWebhook(req: any, res: any, queue: QueuePublisher, secret: string) {
+  if (req.body.event === 'endpoint.url_validation') {
+    const plainToken = req.body.payload?.plainToken;
+    const encryptedToken = crypto.createHmac('sha256', secret).update(plainToken).digest('hex');
+    return res.json({ plainToken, encryptedToken });
+  }
+
+  const ts = String(req.headers['x-zm-request-timestamp'] || '');
+  const sig = String(req.headers['x-zm-signature'] || '');
+  const raw = String(req.rawBody || '');
+  if (!verifyWebhook(raw, ts, sig, secret)) return res.status(401).send('invalid_signature');
+
+  try {
+    // durable write first, then ack
+    await queue.publish('zoom.webhook.raw', req.body);
+    return res.status(200).send('ok');
+  } catch {
+    // non-200 triggers Zoom retry for at-least-once delivery
+    return res.status(503).send('queue_unavailable');
+  }
+}
+
+export async function projectEvent(evt: any, stateStore: any, dedupe: IdempotencyStore) {
+  const dedupeKey = `${evt.event}:${evt.event_ts}:${evt.payload?.object?.uuid || evt.payload?.object?.id || 'unknown'}`;
+  const seen = await dedupe.get(dedupeKey);
+  if (seen) return;
+
+  const id = String(evt.payload?.object?.id || '');
+  const current = (await stateStore.get(id)) || { status: 'unknown', participants: 0, lastEventTs: 0 };
+  if (evt.event_ts < current.lastEventTs) {
+    await dedupe.put(dedupeKey, { stale: true }, 86400);
+    return;
+  } // stale event guard
+
+  if (evt.event === 'meeting.started') current.status = 'in_progress';
+  if (evt.event === 'meeting.ended') current.status = 'ended';
+  if (evt.event === 'meeting.participant_joined') current.participants += 1;
+  if (evt.event === 'meeting.participant_left') current.participants = Math.max(0, current.participants - 1);
+  current.lastEventTs = evt.event_ts;
+
+  await stateStore.put(id, current);
+  await dedupe.put(dedupeKey, { ok: true }, 86400);
+}
+```
+
+### Express raw-body setup (required for signature verification)
+
+```ts
+app.use(express.json({
+  verify: (req: any, _res, buf) => {
+    req.rawBody = buf.toString('utf8');
+  },
+}));
+```
+
 ## Retry + Circuit Breaker Example (TypeScript)
 
 ```ts
@@ -98,6 +248,57 @@ export class CircuitBreaker {
     if (this.failures >= this.threshold) {
       this.openUntil = Date.now() + this.coolDownMs;
     }
+  }
+}
+```
+
+## Reconciliation Poller Example (Fallback for Missed Events)
+
+```ts
+export async function reconcileMeetingState(
+  meetingId: string,
+  hostUserId: string,
+  deps: {
+    tokenBroker: { getToken: () => Promise<string> };
+    stateStore: { get: (id: string) => Promise<any>; put: (id: string, v: any) => Promise<void> };
+  },
+) {
+  const token = await deps.tokenBroker.getToken();
+  const res = await fetch(`https://api.zoom.us/v2/meetings/${encodeURIComponent(meetingId)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) return;
+
+  const apiState = await res.json();
+  const projected = (await deps.stateStore.get(meetingId)) || {};
+  const merged = {
+    ...projected,
+    status: apiState.status || projected.status,
+    topic: apiState.topic || projected.topic,
+    hostId: hostUserId,
+    reconciledAt: Date.now(),
+  };
+  await deps.stateStore.put(meetingId, merged);
+}
+```
+
+## Distributed Coordination and Load-Balancing Considerations
+
+- Partition command/event streams by `meetingId` or `hostUserId` so all updates for one meeting land on the same consumer shard.
+- Use a distributed lock for shared singleton jobs (token refresh rotation, reconciliation scheduler leader).
+- Keep webhook ingress stateless so horizontal autoscaling is safe behind L4/L7 load balancers.
+- Apply queue consumer concurrency limits to protect downstream Zoom API quotas.
+
+### Redis-Style Lock Skeleton
+
+```ts
+export async function withLock(lock: { acquire: (k: string, ttlMs: number) => Promise<boolean>; release: (k: string) => Promise<void> }, key: string, fn: () => Promise<void>) {
+  const got = await lock.acquire(key, 10_000);
+  if (!got) return;
+  try {
+    await fn();
+  } finally {
+    await lock.release(key);
   }
 }
 ```
