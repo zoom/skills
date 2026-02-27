@@ -28,6 +28,7 @@ This repository contains skills for building with Zoom APIs and SDKs, focused on
 | **[zoom-apps-sdk](zoom-apps-sdk/SKILL.md)** | Apps that run inside the Zoom client |
 | **[zoom-rtms](rtms/SKILL.md)** | Real-Time Media Streams (live audio/video/transcripts) |
 | **[zoom-team-chat](team-chat/SKILL.md)** | Team Chat messaging and channels |
+| **[virtual-agent](virtual-agent/SKILL.md)** | Virtual Agent web/mobile chat embeds and KB sync workflows |
 | **[contact-center](contact-center/SKILL.md)** | Contact Center apps, web embeds, and native mobile SDK integrations |
 | **[phone](phone/SKILL.md)** | Zoom Phone APIs, Smart Embed, URI schemes, webhooks, and call-history migration patterns |
 | **[rivet-sdk](rivet-sdk/SKILL.md)** | Rivet JavaScript server framework for OAuth, webhook events, and typed API endpoint wrappers |
@@ -79,6 +80,7 @@ Use `zoom-general` when:
 | Build an app inside Zoom client | **zoom-apps-sdk** |
 | Access live audio/video/transcripts | **zoom-rtms** |
 | Build Team Chat integrations | **zoom-team-chat** |
+| Build Virtual Agent chat/campaign experiences | **virtual-agent** |
 | Build Contact Center integrations (apps/web/mobile) | **contact-center** |
 | Build Zoom Phone integrations (Smart Embed, APIs, webhooks, URI launch) | **phone** |
 | Build Rivet-based server integrations (optional) | **rivet-sdk** |

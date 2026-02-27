@@ -35,6 +35,7 @@ Entry point for building with Zoom. This skill helps you choose the right SDK or
 | Access live audio/video/transcripts from meetings | **[zoom-rtms](../rtms/SKILL.md)** |
 | Enable collaborative browsing for support | **[zoom-cobrowse-sdk](../cobrowse-sdk/SKILL.md)** |
 | Build Contact Center apps and channel integrations | **[contact-center](../contact-center/SKILL.md)** |
+| Build Virtual Agent web/mobile chatbot experiences | **[virtual-agent](../virtual-agent/SKILL.md)** |
 | Build Zoom Phone integrations (Smart Embed, Phone API, webhooks, URI flows) | **[phone](../phone/SKILL.md)** |
 | Build Team Chat apps and integrations | **[zoom-team-chat](../team-chat/SKILL.md)** |
 | Build server-side integrations with Rivet (auth + webhooks + APIs) | **[rivet-sdk](../rivet-sdk/SKILL.md)** |
@@ -65,6 +66,7 @@ Routing after answer:
 Routing guardrails:
 - If user asks for SDK embed/join behavior, stay in SDK path.
 - Only use REST path for resource management, reporting, or link distribution unless user explicitly requests a mixed architecture.
+- For executable classification/chaining logic and error handling, see [references/routing-implementation.md](references/routing-implementation.md).
 
 ### Webhooks vs WebSockets
 
@@ -98,6 +100,8 @@ Both receive event notifications, but differ in approach:
 | [Collaborative Apps](use-cases/collaborative-apps.md) | Real-time shared state in meetings | [zoom-apps-sdk](../zoom-apps-sdk/SKILL.md) |
 | [Forum Triage Skill Coverage](use-cases/forum-triage-skill-coverage.md) | Cluster and label forum threads to improve skill coverage | [zoom-general](SKILL.md) + product skills |
 | [Contact Center App Lifecycle and Context Switching](use-cases/contact-center-app-lifecycle-and-context-switching.md) | Build Contact Center apps that handle engagement events and multi-engagement state | [contact-center](../contact-center/SKILL.md) + [zoom-apps-sdk](../zoom-apps-sdk/SKILL.md) |
+| [Virtual Agent Campaign Web and Mobile Wrapper](use-cases/virtual-agent-campaign-web-mobile-wrapper.md) | Deliver one campaign-driven bot flow across web and native mobile wrappers | [virtual-agent](../virtual-agent/SKILL.md) + [contact-center](../contact-center/SKILL.md) |
+| [Virtual Agent Knowledge Base Sync Pipeline](use-cases/virtual-agent-knowledge-base-sync-pipeline.md) | Sync external knowledge content into Zoom Virtual Agent using web sync or custom API connectors | [virtual-agent](../virtual-agent/SKILL.md) + [zoom-rest-api](../rest-api/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [Zoom Phone Smart Embed CRM Integration](use-cases/zoom-phone-smart-embed-crm.md) | Build CRM dialer and call logging flows using Smart Embed plus Phone APIs | [phone](../phone/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) + [zoom-webhooks](../webhooks/SKILL.md) |
 | [Rivet Event-Driven API Orchestrator](use-cases/rivet-event-driven-api-orchestrator.md) | Build a Node.js backend that combines webhooks and API actions through Rivet module clients | [rivet-sdk](../rivet-sdk/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) + [zoom-rest-api](../rest-api/SKILL.md) |
 | [Probe SDK Preflight Readiness Gate](use-cases/probe-sdk-preflight-readiness-gate.md) | Add browser/device/network diagnostics and readiness policy before Meeting SDK or Video SDK joins | [probe-sdk](../probe-sdk/SKILL.md) + [zoom-meeting-sdk](../meeting-sdk/SKILL.md) or [zoom-video-sdk](../video-sdk/SKILL.md) |
@@ -110,6 +114,8 @@ Both receive event notifications, but differ in approach:
 - [Collaborative Apps](use-cases/collaborative-apps.md): build shared in-meeting app state and interactions.
 - [Contact Center Integration](use-cases/contact-center-integration.md): connect Zoom Contact Center signals into external systems.
 - [Contact Center App Lifecycle and Context Switching](use-cases/contact-center-app-lifecycle-and-context-switching.md): implement event-driven engagement state and safe context switching in Contact Center apps.
+- [Virtual Agent Campaign Web and Mobile Wrapper](use-cases/virtual-agent-campaign-web-mobile-wrapper.md): deploy campaign-based Virtual Agent chat across website and Android/iOS WebView wrappers.
+- [Virtual Agent Knowledge Base Sync Pipeline](use-cases/virtual-agent-knowledge-base-sync-pipeline.md): automate knowledge-base ingestion with web sync strategy or custom API connector.
 - [Zoom Phone Smart Embed CRM Integration](use-cases/zoom-phone-smart-embed-crm.md): integrate Smart Embed events, Phone APIs, and CRM workflows with migration-safe data handling.
 - [Rivet Event-Driven API Orchestrator](use-cases/rivet-event-driven-api-orchestrator.md): build a Node.js backend that combines webhook handling and API orchestration with Rivet.
 - [Probe SDK Preflight Readiness Gate](use-cases/probe-sdk-preflight-readiness-gate.md): run browser/device/network diagnostics before launching meeting or video session workflows.
@@ -179,6 +185,7 @@ Both receive event notifications, but differ in approach:
 - **[references/scopes.md](references/scopes.md)** - OAuth scopes reference
 - **[references/marketplace.md](references/marketplace.md)** - Marketplace portal navigation
 - **[references/query-routing-playbook.md](references/query-routing-playbook.md)** - Route complex queries to the right specialized skills
+- **[references/routing-implementation.md](references/routing-implementation.md)** - Concrete TypeScript query classification and skill handoff contract
 
 ## SDK Maintenance
 
