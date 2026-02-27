@@ -38,4 +38,6 @@ This pattern shows up constantly in high-frequency forum clusters:
 - `../../rest-api/concepts/authentication-flows.md`
 - `../../rest-api/examples/webhook-server.md`
 - `../../webhooks/references/verification.md`
-
+- `../references/automatic-skill-chaining-rest-webhooks.md`
+- `../references/meeting-webhooks-oauth-refresh-orchestration.md`
+- `../references/distributed-meeting-fallback-architecture.md`
