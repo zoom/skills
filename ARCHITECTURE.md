@@ -30,6 +30,7 @@ Common route outcomes:
 - In-client apps -> `zoom-apps-sdk`
 - Live media streams -> `rtms`
 - Contact Center -> `contact-center`
+- Virtual Agent web/mobile chat and KB sync -> `virtual-agent`
 - Phone integrations -> `phone`
 - Rivet server integrations -> `rivet-sdk`
 - Pre-join diagnostics/readiness -> `probe-sdk`
@@ -51,6 +52,7 @@ skills/
 ├── rtms/
 ├── team-chat/
 ├── contact-center/
+├── virtual-agent/
 ├── phone/
 ├── rivet-sdk/
 ├── probe-sdk/
@@ -65,6 +67,7 @@ Platform-heavy spokes (examples):
 - `meeting-sdk`: web, android, ios, macos, unreal, electron, react-native, linux, windows
 - `video-sdk`: web, android, ios, macos, unity, react-native, flutter, linux, windows
 - `contact-center`: common + android + ios + web
+- `virtual-agent`: common + android + ios + web (campaign/chat + WebView bridges)
 
 ## Design Principles
 
@@ -98,6 +101,7 @@ Platform-heavy spokes (examples):
 | `rtms` | Real-time media streams |
 | `team-chat` | Team Chat integrations |
 | `contact-center` | Contact Center app/web/mobile integrations |
+| `virtual-agent` | Virtual Agent web/mobile chat embeds and knowledge-base sync patterns |
 | `phone` | Phone APIs, Smart Embed, URI/webhook flows |
 | `rivet-sdk` | Rivet JavaScript server framework for auth, events, and API wrappers |
 | `probe-sdk` | Browser/device/network readiness diagnostics before meeting/video join |

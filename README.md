@@ -104,6 +104,7 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | [zoom-apps-sdk](zoom-apps-sdk/) | Apps that run inside Zoom client |
 | [zoom-rtms](rtms/) | Real-time Media Streams (live audio/video/transcripts) |
 | [zoom-team-chat](team-chat/) | Team Chat APIs and integrations |
+| [virtual-agent](virtual-agent/) | Virtual Agent web embeds, Android/iOS wrappers, and KB sync workflows |
 | [contact-center](contact-center/) | Contact Center apps, web embeds, and Android/iOS native SDKs |
 | [phone](phone/) | Zoom Phone APIs, Smart Embed, URI schemes, and webhook patterns |
 | [rivet-sdk](rivet-sdk/) | Rivet JavaScript server framework for auth, webhooks, and typed endpoint wrappers |
@@ -124,6 +125,7 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | Real-time AI processing | rtms |
 | In-meeting collaborative apps | zoom-apps-sdk |
 | Team Chat integrations | zoom-team-chat |
+| Virtual Agent campaign/chat flows (web + mobile wrappers) | virtual-agent + contact-center |
 | Contact Center app/web/mobile integrations | contact-center |
 | Rivet-based event-driven API backend | rivet-sdk + oauth + zoom-rest-api |
 | Pre-join/browser readiness diagnostics | probe-sdk + meeting-sdk or video-sdk |
@@ -145,6 +147,7 @@ zoom-general (HUB)
        ├── zoom-apps-sdk
        ├── zoom-rtms
        ├── zoom-team-chat
+       ├── virtual-agent
        ├── contact-center
        ├── phone
        ├── rivet-sdk
