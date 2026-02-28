@@ -36,6 +36,7 @@ This repository contains skills for building with Zoom APIs and SDKs, focused on
 | **[zoom-ui-toolkit](ui-toolkit/SKILL.md)** | Pre-built React components for Video SDK |
 | **[zoom-cobrowse-sdk](cobrowse-sdk/SKILL.md)** | Collaborative browsing for support |
 | **[zoom-oauth](oauth/SKILL.md)** | OAuth authentication flows (all 4 grant types) |
+| **[zoom-mcp](zoom-mcp/SKILL.md)** | Official Zoom MCP Server — meeting management and recording/transcript access via Model Context Protocol |
 
 ## How to Use
 
@@ -88,6 +89,7 @@ Use `zoom-general` when:
 | Use pre-built video UI components | **zoom-ui-toolkit** |
 | Enable co-browsing for support | **zoom-cobrowse-sdk** |
 | Implement OAuth authentication | **zoom-oauth** |
+| Use Zoom's official MCP Server (meetings + transcripts) | **zoom-mcp** |
 | General/cross-product guidance | **zoom-general** |
 
 ## Resources
