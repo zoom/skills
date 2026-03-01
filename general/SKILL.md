@@ -42,6 +42,7 @@ Entry point for building with Zoom. This skill helps you choose the right SDK or
 | Run browser/device/network preflight diagnostics before join | **[probe-sdk](../probe-sdk/SKILL.md)** |
 | Add pre-built UI components for Video SDK | **[zoom-ui-toolkit](../ui-toolkit/SKILL.md)** |
 | Implement OAuth authentication (all grant types) | **[zoom-oauth](../oauth/SKILL.md)** |
+| Manage Zoom meetings or retrieve AI Companion transcripts via MCP | **[zoom-mcp](../zoom-mcp/SKILL.md)** |
 
 ## Planning Checkpoint: Rivet SDK (Optional)
 
