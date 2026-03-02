@@ -1,6 +1,11 @@
 # Search and Act — Finding Meetings and Taking Action
 
-Patterns for searching meetings by topic, participant, or date range, then acting on results.
+Patterns for searching meeting content and metadata, then acting on results.
+
+`search_meetings` uses AI Companion's Agentic Retrieval API — it searches what was
+actually said and discussed, not just meeting titles. Recap results include inline AI
+summaries and any Zoom Doc URLs attached to the meeting. See
+[examples/transcript-retrieval.md](transcript-retrieval.md) for the full retrieval workflow.
 
 ---
 
