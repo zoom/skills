@@ -1,124 +1,171 @@
-# Transcript Retrieval — Primary Use Case
+# Transcript & Summary Retrieval
 
-Retrieving meeting transcripts is the core capability of the Zoom MCP Server — it's the
-primary workflow behind the Zoom for ChatGPT app. This document walks through the complete
-end-to-end pattern.
-
----
-
-## Prerequisites
-
-Before transcripts are available:
-- AI Companion → **Smart Recording** must be enabled (generates VTT/TRANSCRIPT files)
-- The meeting must have been recorded to **cloud** (not local)
-- The recording must have completed processing (usually within minutes of meeting end)
-
-See [concepts/oauth-setup.md](../concepts/oauth-setup.md#step-4-enable-ai-companion-required-for-transcripts)
-for setup instructions.
+Retrieving meeting content is the core capability of the Zoom MCP Server — and the primary
+workflow behind the Zoom for ChatGPT app. There are two paths depending on what you need.
 
 ---
 
-## The Retrieval Workflow
+## Path 1: Agentic Retrieval (Recommended)
 
-### Step 1: Find the Meeting
+The `search_meetings` tool uses AI Companion's **Agentic Retrieval API** to search meeting
+content semantically. Results include an inline AI summary — no separate recording fetch
+needed for most use cases.
 
-If you know the meeting ID, skip to Step 2. Otherwise, search:
+### Prerequisites
 
+- AI Companion → **Smart Recording** and **Meeting Summary** must be enabled
+- Meetings must have been recorded to cloud
+
+### Step 1: Search by content or time period
+
+**By content (semantic query):**
 ```
 zoom-mcp:search_meetings
-  query: "Q4 planning"
+  query: "Q4 budget discussion"
+```
+
+**By time period:**
+```
+zoom-mcp:search_meetings
+  startDate: "2025-02-01"
+  endDate: "2025-02-28"
+  pageSize: 20
+```
+
+**Combined:**
+```
+zoom-mcp:search_meetings
+  query: "product roadmap"
   startDate: "2025-01-01"
   endDate: "2025-01-31"
 ```
 
-Or list recent meetings:
-```
-zoom-mcp:list_meetings
-  type: scheduled
-  pageSize: 20
-```
+### Step 2: Read the Recap meeting result
 
-Note the `id` of the target meeting.
+For meetings with AI Companion data, results include a **Recap meeting** type with:
+- **Inline AI summary** — the meeting summary text, returned directly in the response
+- **Zoom Doc URLs** — links to any Zoom Docs attached to or created from the meeting
+- **Recording reference** — pointer to the cloud recording
+- **Whiteboards** — links to any whiteboards from the meeting
+
+> **[CONTRIBUTOR NEEDED]** Exact field names in the Recap meeting result object. Specifically:
+> - What is the field name for the inline AI summary text?
+> - What is the structure of the docs array and each entry's fields (title, URL)?
+> - What is the field name/structure for the recording reference?
+> - What is the field name/structure for whiteboards?
+> Source: Zoom MCP Server engineering team or live `zoom-mcp:get_tool_details` output.
+
+**View recording** results provide full recording details for meetings with cloud recordings.
+
+> **[CONTRIBUTOR NEEDED]** Exact field names in the View recording result object. What does
+> it contain beyond the recording reference in Recap? Source: engineering team or API schema.
+
+### Step 3: Act on the content
+
+With the inline AI summary, Claude can immediately:
+- Answer questions about what was discussed
+- Extract action items and owners
+- Identify decisions made
+- Find specific topics or speaker contributions
+- Draft follow-up emails or meeting notes
+- Create a Zoom Doc with the content → see [examples/create-zoom-doc.md](create-zoom-doc.md)
 
 ---
 
-### Step 2: Get the Recording
+## Path 2: Raw Recording Access (When You Need More)
 
+Use this path when you need:
+- Timestamped VTT (exact moment-by-moment captions)
+- Speaker-labeled TRANSCRIPT JSON
+- The raw video or audio file
+- Content from a meeting that predates AI Companion being enabled
+
+### Step 1: Find the recording
+
+**By date range:**
+```
+zoom-mcp:list_recordings
+  from: "2025-02-01"
+  to: "2025-02-28"
+  pageSize: 50
+```
+
+**By meeting ID (from a search result):**
 ```
 zoom-mcp:get_recording
   meetingId: "84574185634"
 ```
 
-The response includes a `recording_files` array. Each entry has a `file_type` field. Look for:
+### Step 2: Locate the transcript file
+
+`get_recording` returns a `recording_files` array. Look for:
 
 | `file_type` | Contents |
 |-------------|---------|
-| `VTT` | WebVTT format — includes timestamps, suitable for navigation |
 | `TRANSCRIPT` | Structured JSON with speaker labels and timestamps |
-| `MP4` | Video recording |
+| `VTT` | WebVTT format — timestamps for every caption segment |
+| `MP4` | Full video recording |
 | `M4A` | Audio-only recording |
-| `CHAT` | In-meeting chat transcript |
-| `TIMELINE` | Meeting timeline events |
+| `CHAT` | In-meeting chat messages |
+
+### Step 3: Fetch the transcript
+
+Each file entry has a `download_url`. Fetch it with the OAuth Bearer token:
+
+```
+GET {download_url}
+Authorization: Bearer YOUR_ZOOM_OAUTH_TOKEN
+```
+
+> **Note:** The download URL is not publicly accessible — the Bearer token is required.
+> The same token used for MCP calls works for file downloads.
 
 ---
 
-### Step 3: Read the Transcript
+## Choosing the Right Path
 
-Each recording file entry includes a `download_url`. Fetch it to retrieve the content:
-
-```
-fetch: recording_files[file_type == "TRANSCRIPT"].download_url
-  Authorization: Bearer YOUR_ZOOM_OAUTH_TOKEN
-```
-
-> **Note:** The download URL requires the same OAuth token used for MCP calls. Pass it as
-> an Authorization header when fetching the file directly.
-
----
-
-### Step 4: Analyze the Content
-
-With the transcript retrieved, Claude can:
-- Summarize key discussion points and decisions
-- Extract action items with owners
-- Answer questions about what was said
-- Find specific speaker contributions
-- Locate timestamps for topics of interest
-- Generate follow-up emails or meeting notes
+| If you need... | Use |
+|---------------|-----|
+| AI-generated summary, key topics, action items | Path 1 — Agentic Retrieval |
+| Zoom Doc links from the meeting | Path 1 — Recap result includes URLs |
+| Exact timestamps (who said what, when) | Path 2 — VTT file |
+| Speaker-attributed full transcript | Path 2 — TRANSCRIPT file |
+| Video or audio file | Path 2 — MP4 / M4A |
+| Content from before AI Companion was enabled | Path 2 — raw recording |
 
 ---
 
 ## Example Prompts
 
-Ask Claude these prompts after connecting the zoom-mcp server:
+**Content search:**
+> "Find meetings where we discussed the product launch and summarize the decisions."
 
-**Find and summarize:**
-> "Find my meeting about Q4 planning from last week and summarize the key decisions."
+**Time period:**
+> "What happened in my meetings last week? Give me a summary of the key topics."
+
+**Specific speaker:**
+> "In the February all-hands, what did the CEO say about the roadmap?"
 
 **Extract action items:**
-> "Get the transcript from yesterday's team standup and list all action items with owners."
+> "Get the AI summary from yesterday's team sync and list all action items."
 
-**Speaker search:**
-> "In the January 15th product review meeting, what did Sarah say about the roadmap?"
-
-**Generate follow-up:**
-> "Based on the transcript from this morning's client call, draft a follow-up email
-> summarizing what we agreed to."
+**Full transcript:**
+> "I need the word-for-word timestamped transcript from the March 5th client call."
 
 ---
 
 ## Troubleshooting
 
-**No `TRANSCRIPT` or `VTT` in `recording_files`:**
-1. Check that AI Companion → Smart Recording is enabled in Zoom account settings
-2. Confirm the meeting was recorded to cloud, not local
-3. Wait a few minutes — transcript processing takes time after meeting end
-4. Check `status` field in `get_recording` response: should be `completed`
+**Recap result has no AI summary:**
+- AI Companion not enabled → Admin → Account Settings → AI Companion → enable Smart Recording
+- Meeting predates AI Companion being turned on → use Path 2 for raw transcript
 
-**`404` on `get_recording`:**
-- The `meetingId` for past meetings may differ from the scheduled ID
-- Use `list_recordings` with `from`/`to` dates to find the correct recording UUID
+**No TRANSCRIPT or VTT in `recording_files`:**
+- `auto_recording` was not set to `"cloud"` for the meeting
+- AI Companion disabled at time of recording
 
 **Download URL returns 401:**
-- The OAuth token must be included as `Authorization: Bearer TOKEN` when fetching files
-- Tokens expire after 1 hour — refresh if needed
+- Include `Authorization: Bearer YOUR_TOKEN` header when fetching the file directly
+
+**`get_recording` returns 404:**
+- Use `list_recordings` with a date range — past recording UUIDs differ from meeting IDs

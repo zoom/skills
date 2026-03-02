@@ -1,10 +1,13 @@
 # Tool Reference — Zoom MCP Server
 
-All 12 tools available on the Zoom MCP Server. Always use fully qualified names:
-`zoom-mcp:tool_name`
+Tools available on the Zoom MCP Server. Always use fully qualified names: `zoom-mcp:tool_name`
 
 Use `zoom-mcp:get_tool_details` with any `toolName` to retrieve the live parameter schema
 directly from the server.
+
+> **[CONTRIBUTOR NEEDED]** Confirm the complete tool list. The original list had 12 tools;
+> the Zoom Doc creation tool may be a 13th. Run `zoom-mcp:list_available_tools` against
+> the live server to get the authoritative list with current names.
 
 ---
 
@@ -12,15 +15,41 @@ directly from the server.
 
 ### `zoom-mcp:search_meetings`
 
-Search meetings by topic, participant, or date range.
+Semantic content search using AI Companion's **Agentic Retrieval API**. Searches across
+meeting content (what was said, documents, AI summaries) — not just meeting metadata.
+Can search by time period, by content query, or both.
+
+**Input parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `query` | string | Yes | Search term (topic, participant name) |
-| `startDate` | string | No | Start of date range (`YYYY-MM-DD`) |
-| `endDate` | string | No | End of date range (`YYYY-MM-DD`, max 30-day window) |
+| `query` | string | No* | Semantic search term — searches meeting content, not just topic |
+| `startDate` | string | No* | Start of date range (`YYYY-MM-DD`) |
+| `endDate` | string | No* | End of date range (`YYYY-MM-DD`, max 30-day window) |
 | `pageSize` | integer | No | Results per page (max 300) |
 | `nextPageToken` | string | No | Token for next page |
+
+\* At least one of `query` or a date range should be provided.
+
+**Response — two result types:**
+
+**Recap meeting** (for meetings with AI Companion data):
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `[CONTRIBUTOR NEEDED]` | string | Inline AI summary text |
+| `[CONTRIBUTOR NEEDED]` | array | Attached Zoom Docs — each entry includes title and URL |
+| `[CONTRIBUTOR NEEDED]` | object | Recording reference |
+| `[CONTRIBUTOR NEEDED]` | array | Whiteboards |
+
+> **[CONTRIBUTOR NEEDED]** Exact field names for the Recap meeting result. Source: Zoom
+> MCP Server engineering team or live server response inspection.
+
+**View recording** (for meetings with cloud recordings):
+
+> **[CONTRIBUTOR NEEDED]** Exact field names for the View recording result. What does it
+> contain? Does it overlap with Recap, or is it a distinct result type? Source: engineering
+> team or live server response.
 
 ---
 
@@ -157,6 +186,29 @@ Delete or trash a cloud recording.
 |-----------|------|----------|-------------|
 | `meetingId` | string | **Yes** | Meeting ID |
 | `action` | string | No | `trash` (default) or `delete` (permanent) |
+
+---
+
+## Zoom Docs
+
+### `zoom-mcp:create_zoom_doc` *(verify tool name)*
+
+Creates a Zoom Doc — Zoom's native document format, comparable to a Notion page. Returns
+the URL of the created document.
+
+> **[CONTRIBUTOR NEEDED]** Verify the exact tool name by running `zoom-mcp:list_available_tools`
+> against the live server. Then fill in the full parameter schema below.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `[CONTRIBUTOR NEEDED]` | string | **Yes** | Document title |
+| `[CONTRIBUTOR NEEDED]` | string | No | Document body / content |
+| `[CONTRIBUTOR NEEDED]` | — | No | Any additional parameters (owner, folder, template, permissions) |
+
+**Returns:**
+
+> **[CONTRIBUTOR NEEDED]** What does the response contain? Specifically: the URL of the
+> created Zoom Doc, and any other returned fields (doc ID, created timestamp, etc.).
 
 ---
 
