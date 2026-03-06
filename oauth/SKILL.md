@@ -148,7 +148,7 @@ For apps that act on behalf of users.
 https://zoom.us/oauth/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}
 ```
 
-Use../oauth/authorize` for consent, but `/oauth/token` for token exchange.
+Use `https://zoom.us/oauth/authorize` for consent, but `https://zoom.us/oauth/token` for token exchange.
 
 **Optional Parameters:**
 
@@ -606,13 +606,14 @@ See `references/oauth-errors.md` for complete error list.
 
 ---
 
-## Live Demo
+## Demo Guidance
 
-Interactive demo of all 4 OAuth flows: **http://www.aiweshipcode.c../oauth/project/**
+If you build an OAuth demo app, document its runtime base URL in that demo project's own
+README or `.env.example`, not in this shared skill.
 
 ## Resources
 
-- **OAuth docs**: https://developers.zoom.us/docs/integratio../oauth/
+- **OAuth docs**: https://developers.zoom.us/docs/integrations/oauth/
 - **S2S OAuth docs**: https://developers.zoom.us/docs/internal-apps/s2s-oauth/
 - **PKCE blog**: https://developers.zoom.us/blog/pcke-oauth-with-postman-rest-api/
 - **Classic scopes**: https://developers.zoom.us/docs/integrations/oauth-scopes/

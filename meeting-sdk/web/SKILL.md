@@ -603,7 +603,7 @@ The official samples use a **two-server pattern** for development because COOP/C
 // Main server proxies to meeting server
 proxy: [{
   path: '/meeting.html',
-  target: 'http://127.0.0.1:9998/'
+  target: 'http://YOUR_MEETING_SERVER_HOST:9998/'
 }]
 ```
 
@@ -723,7 +723,7 @@ ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
 
 function App() {
-  const authEndpoint = 'http://localhost:4000';
+  const authEndpoint = import.meta.env.VITE_AUTH_ENDPOINT;
   const meetingNumber = '';
   const passWord = '';
   const role = 0;
@@ -852,7 +852,7 @@ function ZoomMeeting({ meetingNumber, password, userName }: Props) {
 
 ```bash
 # .env.local
-VITE_AUTH_ENDPOINT=http://localhost:4000
+VITE_AUTH_ENDPOINT=http://YOUR_AUTH_SERVER_HOST:4000
 VITE_SDK_KEY=your_sdk_key
 ```
 

@@ -233,15 +233,15 @@ void onMeetingStatusChanged(MeetingStatus status, int iResult) {
 ## Detailed Platform Guides
 
 ### Meeting SDK (Linux) - Recommended for Bots
-- **[Meeting SDK Linux - Quick Start../meeting-sdk/linux/linux.md)** - Complete setup guide
-- **[High-Level Bot Scenarios../meeting-sdk/linux/concepts/high-level-scenarios.md)** - Production architectures
-- **[Resilient Bot Pattern../meeting-sdk/linux/meeting-sdk-bot.md)** - Retry logic, OBF tokens
-- **[Linux Platform Reference../meeting-sdk/linux/references/linux-reference.md)** - Dependencies, Docker, troubleshooting
+- **[Meeting SDK Linux - Quick Start](../../meeting-sdk/linux/linux.md)** - Complete setup guide
+- **[High-Level Bot Scenarios](../../meeting-sdk/linux/concepts/high-level-scenarios.md)** - Production architectures
+- **[Resilient Bot Pattern](../../meeting-sdk/linux/meeting-sdk-bot.md)** - Retry logic, OBF tokens
+- **[Linux Platform Reference](../../meeting-sdk/linux/references/linux-reference.md)** - Dependencies, Docker, troubleshooting
 
 ### Specific Use Cases
-- **[Transcription Bot (Linux)../general/use-cases/transcription-bot-linux.md)** - Step-by-step transcription bot guide
-- **[AI Integration../general/use-cases/ai-integration.md)** - AI-powered meeting analysis
-- **[Real-time Media Streams../general/use-cases/real-time-media-streams.md)** - RTMS alternative (invisible bots)
+- **[Transcription Bot (Linux)](transcription-bot-linux.md)** - Step-by-step transcription bot guide
+- **[AI Integration](ai-integration.md)** - AI-powered meeting analysis
+- **[Real-time Media Streams](real-time-media-streams.md)** - RTMS alternative (invisible bots)
 
 ## Resources
 

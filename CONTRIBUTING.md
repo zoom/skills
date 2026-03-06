@@ -87,7 +87,7 @@ After adding or moving docs, regenerate the relationship graph:
 
 ```bash
 node md-graph/build-graph.mjs . md-graph/data.json
-cp md-graph/data.json /var/www/skills-relationship/data.json
+cp md-graph/data.json /path/to/your/hosted/skills-relationship/data.json
 ```
 
 Graph generation intentionally excludes non-skill content directories such as `raw-docs`, `md-graph`, `tools`, hidden directories, and dependency/vendor folders.

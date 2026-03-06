@@ -7,7 +7,6 @@ triggers:
   - "video sdk android"
   - "zoom video android"
   - "android custom video"
-  - "mobilertc.aar"
   - "android video session"
 ---
 

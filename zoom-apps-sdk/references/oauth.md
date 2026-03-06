@@ -199,4 +199,4 @@ const { deeplink } = response.data;
 
 - **Auth docs**: https://developers.zoom.us/docs/zoom-apps/authentication/
 - **In-Client OAuth example**: [../examples/in-client-oauth.md](../examples/in-client-oauth.md)
-- **oauth skill**:../oauth/SKILL.md../oauth/SKILL.md)
+- **oauth skill**: [../../oauth/SKILL.md](../../oauth/SKILL.md)

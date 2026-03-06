@@ -19,6 +19,5 @@
 
 ## Local Testing
 
-- Use a tunneling tool to expose `localhost` over HTTPS for webhook testing.
+- Use a tunneling tool to expose your local development host over HTTPS for webhook testing.
 - Keep a "dev" app and "prod" app to avoid breaking production while iterating.
-

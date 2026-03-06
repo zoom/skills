@@ -92,7 +92,7 @@ const response = await axios.post(
 
 ### Option 1: ngrok (Recommended)
 
-Expose localhost to the internet for webhook testing:
+Expose your local development webhook server to the internet for testing:
 
 ```bash
 # Install ngrok
@@ -107,7 +107,7 @@ ngrok http 3000
 
 Output:
 ```
-Forwarding  https://abc123.ngrok.io -> http://localhost:3000
+Forwarding  https://abc123.ngrok.io -> http://YOUR_DEV_HOST:3000
 ```
 
 Use `https://abc123.ngrok.io/webhook` as your webhook URL in Zoom Marketplace.
@@ -119,7 +119,8 @@ Use `https://abc123.ngrok.io/webhook` as your webhook URL in Zoom Marketplace.
 brew install cloudflare/cloudflare/cloudflared
 
 # Create tunnel
-cloudflared tunnel --url http://localhost:3000
+LOCAL_WEBHOOK_BASE_URL="http://YOUR_DEV_HOST:3000"
+cloudflared tunnel --url "$LOCAL_WEBHOOK_BASE_URL"
 ```
 
 ### Option 3: localtunnel
@@ -215,8 +216,10 @@ val initParams = ZoomVideoSDKInitParams().apply {
 Test your webhook handler locally:
 
 ```bash
+LOCAL_WEBHOOK_BASE_URL="http://YOUR_DEV_HOST:3000"
+
 # Simulate meeting.started event
-curl -X POST http://localhost:3000/webhook \
+curl -X POST "$LOCAL_WEBHOOK_BASE_URL/webhook" \
   -H "Content-Type: application/json" \
   -H "x-zm-signature: v0=test" \
   -H "x-zm-request-timestamp: $(date +%s)" \

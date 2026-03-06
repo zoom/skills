@@ -229,7 +229,7 @@ async function downloadWithRetry(file, meetingUuid) {
 
 // Queue system for processing
 const Queue = require('bull');
-const recordingQueue = new Queue('recording-uploads', 'redis://localhost:6379');
+const recordingQueue = new Queue('recording-uploads', process.env.REDIS_URL || 'redis://YOUR_REDIS_HOST:6379');
 
 recordingQueue.process(async (job) => {
   const { file, meetingUuid, topic } = job.data;

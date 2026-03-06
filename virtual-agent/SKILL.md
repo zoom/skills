@@ -4,13 +4,7 @@ description: "Zoom Virtual Agent skill pack for web campaigns/chat embeds, Andro
 triggers:
   - "virtual agent"
   - "zva"
-  - "zoom campaign sdk"
-  - "zoomCampaignSdk"
-  - "entry id"
-  - "support_handoff"
-  - "zoomCampaignSdk:ready"
   - "virtual assistant sdk"
-  - "zcc-sdk.js"
   - "knowledge base sync"
 ---
 

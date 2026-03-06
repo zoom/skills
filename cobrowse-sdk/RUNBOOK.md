@@ -49,7 +49,7 @@ If using npm agent integration without BYOP expectations, flow mismatches happen
 
 ## 6) Confirm Browser and Security Constraints
 
-- HTTPS required (except localhost dev).
+- HTTPS required (except loopback/local dev).
 - CSP/CORS must allow Zoom domains.
 - Third-party cookie/privacy settings can affect reconnect behavior.
 

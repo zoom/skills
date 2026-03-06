@@ -9,7 +9,7 @@ Embed Zoom meeting capabilities into Linux applications for headless meeting bot
 - C++ development toolchain (cmake, gcc, g++)
 - GLib 2.0, libcurl, pthread
 
-> **Need help with authentication?** See the **[zoom-oauth../oauth/SKILL.md)** skill for JWT token generation.
+> **Need help with authentication?** See the **[zoom-oauth](../../oauth/SKILL.md)** skill for JWT token generation.
 
 ## Overview
 

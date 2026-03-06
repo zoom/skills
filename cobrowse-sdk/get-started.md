@@ -130,11 +130,11 @@ EOF
 npm start
 ```
 
-The server will run on `http://localhost:4000`.
+The server will run on the base URL you configure for your token service.
 
 **Token Request:**
 ```javascript
-// POST http://localhost:4000
+// POST https://YOUR_TOKEN_SERVICE_BASE_URL
 {
   "role": 1,           // 1 = customer, 2 = agent
   "userId": "user123",
@@ -220,7 +220,7 @@ ZoomCobrowseSDK.init(settings, function ({ success, session, error }) {
 
 ```javascript
 // Fetch JWT from your server
-const response = await fetch('http://localhost:4000', {
+const response = await fetch('https://YOUR_TOKEN_SERVICE_BASE_URL', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -303,7 +303,7 @@ session.start({ sdkToken: token });
     document.getElementById("cobrowse-btn").addEventListener("click", async () => {
       try {
         // Fetch JWT from your server
-        const response = await fetch("http://localhost:4000", {
+        const response = await fetch("https://YOUR_TOKEN_SERVICE_BASE_URL", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -351,7 +351,7 @@ Agents connect to cobrowse sessions by embedding an iframe.
     async function connectAgent() {
       try {
         // Fetch JWT from your server
-        const response = await fetch("http://localhost:4000", {
+        const response = await fetch("https://YOUR_TOKEN_SERVICE_BASE_URL", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -423,7 +423,7 @@ The `allow` attribute must include these permissions:
 | SDK doesn't load | Verify SDK Key is correct in CDN URL |
 | PIN not showing | Check browser console for errors |
 | Agent can't connect | Verify PIN is correct and session is still active |
-| Connection fails | Check HTTPS is being used (or localhost for development) |
+| Connection fails | Check HTTPS is being used (or a loopback host for development) |
 
 ## Step 6: Add Features
 
@@ -536,7 +536,7 @@ The Cobrowse SDK supports connecting agents and customers using a PIN code. In t
 ## Common Questions
 
 **Q: Can I use HTTP instead of HTTPS?**  
-A: Only for `localhost` development. Production must use HTTPS.
+A: Only for loopback/local development. Production must use HTTPS.
 
 **Q: What's the difference between SDK Key and API Key?**  
 A: SDK Key is used in the CDN URL and JWT `app_key` claim. API Key is for optional REST API calls.

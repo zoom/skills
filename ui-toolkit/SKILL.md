@@ -481,7 +481,7 @@ See: **[troubleshooting/common-issues.md](troubleshooting/common-issues.md)**
 - **Marketplace**: https://marketplace.zoom.us/
 - **Developer Forum**: https://devforum.zoom.us/
 - **Live Demo**: https://sdk.zoom.com/videosdk-uitoolkit
-- **Changelog**: https://developers.zoom.us/changel../ui-toolkit/web/
+- **Changelog**: https://developers.zoom.us/changelog/ui-toolkit/web/
 
 ## 🎓 Learning Path
 

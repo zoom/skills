@@ -8,7 +8,6 @@ triggers:
   - "zoom android sdk"
   - "android default ui"
   - "android custom ui"
-  - "mobilertc.aar"
   - "join meeting android"
   - "start meeting android"
 ---

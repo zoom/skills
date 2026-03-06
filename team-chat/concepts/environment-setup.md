@@ -75,7 +75,7 @@ Enter your OAuth callback endpoint:
 
 **Local development**:
 ```
-http://localhost:4000/auth/callback
+http://YOUR_DEV_HOST:4000/auth/callback
 ```
 
 **Production**:
@@ -194,7 +194,7 @@ When you enable Team Chat Subscription, these scopes are **automatically added**
 # .env file
 ZOOM_CLIENT_ID=your_client_id_here
 ZOOM_CLIENT_SECRET=your_client_secret_here
-ZOOM_REDIRECT_URI=http://localhost:4000/auth/callback
+ZOOM_REDIRECT_URI=http://YOUR_DEV_HOST:4000/auth/callback
 
 PORT=4000
 ```
@@ -220,7 +220,7 @@ Create this file in your project root:
 # Zoom App Credentials (Required for both APIs)
 ZOOM_CLIENT_ID=
 ZOOM_CLIENT_SECRET=
-ZOOM_REDIRECT_URI=http://localhost:4000/auth/callback
+ZOOM_REDIRECT_URI=http://YOUR_DEV_HOST:4000/auth/callback
 
 # Chatbot Credentials (Required for Chatbot API only)
 ZOOM_BOT_JID=
@@ -296,6 +296,6 @@ Before proceeding to development, verify:
 ## Resources
 
 - [Zoom App Marketplace](https://marketplace.zoom.us/)
-- [OAuth Documentation](https://developers.zoom.us/docs/integratio../oauth/)
+- [OAuth Documentation](https://developers.zoom.us/docs/integrations/oauth/)
 - [Chatbot Documentation](https://developers.zoom.us/docs/team-chat/chatbot/extend/)
 - [Using Role Management](https://support.zoom.us/hc/en-us/articles/115001078646)

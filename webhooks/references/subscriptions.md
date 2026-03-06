@@ -27,7 +27,7 @@ Use the Webhook Subscriptions API for programmatic subscription management.
 #### Create Subscription
 
 ```bash
-POS../webhooks/options
+POST /webhooks/options
 ```
 
 ```json
@@ -45,7 +45,7 @@ POS../webhooks/options
 #### Get Subscription
 
 ```bash
-GE../webhooks/options
+GET /webhooks/options
 ```
 
 **Response:**
@@ -64,7 +64,7 @@ GE../webhooks/options
 #### Update Subscription
 
 ```bash
-PATC../webhooks/options
+PATCH /webhooks/options
 ```
 
 ```json

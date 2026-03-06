@@ -20,7 +20,7 @@ If this is wrong, everything else will fail.
 - Authorize URL: `https://zoom.us/oauth/authorize`
 - Token URL: `https://zoom.us/oauth/token`
 
-If token requests hit../oauth/token`, expect 404/HTML.
+If token requests hit `/oauth/token`, expect 404/HTML.
 
 ## 3) Confirm Runtime Env Loading
 
@@ -34,9 +34,9 @@ Do not assume root `.env` is enough.
 ## 4) Confirm App Routes + Reverse Proxy
 
 - Current demo pages:
-  -../team-chat/user-demo`
-  -../team-chat/bot-demo`
-- API path should resolve:../team-chat/api/*`
+  - `/team-chat/user-demo`
+  - `/team-chat/bot-demo`
+- API path should resolve: `/team-chat/api/*`
 
 If browser calls old routes (`/api/channel/*`) and gets 404, either update frontend or keep compatibility routes.
 
@@ -45,9 +45,11 @@ If browser calls old routes (`/api/channel/*`) and gets 404, either update front
 Use backend probes before browser debugging.
 
 ```bash
-curl -sS https://www.aiweshipcode.c../team-chat/api/config
-curl -sS -i https://www.aiweshipcode.c../team-chat/api/bot/token
-curl -sS -i https://www.aiweshipcode.c../team-chat/api/channel/list
+TEAM_CHAT_BASE_URL="http://YOUR_HOST:YOUR_PORT"
+
+curl -sS "$TEAM_CHAT_BASE_URL/team-chat/api/config"
+curl -sS -i "$TEAM_CHAT_BASE_URL/team-chat/api/bot/token"
+curl -sS -i "$TEAM_CHAT_BASE_URL/team-chat/api/channel/list"
 ```
 
 Expected:

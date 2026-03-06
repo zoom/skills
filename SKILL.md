@@ -43,7 +43,8 @@ This repository contains skills for building with Zoom SDKs, APIs, MCP servers, 
 | **[zoom-ui-toolkit](ui-toolkit/SKILL.md)** | Pre-built React components for Video SDK |
 | **[zoom-cobrowse-sdk](cobrowse-sdk/SKILL.md)** | Collaborative browsing for support |
 | **[zoom-oauth](oauth/SKILL.md)** | OAuth authentication flows (all 4 grant types) |
-| **[zoom-mcp](zoom-mcp/SKILL.md)** | Official Zoom MCP Server — meeting management and recording/transcript access via Model Context Protocol |
+| **[zoom-mcp](zoom-mcp/SKILL.md)** | Official Zoom MCP Server — semantic meeting search, meeting assets, recording resources, and Zoom Docs creation via Model Context Protocol |
+| **[zoom-mcp/whiteboard](zoom-mcp/whiteboard/SKILL.md)** | Whiteboard MCP child skill — Whiteboard endpoints, scopes, auth findings, and ID mapping |
 
 ## How to Use
 
@@ -96,7 +97,7 @@ Use `zoom-general` when:
 | Use pre-built video UI components | **zoom-ui-toolkit** |
 | Enable co-browsing for support | **zoom-cobrowse-sdk** |
 | Implement OAuth authentication | **zoom-oauth** |
-| Build AI-driven tool discovery workflows (AI Companion/agents) | **zoom-mcp** |
+| Build AI-driven meeting search, meeting-asset retrieval, recording-resource retrieval, or Zoom Docs workflows | **zoom-mcp** |
 | Build enterprise AI workflows with stable API core + AI tool layer | **zoom-rest-api + zoom-mcp** |
 | General/cross-product guidance | **zoom-general** |
 
@@ -117,7 +118,7 @@ Source: https://developers.zoom.us/docs/mcp/library/resources/apis-vs-mcp/
 - Zoom acts as MCP server and exposes Zoom platform tools/data to external AI clients.
 - MCP access is OAuth-scoped and governed.
 - Product-scoped MCP servers are expected (for example Meetings, Team Chat, Whiteboard).
-- Current routing in this repo uses `zoom-mcp` as the MCP entry point; expand by product as Zoom publishes additional MCP server surfaces.
+- Current routing in this repo uses `zoom-mcp` as the MCP parent entry point, with Whiteboard split into **[zoom-mcp/whiteboard](zoom-mcp/whiteboard/SKILL.md)**.
 
 ## Resources
 

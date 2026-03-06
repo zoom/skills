@@ -37,7 +37,7 @@ Use this before deep debugging.
 
 - Remove dead links after any file move or rename.
 - Remove stale platform claims that no longer match current docs.
-- Remove any `/home/dreamtcs/...` references before finalizing.
+- Remove any machine-local absolute path references before finalizing.
 
 ## 6) Quick Probes
 

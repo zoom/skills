@@ -401,7 +401,7 @@ function verifyWebhook(req, secret) {
   return req.headers['x-zm-signature'] === expected;
 }
 
-app.post../webhooks/zoom', (req, res) => {
+app.post('/webhooks/zoom', (req, res) => {
   if (!verifyWebhook(req, process.env.ZOOM_WEBHOOK_SECRET)) {
     return res.status(401).send('Invalid signature');
   }
@@ -432,7 +432,7 @@ const token = await getServerToServerToken();
 
 ## Resources
 
-- **OAuth Guide**: https://developers.zoom.us/docs/integratio../oauth/
+- **OAuth Guide**: https://developers.zoom.us/docs/integrations/oauth/
 - **Server-to-Server OAuth**: https://developers.zoom.us/docs/internal-apps/s2s-oauth/
 - **Scopes Reference**: https://developers.zoom.us/docs/integrations/oauth-scopes/
 - **Migration Guide**: https://developers.zoom.us/docs/internal-apps/jwt-app-migration/

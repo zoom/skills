@@ -67,7 +67,7 @@ RUNTIME PHASE:
 3. Click **Add Event Subscription**
 4. Configure:
    - **Subscription name**: "Meeting Events"
-   - **Event notification endpoint URL**: `https://yourapp.c../webhooks/zoom`
+   - **Event notification endpoint URL**: `https://yourapp.com/webhooks/zoom`
 5. Select events:
    - ✅ `meeting.started`
    - ✅ `meeting.ended`
@@ -193,7 +193,7 @@ function handleUrlValidation(req, res, webhookSecret) {
 }
 
 // Webhook endpoint
-app.post../webhooks/zoom', async (req, res) => {
+app.post('/webhooks/zoom', async (req, res) => {
   const WEBHOOK_SECRET = process.env.ZOOM_WEBHOOK_SECRET;
   
   // 1. Handle URL validation challenge
@@ -445,7 +445,7 @@ function verifyWebhook(req) {
   return signature === expected;
 }
 
-app.post../webhooks/zoom', async (req, res) => {
+app.post('/webhooks/zoom', async (req, res) => {
   // URL validation challenge
   if (req.body.event === 'endpoint.url_validation') {
     const hash = crypto
@@ -557,7 +557,7 @@ app.listen(3000, () => {
   console.log('Endpoints:');
   console.log('  GET  /api/meetings/:id        - Fetch & track meeting (zoom-rest-api)');
   console.log('  GET  /api/meetings/:id/status - Get meeting status');
-  console.log('  POS../webhooks/zoom           - Webhook receiver (webhooks)');
+  console.log('  POST /webhooks/zoom           - Webhook receiver (webhooks)');
 });
 ```
 

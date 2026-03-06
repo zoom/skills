@@ -132,12 +132,12 @@ ngrok http 3000
 # 2. Update Marketplace URLs (if changed)
 # 3. Open Zoom client
 # 4. Click your app in sidebar or during meeting
-# 5. Check ngrok web interface (http://localhost:4040) for request logs
+# 5. Check the ngrok local request inspector for request logs
 ```
 
 ## ngrok Request Inspector
 
-ngrok provides a web UI at `http://localhost:4040` that shows:
+ngrok provides a local web UI that shows:
 - All HTTP requests to your tunnel
 - Request/response headers and bodies
 - Replay failed requests

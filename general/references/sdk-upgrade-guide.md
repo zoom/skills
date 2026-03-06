@@ -157,8 +157,8 @@ npm test
 ## Resources
 
 - **Main Changelog**: https://developers.zoom.us/changelog/ (check here first!)
-- **Meeting SDK changelog**: https://developers.zoom.us/changel../meeting-sdk/
-- **Video SDK changelog**: https://developers.zoom.us/changel../video-sdk/
+- **Meeting SDK changelog**: https://developers.zoom.us/changelog/meeting-sdk/
+- **Video SDK changelog**: https://developers.zoom.us/changelog/video-sdk/
 - **Migration guides**: https://developers.zoom.us/docs/meeting-sdk/web/migrate/
 
 > **Note for LLMs/Agents**: If the changelog URLs return 404 or have moved, perform a web search for "zoom developer changelog" or "zoom sdk changelog" to find the current location. Zoom occasionally restructures their documentation.

@@ -233,7 +233,7 @@ async function createUserAndWait(userInfo, accessToken) {
 }
 
 // Webhook handler for user activation
-app.post../webhooks/zoom', (req, res) => {
+app.post('/webhooks/zoom', (req, res) => {
   const { event, payload } = req.body;
   
   if (event === 'user.activated') {

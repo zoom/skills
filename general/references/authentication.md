@@ -78,5 +78,5 @@ For Meeting SDK and Video SDK authentication. See:
 
 ## Resources
 
-- **OAuth docs**: https://developers.zoom.us/docs/integratio../oauth/
+- **OAuth docs**: https://developers.zoom.us/docs/integrations/oauth/
 - **S2S OAuth docs**: https://developers.zoom.us/docs/internal-apps/s2s-oauth/

@@ -133,7 +133,7 @@ const getToken = async () => {
      │─────────────────────>│                          │                          │
      │                      │                          │                          │
      │  2. Redirect to authorize                       │                          │
-     │../oauth/authorize?                              │                          │
+     │https://zoom.us/oauth/authorize?                │                          │
      │    client_id={ID}                               │                          │
      │    redirect_uri={URI}                           │                          │
      │    response_type=code                           │                          │
@@ -275,7 +275,7 @@ app.get('/callback', async (req, res) => {
 │ (TV/Kiosk) │           │    Server    │           │ / Computer │
 └──────┬─────┘           └──────┬───────┘           └─────┬──────┘
        │                        │                         │
-       │  1. POS../oauth/devicecode                       │
+       │  1. POST /oauth/devicecode                       │
        │  client_id={CLIENT_ID}                           │
        │───────────────────────>│                         │
        │                        │                         │

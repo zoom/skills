@@ -22,7 +22,7 @@ Wrong flow choice causes scope and token errors later.
 - Authorize URL: `https://zoom.us/oauth/authorize`
 - Token URL: `https://zoom.us/oauth/token`
 
-If token requests return 404/HTML, verify you are not calling../oauth/token`.
+If token requests return 404/HTML, verify you are not calling `/oauth/token`.
 
 ## 3) Confirm Redirect URI Exact Match
 

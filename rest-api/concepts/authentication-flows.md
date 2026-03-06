@@ -289,7 +289,7 @@ The JWT app type on Zoom Marketplace is deprecated. This does **not** affect JWT
 
 ## Resources
 
-- **OAuth Guide**: https://developers.zoom.us/docs/integratio../oauth/
+- **OAuth Guide**: https://developers.zoom.us/docs/integrations/oauth/
 - **S2S OAuth**: https://developers.zoom.us/docs/internal-apps/s2s-oauth/
 - **Scopes Reference**: https://developers.zoom.us/docs/integrations/oauth-scopes/
 - **Full OAuth Skill**: See **[zoom-oauth](../../oauth/SKILL.md)**

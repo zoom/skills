@@ -16,6 +16,7 @@ export type SkillId =
   | 'zoom-general'
   | 'zoom-rest-api'
   | 'zoom-mcp'
+  | 'zoom-mcp/whiteboard'
   | 'zoom-webhooks'
   | 'zoom-websockets'
   | 'zoom-meeting-sdk'
@@ -46,6 +47,7 @@ interface Signals {
   customVideo: boolean;
   restApi: boolean;
   mcp: boolean;
+  whiteboardMcp: boolean;
   webhooks: boolean;
   websockets: boolean;
   zoomApps: boolean;
@@ -70,15 +72,16 @@ export function detectSignals(rawQuery: string): Signals {
     customVideo: hasAny(q, ['video sdk', 'custom video', 'attachvideo', 'peer-video-state-change']),
     restApi: hasAny(q, ['rest api', 'api create meeting', 'api list meetings', '/v2/', 'list users', 's2s oauth', 'meeting endpoint']),
     mcp: hasAny(q, ['zoom mcp', 'mcp server', 'agentic retrieval', 'tools/list', 'tools/call', 'semantic meeting search']),
+    whiteboardMcp: hasAny(q, ['whiteboard mcp', 'zoom whiteboard mcp', 'list whiteboards', 'get a whiteboard', 'wb/db', 'whiteboard_id']),
     webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
     websockets: hasAny(q, ['websocket', 'real-time events', 'persistent connection']),
     zoomApps: hasAny(q, ['zoom apps sdk', 'in-client app', 'layers api', 'collaborate mode']),
     oauth: hasAny(q, ['oauth', 'pkce', 'authorization code', 'account_credentials', 'token refresh']),
     rtms: hasAny(q, ['rtms', 'real-time media streams', 'live transcript stream', 'audio stream']),
     teamChat: hasAny(q, ['team chat', 'chatbot', 'chat card', 'chat message']),
-    contactCenter: hasAny(q, ['contact center', 'engagement context', 'smart embed', 'zcc']),
-    virtualAgent: hasAny(q, ['virtual agent', 'zva', 'zoomcampaignsdk', 'entry id', 'support_handoff']),
-    phone: hasAny(q, ['zoom phone', 'smart embed phone', 'phone api', 'click to dial']),
+    contactCenter: hasAny(q, ['contact center', 'engagement context', 'contact center smart embed', 'zcc']),
+    virtualAgent: hasAny(q, ['virtual agent', 'zva', 'knowledge base sync', 'virtual assistant sdk']),
+    phone: hasAny(q, ['zoom phone', 'phone smart embed', 'phone api', 'click to dial']),
     rivet: hasAny(q, ['rivet', 'zoom rivet']),
     preflight: hasAny(q, ['probe sdk', 'preflight', 'diagnostics', 'network readiness']),
     uiToolkit: hasAny(q, ['ui toolkit', 'prebuilt video ui']),
@@ -102,6 +105,7 @@ function pickPrimarySkill(s: Signals): SkillId {
   if (s.preflight) return 'probe-sdk';
   if (s.websockets) return 'zoom-websockets';
   if (s.webhooks) return 'zoom-webhooks';
+  if (s.whiteboardMcp) return 'zoom-mcp/whiteboard';
   if (s.mcp) return 'zoom-mcp';
   if (s.restApi) return 'zoom-rest-api';
   if (s.oauth) return 'zoom-oauth';

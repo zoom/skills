@@ -1,6 +1,6 @@
 # OAuth Error Messages
 
-> Source: https://developers.zoom.us/docs/integratio../oauth/
+> Source: https://developers.zoom.us/docs/integrations/oauth/
 
 This table lists OAuth error messages, possible causes, and recommended mitigations.
 

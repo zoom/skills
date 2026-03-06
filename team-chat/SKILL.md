@@ -61,7 +61,7 @@ If you choose the wrong type early, auth/scopes/endpoints all mismatch and imple
 **OAuth endpoint sanity check:**
 - Authorize URL: `https://zoom.us/oauth/authorize`
 - Token URL: `https://zoom.us/oauth/token`
-- If../oauth/token` returns 404/HTML, use `/oauth/token`.
+- If `/oauth/token` returns 404/HTML, use `https://zoom.us/oauth/token`.
 
 **Building Interactive Bots?**
 - [Button Actions](examples/button-actions.md) - Handle button clicks
@@ -680,7 +680,7 @@ Request → Send card with buttons → User clicks → Update status → Notify
 
 ## Contributing
 
-This skill is part of the agent-skills repository. Improvements welcome!
+This skill is part of the zoom-skills repository. Improvements welcome!
 
 ## Support
 

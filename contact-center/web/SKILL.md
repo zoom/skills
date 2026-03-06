@@ -4,10 +4,9 @@ description: "Zoom Contact Center SDK for Web. Use for web chat/video/campaign e
 triggers:
   - "contact center web"
   - "zcc web sdk"
-  - "zoomCampaignSdk"
   - "getengagementcontext web"
   - "onengagementcontextchange"
-  - "smart embed"
+  - "contact center smart embed"
   - "zcc-init-config-request"
 ---
 

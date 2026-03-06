@@ -11,8 +11,8 @@
 
 - Confirm token endpoint is `https://zoom.us/oauth/token`
 - Confirm user OAuth authorize URL is `https://zoom.us/oauth/authorize`
-- Confirm current UI routes are../team-chat/user-demo` and../team-chat/bot-demo`
-- Confirm reverse proxy forwards../team-chat/api/*` correctly
+- Confirm current UI routes are `/team-chat/user-demo` and `/team-chat/bot-demo`
+- Confirm reverse proxy forwards `/team-chat/api/*` correctly
 
 ## Webhooks Time Out
 

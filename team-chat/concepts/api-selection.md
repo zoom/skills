@@ -206,7 +206,7 @@ Need rich interactive messages?
 ### ❌ "Chatbot API requires user login"
 **Reality**: Chatbot API uses client_credentials flow (no user login needed).
 
-### ❌ "OAuth token endpoint i../oauth/token"
+### ❌ "OAuth token endpoint is `/oauth/token`"
 **Reality**: Use `https://zoom.us/oauth/token` for token exchange. Keep `https://zoom.us/oauth/authorize` for the user consent step.
 
 ### ❌ "I can only use one API per app"

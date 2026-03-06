@@ -3,7 +3,7 @@ name: phone
 description: "Zoom Phone skill pack for OAuth, Phone APIs, webhooks, Smart Embed postMessage events, URI schemes, and call-history migration patterns. Use for CRM/CTI dialer workflows, real-time call tracking, and call handling automation."
 triggers:
   - "zoom phone"
-  - "smart embed"
+  - "phone smart embed"
   - "zoom phone api"
   - "zoom phone webhook"
   - "call history"

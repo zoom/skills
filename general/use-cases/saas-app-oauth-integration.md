@@ -30,7 +30,7 @@ User Browser → Your SaaS App → Zoom OAuth → Zoom APIs
 
 **Configure app in Zoom Marketplace:**
 - App Type: OAuth
-- Redirect URL: `https://yourapp.c../oauth/callback`
+- Redirect URL: `https://yourapp.com/oauth/callback`
 - Required scopes: `meeting:write`, `meeting:read`, `user:read`
 
 **See:** `oauth/concepts/oauth-flows.md#user-authorization-oauth`
@@ -149,7 +149,7 @@ req.session.oauthState = state; // Verify in callback
 Listen for deauthorization webhook:
 
 ```javascript
-app.post../webhooks/zoom', (req, res) => {
+app.post('/webhooks/zoom', (req, res) => {
   if (req.body.event === 'app_deauthorized') {
     const userId = req.body.payload.user_id;
     await deleteUserZoomTokens(userId);

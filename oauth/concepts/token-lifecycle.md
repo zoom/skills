@@ -315,7 +315,7 @@ app.get('/callback', async (req, res) => {
    - User must re-authorize to grant access again
 
 3. **Explicit revocation:**
-   - Your app calls../oauth/revoke` endpoint
+   - Your app calls `https://zoom.us/oauth/revoke` endpoint
    - Tokens become invalid immediately
 
 4. **Refresh token expires (lifetime varies):**

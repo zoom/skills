@@ -83,7 +83,7 @@ app.get('/callback', async (req, res) => {
        │────────────────────────────>│ session.oauthState = "abc123"
        │                             │                              │
        │ 3. Redirect to authorize with state                        │
-       │../oauth/authorize?state=abc123                             │
+       │https://zoom.us/oauth/authorize?state=abc123                │
        │───────────────────────────────────────────────────────────>│
        │                             │                              │
        │ 4. User authorizes          │                              │

@@ -10,4 +10,4 @@ For specific error details, consult the error reference documentation.
 
 - Use `https://zoom.us/oauth/authorize` for user consent.
 - Use `https://zoom.us/oauth/token` for token exchange.
-- If token calls return HTML or 404, check that you are not calling../oauth/token`.
+- If token calls return HTML or 404, check that you are not calling `/oauth/token`.

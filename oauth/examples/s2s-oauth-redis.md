@@ -29,7 +29,7 @@ npm install express redis axios query-string dotenv
 const redis = require('redis');
 
 const client = redis.createClient({
-  url: process.env.REDIS_URL || 'redis://localhost:6379'
+  url: process.env.REDIS_URL || 'redis://YOUR_REDIS_HOST:6379'
 });
 
 client.on('error', (err) => console.error('Redis error:', err));
@@ -218,7 +218,7 @@ module.exports = router;
 ZOOM_ACCOUNT_ID=your_account_id
 ZOOM_CLIENT_ID=your_client_id
 ZOOM_CLIENT_SECRET=your_client_secret
-REDIS_URL=redis://localhost:6379
+REDIS_URL=redis://YOUR_REDIS_HOST:6379
 PORT=8080
 ```
 
@@ -251,7 +251,8 @@ docker run -d -p 6379:6379 redis
 npm start
 
 # Test endpoints
-curl http://localhost:8080/api/users
+API_BASE_URL="http://YOUR_API_HOST:8080"
+curl "$API_BASE_URL/api/users"
 ```
 
 ## Docker Deployment

@@ -9,7 +9,6 @@ triggers:
   - "engagement status"
   - "campaign sdk"
   - "scheduled callback"
-  - "smart embed"
   - "getengagementcontext"
   - "onengagementstatuschange"
   - "zoom contact center app"

@@ -40,7 +40,7 @@ PKCE prevents authorization code interception attacks **without requiring a clie
        │    SHA256(code_verifier)      │                                │
        │                               │                                │
        │ 3. Authorize with challenge   │                                │
-       │../oauth/authorize?            │                                │
+       │https://zoom.us/oauth/authorize?│                                │
        │    code_challenge={HASH}      │                                │
        │    code_challenge_method=S256 │                                │
        │──────────────────────────────>│                                │

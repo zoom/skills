@@ -61,8 +61,10 @@ if (error.message.includes('token expired')) {
 
 **Test properly**:
 ```bash
+WEBHOOK_BASE_URL="http://YOUR_DEV_HOST:4000"
+
 # Use POST instead
-curl -X POST http://localhost:4000/webhook \
+curl -X POST "$WEBHOOK_BASE_URL/webhook" \
   -H "Content-Type: application/json" \
   -d '{"event":"test"}'
 ```
@@ -239,7 +241,7 @@ function sanitizeMessage(message) {
 1. Use ngrok auth token for persistent URLs (paid)
 2. Use environment variable for flexibility:
    ```javascript
-   const WEBHOOK_URL = process.env.WEBHOOK_URL || 'http://localhost:4000/webhook';
+   const WEBHOOK_URL = process.env.WEBHOOK_URL || 'https://YOUR_PUBLIC_WEBHOOK_URL/webhook';
    ```
 
 ## Deployment Issues
@@ -270,14 +272,14 @@ function sanitizeMessage(message) {
    - If your app keeps per-mode env files (for example `project/team-chat-api/.env` and `project/chatbot-api/.env`), make sure runtime loads those files explicitly.
    - Verify loaded config via a health/config endpoint before debugging OAuth logic.
 
-### `404` on../team-chat/api/channel/*`
+### `404` on `/team-chat/api/channel/*`
 
 **Cause**: Route mismatch between old and new demo structure.
 
 **Fix**:
 - New pages should use:
-  -../team-chat/user-demo`
-  -../team-chat/bot-demo`
+  - `/team-chat/user-demo`
+  - `/team-chat/bot-demo`
 - Keep compatibility routes in backend if older UI still calls:
   - `/api/channel/list`
   - `/api/channel/messages`

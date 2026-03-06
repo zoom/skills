@@ -23,7 +23,7 @@ This is for the **Team Chat API** (user-level actions).
 For browser demos, keep the whole flow in your app to avoid manual copy/paste mistakes:
 
 1. User clicks **Connect Zoom User** in your UI.
-2. Backend returns authorize URL ../oauth/authorize`) with a generated `state`.
+2. Backend returns authorize URL (`https://zoom.us/oauth/authorize`) with a generated `state`.
 3. Redirect browser to Zoom consent screen.
 4. Callback route validates `state` and exchanges `code` at `https://zoom.us/oauth/token`.
 5. Callback page stores token in app storage (for demo: localStorage, for production: server session/DB) and redirects back to app.

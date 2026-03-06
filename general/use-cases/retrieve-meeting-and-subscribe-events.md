@@ -62,7 +62,7 @@ When someone says "retrieve meeting details and subscribe to events," they could
 │ Step 2: Store meeting ID for filtering                         │
 │         └── Your backend remembers which meetings to track     │
 │                                                                 │
-│ Step 3: POS../webhooks/zoom (webhooks)                    │
+│ Step 3: POST /webhooks/zoom (webhooks)               │
 │         └── Zoom sends events for ALL meetings                 │
 │         └── Filter by meeting ID in your handler               │
 │         └── Process: started, ended, participant events        │
@@ -159,7 +159,7 @@ function verifyWebhookSignature(req) {
   return signature === expectedSignature;
 }
 
-app.post../webhooks/zoom', async (req, res) => {
+app.post('/webhooks/zoom', async (req, res) => {
   // Handle URL validation challenge
   if (req.body.event === 'endpoint.url_validation') {
     const hash = crypto
@@ -222,7 +222,7 @@ app.listen(3000, () => {
   console.log('');
   console.log('Endpoints:');
   console.log('  GET  /api/meetings/:id  - Fetch & track meeting');
-  console.log('  POS../webhooks/zoom     - Webhook receiver');
+  console.log('  POST /webhooks/zoom     - Webhook receiver');
 });
 ```
 
@@ -703,7 +703,7 @@ async function getMeetingDetails(meetingId) {
 }
 
 // Step 2: Wait for meeting.rtms_started webhook
-app.post../webhooks/zoom', (req, res) => {
+app.post('/webhooks/zoom', (req, res) => {
   const { event, payload } = req.body;
   
   if (event === 'meeting.rtms_started') {

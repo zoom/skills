@@ -451,8 +451,10 @@ ngrok http 4000
 ### Manual Testing
 
 ```bash
+WEBHOOK_BASE_URL="http://YOUR_DEV_HOST:4000"
+
 # Test with curl (will fail signature verification - expected)
-curl -X POST http://localhost:4000/webhook \
+curl -X POST "$WEBHOOK_BASE_URL/webhook" \
   -H "Content-Type: application/json" \
   -d '{"event":"test"}'
 

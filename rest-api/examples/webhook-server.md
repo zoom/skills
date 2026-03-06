@@ -361,7 +361,7 @@ app.get('/health', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`Webhook server running on port ${PORT}`);
-  console.log(`Webhook endpoint: http://localhost:${PORT}/webhook`);
+  console.log(`Webhook endpoint: ${process.env.PUBLIC_BASE_URL || 'https://YOUR_PUBLIC_BASE_URL'}/webhook`);
 });
 
 // Graceful shutdown
@@ -518,7 +518,9 @@ ngrok http 3000
 ### Test CRC Validation
 
 ```bash
-curl -X POST http://localhost:3000/webhook \
+WEBHOOK_BASE_URL="http://YOUR_DEV_HOST:3000"
+
+curl -X POST "$WEBHOOK_BASE_URL/webhook" \
   -H "Content-Type: application/json" \
   -d '{
     "event": "endpoint.url_validation",
@@ -545,7 +547,9 @@ TIMESTAMP=$(date +%s)
 MESSAGE="v0:${TIMESTAMP}:{\"event\":\"meeting.started\",\"payload\":{\"object\":{\"id\":\"123\",\"topic\":\"Test\"}}}"
 SIGNATURE="v0=$(echo -n "$MESSAGE" | openssl dgst -sha256 -hmac "YOUR_SECRET" -binary | xxd -p)"
 
-curl -X POST http://localhost:3000/webhook \
+WEBHOOK_BASE_URL="http://YOUR_DEV_HOST:3000"
+
+curl -X POST "$WEBHOOK_BASE_URL/webhook" \
   -H "Content-Type: application/json" \
   -H "x-zm-signature: $SIGNATURE" \
   -H "x-zm-request-timestamp: $TIMESTAMP" \

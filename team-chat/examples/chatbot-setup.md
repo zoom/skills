@@ -421,7 +421,7 @@ app.post('/webhook', handleWebhook);
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`Webhook endpoint: http://localhost:${PORT}/webhook`);
+  console.log(`Webhook endpoint: ${process.env.PUBLIC_BASE_URL || 'https://YOUR_PUBLIC_BASE_URL'}/webhook`);
 });
 ```
 

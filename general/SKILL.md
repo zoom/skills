@@ -43,6 +43,7 @@ Entry point for building with Zoom. This skill helps you choose the right SDK or
 | Add pre-built UI components for Video SDK | **[zoom-ui-toolkit](../ui-toolkit/SKILL.md)** |
 | Implement OAuth authentication (all grant types) | **[zoom-oauth](../oauth/SKILL.md)** |
 | Build AI-driven tool workflows (AI Companion/agents) over Zoom data | **[zoom-mcp](../zoom-mcp/SKILL.md)** |
+| Build AI-driven Whiteboard workflows over Zoom Whiteboard MCP | **[zoom-mcp/whiteboard](../zoom-mcp/whiteboard/SKILL.md)** |
 | Build enterprise AI systems with stable API core + AI tool layer | **[zoom-rest-api](../rest-api/SKILL.md)** + **[zoom-mcp](../zoom-mcp/SKILL.md)** |
 
 ## Planning Checkpoint: Rivet SDK (Optional)
@@ -100,7 +101,8 @@ Then route as:
 ### MCP Availability and Topology Notes
 
 - Zoom-hosted MCP access is evolving; docs indicate a model where Zoom exposes product-scoped MCP servers (for example Meetings, Team Chat, Whiteboard).
-- Treat `zoom-mcp` as the MCP routing anchor in this repo until product-specific MCP skills are split out.
+- Use `zoom-mcp` as the parent MCP entry point.
+- Route Whiteboard-specific MCP requests to **[zoom-mcp/whiteboard](../zoom-mcp/whiteboard/SKILL.md)**.
 - When a request is product-specific and MCP coverage exists, route to that MCP product surface first; otherwise use REST/SDK skills for deterministic implementation.
 
 ### Webhooks vs WebSockets

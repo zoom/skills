@@ -15,23 +15,8 @@ triggers:
   - "twitter spaces"
   - "clubhouse alternative"
   - "audio-only room"
-  - "react native video sdk"
-  - "zoom react native video sdk"
-  - "flutter video sdk"
-  - "zoom flutter video sdk"
-  - "ui toolkit"
-  - "zoom ui toolkit"
-  - "attachVideo"
-  - "detachVideo"
-  - "peer-video-state-change"
-  - "getMediaStream"
-  - "createZoomVideoSDKObj"
   - "screen sharing"
   - "virtual background"
-  - "android video sdk"
-  - "ios video sdk"
-  - "macos video sdk"
-  - "unity video sdk"
   - "native video sdk"
 ---
 
@@ -265,7 +250,7 @@ The signature endpoint must be accessible from your frontend without CORS issues
 ```nginx
 # Nginx config
 location /api/ {
-    proxy_pass http://localhost:3005/api/;
+    proxy_pass http://YOUR_BACKEND_HOST:3005/api/;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
 }

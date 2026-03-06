@@ -8,9 +8,9 @@ A transcription bot joins Zoom meetings as a visible participant, captures raw a
 
 ## Skills Needed
 
-- **[meeting-sdk/linux../meeting-sdk/linux/SKILL.md)** - Primary (headless meeting bot)
-- **[zoom-rest-api../rest-api/SKILL.md)** - Get meeting details, OBF tokens
-- **[zoom-oauth../oauth/SKILL.md)** - JWT token generation for SDK auth
+- **[meeting-sdk/linux](../../meeting-sdk/linux/SKILL.md)** - Primary (headless meeting bot)
+- **[zoom-rest-api](../../rest-api/SKILL.md)** - Get meeting details, OBF tokens
+- **[zoom-oauth](../../oauth/SKILL.md)** - JWT token generation for SDK auth
 
 ## Architecture
 
@@ -46,11 +46,11 @@ curl -X POST "https://api.zoom.us/v2/users/{userId}/token?type=obf&ttl=7200" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
-See: [zoom-oauth../oauth/SKILL.md), [bot-authentication../meeting-sdk/references/bot-authentication.md)
+See: [zoom-oauth](../../oauth/SKILL.md), [bot-authentication](../../meeting-sdk/references/bot-authentication.md)
 
 ### Step 2: Initialize Meeting SDK
 
-**Full implementation**: [meeting-sdk/linux../meeting-sdk/linux/linux.md)
+**Full implementation**: [meeting-sdk/linux](../../meeting-sdk/linux/linux.md)
 
 ```cpp
 #include "zoom_sdk.h"
@@ -243,7 +243,7 @@ public:
 
 ### Retry Logic for Meeting Join
 
-**See**: [meeting-sdk-bot.md../meeting-sdk/linux/meeting-sdk-bot.md)
+**See**: [meeting-sdk-bot.md](../../meeting-sdk/linux/meeting-sdk-bot.md)
 
 ```cpp
 bool joinMeetingWithRetry(int max_attempts = 5, int retry_interval_ms = 60000) {
@@ -371,7 +371,7 @@ BotConfig loadConfig() {
 2. Use **recording token** from [REST API](https://developers.zoom.us/docs/meeting-sdk/apis/#operation/meetingLocalRecordingJoinToken), OR
 3. Host grants recording permission manually
 
-**See**: [meeting-sdk-bot.md#raw-recording-permission-denied../meeting-sdk/linux/meeting-sdk-bot.md#raw-recording-permission-denied)
+**See**: [meeting-sdk-bot.md#raw-recording-permission-denied](../../meeting-sdk/linux/meeting-sdk-bot.md#raw-recording-permission-denied)
 
 ### Issue: No Audio in Docker
 
@@ -383,7 +383,7 @@ mkdir -p ~/.config
 echo "[General]\nsystem.audio.type=default" > ~/.config/zoomus.conf
 ```
 
-**See**: [linux-reference.md#pulseaudio-setup../meeting-sdk/linux/references/linux-reference.md#pulseaudio-setup)
+**See**: [linux-reference.md#pulseaudio-setup](../../meeting-sdk/linux/references/linux-reference.md#pulseaudio-setup)
 
 ### Issue: Callbacks Not Firing
 
@@ -399,19 +399,19 @@ g_main_loop_run(loop);  // Blocks until quit
 
 ## Related Use Cases
 
-- **[AI Meeting Assistant../general/use-cases/ai-integration.md)** - Add AI analysis on top of transcription
-- **[Recording Bot../meeting-sdk/linux/concepts/high-level-scenarios.md#scenario-2-recording-bot)** - Record video + audio with sync
-- **[Real-time Media Streams../general/use-cases/real-time-media-streams.md)** - Alternative: RTMS for invisible bots
+- **[AI Meeting Assistant](ai-integration.md)** - Add AI analysis on top of transcription
+- **[Recording Bot](../../meeting-sdk/linux/concepts/high-level-scenarios.md#scenario-2-recording-bot)** - Record video + audio with sync
+- **[Real-time Media Streams](real-time-media-streams.md)** - Alternative: RTMS for invisible bots
 
 ## Related Skills
 
-- **[meeting-sdk/linux../meeting-sdk/linux/SKILL.md)** - Complete Meeting SDK Linux guide
-- **[zoom-rest-api../rest-api/SKILL.md)** - Get meetings, OBF tokens
-- **[zoom-oauth../oauth/SKILL.md)** - JWT token generation
+- **[meeting-sdk/linux](../../meeting-sdk/linux/SKILL.md)** - Complete Meeting SDK Linux guide
+- **[zoom-rest-api](../../rest-api/SKILL.md)** - Get meetings, OBF tokens
+- **[zoom-oauth](../../oauth/SKILL.md)** - JWT token generation
 
 ## Sample Code
 
-**Complete sample**: [meeting-sdk/linux/concepts/high-level-scenarios.md#scenario-1../meeting-sdk/linux/concepts/high-level-scenarios.md)
+**Complete sample**: [meeting-sdk/linux/concepts/high-level-scenarios.md](../../meeting-sdk/linux/concepts/high-level-scenarios.md#scenario-1)
 
 **Official samples**:
 - https://github.com/zoom/meetingsdk-linux-raw-recording-sample

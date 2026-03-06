@@ -193,7 +193,7 @@ fetch(`${basePath}/api/sessions`);  // NOT fetch('/api/sessions')
 3. **Nginx WebSocket proxy**:
 ```nginx
 location /my-app/rtms-socket {
-    proxy_pass http://localhost:3000/rtms-socket;
+    proxy_pass http://YOUR_RTMS_BACKEND_HOST:3000/rtms-socket;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";

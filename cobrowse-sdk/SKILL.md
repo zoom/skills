@@ -66,7 +66,7 @@ The Zoom Cobrowse SDK is a JavaScript library that provides:
 - **Multi-Tab Persistence**: Session continues when customer opens new tabs
 - **Auto-Reconnection**: Session recovers from page refresh (2-minute window)
 - **Session Events**: Real-time events for session state changes
-- **HTTPS Required**: Secure connections (HTTP only works on localhost)
+- **HTTPS Required**: Secure connections (HTTP only works on loopback/local development hosts)
 - **No Plugins**: Pure JavaScript, no browser extensions needed
 
 ## Two Roles Architecture
@@ -118,7 +118,7 @@ If a demo only has one generic "session" user, it is incomplete for real cobrows
   - Internet Explorer ✗ (not supported)
 
 - **Network Requirements**:
-  - HTTPS required (HTTP works on localhost only)
+  - HTTPS required (HTTP works on loopback/local development hosts only)
   - Allow cross-origin requests to `*.zoom.us`
   - CSP headers must allow Zoom domains (see [CORS and CSP guide](troubleshooting/cors-csp.md))
 
@@ -181,7 +181,7 @@ npm start
 
 **Token endpoint:**
 ```javascript
-// POST http://localhost:4000
+// POST https://YOUR_TOKEN_SERVICE_BASE_URL
 {
   "role": 1,           // 1 = customer, 2 = agent
   "userId": "user123",
@@ -266,7 +266,7 @@ npm start
     
     document.getElementById("cobrowse-btn").addEventListener("click", async () => {
       // Fetch JWT from your server
-      const response = await fetch("http://localhost:4000", {
+      const response = await fetch("https://YOUR_TOKEN_SERVICE_BASE_URL", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -305,7 +305,7 @@ npm start
   <script>
     async function connectAgent() {
       // Fetch JWT from your server
-      const response = await fetch("http://localhost:4000", {
+      const response = await fetch("https://YOUR_TOKEN_SERVICE_BASE_URL", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -506,8 +506,8 @@ const { token } = await response.json();
 
 **Solution**:
 - Production: Use HTTPS ✓
-- Development: Use `localhost` (HTTP works) ✓
-- Development: Use `https://127.0.0.1` with self-signed cert ✓
+- Development: Use a loopback host for local HTTP testing ✓
+- Development: Use a local HTTPS endpoint with a trusted/self-signed cert if required ✓
 
 ### Third-Party Cookies Required
 

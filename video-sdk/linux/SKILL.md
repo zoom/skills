@@ -4,7 +4,6 @@ description: "Zoom Video SDK for Linux - C++ headless bots, raw audio/video capt
 triggers:
 - linux video sdk
 - zoom linux
-- headless bot
 - raw data linux
 - qt zoom
 - gtk zoom

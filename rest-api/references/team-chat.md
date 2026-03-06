@@ -277,5 +277,5 @@ Team Chat events via webhooks:
 
 ## Resources
 
-- **API Reference**: https://developers.zoom.us/docs/api/rest/referen../team-chat/methods/
+- **API Reference**: https://developers.zoom.us/docs/api/rest/reference/team-chat/methods/
 - **Chatbots**: See `chatbot.md` for interactive messages
