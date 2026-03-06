@@ -24,6 +24,8 @@ User request
 Common route outcomes:
 
 - API management flows -> `rest-api`
+- AI-driven tool workflows (agentic, MCP tool discovery) -> `zoom-mcp`
+- Enterprise AI systems requiring stable API core + AI tool layer -> `rest-api` + `zoom-mcp`
 - Event notifications -> `webhooks` or `websockets`
 - Embedded meetings -> `meeting-sdk`
 - Custom video sessions -> `video-sdk`
@@ -59,6 +61,7 @@ skills/
 ├── ui-toolkit/
 ├── cobrowse-sdk/
 ├── oauth/
+├── zoom-mcp/
 └── tools/
 ```
 
@@ -108,6 +111,7 @@ Platform-heavy spokes (examples):
 | `ui-toolkit` | Prebuilt Video SDK UI components |
 | `cobrowse-sdk` | Collaborative browsing support flows |
 | `oauth` | Auth flows and token models |
+| `zoom-mcp` | Zoom-hosted MCP server workflows for AI-agent tool discovery and meeting summary/transcript retrieval |
 
 ## Maintenance Notes
 

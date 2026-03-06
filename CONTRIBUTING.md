@@ -68,10 +68,11 @@ description: |
 
 ### Repository Naming Conventions
 
-- Keep `zoom-apps-sdk` with the `zoom-` prefix.
-- Use non-prefixed product folders for the rest:
-- `general`, `rest-api`, `webhooks`, `websockets`, `meeting-sdk`, `video-sdk`
-- `rtms`, `team-chat`, `ui-toolkit`, `cobrowse-sdk`, `oauth`, `contact-center`, `phone`, `rivet-sdk`, `probe-sdk`
+- Keep canonical skill folder names aligned with root [SKILL.md](SKILL.md).
+- Current canonical folders include:
+- `general`, `rest-api`, `webhooks`, `websockets`, `meeting-sdk`, `video-sdk`, `zoom-apps-sdk`
+- `rtms`, `team-chat`, `ui-toolkit`, `cobrowse-sdk`, `oauth`, `zoom-mcp`
+- `contact-center`, `virtual-agent`, `phone`, `rivet-sdk`, `probe-sdk`
 
 ### Markdown Linking Rules (Required)
 

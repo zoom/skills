@@ -2,26 +2,22 @@
 name: zoom-mcp
 description: Connects Claude to the official Zoom MCP Server for meeting management, recording access, and Zoom Doc creation. Uses AI Companion's Agentic Retrieval API to search meeting content semantically — returns inline AI summaries, Zoom Doc URLs, recording references, and whiteboards. Creates, searches, lists, updates, and deletes Zoom meetings; retrieves cloud recordings; creates Zoom Docs. Use when the user asks to manage Zoom meetings, find past meetings by content, access AI meeting summaries, retrieve transcripts, create meeting notes as a Zoom Doc, or automate Zoom workflows. Requires a Zoom OAuth Bearer token and AI Companion enabled.
 triggers:
-  - "zoom meeting"
-  - "search meetings"
-  - "list meetings"
-  - "create meeting"
-  - "schedule zoom"
-  - "find meeting"
-  - "update meeting"
-  - "delete meeting"
-  - "cancel meeting"
-  - "zoom transcript"
-  - "meeting transcript"
-  - "zoom recording"
-  - "cloud recording"
   - "zoom mcp"
+  - "mcp server"
+  - "mcp tools"
+  - "tools/list"
+  - "tools/call"
   - "meeting summary"
   - "ai companion transcript"
   - "agentic retrieval"
+  - "semantic meeting search"
+  - "search meetings by content"
+  - "ai-driven meeting retrieval"
+  - "zoom transcript via mcp"
+  - "meeting transcript via mcp"
   - "zoom doc"
-  - "create doc"
-  - "meeting notes"
+  - "create zoom doc"
+  - "meeting notes from ai"
 ---
 
 # Zoom MCP Server

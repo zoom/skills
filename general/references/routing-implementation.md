@@ -15,6 +15,7 @@ This reference provides a concrete implementation model for routing a complex de
 export type SkillId =
   | 'zoom-general'
   | 'zoom-rest-api'
+  | 'zoom-mcp'
   | 'zoom-webhooks'
   | 'zoom-websockets'
   | 'zoom-meeting-sdk'
@@ -44,6 +45,7 @@ interface Signals {
   meetingEmbed: boolean;
   customVideo: boolean;
   restApi: boolean;
+  mcp: boolean;
   webhooks: boolean;
   websockets: boolean;
   zoomApps: boolean;
@@ -66,7 +68,8 @@ export function detectSignals(rawQuery: string): Signals {
   return {
     meetingEmbed: hasAny(q, ['meeting sdk', 'embed meeting', 'join meeting ui', 'client view', 'component view']),
     customVideo: hasAny(q, ['video sdk', 'custom video', 'attachvideo', 'peer-video-state-change']),
-    restApi: hasAny(q, ['rest api', 'create meeting', '/v2/', 'list users', 's2s oauth']),
+    restApi: hasAny(q, ['rest api', 'api create meeting', 'api list meetings', '/v2/', 'list users', 's2s oauth', 'meeting endpoint']),
+    mcp: hasAny(q, ['zoom mcp', 'mcp server', 'agentic retrieval', 'tools/list', 'tools/call', 'semantic meeting search', 'create zoom doc']),
     webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
     websockets: hasAny(q, ['websocket', 'real-time events', 'persistent connection']),
     zoomApps: hasAny(q, ['zoom apps sdk', 'in-client app', 'layers api', 'collaborate mode']),
@@ -99,6 +102,7 @@ function pickPrimarySkill(s: Signals): SkillId {
   if (s.preflight) return 'probe-sdk';
   if (s.websockets) return 'zoom-websockets';
   if (s.webhooks) return 'zoom-webhooks';
+  if (s.mcp) return 'zoom-mcp';
   if (s.restApi) return 'zoom-rest-api';
   if (s.oauth) return 'zoom-oauth';
 
@@ -109,7 +113,7 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   const chain = new Set<SkillId>();
 
   // Auth chaining.
-  if (s.oauth || s.restApi || s.webhooks || s.websockets || s.phone || s.teamChat || s.virtualAgent) {
+  if (s.oauth || s.restApi || s.mcp || s.webhooks || s.websockets || s.phone || s.teamChat || s.virtualAgent) {
     chain.add('zoom-oauth');
   }
 
@@ -122,6 +126,10 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
 
   // Event channels often pair with REST resource management.
   if (s.webhooks || s.websockets) chain.add('zoom-rest-api');
+  if (s.mcp && s.restApi) {
+    chain.add('zoom-rest-api');
+    chain.add('zoom-mcp');
+  }
 
   // Avoid redundant primary in chain.
   chain.delete(primary);
@@ -160,6 +168,9 @@ export function routeComplexQuery(query: string): RouteDecision {
   const warnings = validateDecision(primarySkill, signals);
 
   const needsClarification: string[] = [];
+  if (signals.mcp && signals.restApi) {
+    needsClarification.push('Do you want deterministic REST API automation, AI-agent MCP tooling, or a hybrid of both?');
+  }
   if (primarySkill === 'zoom-general') {
     needsClarification.push('Do you need SDK embed behavior, API resource automation, or event ingestion?');
   }

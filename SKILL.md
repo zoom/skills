@@ -54,7 +54,7 @@ This repo uses progressive discovery:
 To improve routing quality in any skill:
 - Keep `description` specific and keyword-rich (include "use when...").
 - Add practical `triggers` for common user phrasing.
-- Avoid overlapping triggers between Meeting SDK, Video SDK, and REST API intents.
+- Avoid overlapping triggers between Meeting SDK, Video SDK, REST API, and MCP intents.
 
 ## zoom-general (Hub)
 
@@ -73,7 +73,7 @@ Use `zoom-general` when:
 
 | I want to... | Use this skill |
 |--------------|----------------|
-| Make API calls (create meetings, manage users) | **zoom-rest-api** |
+| Build deterministic automation/configuration/reporting with explicit request control | **zoom-rest-api** |
 | Receive event notifications (HTTP push) | **zoom-webhooks** |
 | Receive event notifications (WebSocket) | **zoom-websockets** |
 | Embed Zoom meetings in my app | **zoom-meeting-sdk** |
@@ -89,8 +89,28 @@ Use `zoom-general` when:
 | Use pre-built video UI components | **zoom-ui-toolkit** |
 | Enable co-browsing for support | **zoom-cobrowse-sdk** |
 | Implement OAuth authentication | **zoom-oauth** |
-| Use Zoom's official MCP Server (meetings + transcripts) | **zoom-mcp** |
+| Build AI-driven tool discovery workflows (AI Companion/agents) | **zoom-mcp** |
+| Build enterprise AI workflows with stable API core + AI tool layer | **zoom-rest-api + zoom-mcp** |
 | General/cross-product guidance | **zoom-general** |
+
+## APIs vs MCP Routing (Official Zoom Guidance)
+
+| Primary goal | Route |
+|--------------|-------|
+| Automation, configuration, reporting, scheduled jobs, strict retries/error control | **zoom-rest-api** |
+| AI interaction, dynamic tool discovery, cross-platform AI workflows | **zoom-mcp** |
+| Enterprise AI experiences at scale | **zoom-rest-api + zoom-mcp** |
+
+Source: https://developers.zoom.us/docs/mcp/library/resources/apis-vs-mcp/
+- Deep dive: [general/use-cases/apis-vs-mcp-routing.md](general/use-cases/apis-vs-mcp-routing.md)
+- MCP transport note: Zoom MCP remote server uses Streamable HTTP/SSE (client support required).
+
+### MCP Server Model (Zoom-Hosted)
+
+- Zoom acts as MCP server and exposes Zoom platform tools/data to external AI clients.
+- MCP access is OAuth-scoped and governed.
+- Product-scoped MCP servers are expected (for example Meetings, Team Chat, Whiteboard).
+- Current routing in this repo uses `zoom-mcp` as the MCP entry point; expand by product as Zoom publishes additional MCP server surfaces.
 
 ## Resources
 

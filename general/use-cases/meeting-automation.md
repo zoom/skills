@@ -6,9 +6,13 @@ Schedule, update, and delete Zoom meetings programmatically.
 
 Use the Zoom REST API to automate meeting management - create meetings, update settings, manage participants, and delete meetings without manual intervention.
 
+If your primary goal is deterministic backend automation, stay on REST API.
+If your primary goal is AI-agent tool invocation (for example, natural-language meeting management), route to `zoom-mcp` instead.
+
 ## Skills Needed
 
 - **zoom-rest-api** - Primary
+- **zoom-mcp** - Optional alternative for AI-driven tool workflows
 
 ## Prerequisites
 

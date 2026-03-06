@@ -38,8 +38,9 @@ cp -r skills ~/.claude/skills/zoom-skills
 
 Or install individual skills:
 ```bash
-cp -r skills/zoom-general ~/.claude/skills/
-cp -r skills/zoom-meeting-sdk ~/.claude/skills/
+cp -r skills/general ~/.claude/skills/
+cp -r skills/meeting-sdk ~/.claude/skills/
+cp -r skills/zoom-mcp ~/.claude/skills/
 ```
 
 ### OpenCode
@@ -83,6 +84,7 @@ The **general** skill acts as a router and directs to the appropriate specialize
 | "Handle webhook events" | webhooks |
 | "Build a meeting bot" | zoom-meeting-sdk + rtms |
 | "Set up OAuth authentication" | oauth |
+| "Build AI-agent meeting search tools" | zoom-mcp |
 
 ### 3. Skills chain automatically
 
@@ -112,6 +114,7 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | [zoom-ui-toolkit](ui-toolkit/) | Pre-built UI components for Video SDK |
 | [zoom-cobrowse-sdk](cobrowse-sdk/) | Collaborative browsing for support |
 | [zoom-oauth](oauth/) | OAuth authentication (all 4 grant types) |
+| [zoom-mcp](zoom-mcp/) | Zoom-hosted MCP server workflows for AI-agent tooling, meeting summaries, and transcript retrieval |
 
 ## Common Use Cases
 
@@ -131,6 +134,8 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | Pre-join/browser readiness diagnostics | probe-sdk + meeting-sdk or video-sdk |
 | Low-latency event notifications | zoom-websockets |
 | OAuth authentication setup | oauth |
+| AI-driven tool workflows over Zoom data | zoom-mcp |
+| Enterprise AI architecture (API core + AI tool layer) | zoom-rest-api + zoom-mcp |
 
 ## Architecture
 
@@ -154,24 +159,39 @@ zoom-general (HUB)
        ├── probe-sdk
        ├── zoom-ui-toolkit
        ├── zoom-cobrowse-sdk
-       └── zoom-oauth
+       ├── zoom-oauth
+       └── zoom-mcp
 ```
 
 ## Directory Structure
 
-```
-agent-skills/
+```text
+skills/
 ├── README.md                 # This file
 ├── ARCHITECTURE.md           # Full architecture diagram
 │
-├── general/            # HUB (entry point)
+├── general/                  # HUB (entry point)
 │   ├── SKILL.md
 │   ├── references/           # Cross-cutting docs
 │   └── use-cases/            # Multi-skill scenarios
 │
-└── zoom-*/                   # SPOKES (specialized skills)
-    ├── SKILL.md
-    └── references/
+├── rest-api/
+├── webhooks/
+├── websockets/
+├── meeting-sdk/
+├── video-sdk/
+├── zoom-apps-sdk/
+├── rtms/
+├── team-chat/
+├── contact-center/
+├── virtual-agent/
+├── phone/
+├── rivet-sdk/
+├── probe-sdk/
+├── ui-toolkit/
+├── cobrowse-sdk/
+├── oauth/
+└── zoom-mcp/
 ```
 
 ## Resources

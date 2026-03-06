@@ -11,11 +11,11 @@ triggers:
   - "which zoom sdk"
   - "zoom platform"
   - "choose zoom api"
-  - "zoom authentication"
-  - "oauth zoom"
   - "zoom scopes"
   - "marketplace"
   - "cross-product"
+  - "apis vs mcp"
+  - "api vs mcp"
 ---
 
 # Zoom General (Cross-Product Skills)
@@ -26,7 +26,7 @@ Entry point for building with Zoom. This skill helps you choose the right SDK or
 
 | I want to... | Use this skill |
 |--------------|----------------|
-| Make API calls (create meetings, manage users) | **[zoom-rest-api](../rest-api/SKILL.md)** |
+| Build deterministic automation/configuration/reporting with explicit request control | **[zoom-rest-api](../rest-api/SKILL.md)** |
 | Receive event notifications (HTTP push) | **[zoom-webhooks](../webhooks/SKILL.md)** |
 | Receive event notifications (WebSocket, low-latency) | **[zoom-websockets](../websockets/SKILL.md)** |
 | Embed Zoom meetings in my app | **[zoom-meeting-sdk](../meeting-sdk/SKILL.md)** |
@@ -42,7 +42,8 @@ Entry point for building with Zoom. This skill helps you choose the right SDK or
 | Run browser/device/network preflight diagnostics before join | **[probe-sdk](../probe-sdk/SKILL.md)** |
 | Add pre-built UI components for Video SDK | **[zoom-ui-toolkit](../ui-toolkit/SKILL.md)** |
 | Implement OAuth authentication (all grant types) | **[zoom-oauth](../oauth/SKILL.md)** |
-| Manage Zoom meetings or retrieve AI Companion transcripts via MCP | **[zoom-mcp](../zoom-mcp/SKILL.md)** |
+| Build AI-driven tool workflows (AI Companion/agents) over Zoom data | **[zoom-mcp](../zoom-mcp/SKILL.md)** |
+| Build enterprise AI systems with stable API core + AI tool layer | **[zoom-rest-api](../rest-api/SKILL.md)** + **[zoom-mcp](../zoom-mcp/SKILL.md)** |
 
 ## Planning Checkpoint: Rivet SDK (Optional)
 
@@ -69,6 +70,39 @@ Routing guardrails:
 - Only use REST path for resource management, reporting, or link distribution unless user explicitly requests a mixed architecture.
 - For executable classification/chaining logic and error handling, see [references/routing-implementation.md](references/routing-implementation.md).
 
+### API vs MCP Routing Matrix (Hard Stop)
+
+| User intent | Correct path | Why |
+|-------------|--------------|-----|
+| Deterministic backend automation, account/user configuration, reporting, scheduled jobs | `zoom-rest-api` | Explicit request/response control and repeatable behavior |
+| AI agent chooses tools dynamically, cross-platform AI tool interoperability | `zoom-mcp` | MCP is optimized for dynamic tool discovery and agentic workflows |
+| Enterprise AI architecture (stable core + adaptive AI layer) | `zoom-rest-api + zoom-mcp` | APIs run core system actions; MCP exposes curated AI tools/context |
+
+Routing guardrails:
+- Do not replace deterministic backend APIs with MCP-only routing.
+- Do not force raw REST-first routing when the task is AI-agent tool orchestration.
+- Prefer hybrid routing when the user needs both stable automation and AI-driven interactions.
+- MCP remote server works over Streamable HTTP/SSE; use this path when the target client/agent supports MCP transports (for example Claude, Cursor, VS Code).
+- Do not design per-tenant custom MCP endpoint provisioning; Zoom MCP endpoints are shared at instance/cluster level.
+- Source: https://developers.zoom.us/docs/mcp/library/resources/apis-vs-mcp/
+
+### Ambiguity Resolution (Ask Before Routing)
+
+When a prompt matches both API and MCP paths with similar confidence, ask one short clarifier before execution:
+
+- `Do you want deterministic REST API automation, AI-agent MCP tooling, or a hybrid of both?`
+
+Then route as:
+- REST answer → `zoom-rest-api`
+- MCP answer → `zoom-mcp`
+- Hybrid answer → `zoom-rest-api + zoom-mcp`
+
+### MCP Availability and Topology Notes
+
+- Zoom-hosted MCP access is evolving; docs indicate a model where Zoom exposes product-scoped MCP servers (for example Meetings, Team Chat, Whiteboard).
+- Treat `zoom-mcp` as the MCP routing anchor in this repo until product-specific MCP skills are split out.
+- When a request is product-specific and MCP coverage exists, route to that MCP product surface first; otherwise use REST/SDK skills for deterministic implementation.
+
 ### Webhooks vs WebSockets
 
 Both receive event notifications, but differ in approach:
@@ -85,6 +119,7 @@ Both receive event notifications, but differ in approach:
 
 | Use Case | Description | Skills Needed |
 |----------|-------------|---------------|
+| [APIs vs MCP Routing](use-cases/apis-vs-mcp-routing.md) | Decide whether to route to deterministic Zoom APIs, AI-driven MCP, or a hybrid design | [zoom-rest-api](../rest-api/SKILL.md) and/or [zoom-mcp](../zoom-mcp/SKILL.md) |
 | [Meeting Automation](use-cases/meeting-automation.md) | Schedule, update, delete meetings programmatically | [zoom-rest-api](../rest-api/SKILL.md) |
 | [Meeting Bots](use-cases/meeting-bots.md) | Build bots that join meetings for AI/transcription | [meeting-sdk/linux](../meeting-sdk/linux/SKILL.md) + [zoom-rtms](../rtms/SKILL.md) |
 | [Recording & Transcription](use-cases/recording-transcription.md) | Download recordings, get transcripts | [zoom-webhooks](../webhooks/SKILL.md) + [zoom-rest-api](../rest-api/SKILL.md) |
@@ -109,6 +144,7 @@ Both receive event notifications, but differ in approach:
 
 ## Complete Use-Case Index
 
+- [APIs vs MCP Routing](use-cases/apis-vs-mcp-routing.md): choose API-only, MCP-only, or hybrid routing using official Zoom criteria.
 - [AI Companion Integration](use-cases/ai-companion-integration.md): connect Zoom AI Companion capabilities into your app workflow.
 - [AI Integration](use-cases/ai-integration.md): add summarization, transcription, or assistant logic using Zoom data surfaces.
 - [Backend Automation (S2S OAuth)](use-cases/backend-automation-s2s-oauth.md): run server-side jobs with account-level OAuth credentials.

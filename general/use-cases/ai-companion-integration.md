@@ -26,10 +26,17 @@ Zoom AI Companion provides AI-powered features including:
 
 | Use Case | Skills |
 |----------|--------|
+| AI-agent search and tool invocation over Zoom meeting context | **zoom-mcp** |
 | Get meeting summaries after meeting | **zoom-rest-api** |
-| Get meeting transcripts | **zoom-rest-api** + **webhooks** |
+| Get meeting transcripts in deterministic backend pipeline | **zoom-rest-api** + **zoom-webhooks** |
 | Real-time transcript streaming | **rtms** |
 | Control AI features in embedded meetings | **zoom-meeting-sdk** |
+
+## Routing Modes
+
+- Use **zoom-rest-api** when you need deterministic backend jobs, strict retry behavior, and explicit endpoint control.
+- Use **zoom-mcp** when an AI system must discover and invoke Zoom tools dynamically.
+- Use both when your architecture requires stable API automation plus AI-driven retrieval and assistance.
 
 ---
 

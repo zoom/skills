@@ -6,10 +6,14 @@ Download cloud recordings and access transcripts from Zoom meetings.
 
 Access Zoom's cloud recordings and automated transcripts via webhooks and REST API for archival, compliance, or further processing.
 
+For deterministic archival pipelines, keep REST API + webhooks as the primary route.
+For AI-agent retrieval of summaries/transcripts through tool discovery, use `zoom-mcp`.
+
 ## Skills Needed
 
-- **webhooks** - Receive recording.completed events
-- **zoom-rest-api** - Download recordings and transcripts
+- **zoom-webhooks** - Receive recording.completed events (pipeline mode)
+- **zoom-rest-api** - Download recordings and transcripts (pipeline mode)
+- **zoom-mcp** - AI-driven transcript/summary retrieval (agent mode)
 
 ## Flow
 
@@ -25,6 +29,15 @@ Recording Flow:
         ↓
 5. API: Get transcript (if enabled)
 ```
+
+MCP Agent Flow:
+1. Agent invokes search tool
+        ↓
+2. MCP: search meetings / recordings by context
+        ↓
+3. MCP: retrieve transcript-capable recording details
+        ↓
+4. Agent fetches transcript file or uses returned summary context
 
 ## Prerequisites
 
