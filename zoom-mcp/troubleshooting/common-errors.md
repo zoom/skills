@@ -1,166 +1,128 @@
 # Common Errors — Zoom MCP Server
 
-Diagnostic guide for the most frequent issues when using the Zoom MCP Server with Claude.
-
----
+Diagnostic guide for the most frequent issues when using the Zoom MCP server.
 
 ## Authentication Issues
 
-### "Access token is required" (`-32001`)
+### `Access token is required` (`-32001`)
 
-**Symptom**: Every tool call returns `-32001 Access token is required`.
+**Cause:** The Authorization header was not included when the MCP server was registered, or the
+registration is missing.
 
-**Cause**: The Authorization header was not included when registering the MCP server, or
-the registration is missing.
+**Fix:** Re-register the MCP server with a bearer token.
 
-**Fix**:
 ```bash
-# Remove existing registration (if any)
 claude mcp remove zoom-mcp
-
-# Re-add with Bearer token
 claude mcp add --transport http zoom-mcp \
   https://mcp-us.zoom.us/mcp/zoom/streamable \
   --header "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   --scope user
 ```
 
----
+### `Invalid access token` (`-32001`)
 
-### "Invalid access token" (`-32001`)
+**Cause:** The access token expired, was revoked, or does not contain the exact MCP scopes needed
+for the tool you called.
 
-**Symptom**: The server returns `-32001 Invalid access token`.
+**Fix:** Refresh the token and verify the MCP-specific granular scopes.
 
-**Cause**: The OAuth access token has expired (tokens expire after 1 hour) or was revoked.
+## Scope Issues
 
-**Fix**:
-1. Refresh the token:
-   ```bash
-   curl -X POST https://zoom.us/oauth/token \
-     -u "CLIENT_ID:CLIENT_SECRET" \
-     -d "grant_type=refresh_token&refresh_token=YOUR_REFRESH_TOKEN"
-   ```
-2. Re-register with the new access token:
-   ```bash
-   claude mcp remove zoom-mcp
-   claude mcp add --transport http zoom-mcp \
-     https://mcp-us.zoom.us/mcp/zoom/streamable \
-     --header "Authorization: Bearer NEW_ACCESS_TOKEN" \
-     --scope user
-   ```
+### `search_meetings` fails on scope
 
----
+**Server-required scope:** `meeting:read:search`
 
-## Transcript Issues
+### `get_meeting_assets` fails on scope
 
-### Transcript not in `recording_files`
+**Server-required scope:** `meeting:read:assets`
 
-**Symptom**: `get_recording` returns a `recording_files` array but it contains only MP4/M4A
-entries — no VTT or TRANSCRIPT file.
+### `recordings_list` fails on scope
 
-**Most common cause**: AI Companion is not enabled on the account.
+**Server-required scope:** `cloud_recording:read:list_user_recordings`
 
-**Fix**:
-1. Go to Zoom web portal → **Admin → Account Management → Account Settings → AI Companion**
-2. Enable **Smart Recording** and **Meeting Summary**
-3. For future meetings: these settings apply automatically
-4. For past meetings: transcripts cannot be retroactively generated; only new recordings
-   after enabling will include transcript files
+### `get_recording_resource` fails on scope
 
-**Secondary cause**: The meeting was recorded locally, not to cloud.
-- Only cloud recordings generate transcript files
-- Update the meeting: `zoom-mcp:update_meeting` with `settings: { auto_recording: "cloud" }`
+**Server-required scope:** `cloud_recording:read:content`
 
----
+### `create_new_file_with_markdown` fails on scope
 
-### Recording file download returns 401
+**Required scope:** `docs:write:import`
 
-**Symptom**: The `download_url` from `get_recording` returns `401 Unauthorized` when fetched.
+## Search and Retrieval Issues
 
-**Cause**: The download URL requires OAuth authentication but no token was passed.
+### Semantic search returns no useful results
 
-**Fix**: Include the Authorization header when fetching the file:
-```
-Authorization: Bearer YOUR_ZOOM_OAUTH_TOKEN
-```
+Common causes:
+- AI Companion features were not enabled for those meetings
+- the query is too narrow
+- the date window is too narrow
+- the meeting is easier to locate through `recordings_list`
 
-The same token used for MCP calls is required for file downloads.
+**Fixes:**
+- enable Smart Recording and Meeting Summary
+- widen `from` and `to`
+- try shorter search terms
+- fall back to `recordings_list`
 
----
+### Meeting assets retrieval fails even with a valid token
+
+Most often this means one of these:
+- missing `meeting:read:assets`
+- guessed `meetingId` instead of the right UUID or numeric ID
+- user does not have access to that meeting's assets
+
+### Recording-oriented retrieval fails
+
+If `get_recording_resource` cannot find the target:
+- use `recordings_list` first
+- use the identifier returned by the live listing flow
+- avoid assuming a scheduled meeting number is the same identifier used by the recording flow
+
+### Direct resource download returns `401`
+
+Returned resource URLs still require the bearer token.
+
+**Fix:** Include `Authorization: Bearer YOUR_TOKEN` when fetching the URL directly.
 
 ## Connection Issues
 
-### "instance not found" (`-32602`)
+### `Can not found tool: ... in this MCP Server` (`-32602`)
 
-**Symptom**: Error on any tool call: `-32602 instance not found`.
+**Cause:** The requested tool does not exist on the registered MCP server, or the request was
+sent to the wrong MCP surface.
 
-**Cause**: The registered URL points to the Whiteboard MCP server instead of the Zoom
-meeting/recording server.
+**Fix:**
+- Zoom MCP: `https://mcp-us.zoom.us/mcp/zoom/streamable`
+- Whiteboard MCP: `https://mcp-us.zoom.us/mcp/whiteboard/streamable`
+- re-run `tools/list`
+- use the current tool names exposed by that server
+- if the request is Whiteboard-specific, route to [../whiteboard/SKILL.md](../whiteboard/SKILL.md)
 
-**Fix**: Confirm the URL:
-- ✅ Correct: `https://mcp-us.zoom.us/mcp/zoom/streamable`
-- ❌ Wrong: `https://mcp-us.zoom.us/mcp/whiteboard/streamable`
+### MCP server not appearing in the client
 
----
+**Fix:**
+- run `claude mcp list`
+- if missing, re-add the server
+- confirm the client is using the expected bearer token
 
-### MCP server not appearing in Claude
+## Parameter and Call-Handling Issues
 
-**Symptom**: Claude doesn't offer zoom-mcp tools or says the server isn't registered.
+### `Call handle error` (`-32603`)
 
-**Fix**:
-```bash
-# Check registration
-claude mcp list
+**Cause:** The tool call was accepted at the protocol layer, but the server failed while
+handling the call. In this repo, this was reproduced by calling `recordings_list` without
+required arguments.
 
-# If not listed, add it
-claude mcp add --transport http zoom-mcp \
-  https://mcp-us.zoom.us/mcp/zoom/streamable \
-  --header "Authorization: Bearer YOUR_ZOOM_OAUTH_TOKEN" \
-  --scope user
-```
+**Fix:**
+- re-check required parameters against the live schema from `tools/list`
+- retry with the missing arguments added
 
----
+### Upstream `400 invalid param`
 
-## Meeting / Recording Not Found
+**Cause:** The MCP tool reached the downstream Zoom API, but one of the passed arguments was
+invalid. In this repo, this was reproduced by calling `create_new_file_with_markdown` with a
+bogus `parent_id`.
 
-### `404` on `get_recording`
-
-**Symptom**: `get_recording` returns 404 even though you know the recording exists.
-
-**Cause**: Meeting IDs for past meetings may differ from the original scheduled meeting ID
-after the meeting completes. Zoom sometimes uses a UUID-based ID for the recording.
-
-**Fix**: Use `list_recordings` with a date range instead:
-```
-zoom-mcp:list_recordings
-  from: "2025-02-01"
-  to: "2025-02-28"
-```
-
-The response includes the correct `uuid` to pass to `get_recording`.
-
----
-
-### Empty search results
-
-**Symptom**: `search_meetings` returns no results for a topic you know exists.
-
-**Causes and fixes**:
-1. **Date range too narrow**: Widen `startDate`/`endDate`
-2. **Topic spelling**: Try a shorter search term or partial match
-3. **Meeting belongs to another host**: `search_meetings` only returns meetings the
-   authenticated user hosts or is invited to
-4. **Past meetings not indexed**: Some older past meetings may not appear in search;
-   use `list_recordings` by date range for past content
-
----
-
-## Rate Limits
-
-### `429 Too Many Requests`
-
-**Symptom**: Occasional failures with status `429`.
-
-**Fix**: Back off and retry after the interval specified in the `Retry-After` response header.
-The default rate limit is approximately 10 requests/second. Avoid rapid sequences of large
-paginated queries.
+**Fix:**
+- remove the bad argument or replace it with a valid value
+- retry the tool call

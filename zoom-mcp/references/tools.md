@@ -1,244 +1,130 @@
 # Tool Reference — Zoom MCP Server
 
-Tools available on the Zoom MCP Server. Always use fully qualified names: `zoom-mcp:tool_name`
+Tools available on the Zoom MCP server. Treat the raw server tool names as authoritative.
+Some MCP clients namespace them in the UI, for example `zoom-mcp:recordings_list`.
 
-Use `zoom-mcp:get_tool_details` with any `toolName` to retrieve the live parameter schema
-directly from the server.
+This reference is based on the current `tools/list` output and tool execution behavior of
+`https://mcp-us.zoom.us/mcp/zoom/streamable`.
 
-> **[CONTRIBUTOR NEEDED]** Confirm the complete tool list. The original list had 12 tools;
-> the Zoom Doc creation tool may be a 13th. Run `zoom-mcp:list_available_tools` against
-> the live server to get the authoritative list with current names.
+Treat the live MCP protocol `tools/list` response as the authoritative source for the current
+tool list and schemas.
 
----
+## Current Live Tools
 
-## Meeting Management
+The current `tools/list` response exposes these Zoom MCP tools:
 
-### `zoom-mcp:search_meetings`
+- `create_new_file_with_markdown`
+- `get_meeting_assets`
+- `search_meetings`
+- `get_recording_resource`
+- `recordings_list`
 
-Semantic content search using AI Companion's **Agentic Retrieval API**. Searches across
-meeting content (what was said, documents, AI summaries) — not just meeting metadata.
-Can search by time period, by content query, or both.
+The server did **not** expose older inferred tool names such as `list_meetings`,
+`get_meeting`, `create_meeting`, `get_user_profile`, `list_available_tools`, or
+`get_tool_details` in that probe.
 
-**Input parameters:**
+## Supported Scope Families Advertised by Zoom MCP
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `query` | string | No* | Semantic search term — searches meeting content, not just topic |
-| `startDate` | string | No* | Start of date range (`YYYY-MM-DD`) |
-| `endDate` | string | No* | End of date range (`YYYY-MM-DD`, max 30-day window) |
-| `pageSize` | integer | No | Results per page (max 300) |
-| `nextPageToken` | string | No | Token for next page |
+Protected-resource metadata for Zoom MCP advertised these scope families:
+- `docs:write:import`
+- `meeting:read:assets`
+- `meeting:read:search`
+- `cloud_recording:read:content`
+- `cloud_recording:read:list_user_recordings`
 
-\* At least one of `query` or a date range should be provided.
+## Documents
 
-**Response — two result types:**
+### `create_new_file_with_markdown`
 
-**Recap meeting** (for meetings with AI Companion data):
+Create a Zoom Docs document from Markdown content.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `[CONTRIBUTOR NEEDED]` | string | Inline AI summary text |
-| `[CONTRIBUTOR NEEDED]` | array | Attached Zoom Docs — each entry includes title and URL |
-| `[CONTRIBUTOR NEEDED]` | object | Recording reference |
-| `[CONTRIBUTOR NEEDED]` | array | Whiteboards |
-
-> **[CONTRIBUTOR NEEDED]** Exact field names for the Recap meeting result. Source: Zoom
-> MCP Server engineering team or live server response inspection.
-
-**View recording** (for meetings with cloud recordings):
-
-> **[CONTRIBUTOR NEEDED]** Exact field names for the View recording result. What does it
-> contain? Does it overlap with Recap, or is it a distinct result type? Source: engineering
-> team or live server response.
-
----
-
-### `zoom-mcp:list_meetings`
-
-List meetings for the authenticated user.
+**Verified scope:** `docs:write:import`
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `type` | string | No | `scheduled`, `live`, or `upcoming` (default: `scheduled`) |
-| `pageSize` | integer | No | Results per page (max 300) |
-| `nextPageToken` | string | No | Token for next page |
+| `content` | string | **Yes** | Markdown formatted content |
+| `file_name` | string | No | Name of the new document |
+| `parent_id` | string | No | Parent file/folder ID; omit to place under My Docs |
 
----
+Successful calls return:
+- `file_id`
+- `file_link`
 
-### `zoom-mcp:get_meeting`
+## Meeting Discovery and Assets
 
-Get details for a specific meeting.
+### `search_meetings`
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `meetingId` | string | **Yes** | Meeting ID |
-| `occurrenceId` | string | No | Occurrence ID for recurring meetings |
-| `showPreviousOccurrences` | boolean | No | Include past occurrences |
+Read-only search tool for semantic meeting discovery.
 
----
-
-### `zoom-mcp:create_meeting`
-
-Create a new Zoom meeting.
+**Verified scope:** `meeting:read:search`
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `topic` | string | **Yes** | Meeting topic/title |
-| `type` | integer | **Yes** | `1`=instant, `2`=scheduled, `3`=recurring (no fixed time), `8`=recurring (fixed time) |
-| `startTime` | string | No | ISO 8601 datetime (e.g., `2025-03-10T14:00:00`) |
-| `duration` | integer | No | Duration in minutes |
-| `timezone` | string | No | Timezone (e.g., `America/New_York`) |
-| `agenda` | string | No | Meeting description |
-| `recurrence` | object | No | Required for type 3 or 8 (see below) |
-| `settings` | object | No | Meeting settings (see below) |
+| `q` | string | No | Search query keyword |
+| `from` | string | No | UTC start datetime |
+| `to` | string | No | UTC end datetime |
+| `page_size` | integer | No | Results per page; default `50`, max `300` |
+| `next_page_token` | string | No | Pagination token; expires in 15 minutes |
 
-**recurrence object:**
+### `get_meeting_assets`
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `type` | integer | `1`=daily, `2`=weekly, `3`=monthly |
-| `repeat_interval` | integer | Interval between recurrences |
-| `weekly_days` | string | Day(s) of week: `1`=Sun through `7`=Sat |
-| `end_times` | integer | Number of occurrences |
-| `end_date_time` | string | End date in ISO 8601 |
+Read-only meeting asset hub. Retrieves meeting summary, recording, whiteboards, Zoom Docs,
+and related artifacts for a specific meeting.
 
-**settings object:**
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `host_video` | boolean | Start with host video on |
-| `participant_video` | boolean | Start with participant video on |
-| `join_before_host` | boolean | Allow joining before host |
-| `mute_upon_entry` | boolean | Mute participants on entry |
-| `waiting_room` | boolean | Enable waiting room |
-| `auto_recording` | string | `local`, `cloud`, or `none` |
-
----
-
-### `zoom-mcp:update_meeting`
-
-Update an existing meeting. Accepts the same parameters as `create_meeting` plus:
+**Verified scope:** `meeting:read:assets`
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `meetingId` | string | **Yes** | ID of the meeting to update |
+| `meetingId` | string | **Yes** | Numeric meeting number or UUID; the schema prefers UUID when available |
 
-Only fields you pass are changed — omitted fields keep their current values.
+**Important live-schema note:**
+- UUID-style values may require double encoding when they contain `/` or `//`.
+- The tool description strongly prefers explicit user selection when choosing a meeting from search results.
 
----
+## Recordings
 
-### `zoom-mcp:delete_meeting`
+### `recordings_list`
 
-Delete a meeting.
+List cloud recordings for a user.
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `meetingId` | string | **Yes** | Meeting ID to delete |
-| `occurrenceId` | string | No | Delete only this recurrence occurrence |
-| `scheduleForReminder` | boolean | No | Send cancellation notification |
-
----
-
-## Recordings & Transcripts
-
-### `zoom-mcp:list_recordings`
-
-List cloud recordings for the authenticated user.
+**Verified scope:** `cloud_recording:read:list_user_recordings`
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `from` | string | **Yes** | Start date (`YYYY-MM-DD`) |
-| `to` | string | **Yes** | End date (`YYYY-MM-DD`, max 30-day window) |
-| `pageSize` | integer | No | Results per page |
-| `nextPageToken` | string | No | Token for next page |
-| `trash` | boolean | No | List trashed recordings |
+| `userId` | string | **Yes** | User ID; user OAuth commonly accepts `me` |
+| `from` | string | No | Start date |
+| `to` | string | No | End date |
+| `meeting_id` | integer | No | Filter by meeting number |
+| `trash` | boolean | No | Include trashed recordings |
+| `trash_type` | string | No | Trash filter category |
+| `mc` | string | No | Additional recording filter flag from the live schema |
+| `page_size` | integer | No | Results per page; default `30`, max `300` |
+| `next_page_token` | string | No | Pagination token |
 
----
+### `get_recording_resource`
 
-### `zoom-mcp:get_recording`
+Retrieve recording-oriented assets for a specific meeting, including transcript-like,
+summary-like, and playback-oriented resources.
 
-Get recording details for a specific meeting, including all recording files.
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `meetingId` | string | **Yes** | Meeting ID (or recording UUID) |
-
-**Recording file types in `recording_files`:**
-
-| `file_type` | Description |
-|-------------|-------------|
-| `MP4` | Video recording |
-| `M4A` | Audio-only recording |
-| `VTT` | WebVTT transcript with timestamps |
-| `TRANSCRIPT` | Structured transcript with speaker labels |
-| `CHAT` | In-meeting chat messages |
-| `TIMELINE` | Meeting timeline events |
-
-Access transcript content by fetching `download_url` with `Authorization: Bearer TOKEN`.
-
----
-
-### `zoom-mcp:delete_recording`
-
-Delete or trash a cloud recording.
+**Verified scope:** `cloud_recording:read:content`
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `meetingId` | string | **Yes** | Meeting ID |
-| `action` | string | No | `trash` (default) or `delete` (permanent) |
+| `meetingId` | string | **Yes** | Meeting UUID or recording-capable identifier |
+| `types` | string | No | Resource type selector |
+| `clip_num` | integer | No | Clip number / segment selector |
+| `play_time` | integer | No | Playback position |
+| `raw_passcode` | string | No | Plaintext recording passcode |
+| `encode_passcode` | string | No | Encoded recording passcode |
 
----
+**Output shape from live schema includes resource families such as:**
+- transcript timelines
+- summaries
+- next steps
+- play URLs
 
-## Experimental / Unverified: Zoom Docs
+## Discovery Notes
 
-This section is intentionally quarantined. Do not treat it as a stable public surface until a
-live `zoom-mcp:list_available_tools` response confirms the tool name and schema.
-
-### `zoom-mcp:create_zoom_doc` *(verify tool name)*
-
-Creates a Zoom Doc — Zoom's native document format, comparable to a Notion page. Returns
-the URL of the created document.
-
-> **[CONTRIBUTOR NEEDED]** Verify the exact tool name by running `zoom-mcp:list_available_tools`
-> against the live server. Then fill in the full parameter schema below.
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `[CONTRIBUTOR NEEDED]` | string | **Yes** | Document title |
-| `[CONTRIBUTOR NEEDED]` | string | No | Document body / content |
-| `[CONTRIBUTOR NEEDED]` | — | No | Any additional parameters (owner, folder, template, permissions) |
-
-**Returns:**
-
-> **[CONTRIBUTOR NEEDED]** What does the response contain? Specifically: the URL of the
-> created Zoom Doc, and any other returned fields (doc ID, created timestamp, etc.).
-
----
-
-## User & Utility
-
-### `zoom-mcp:get_user_profile`
-
-Get the authenticated user's Zoom profile. No parameters required.
-
-Returns: `id`, `email`, `first_name`, `last_name`, `account_id`, `type`, `timezone`.
-
----
-
-### `zoom-mcp:list_available_tools`
-
-List all tools available on this MCP server. No parameters required.
-
-Use to confirm server connectivity and discover the current tool list.
-
----
-
-### `zoom-mcp:get_tool_details`
-
-Get the full parameter schema for any tool.
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `toolName` | string | **Yes** | Tool name (e.g., `search_meetings`) |
-
-Returns the complete JSON Schema for the tool's input parameters, directly from the server.
+- Discovery happens through MCP protocol `tools/list`, not through a dedicated Zoom utility tool.
+- Re-run `tools/list` whenever you need to confirm whether the current tool list has changed.
+- Do not rely on older examples that use `query`, `startDate`, `endDate`, or `pageSize`; the current live schema uses `q`, `from`, `to`, and `page_size`.

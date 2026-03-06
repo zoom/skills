@@ -1,140 +1,84 @@
-# Search and Act — Finding Meetings and Taking Action
+# Search and Act — Zoom MCP Patterns
 
-Patterns for searching meeting content and metadata, then acting on results.
+Patterns for finding meetings and taking action using the current Zoom MCP tool surface.
 
-`search_meetings` uses AI Companion's Agentic Retrieval API — it searches what was
-actually said and discussed, not just meeting titles. Recap results include inline AI
-summaries and any Zoom Doc URLs attached to the meeting. See
-[examples/transcript-retrieval.md](transcript-retrieval.md) for the full retrieval workflow.
+## Search by Topic or Time Range
 
----
-
-## Search by Topic
-
-```
-zoom-mcp:search_meetings
-  query: "budget review"
-  pageSize: 10
+```text
+search_meetings
+  q: "budget review"
+  from: "2026-03-01"
+  to: "2026-03-06"
+  page_size: 10
 ```
 
-Returns meetings whose topic matches the query. Results include meeting ID, topic, start
-time, host, and status.
+Use this when the user starts from what was discussed rather than from a known meeting ID.
 
----
+## Search Then Inspect Assets
 
-## Search by Date Range
-
-```
-zoom-mcp:search_meetings
-  query: "all hands"
-  startDate: "2025-01-01"
-  endDate: "2025-01-31"
-  pageSize: 300
-```
-
-Date format: `YYYY-MM-DD`. Maximum date window: 30 days per query. For longer ranges,
-run multiple queries with 30-day windows.
-
-Maximum `pageSize`: 300. Use `nextPageToken` from the response to paginate.
-
----
-
-## Search Then Get Details
-
-A two-step pattern to find and inspect a meeting:
-
-```
+```text
 Step 1:
-zoom-mcp:search_meetings
-  query: "product roadmap"
-  startDate: "2025-02-01"
-  endDate: "2025-02-28"
-
-Step 2 (use ID from results):
-zoom-mcp:get_meeting
-  meetingId: "84574185634"
-```
-
-`get_meeting` returns the full meeting object including join URL, password, recurrence
-details, and settings — more than `search_meetings` returns alone.
-
----
-
-## Search Then Reschedule
-
-```
-Step 1: zoom-mcp:search_meetings  →  find the meeting ID
+search_meetings
+  q: "product roadmap"
+  from: "2026-03-01"
+  to: "2026-03-06"
 
 Step 2:
-zoom-mcp:update_meeting
-  meetingId: "84574185634"
-  startTime: "2025-03-20T14:00:00"
-  timezone: "America/Chicago"
+get_meeting_assets
+  meetingId: "MEETING_ID_OR_UUID"
 ```
 
----
+This is the main MCP pattern for retrieving summaries, recording references, linked docs, and
+other meeting-related assets.
 
-## Search Then Get Recording
+## Search Then Inspect Recording Resources
 
-Find a past meeting and retrieve its recording/transcript:
-
-```
-Step 1: zoom-mcp:search_meetings  →  get meeting ID
+```text
+Step 1:
+search_meetings
+  q: "all hands"
+  from: "2026-03-01"
+  to: "2026-03-06"
 
 Step 2:
-zoom-mcp:get_recording
-  meetingId: "84574185634"
+get_recording_resource
+  meetingId: "MEETING_ID_OR_UUID"
 ```
 
-If the recording isn't found by meeting ID (common for past meetings where the UUID changes
-post-completion), use `list_recordings` with a date range instead:
+Use this when the user needs transcript-capable or playback-oriented resources after they have
+identified the target meeting.
 
-```
-zoom-mcp:list_recordings
-  from: "2025-02-01"
-  to: "2025-02-28"
-  pageSize: 50
-```
+## Search Then Create a Zoom Doc
 
----
-
-## Search Then Delete
-
-Find and cancel a meeting:
-
-```
-Step 1: zoom-mcp:search_meetings  →  find the meeting
+```text
+Step 1:
+search_meetings
+  q: "Q1 planning"
 
 Step 2:
-zoom-mcp:delete_meeting
-  meetingId: "84574185634"
+get_meeting_assets
+  meetingId: "MEETING_ID_OR_UUID"
+
+Step 3:
+create_new_file_with_markdown
+  file_name: "Q1 Planning Summary"
+  content: "# Decisions\n\n- ..."
 ```
 
----
+## When to Hand Off to REST
 
-## Get User Context
+If the user asks for deterministic operations such as:
+- create a meeting
+- reschedule a meeting
+- update meeting settings
+- delete a meeting
 
-Before searching, optionally confirm whose account you're operating on:
-
-```
-zoom-mcp:get_user_profile
-```
-
-Returns name, email, account type, and timezone — useful for setting defaults in subsequent
-create/update calls.
-
----
+route to [../../rest-api/SKILL.md](../../rest-api/SKILL.md) instead of assuming the current
+Zoom MCP surface exposes meeting CRUD.
 
 ## Example Prompts
 
-**Find and summarize:**
-> "Find all meetings about 'product launch' in February and tell me when they were."
-
-**Find and reschedule:**
-> "Find my client onboarding meeting and move it to next Monday at 10am."
-
-**Find recording:**
-> "Get the recording from last week's all-hands meeting."
-
-**Audit:**
-> "List all meetings I scheduled in January 2025."
+- "Find meetings about the product launch in February and summarize them."
+- "Look up last week's all-hands and pull the recording resources."
+- "Search for Q1 planning discussions and create a Zoom Doc from the recap."
+- "I need to reschedule a meeting" → hand off to the REST API skill.

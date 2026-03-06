@@ -1,162 +1,50 @@
-# Meeting Lifecycle — Create, Update, and Delete
+# Meeting Lifecycle — Use REST for CRUD
 
-Complete workflows for managing Zoom meetings through the MCP server.
+The current Zoom MCP surface does **not** expose deterministic meeting
+create, update, list, or delete tools.
 
----
+If the user needs meeting lifecycle management, route to the REST API skill:
+- [../../rest-api/SKILL.md](../../rest-api/SKILL.md)
 
-## Create a Meeting
+## What Zoom MCP Is Good For
 
-### Instant (one-time) meeting
+Use Zoom MCP for:
+- semantic search across meetings
+- retrieval of meeting-linked assets
+- recording-resource retrieval
+- Zoom Docs creation from Markdown
 
-```
-zoom-mcp:create_meeting
-  topic: "Project kickoff"
-  type: 2
-  startTime: "2025-03-10T14:00:00"
-  duration: 60
-  timezone: "America/New_York"
-  agenda: "Review scope, assign owners, set next steps"
-```
+## What To Use Instead for CRUD
 
-**type values:**
-- `1` = instant meeting (starts immediately)
-- `2` = scheduled meeting (specific date/time)
-- `3` = recurring, no fixed time
-- `8` = recurring, fixed time
+Use the REST API for:
+- create a meeting
+- reschedule or update a meeting
+- list scheduled meetings deterministically
+- delete a meeting or occurrence
 
----
+## Hybrid Pattern
 
-### Recurring weekly meeting
+Use MCP first when the user starts with meeting content or recap intent, then hand off to REST
+only if the next action becomes a deterministic resource-management step.
 
-```
-zoom-mcp:create_meeting
-  topic: "Weekly team sync"
-  type: 8
-  startTime: "2025-03-03T09:00:00"
-  duration: 30
-  timezone: "America/New_York"
-  recurrence:
-    type: 2
-    repeat_interval: 1
-    weekly_days: "2"
-    end_times: 12
-  settings:
-    auto_recording: "cloud"
-    waiting_room: true
-    mute_upon_entry: true
+Example:
+
+```text
+1. search_meetings
+   q: "client onboarding"
+   from: "2026-03-01"
+   to: "2026-03-06"
+
+2. get_meeting_assets
+   meetingId: "MEETING_ID_OR_UUID"
+
+3. If the user then wants to reschedule or delete the meeting,
+   route to zoom-rest-api and perform the CRUD operation there.
 ```
 
-**recurrence.type values:** `1`=daily, `2`=weekly, `3`=monthly
-**weekly_days:** `1`=Sun, `2`=Mon, `3`=Tue, `4`=Wed, `5`=Thu, `6`=Fri, `7`=Sat
+## Example Prompts That Should Route to REST
 
----
-
-### Meeting with cloud recording enabled
-
-```
-zoom-mcp:create_meeting
-  topic: "Client review"
-  type: 2
-  startTime: "2025-03-15T10:00:00"
-  duration: 90
-  timezone: "Europe/London"
-  settings:
-    auto_recording: "cloud"
-    host_video: true
-    participant_video: true
-    join_before_host: false
-    waiting_room: true
-```
-
-Setting `auto_recording: "cloud"` ensures AI Companion can generate transcripts.
-
----
-
-## Inspect a Meeting
-
-```
-zoom-mcp:get_meeting
-  meetingId: "84574185634"
-```
-
-Returns full details: join URL, password, settings, recurrence, registrants count.
-
----
-
-## Update a Meeting
-
-### Reschedule
-
-```
-zoom-mcp:update_meeting
-  meetingId: "84574185634"
-  startTime: "2025-03-17T15:00:00"
-  timezone: "America/Los_Angeles"
-```
-
-### Change topic and agenda
-
-```
-zoom-mcp:update_meeting
-  meetingId: "84574185634"
-  topic: "Q1 Planning — Updated"
-  agenda: "Review updated roadmap and budget"
-```
-
-### Enable cloud recording on an existing meeting
-
-```
-zoom-mcp:update_meeting
-  meetingId: "84574185634"
-  settings:
-    auto_recording: "cloud"
-```
-
-Only fields you pass are updated — omitted fields keep their current values.
-
----
-
-## List Meetings
-
-```
-zoom-mcp:list_meetings
-  type: scheduled
-  pageSize: 50
-```
-
-**type options:** `scheduled`, `live`, `upcoming`
-
-Use `nextPageToken` from the response to paginate.
-
----
-
-## Delete a Meeting
-
-```
-zoom-mcp:delete_meeting
-  meetingId: "84574185634"
-```
-
-To delete a specific occurrence of a recurring meeting:
-```
-zoom-mcp:delete_meeting
-  meetingId: "84574185634"
-  occurrenceId: "1711900800000"
-```
-
----
-
-## Example Prompts
-
-**Schedule:**
-> "Create a 45-minute meeting called 'Design Review' for next Tuesday at 2pm Eastern with
-> cloud recording enabled."
-
-**Reschedule:**
-> "Move my Q1 Planning meeting to Friday at 3pm Pacific."
-
-**Cancel:**
-> "Delete the team sync meeting scheduled for March 10th."
-
-**List:**
-> "Show me all my scheduled meetings for this week."
+- "Create a 45-minute design review for next Tuesday."
+- "Move my Q1 planning meeting to Friday at 3pm Pacific."
+- "Delete the team sync meeting scheduled for March 10th."
+- "Show me all my scheduled meetings for this week."

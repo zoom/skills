@@ -1,75 +1,52 @@
-# Experimental: Create a Zoom Doc
+# Create a Zoom Doc
 
-A Zoom Doc is Zoom's native document format — comparable to a Notion page. The Zoom MCP
-Server can create Zoom Docs directly, making it easy to turn meeting content into a
-persistent, shareable document without leaving the workflow.
+The current Zoom MCP tool surface includes `create_new_file_with_markdown` for
+creating a Zoom Docs document from Markdown content.
 
-This page is quarantined on purpose. Do not route here automatically until live MCP tool
-discovery confirms the tool name and parameter schema.
+## Required Scope
 
-**Primary use cases:**
-- Generate action item lists from a meeting AI summary
-- Create structured meeting notes as a Zoom Doc
-- Capture decisions and next steps in a format the team can collaborate on
+- `docs:write:import`
 
----
+## Basic Flow
 
-## Workflow: Search Meeting → Create Zoom Doc
+### Step 1: Gather the source content
 
-### Step 1: Find the meeting and get the AI summary
+If the source is meeting content, first use the current Zoom MCP retrieval tools.
 
-```
-zoom-mcp:search_meetings
-  query: "Q1 planning"
-  startDate: "2025-02-01"
-  endDate: "2025-02-28"
+```text
+search_meetings
+  q: "Q1 planning"
+  from: "2026-03-01"
+  to: "2026-03-06"
 ```
 
-The Recap meeting result includes the inline AI summary. Use that content as the source
-for the Zoom Doc.
+```text
+get_meeting_assets
+  meetingId: "MEETING_ID_OR_UUID"
+```
 
 ### Step 2: Create the Zoom Doc
 
-> **[CONTRIBUTOR NEEDED]** Verify the exact tool name and parameter schema. The tool name
-> `create_zoom_doc` below is a placeholder. Run `zoom-mcp:list_available_tools` to find
-> the correct name, or confirm with the Zoom MCP Server engineering team. Parameters
-> needed: title, body/content, and any optional fields (owner, folder, permissions).
-
-```
-zoom-mcp:create_zoom_doc  ← verify tool name
-  title: "Q1 Planning — Action Items"
-  content: "[action items extracted from AI summary]"
+```text
+create_new_file_with_markdown
+  file_name: "Q1 Planning — Action Items"
+  content: "# Action Items\n\n- Owner: ..."
 ```
 
-The tool returns the **URL of the created Zoom Doc**, which can be shared with the team
-or opened directly in Zoom.
+Optional parameter:
+- `parent_id` to place the document under a specific folder or parent object
 
----
+## Verified Result Shape
 
-## Zoom Doc in Search Results
+Successful calls return:
+- `file_id`
+- `file_link`
 
-When a Zoom Doc was attached to a meeting, the Agentic Retrieval result includes it. The
-Recap meeting result contains a docs array with the URL for each attached Zoom Doc — no
-separate fetch required. This means Claude can surface relevant documents directly from
-a search result.
-
----
+Expect clients to expose at least the created file ID, and in practice often a direct Docs link.
+Always parse the actual response you receive from the MCP client.
 
 ## Example Prompts
 
-**After a meeting:**
-> "Create a Zoom Doc with the action items from today's all-hands meeting."
-
-**From a search:**
-> "Find the Q1 planning session and create a Zoom Doc summarizing the key decisions."
-
-**Structured notes:**
-> "Get the AI summary from last Tuesday's product review and create a Zoom Doc with
-> sections for Decisions, Action Items, and Open Questions."
-
----
-
-> **[CONTRIBUTOR NEEDED]** Complete example showing the full request and response for
-> `create_zoom_doc` (or the correct tool name), including all available parameters and
-> what the returned Zoom Doc URL looks like. Source: Zoom MCP Server engineering team
-> or live tool testing.
+- "Create a Zoom Doc with the action items from today's planning meeting."
+- "Search for the product review and publish the recap as a Zoom Doc."
+- "Turn these Markdown notes into a Zoom Doc."

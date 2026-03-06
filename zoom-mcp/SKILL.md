@@ -1,37 +1,54 @@
 ---
 name: zoom-mcp
-description: Connects Claude to the official Zoom MCP Server for meeting management, recording access, and AI Companion retrieval. Uses Agentic Retrieval to search meeting content semantically and returns inline AI summaries, Zoom Doc URLs, recording references, and whiteboards. Creates, searches, lists, updates, and deletes Zoom meetings and retrieves cloud recordings. Use when the user asks to manage Zoom meetings, find past meetings by content, access AI meeting summaries, retrieve transcripts, or automate Zoom workflows through MCP. Requires a Zoom OAuth Bearer token and AI Companion enabled.
+description: |
+  Official Zoom MCP Server guidance for AI-agent access to semantic meeting search,
+  meeting assets, recording resources, and Zoom Docs creation over MCP. Use when the
+  request is about Zoom tools/list or tools/call against Zoom's hosted MCP endpoints,
+  AI Companion retrieval, recording-content access, or Zoom Docs creation via MCP.
+  Route Whiteboard-specific MCP requests to zoom-mcp/whiteboard.
 triggers:
   - "zoom mcp"
-  - "mcp server"
-  - "mcp tools"
-  - "tools/list"
-  - "tools/call"
-  - "meeting summary"
+  - "zoom mcp server"
+  - "zoom mcp tools"
+  - "zoom tools/list"
+  - "zoom tools/call"
   - "ai companion transcript"
   - "agentic retrieval"
-  - "semantic meeting search"
-  - "search meetings by content"
-  - "ai-driven meeting retrieval"
+  - "zoom semantic meeting search"
+  - "zoom search meetings by content"
+  - "zoom meeting assets mcp"
+  - "zoom recording resource mcp"
+  - "zoom docs via mcp"
   - "zoom transcript via mcp"
   - "meeting transcript via mcp"
-  - "meeting notes from ai"
 ---
 
 # Zoom MCP Server
 
-Connects to Zoom's official MCP Server at `mcp-us.zoom.us`. The same server powers
-the Zoom for ChatGPT app. Core capabilities:
+Zoom hosts an MCP server at `mcp-us.zoom.us` for AI-agent access to:
 
-- **Agentic Retrieval search** — semantic content search across your meetings via AI Companion;
-  results include inline AI summaries, Zoom Doc URLs, recording references, and whiteboards
-- **Meeting management** — create, list, search, update, delete meetings
-- **Recordings** — list and retrieve cloud recordings with transcript files
-- **Attached Zoom Docs** — search results can include linked Zoom Docs when AI Companion recap data exists
+- semantic meeting search
+- meeting-linked asset retrieval
+- recording resource retrieval
+- Zoom Docs creation from Markdown
+
+Current tool names from the Zoom MCP server:
+
+- `create_new_file_with_markdown`
+- `get_meeting_assets`
+- `search_meetings`
+- `get_recording_resource`
+- `recordings_list`
+
+Some MCP clients namespace server tools in the UI, for example `zoom-mcp:recordings_list`.
+Treat the raw tool names above as authoritative.
+
+Whiteboard-specific MCP work is split into the child skill
+[whiteboard/SKILL.md](whiteboard/SKILL.md).
 
 ## Quick Start
 
-**1. Add to Claude Code:**
+**1. Add to an MCP client (Claude Code example):**
 ```bash
 claude mcp add --transport http zoom-mcp \
   https://mcp-us.zoom.us/mcp/zoom/streamable \
@@ -39,40 +56,59 @@ claude mcp add --transport http zoom-mcp \
   --scope user
 ```
 
-**2. Verify connection:**
+**2. Verify discovery:**
+- Confirm the client can see `recordings_list`, `search_meetings`, `get_meeting_assets`,
+  `get_recording_resource`, and `create_new_file_with_markdown`.
+- If the client exposes raw protocol inspection, `tools/list` is the authoritative discovery source.
+- The current catalog is documented in [references/tools.md](references/tools.md).
+
+**3. Run the first useful call:**
+```text
+recordings_list
+  userId: "me"
+  from: "2026-03-01"
+  to: "2026-03-06"
+  page_size: 10
 ```
-zoom-mcp:get_user_profile
-```
 
-**3. Search meeting content:**
-```
-zoom-mcp:search_meetings  query: "action items from Q4 planning"
-```
+## Critical Notes
 
-For OAuth setup, scopes, and token lifecycle: [concepts/oauth-setup.md](concepts/oauth-setup.md)
+**1. User OAuth is the recommended execution path**
 
----
+A Server-to-Server OAuth token can:
+- initialize against the MCP gateway
+- complete `tools/list`
+- open SSE sessions
 
-## ⚠️ Critical Notes
+Use user OAuth as the default execution path for Zoom MCP tool use unless you have already
+validated S2S scope coverage and tool execution for your app.
 
-**1. AI Companion required for search and transcripts**
-The Agentic Retrieval search and transcript access both depend on AI Companion. Enable
-**Smart Recording** and **Meeting Summary** in Zoom web portal:
-Admin → Account Management → Account Settings → AI Companion.
-Without this, search returns no content results and recording files contain no transcripts.
+**2. Zoom MCP uses MCP-specific granular scopes**
 
-**2. Cloud recording required for transcripts**
-Transcript files only exist for meetings recorded to cloud (`auto_recording: "cloud"`).
-Local recordings do not generate transcripts.
+The Zoom MCP scope set is not the same as the older broad REST scopes.
+The key scopes for this surface are:
+- `meeting:read:search`
+- `meeting:read:assets`
+- `cloud_recording:read:list_user_recordings`
+- `cloud_recording:read:content`
+- `docs:write:import` for Zoom Docs creation
 
-**3. OAuth tokens expire after 1 hour**
-Refresh with your `refresh_token` and re-run `claude mcp add` with the updated token.
+**3. AI Companion features are feature prerequisites, not scope substitutes**
 
-**4. Past meeting IDs may differ from recording IDs**
-Use `list_recordings` with a date range when `get_recording` returns 404 — recordings use
-a UUID that may differ from the scheduled meeting ID.
+Semantic meeting search, meeting assets, and recording-content retrieval depend on account
+features such as **Smart Recording** and **Meeting Summary** for useful results. These feature
+settings do not replace the required OAuth scopes.
 
----
+**4. Whiteboard is a separate MCP surface**
+
+The Zoom MCP endpoint and the Whiteboard MCP endpoint are separate. Route Whiteboard-specific
+requests to [whiteboard/SKILL.md](whiteboard/SKILL.md).
+
+**5. Use REST for deterministic meeting CRUD**
+
+The current Zoom MCP tool surface does not expose deterministic
+meeting create, update, or delete tools. If the user needs explicit meeting CRUD operations,
+route to [../rest-api/SKILL.md](../rest-api/SKILL.md).
 
 ## Server Endpoints
 
@@ -81,164 +117,102 @@ a UUID that may differ from the scheduled meeting ID.
 | Streamable HTTP (recommended) | `https://mcp-us.zoom.us/mcp/zoom/streamable` |
 | SSE (fallback) | `https://mcp-us.zoom.us/mcp/zoom/sse` |
 
-A separate Whiteboard MCP server exists at `/mcp/whiteboard/streamable` — requires a
-Whiteboard instance ID and is not covered by this skill.
+Whiteboard child skill:
+- [whiteboard/SKILL.md](whiteboard/SKILL.md)
 
----
+## Search and Retrieval Model
 
-## Search & Retrieval
+`search_meetings` uses AI Companion retrieval rather than a plain metadata filter. In this
+use the live MCP server as authoritative for response schema and scope behavior.
 
-`search_meetings` uses AI Companion's **Agentic Retrieval API** — not a simple metadata
-filter. It searches the actual content of your meetings: what was said, documents shared,
-AI summaries generated.
+Two result families matter most:
 
-**Two result types are returned:**
+- **Recap-oriented results**: AI summary, meeting-linked documents, recordings, and related assets
+- **Recording-oriented results**: cloud recording references and transcript-capable resources
 
-**Recap meeting** — for meetings with AI Companion data:
-- Inline AI summary (text returned directly — no separate fetch needed)
-- Attached Zoom Docs (URLs included)
-- Recording reference
-- Whiteboards
+Use [examples/transcript-retrieval.md](examples/transcript-retrieval.md) for the main retrieval
+workflow.
 
-**View recording** — full recording details for meetings with cloud recordings
+## Tool Catalog
 
-
-See [examples/transcript-retrieval.md](examples/transcript-retrieval.md) for the full workflow.
-
----
-
-## Available Tools
-
-Always use fully qualified tool names: `zoom-mcp:tool_name`
-
-Full parameter schemas: [references/tools.md](references/tools.md)
-
-### Meeting Management
-
-| Tool | Key Parameters | Description |
-|------|---------------|-------------|
-| `zoom-mcp:search_meetings` | `query`, `startDate`, `endDate`, `pageSize` (max 300) | Semantic content search via AI Companion Agentic Retrieval; returns Recap and View recording results |
-| `zoom-mcp:list_meetings` | `type` (scheduled/live/upcoming), `pageSize` | List meetings for the authenticated user |
-| `zoom-mcp:get_meeting` | `meetingId`*, `occurrenceId`, `showPreviousOccurrences` | Get details for a specific meeting |
-| `zoom-mcp:create_meeting` | `topic`*, `type`*, `startTime`, `duration`, `timezone`, `agenda`, `recurrence`, `settings` | Create a new meeting |
-| `zoom-mcp:update_meeting` | `meetingId`* + any create_meeting params | Update an existing meeting |
-| `zoom-mcp:delete_meeting` | `meetingId`*, `occurrenceId`, `scheduleForReminder` | Delete a meeting |
-
-**Meeting types:** `1`=instant, `2`=scheduled, `3`=recurring (no fixed time), `8`=recurring (fixed time)
-
-### Recordings & Transcripts
-
-| Tool | Key Parameters | Description |
-|------|---------------|-------------|
-| `zoom-mcp:list_recordings` | `from`*, `to`* (YYYY-MM-DD), `pageSize`, `trash` | List cloud recordings by date range |
-| `zoom-mcp:get_recording` | `meetingId`* | Get recording details including all recording files (VTT, TRANSCRIPT, MP4) |
-| `zoom-mcp:delete_recording` | `meetingId`*, `action` (trash/delete) | Trash or permanently delete a recording |
-
-**Transcript access:** `get_recording` returns a `recording_files` array. Filter for
-`file_type: "VTT"` (with timestamps) or `file_type: "TRANSCRIPT"` (with speaker labels).
-Fetch `download_url` with `Authorization: Bearer TOKEN` to retrieve content.
-
-### Experimental / Unverified Surfaces
-
-Do not auto-route or promise these surfaces until a live `zoom-mcp:list_available_tools`
-result confirms them. Keep them in manual-review mode only.
-
-- [Experimental Zoom Doc creation notes](examples/create-zoom-doc.md)
-- [Draft tool reference details](references/tools.md)
-
-### User & Utility
-
-| Tool | Parameters | Description |
-|------|------------|-------------|
-| `zoom-mcp:get_user_profile` | none | Get the authenticated user's Zoom profile |
-| `zoom-mcp:list_available_tools` | none | List all tools available on this server |
-| `zoom-mcp:get_tool_details` | `toolName`* | Get full parameter schema for any tool by name |
+| Tool | Key Parameters | Required Scope |
+|------|---------------|----------------|
+| `create_new_file_with_markdown` | `content`*, `file_name`, `parent_id` | `docs:write:import` |
+| `get_meeting_assets` | `meetingId`* | `meeting:read:assets` |
+| `search_meetings` | `q`, `from`, `to`, `page_size`, `next_page_token` | `meeting:read:search` |
+| `get_recording_resource` | `meetingId`*, `types`, `clip_num`, `play_time`, `raw_passcode`, `encode_passcode` | `cloud_recording:read:content` |
+| `recordings_list` | `userId`*, `from`, `to`, `meeting_id`, `trash`, `trash_type`, `page_size`, `next_page_token` | `cloud_recording:read:list_user_recordings` |
 
 \* Required parameter
 
----
+Full parameter and output guidance: [references/tools.md](references/tools.md)
 
 ## Key Workflows
 
-**Search meeting content and get AI summary** (primary use case):
+**Search meeting content, then retrieve assets:**
+```text
+search_meetings
+  q: "Q4 planning discussion"
+  from: "2026-03-01"
+  to: "2026-03-06"
+→ choose a returned meeting
+→ get_meeting_assets  meetingId: "MEETING_ID_OR_UUID"
 ```
-zoom-mcp:search_meetings  query: "Q4 planning discussion"
-→ Recap meeting result includes inline AI summary, any attached Zoom Docs, recording reference
-→ For most use cases, the summary is sufficient — no separate recording fetch needed
-```
-Full walkthrough: [examples/transcript-retrieval.md](examples/transcript-retrieval.md)
 
-**Create a scheduled meeting with cloud recording:**
-``` 
-zoom-mcp:create_meeting
-  topic: "Weekly sync", type: 2, startTime: "2025-03-10T14:00:00"
-  timezone: "America/New_York", duration: 60
-  settings: { auto_recording: "cloud", waiting_room: true }
+**List recordings, then retrieve recording resources:**
+```text
+recordings_list
+  userId: "me"
+  from: "2026-03-01"
+  to: "2026-03-06"
+→ choose a recording target
+→ get_recording_resource  meetingId: "MEETING_UUID_OR_RECORDING_ID"
 ```
-Full examples: [examples/meeting-lifecycle.md](examples/meeting-lifecycle.md)
 
-**Access full recording / raw transcript:**
+**Create a Zoom Doc from Markdown:**
+```text
+create_new_file_with_markdown
+  file_name: "Q4 Planning Notes"
+  content: "# Decisions\n\n- ..."
 ```
-1. zoom-mcp:search_meetings or list_recordings  →  find the recording
-2. zoom-mcp:get_recording    →  inspect recording_files for VTT or TRANSCRIPT
-3. Fetch download_url with Authorization: Bearer TOKEN
-```
-Use this when you need timestamped VTT, speaker-labeled JSON, or the raw video file —
-beyond what the Recap AI summary provides.
-
----
 
 ## Error Reference
 
 | Code | Meaning | Fix |
 |------|---------|-----|
-| `-32001 Access token required` | No or missing auth header | Re-run `mcp add` with `--header "Authorization: Bearer TOKEN"` |
-| `-32001 Invalid access token` | Token expired | Refresh OAuth token; re-register |
-| `-32602 instance not found` | Wrong MCP endpoint | Use `.../mcp/zoom/streamable` not `.../mcp/whiteboard/...` |
-| `404` | Meeting/recording not found | Use `list_recordings` by date range to find correct UUID |
-| `429` | Rate limit exceeded | Back off; limit is ~10 req/sec |
+| `401 Unauthorized` | Missing or rejected bearer token at the endpoint | Re-register the MCP server with a valid bearer token |
+| `-32001 Invalid access token` | Token expired, malformed, or missing required scopes | Refresh OAuth token and verify the MCP-specific scopes |
+| `-32602 Can not found tool` | Requested tool name is not exposed by the active MCP server | Re-run `tools/list` and use the current tool names for that endpoint |
+| `404` | Possible downstream resource-not-found response | Re-discover the target with `search_meetings` or `recordings_list` |
 
 Full error reference: [references/error-codes.md](references/error-codes.md)
-
----
 
 ## Documentation
 
 ### Concepts
-- [concepts/mcp-architecture.md](concepts/mcp-architecture.md) — MCP protocol, Agentic Retrieval API, transports, how Claude and ChatGPT connect
-- [concepts/oauth-setup.md](concepts/oauth-setup.md) — OAuth app creation, scopes, AI Companion setup, token lifecycle
+- [concepts/mcp-architecture.md](concepts/mcp-architecture.md) — MCP protocol, hosted endpoints, discovery, and capability model
+- [concepts/oauth-setup.md](concepts/oauth-setup.md) — OAuth app creation, MCP-specific scopes, AI Companion prerequisites, token lifecycle
 
 ### Examples
-- [examples/transcript-retrieval.md](examples/transcript-retrieval.md) — **Primary use case**: Agentic Retrieval search → inline AI summary → optional raw recording
-- [examples/create-zoom-doc.md](examples/create-zoom-doc.md) — Create a Zoom Doc from meeting content
-- [examples/meeting-lifecycle.md](examples/meeting-lifecycle.md) — Create, update, and delete meetings
-- [examples/search-and-act.md](examples/search-and-act.md) — Search by topic/date, then take action
+- [examples/transcript-retrieval.md](examples/transcript-retrieval.md) — Search/assets and recording-resource workflows
+- [examples/create-zoom-doc.md](examples/create-zoom-doc.md) — Verified Zoom Docs creation flow
+- [examples/search-and-act.md](examples/search-and-act.md) — Search, inspect assets, and hand off CRUD work to REST when needed
+- [examples/meeting-lifecycle.md](examples/meeting-lifecycle.md) — Why meeting CRUD belongs in REST, plus the MCP-to-REST handoff pattern
 
 ### References
-- [references/tools.md](references/tools.md) — Complete tool reference with all parameters
-- [references/error-codes.md](references/error-codes.md) — MCP and Zoom API error codes with fixes
+- [references/tools.md](references/tools.md) — Current Zoom MCP tool reference
+- [references/error-codes.md](references/error-codes.md) — MCP and Zoom API errors with fixes
+- [whiteboard/SKILL.md](whiteboard/SKILL.md) — Whiteboard MCP child skill
 
 ### Troubleshooting
-- [troubleshooting/common-errors.md](troubleshooting/common-errors.md) — Auth failures, missing transcripts, connection issues
+- [troubleshooting/common-errors.md](troubleshooting/common-errors.md) — Scope failures, endpoint mixups, search/recording issues
 
 ### Operations
 - [RUNBOOK.md](RUNBOOK.md) — 5-minute preflight and debugging checklist
 
----
-
-## Constraints
-
-- Pagination: max 300 results per page; use `nextPageToken` for subsequent pages
-- Date range windows for search and recording list: 30 days maximum
-- Cloud recordings retained ~30 days by default (varies by account plan)
-- Meeting passwords: 10 characters max
-- Recurring meetings require type `3` or `8`
-
----
-
 ## Related Skills
 
-- [zoom-rest-api](../rest-api/SKILL.md) — Direct REST API access (600+ endpoints, advanced recording management)
-- [zoom-oauth](../oauth/SKILL.md) — OAuth implementation patterns (all 4 grant types)
-- [zoom-webhooks](../webhooks/SKILL.md) — Receive real-time recording completion events
-- [zoom-rtms](../rtms/SKILL.md) — Live audio/video/transcript streams during active meetings
+- [zoom-rest-api](../rest-api/SKILL.md) — Deterministic REST API access, including meeting CRUD
+- [zoom-oauth](../oauth/SKILL.md) — OAuth implementation patterns
+- [zoom-webhooks](../webhooks/SKILL.md) — Event-driven recording and meeting workflows
+- [zoom-rtms](../rtms/SKILL.md) — Live media and transcript streams during active meetings
