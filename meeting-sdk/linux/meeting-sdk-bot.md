@@ -63,6 +63,32 @@ Meeting SDK bots join as real participants (visible in participant list) and can
 | **zoom-rest-api** | Get meeting schedule, retrieve OBF token |
 | **zoom-meeting-sdk** (Linux) | Join meeting, control recording, access raw media |
 
+## Choose the Recording Mode
+
+| Goal | Primary path | Skills |
+|------|--------------|--------|
+| Bot writes its own audio/video files | `StartRawRecording()` + raw audio/video delegates | `zoom-meeting-sdk` (Linux) |
+| Zoom-hosted MP4/M4A/transcript assets after meeting end | Meeting/account cloud recording settings + `recording.completed` webhook + recordings download API | `zoom-rest-api` + `zoom-webhooks` |
+
+Use raw recording when the bot must process or persist media itself. Use the cloud-recording path when the requirement is post-meeting retrieval of Zoom-managed recording assets.
+
+## Automatic Join + Recording Flow
+
+```text
+zoom-rest-api
+  -> get meeting metadata
+  -> get OBF or ZAK token
+Meeting SDK Linux bot
+  -> join with retry
+  -> CanStartRawRecording()
+  -> StartRawRecording()
+  -> subscribe raw audio/video
+  -> write PCM/YUV or forward to AI pipeline
+Optional post-meeting cloud path
+  -> zoom-webhooks recording.completed
+  -> zoom-rest-api recordings download
+```
+
 ## Prerequisites
 
 - Zoom Meeting SDK v5.15+ (Linux)
@@ -396,6 +422,66 @@ void onMeetingStatusChanged(MeetingStatus status, int iResult) {
 
 **IMPORTANT:** `StartRawRecording()` does NOT create a file. It enables access to raw audio/video data streams.
 
+### Manage Recording Lifecycle Explicitly
+
+The bot should treat raw recording as a capability switch plus media subscriptions:
+
+```cpp
+class RecordingSession {
+public:
+    void start(IMeetingService* meetingService) {
+        auto* recordCtrl = meetingService->GetMeetingRecordingController();
+        if (!recordCtrl) {
+            throw std::runtime_error("recording_controller_unavailable");
+        }
+
+        SDKError canRecord = recordCtrl->CanStartRawRecording();
+        if (canRecord != SDKERR_SUCCESS) {
+            throw std::runtime_error("raw_recording_not_permitted");
+        }
+
+        SDKError err = recordCtrl->StartRawRecording();
+        if (err != SDKERR_SUCCESS) {
+            throw std::runtime_error("start_raw_recording_failed");
+        }
+
+        audioHelper = GetAudioRawdataHelper();
+        audioHelper->subscribe(&audioDelegate, true);
+
+        createRenderer(&videoRenderer, &videoDelegate);
+        videoRenderer->setRawDataResolution(ZoomSDKResolution_720P);
+        videoRenderer->subscribe(activeUserId, RAW_DATA_TYPE_VIDEO);
+    }
+
+    void stop(IMeetingService* meetingService) {
+        if (audioHelper) {
+            audioHelper->unSubscribe();
+        }
+        if (videoRenderer) {
+            videoRenderer->unSubscribe();
+        }
+
+        auto* recordCtrl = meetingService->GetMeetingRecordingController();
+        if (recordCtrl) {
+            recordCtrl->StopRawRecording();
+        }
+    }
+
+private:
+    IZoomSDKAudioRawDataHelper* audioHelper = nullptr;
+    IZoomSDKRenderer* videoRenderer = nullptr;
+    MyAudioDelegate audioDelegate;
+    MyVideoDelegate videoDelegate;
+    uint32_t activeUserId = 0;
+};
+```
+
+Persisting a recording is your job after raw data arrives. Typical outputs are:
+
+- PCM audio -> WAV/FLAC encoder or streaming transcription pipeline
+- YUV420 video -> FFmpeg transcode to MP4 or frame-by-frame CV pipeline
+- Mixed bot pipeline -> raw capture first, then post-process after leave
+
 ## Step 4: Subscribe to Raw Audio/Video
 
 ```cpp
@@ -425,6 +511,31 @@ void subscribeToRawMedia() {
     }
 }
 ```
+
+### Cloud Recording Alternative
+
+If the requirement is **Zoom-managed cloud recording** instead of raw media capture, use Meeting SDK only for the joining bot and use API/webhook skills for the recording workflow:
+
+```bash
+curl -X POST "https://api.zoom.us/v2/users/{userId}/meetings" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "topic": "Bot Recorded Meeting",
+    "type": 2,
+    "start_time": "2026-03-06T18:00:00Z",
+    "settings": {
+      "auto_recording": "cloud"
+    }
+  }'
+```
+
+Then subscribe to `recording.completed` and download assets through the recordings APIs:
+
+- `zoom-webhooks` -> receive `recording.completed`
+- `zoom-rest-api` -> `GET /meetings/{meetingId}/recordings` or `GET /users/{userId}/recordings`
+
+Use this path when the desired output is Zoom-hosted MP4/M4A/transcript files rather than bot-owned raw PCM/YUV.
 
 ## Step 5: Mid-Meeting Reconnection
 

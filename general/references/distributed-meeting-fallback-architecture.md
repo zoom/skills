@@ -303,6 +303,144 @@ export async function withLock(lock: { acquire: (k: string, ttlMs: number) => Pr
 }
 ```
 
+## Token Broker Example (Cached Refresh + Distributed Lock)
+
+```ts
+type CachedToken = { accessToken: string; expiresAtMs: number };
+
+export class TokenBroker {
+  constructor(
+    private cache: { get: (k: string) => Promise<CachedToken | null>; put: (k: string, v: CachedToken, ttlSec: number) => Promise<void> },
+    private lock: { acquire: (k: string, ttlMs: number) => Promise<boolean>; release: (k: string) => Promise<void> },
+    private fetchToken: () => Promise<{ access_token: string; expires_in: number }>,
+  ) {}
+
+  async getToken(): Promise<string> {
+    const cached = await this.cache.get('zoom:s2s-token');
+    const now = Date.now();
+    if (cached && cached.expiresAtMs - now > 60_000) {
+      return cached.accessToken;
+    }
+
+    const gotLock = await this.lock.acquire('zoom:s2s-token:refresh', 10_000);
+    if (!gotLock) {
+      await sleep(200);
+      const retryCached = await this.cache.get('zoom:s2s-token');
+      if (retryCached && retryCached.expiresAtMs - Date.now() > 30_000) {
+        return retryCached.accessToken;
+      }
+      throw new Error('token_refresh_lock_contention');
+    }
+
+    try {
+      const fresh = await this.fetchToken();
+      const value = {
+        accessToken: fresh.access_token,
+        expiresAtMs: Date.now() + fresh.expires_in * 1000,
+      };
+      await this.cache.put('zoom:s2s-token', value, Math.max(60, fresh.expires_in - 90));
+      return value.accessToken;
+    } finally {
+      await this.lock.release('zoom:s2s-token:refresh');
+    }
+  }
+}
+```
+
+## High-Volume Create Worker (Concurrency + Rate Protection)
+
+```ts
+type CreateJob = CreateMeetingInput & { attempts: number };
+
+class TokenBucket {
+  private tokens: number;
+  private lastRefill = Date.now();
+
+  constructor(private readonly capacity: number, private readonly refillPerSec: number) {
+    this.tokens = capacity;
+  }
+
+  async take() {
+    while (true) {
+      const now = Date.now();
+      const elapsedSec = (now - this.lastRefill) / 1000;
+      this.tokens = Math.min(this.capacity, this.tokens + elapsedSec * this.refillPerSec);
+      this.lastRefill = now;
+      if (this.tokens >= 1) {
+        this.tokens -= 1;
+        return;
+      }
+      await sleep(100);
+    }
+  }
+}
+
+export async function runCreateWorker(
+  queue: { receiveBatch: (n: number) => Promise<CreateJob[]>; ack: (job: CreateJob) => Promise<void>; retryLater: (job: CreateJob, delayMs: number) => Promise<void> },
+  deps: {
+    createMeeting: (job: CreateJob) => Promise<void>;
+    breaker: CircuitBreaker;
+    limiter: TokenBucket;
+  },
+  concurrency = 8,
+) {
+  while (true) {
+    const jobs = await queue.receiveBatch(concurrency);
+    await Promise.all(jobs.map(async (job) => {
+      if (!deps.breaker.canCall()) {
+        await queue.retryLater(job, 30_000);
+        return;
+      }
+
+      try {
+        await deps.limiter.take();
+        await deps.createMeeting(job);
+        deps.breaker.recordSuccess();
+        await queue.ack(job);
+      } catch (e: any) {
+        deps.breaker.recordFailure();
+        const delay = backoff(job.attempts, 500, 60_000);
+        await queue.retryLater({ ...job, attempts: job.attempts + 1 }, delay);
+      }
+    }));
+  }
+}
+```
+
+## Reconciliation Scheduler (Lag Detection + Leader Election)
+
+```ts
+export async function reconcileLaggingMeetings(
+  deps: {
+    lock: { acquire: (k: string, ttlMs: number) => Promise<boolean>; release: (k: string) => Promise<void> };
+    stateStore: { listLagging: (ageMs: number, limit: number) => Promise<Array<{ meetingId: string; hostUserId: string }>> };
+    reconcile: (meetingId: string, hostUserId: string) => Promise<void>;
+  },
+) {
+  await withLock(deps.lock, 'zoom:reconcile:leader', async () => {
+    const lagging = await deps.stateStore.listLagging(5 * 60_000, 250);
+    for (const item of lagging) {
+      await deps.reconcile(item.meetingId, item.hostUserId);
+    }
+  });
+}
+```
+
+## DLQ Replay Worker
+
+```ts
+export async function replayDlq(
+  dlq: { receiveBatch: (n: number) => Promise<any[]>; ack: (msg: any) => Promise<void>; moveBack: (topic: string, msg: any) => Promise<void> },
+  topic = 'meeting.create.delayed',
+) {
+  const failed = await dlq.receiveBatch(100);
+  for (const msg of failed) {
+    await dlq.moveBack(topic, { ...msg, replayedAt: Date.now() });
+    await dlq.ack(msg);
+  }
+}
+```
+
 ## Distributed State Rules
 
 - Meeting state is event-sourced or projection-based, not only request-response based.

@@ -21,6 +21,17 @@ triggers:
 
 Embed Zoom meeting capabilities into web applications with two integration options: **Client View** (full-page) or **Component View** (embeddable).
 
+## Hard Routing Rule
+
+If the user wants a **custom video user interface for a Zoom meeting in a web app**, route to
+**Component View**, not Video SDK.
+
+- **Meeting SDK Component View** = custom UI for a real Zoom meeting
+- **Video SDK Web** = custom UI for a non-meeting video session product
+
+For the direct custom-meeting-UI path, start with
+[component-view/SKILL.md](component-view/SKILL.md).
+
 ## New to Web SDK? Start Here!
 
 **The fastest way to master the SDK:**
@@ -33,6 +44,8 @@ Embed Zoom meeting capabilities into web applications with two integration optio
 **Building a Custom Integration?**
 - Component View gives you Promise-based API and embeddable UI
 - Client View gives you the familiar full-page Zoom experience
+- For a custom meeting UI, prefer **Component View** first
+- Cross-product routing example: [../../general/use-cases/custom-meeting-ui-web.md](../../general/use-cases/custom-meeting-ui-web.md)
 - [Browser Support](concepts/browser-support.md) - Feature matrix by browser
 
 **Having issues?**

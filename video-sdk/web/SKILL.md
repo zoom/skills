@@ -13,6 +13,10 @@ triggers:
 
 Expert guidance for developing with the Zoom Video SDK on Web. This SDK enables custom video applications in the browser with real-time video/audio, screen sharing, cloud recording, live streaming, chat, and live transcription.
 
+This skill is for **custom video sessions**, not embedded Zoom meetings.
+If the user wants a custom UI for a real Zoom meeting, route to
+[../../meeting-sdk/web/component-view/SKILL.md](../../meeting-sdk/web/component-view/SKILL.md).
+
 **Official Documentation**: https://developers.zoom.us/docs/video-sdk/web/
 **API Reference**: https://marketplacefront.zoom.us/sdk/custom/web/modules.html
 **Sample Repository**: https://github.com/zoom/videosdk-web-sample

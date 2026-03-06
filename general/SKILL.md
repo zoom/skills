@@ -26,6 +26,7 @@ Entry point for building with Zoom. This skill helps you choose the right SDK or
 
 | I want to... | Use this skill |
 |--------------|----------------|
+| Build a custom web UI around a real Zoom meeting | **[zoom-meeting-sdk-web-component-view](../meeting-sdk/web/component-view/SKILL.md)** |
 | Build deterministic automation/configuration/reporting with explicit request control | **[zoom-rest-api](../rest-api/SKILL.md)** |
 | Receive event notifications (HTTP push) | **[zoom-webhooks](../webhooks/SKILL.md)** |
 | Receive event notifications (WebSocket, low-latency) | **[zoom-websockets](../websockets/SKILL.md)** |
@@ -63,11 +64,14 @@ Routing after answer:
 | User intent | Correct path | Do not route to |
 |-------------|--------------|-----------------|
 | Embed Zoom meeting in app UI | `zoom-meeting-sdk` | REST-only `join_url` flow |
+| Build custom web UI for a real Zoom meeting | `zoom-meeting-sdk-web-component-view` | `zoom-video-sdk` |
 | Build custom video UI/session app | `zoom-video-sdk` | Meeting SDK or REST meeting links |
 | Get browser join links / manage meeting resources | `zoom-rest-api` | Meeting SDK join implementation |
 
 Routing guardrails:
 - If user asks for SDK embed/join behavior, stay in SDK path.
+- If the prompt says **meeting** plus **custom UI/video/layout/embed**, prefer `zoom-meeting-sdk-web-component-view`.
+- Only use `zoom-video-sdk` when the user is building a custom session product rather than a Zoom meeting.
 - Only use REST path for resource management, reporting, or link distribution unless user explicitly requests a mixed architecture.
 - For executable classification/chaining logic and error handling, see [references/routing-implementation.md](references/routing-implementation.md).
 
@@ -122,8 +126,10 @@ Both receive event notifications, but differ in approach:
 | Use Case | Description | Skills Needed |
 |----------|-------------|---------------|
 | [APIs vs MCP Routing](use-cases/apis-vs-mcp-routing.md) | Decide whether to route to deterministic Zoom APIs, AI-driven MCP, or a hybrid design | [zoom-rest-api](../rest-api/SKILL.md) and/or [zoom-mcp](../zoom-mcp/SKILL.md) |
+| [Custom Meeting UI (Web)](use-cases/custom-meeting-ui-web.md) | Build a custom video UI for a real Zoom meeting in a web app using Meeting SDK Component View | [zoom-meeting-sdk-web-component-view](../meeting-sdk/web/component-view/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [Meeting Automation](use-cases/meeting-automation.md) | Schedule, update, delete meetings programmatically | [zoom-rest-api](../rest-api/SKILL.md) |
-| [Meeting Bots](use-cases/meeting-bots.md) | Build bots that join meetings for AI/transcription | [meeting-sdk/linux](../meeting-sdk/linux/SKILL.md) + [zoom-rtms](../rtms/SKILL.md) |
+| [Meeting Bots](use-cases/meeting-bots.md) | Build bots that join meetings for AI/transcription/recording | [meeting-sdk/linux](../meeting-sdk/linux/SKILL.md) + [zoom-rest-api](../rest-api/SKILL.md) + optional [zoom-webhooks](../webhooks/SKILL.md) |
+| [High-Volume Meeting Platform](use-cases/high-volume-meeting-platform.md) | Design distributed meeting creation and event processing with retries, queues, and reconciliation | [zoom-rest-api](../rest-api/SKILL.md) + [zoom-webhooks](../webhooks/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [Recording & Transcription](use-cases/recording-transcription.md) | Download recordings, get transcripts | [zoom-webhooks](../webhooks/SKILL.md) + [zoom-rest-api](../rest-api/SKILL.md) |
 | [Recording Download Pipeline](use-cases/recording-download-pipeline.md) | Auto-download recordings to your own storage (S3, GCS, etc.) | [zoom-webhooks](../webhooks/SKILL.md) + [zoom-rest-api](../rest-api/SKILL.md) |
 | [Real-Time Media Streams](use-cases/real-time-media-streams.md) | Access live audio, video, transcripts via WebSocket | [zoom-rtms](../rtms/SKILL.md) + [zoom-webhooks](../webhooks/SKILL.md) |
@@ -159,12 +165,14 @@ Both receive event notifications, but differ in approach:
 - [Rivet Event-Driven API Orchestrator](use-cases/rivet-event-driven-api-orchestrator.md): build a Node.js backend that combines webhook handling and API orchestration with Rivet.
 - [Probe SDK Preflight Readiness Gate](use-cases/probe-sdk-preflight-readiness-gate.md): run browser/device/network diagnostics before launching meeting or video session workflows.
 - [Custom Video](use-cases/custom-video.md): decide between Video SDK and related components for custom session UX.
+- [Custom Meeting UI (Web)](use-cases/custom-meeting-ui-web.md): use Meeting SDK Component View for a custom UI around a real Zoom meeting.
 - [Video SDK Bring Your Own Storage](use-cases/video-sdk-bring-your-own-storage.md): configure Video SDK cloud recordings to write directly to your own S3 bucket.
 - [Customer Support Cobrowsing](use-cases/customer-support-cobrowsing.md): implement customer-agent collaborative browsing support flows.
 - [Embed Meetings](use-cases/embed-meetings.md): embed Zoom meeting experience into your app.
 - [Forum Triage Skill Coverage](use-cases/forum-triage-skill-coverage.md): classify forum issues and map them to skill coverage gaps.
 - [Form Completion Assistant](use-cases/form-completion-assistant.md): build guided flows for form filling and completion assistance.
 - [HD Video Resolution](use-cases/hd-video-resolution.md): enable and troubleshoot high-definition video requirements.
+- [High-Volume Meeting Platform](use-cases/high-volume-meeting-platform.md): build distributed meeting creation and event processing with concrete fallback patterns.
 - [Immersive Experiences](use-cases/immersive-experiences.md): use Zoom Apps Layers APIs for custom in-meeting visuals.
 - [In-Meeting Apps](use-cases/in-meeting-apps.md): build Zoom Apps that run directly inside meeting and webinar contexts.
 - [Marketplace Publishing](use-cases/marketplace-publishing.md): prepare and ship a Zoom app through Marketplace review.

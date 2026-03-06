@@ -8,8 +8,10 @@ Meeting bots are headless applications that join Zoom meetings as participants t
 
 ## Skills Needed
 
-- **zoom-meeting-sdk** (Linux) - Primary
-- **rtms** - For real-time media streams
+- **meeting-sdk/linux** - Visible bot join flow, raw recording, and raw media access
+- **zoom-rest-api** - Meeting lookup plus OBF/ZAK retrieval, optional cloud-recording settings
+- **zoom-webhooks** - Optional if you want Zoom-managed cloud recording download after the meeting
+- **zoom-rtms** - Alternative when you need invisible media access instead of a visible participant bot
 
 ## Architecture
 
@@ -41,8 +43,65 @@ Meeting Bot Architecture:
 
 - Join meetings programmatically
 - Access raw audio/video data
+- Start and stop raw recording explicitly
 - Real-time transcription
 - AI processing (sentiment, summarization)
+
+## Automatic Join + Recording Pattern
+
+Use this chain when the user asks for a bot that automatically joins and records a meeting:
+
+```text
+zoom-rest-api
+  -> fetch meeting metadata
+  -> mint OBF/ZAK token
+meeting-sdk/linux
+  -> join as visible participant
+  -> StartRawRecording()
+  -> subscribe audio/video delegates
+  -> write PCM/YUV or send to downstream pipeline
+optional zoom-webhooks + zoom-rest-api
+  -> receive recording.completed
+  -> download Zoom-managed cloud recording assets
+```
+
+### Raw Recording Control
+
+```cpp
+void onMeetingStatusChanged(MeetingStatus status, int iResult) {
+    if (status != MEETING_STATUS_INMEETING) return;
+
+    auto* recordCtrl = m_meetingService->GetMeetingRecordingController();
+    if (!recordCtrl) {
+        throw std::runtime_error("recording_controller_unavailable");
+    }
+
+    if (recordCtrl->CanStartRawRecording() != SDKERR_SUCCESS) {
+        throw std::runtime_error("raw_recording_not_permitted");
+    }
+
+    SDKError err = recordCtrl->StartRawRecording();
+    if (err != SDKERR_SUCCESS) {
+        throw std::runtime_error("start_raw_recording_failed");
+    }
+
+    GetAudioRawdataHelper()->subscribe(new AudioRawDataDelegate(), true);
+
+    IZoomSDKRenderer* renderer = nullptr;
+    createRenderer(&renderer, new VideoRawDataDelegate());
+    renderer->setRawDataResolution(ZoomSDKResolution_720P);
+    renderer->subscribe(activeSpeakerUserId, RAW_DATA_TYPE_VIDEO);
+}
+```
+
+### Choose the Right Recording Output
+
+| Requirement | Correct path |
+|-------------|--------------|
+| Bot-owned audio/video files or real-time AI processing | Meeting SDK Linux raw recording |
+| Zoom-hosted MP4/M4A/transcript files after meeting end | Cloud recording settings + webhooks + recordings REST API |
+
+`StartRawRecording()` enables raw media flow. It does not create a finished MP4 by itself. You still need to persist PCM/YUV or post-process it with your own pipeline.
 
 ## Bot Implementation Patterns
 

@@ -35,11 +35,21 @@ Expert guidance for building headless meeting bots with the Zoom Meeting SDK on 
 - **Recording Bot** → [high-level-scenarios.md#scenario-2-recording-bot](concepts/high-level-scenarios.md)
 - **AI Meeting Assistant** → [high-level-scenarios.md#scenario-3-ai-meeting-assistant](concepts/high-level-scenarios.md)
 - **Quality Monitoring** → [high-level-scenarios.md#scenario-4-monitoring-quality-bot](concepts/high-level-scenarios.md)
+- **Auto-Join + Recording Bot** → [meeting-sdk-bot.md](meeting-sdk-bot.md) for raw recording orchestration, retry, and cloud-recording handoff
 
 **Having issues?**
 - Docker audio issues → [references/linux-reference.md#pulseaudio-setup](references/linux-reference.md)
 - Raw recording permission denied → [meeting-sdk-bot.md#raw-recording-permission-denied](meeting-sdk-bot.md)
 - Build errors → [references/linux-reference.md#troubleshooting](references/linux-reference.md)
+
+## Routing Rule for Bots
+
+If the user asks to build a bot that **automatically joins a Zoom meeting and records it**, start with
+[meeting-sdk-bot.md](meeting-sdk-bot.md).
+
+- Use **Meeting SDK Linux** for the visible participant, join flow, and raw recording control.
+- Chain **zoom-rest-api** when the bot must fetch OBF/ZAK tokens, schedule meetings, or enable account-side recording settings.
+- Chain **zoom-webhooks** when the requirement is Zoom cloud recording retrieval after meeting end.
 
 ## SDK Overview
 

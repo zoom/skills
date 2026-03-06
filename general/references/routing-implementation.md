@@ -20,7 +20,10 @@ export type SkillId =
   | 'zoom-webhooks'
   | 'zoom-websockets'
   | 'zoom-meeting-sdk'
+  | 'zoom-meeting-sdk-web'
+  | 'zoom-meeting-sdk-web-component-view'
   | 'zoom-video-sdk'
+  | 'zoom-video-sdk-web'
   | 'zoom-apps-sdk'
   | 'zoom-rtms'
   | 'zoom-team-chat'
@@ -44,6 +47,7 @@ export interface RouteDecision {
 
 interface Signals {
   meetingEmbed: boolean;
+  meetingCustomUi: boolean;
   customVideo: boolean;
   restApi: boolean;
   mcp: boolean;
@@ -69,6 +73,16 @@ export function detectSignals(rawQuery: string): Signals {
   const q = rawQuery.toLowerCase();
   return {
     meetingEmbed: hasAny(q, ['meeting sdk', 'embed meeting', 'join meeting ui', 'client view', 'component view']),
+    meetingCustomUi: hasAny(q, [
+      'custom meeting ui',
+      'custom zoom meeting ui',
+      'custom meeting video ui',
+      'custom video ui for meeting',
+      'zoommtgembedded',
+      'zoomapproot',
+      'embeddable meeting ui',
+      'component view',
+    ]),
     customVideo: hasAny(q, ['video sdk', 'custom video', 'attachvideo', 'peer-video-state-change']),
     restApi: hasAny(q, ['rest api', 'api create meeting', 'api list meetings', '/v2/', 'list users', 's2s oauth', 'meeting endpoint']),
     mcp: hasAny(q, ['zoom mcp', 'mcp server', 'agentic retrieval', 'tools/list', 'tools/call', 'semantic meeting search']),
@@ -91,7 +105,10 @@ export function detectSignals(rawQuery: string): Signals {
 
 function pickPrimarySkill(s: Signals): SkillId {
   // Hard guardrails: SDK embed/custom-video requests should not fall back to REST.
+  if (s.meetingCustomUi) return 'zoom-meeting-sdk-web-component-view';
+  if (s.meetingEmbed && !s.customVideo) return 'zoom-meeting-sdk-web';
   if (s.meetingEmbed) return 'zoom-meeting-sdk';
+  if (s.customVideo && !s.meetingEmbed) return 'zoom-video-sdk-web';
   if (s.customVideo) return 'zoom-video-sdk';
 
   if (s.virtualAgent) return 'virtual-agent';
@@ -115,6 +132,8 @@ function pickPrimarySkill(s: Signals): SkillId {
 
 function buildChain(primary: SkillId, s: Signals): SkillId[] {
   const chain = new Set<SkillId>();
+
+  if (primary === 'zoom-meeting-sdk-web-component-view') chain.add('zoom-meeting-sdk-web');
 
   // Auth chaining.
   if (s.oauth || s.restApi || s.mcp || s.webhooks || s.websockets || s.phone || s.teamChat || s.virtualAgent) {
@@ -144,11 +163,17 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
 function validateDecision(primary: SkillId, s: Signals): string[] {
   const warnings: string[] = [];
 
-  if (s.meetingEmbed && primary !== 'zoom-meeting-sdk') {
+  if (s.meetingEmbed && !['zoom-meeting-sdk', 'zoom-meeting-sdk-web', 'zoom-meeting-sdk-web-component-view'].includes(primary)) {
     warnings.push('meeting embed intent detected but primary skill is not zoom-meeting-sdk');
   }
-  if (s.customVideo && primary !== 'zoom-video-sdk') {
+  if (s.meetingCustomUi && primary !== 'zoom-meeting-sdk-web-component-view') {
+    warnings.push('custom meeting UI intent detected but primary skill is not zoom-meeting-sdk-web-component-view');
+  }
+  if (s.customVideo && !['zoom-video-sdk', 'zoom-video-sdk-web'].includes(primary)) {
     warnings.push('custom video intent detected but primary skill is not zoom-video-sdk');
+  }
+  if (s.meetingCustomUi && s.customVideo) {
+    warnings.push('meeting UI intent and custom video intent both detected; prefer Meeting SDK Component View unless the user explicitly wants a non-meeting session');
   }
   if (s.restApi && (s.meetingEmbed || s.customVideo)) {
     warnings.push('mixed SDK + REST intent; keep SDK as primary and use REST only for resource workflows');

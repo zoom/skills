@@ -10,11 +10,18 @@ triggers:
   - "zoomapproot"
   - "embeddable meeting ui"
   - "component view embedded zoom"
+  - "custom meeting ui"
+  - "custom zoom meeting ui"
+  - "custom meeting video ui"
+  - "custom video ui for meeting"
 ---
 
 # Zoom Meeting SDK Web - Component View
 
 Embeddable Zoom meeting components for flexible integration into any web application. Component View provides Promise-based APIs and customizable UI.
+
+This is the correct web skill for a **custom UI around a real Zoom meeting**.
+Do not route to Video SDK unless the user is building a non-meeting custom session product.
 
 ## Overview
 
