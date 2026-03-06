@@ -332,6 +332,80 @@ console.log('Max quality:', stream.getVideoMaxQuality());
 
 ---
 
+## Real-World Integration Pitfalls (Custom Waiting Room Flows)
+
+These came up in production-style waiting-room to main-session transfers.
+
+### A) Joined, but no audio/video works on Firefox
+
+**Symptom**: Session joins, but media pipeline is flaky or blank.
+
+**Cause**: CSP blocks WebAssembly execution used by `js_media.min.js`.
+
+**Fix**: Ensure CSP `script-src` includes:
+
+```text
+'wasm-unsafe-eval' 'unsafe-eval'
+```
+
+Also keep required Zoom domains in `script-src` and allow `worker-src blob:`.
+
+### B) Transfer works, but customer remote video never appears
+
+**Symptom**: Customer reaches main session but does not see advisor video.
+
+**Likely causes**:
+1. Advisor is not publishing video (`bVideoOn` is false)
+2. Event listener race during waiting->main rejoin
+3. Attach attempted too early during stream readiness
+
+**Fix pattern**:
+- Bind listeners once and gate logic by current session mode.
+- On main join, do both:
+  - immediate `getAllUser()` render pass
+  - short retry/poll window for late stream availability
+- Handle `peer-video-state-change`, `user-added`, and `user-updated`.
+
+### C) Self video appears at wrong page position
+
+**Symptom**: Self video renders far down the page instead of in tile.
+
+**Cause**: Container CSS/DOM mismatch for SDK inserted elements.
+
+**Fix**:
+- Use `video-player-container` for SDK video mounts.
+- Ensure child elements are explicitly sized:
+
+```css
+video-player-container video-player,
+video-player-container canvas,
+video-player-container video {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+```
+
+### D) Command channel transfer message is "missed"
+
+**Symptom**: Admit clicked, but customer does not transfer.
+
+**Cause**: Command channel does not replay history. If customer wasn't fully in waiting session yet, message is missed.
+
+**Fix**:
+- Keep backend transfer state and allow customer to fetch transfer details after join.
+- Consider one-time transfer lookup on customer waiting join as race guard.
+
+### E) Repeated CORS errors to `log-external-gateway.zoom.us`
+
+**Symptom**: Console spam with CORS 531 errors.
+
+**Impact**: Usually telemetry-only; does not block core session/media.
+
+**Action**: Treat as noise unless accompanied by actual join or media API failures.
+
+---
+
 ## Related Documentation
 
 - [SDK Architecture Pattern](../concepts/sdk-architecture-pattern.md) - Lifecycle order

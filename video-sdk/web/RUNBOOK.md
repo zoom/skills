@@ -53,6 +53,11 @@ Use this before deep debugging.
 
 ## 8) Source Checkpoints
 
+## 9) Field Pitfalls (Custom Flows)
+
+- For waiting-room -> main-session transfers and browser/CSP edge cases, review:
+  - `troubleshooting/common-issues.md` (section: "Real-World Integration Pitfalls (Custom Waiting Room Flows)")
+
 ### Official docs
 
 - https://developers.zoom.us/docs/video-sdk/web/
