@@ -72,7 +72,7 @@ Expert guidance for building server-side integrations with the Zoom REST API. Th
 ### Get an Access Token (Server-to-Server OAuth)
 
 ```bash
-curl -X POST "https://zoom.../oauth/token" \
+curl -X POST "https://zoom.us/oauth/token" \
   -H "Authorization: Basic $(echo -n 'CLIENT_ID:CLIENT_SECRET' | base64)" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=account_credentials&account_id=ACCOUNT_ID"

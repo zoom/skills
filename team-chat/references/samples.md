@@ -538,9 +538,10 @@ app.post('/webhook', (req, res) => {
 - [Chatbot Setup Example](../examples/chatbot-setup.md) - Build your own using these patterns
 - [LLM Integration Example](../examples/llm-integration.md) - Integrate Claude/GPT
 - [Button Actions Example](../examples/button-actions.md) - Handle interactive components
+- [Sample Comparison](sample-comparison.md) - Compare common sample shapes before choosing a baseline
 
 ## Resources
 
 - [Official Samples GitHub Org](https://github.com/zoom?q=chatbot)
-- [Chatbot Documentation](https://developers.zoom.us/do../team-chat/chatbot/extend/)
+- [Chatbot Documentation](https://developers.zoom.us/docs/team-chat/chatbot/extend/)
 - [Developer Forum](https://devforum.zoom.us/)

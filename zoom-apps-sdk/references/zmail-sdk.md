@@ -173,7 +173,7 @@ await sdk.insertContentToMailActiveEditor({
 
 ```javascript
 async function getAccessToken() {
-  const response = await fetch('https://zoom.../oauth/token', {
+  const response = await fetch('https://zoom.us/oauth/token', {
     method: 'POST',
     headers: {
       'Authorization': 'Basic ' + btoa(`${clientId}:${clientSecret}`),

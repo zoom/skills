@@ -54,4 +54,4 @@ Tracking IDs appear in:
 
 ## Resources
 
-- **Meeting SDK Web docs**: https://developers.zoom.us/do../meeting-sdk/web/
+- **Meeting SDK Web docs**: https://developers.zoom.us/docs/meeting-sdk/web/

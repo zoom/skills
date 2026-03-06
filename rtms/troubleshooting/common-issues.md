@@ -356,7 +356,7 @@ const signature = generateSignature(clientId, idValue, streamId, clientSecret);
 
 1. **Developer Forum**: https://devforum.zoom.us/
 2. **GitHub Issues**: https://github.com/zo../rtms/issues
-3. **Official Docs**: https://developers.zoom.us/do../rtms/
+3. **Official Docs**: https://developers.zoom.us/docs/rtms/
 
 ## Next Steps
 

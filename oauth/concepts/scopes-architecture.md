@@ -136,7 +136,7 @@ Token will include all configured scopes.
 Scopes are requested in authorization URL:
 
 ```javascript
-const authURL = new URL('https://zoom.../oauth/authorize');
+const authURL = new URL('https://zoom.us/oauth/authorize');
 authURL.searchParams.set('response_type', 'code');
 authURL.searchParams.set('client_id', CLIENT_ID);
 authURL.searchParams.set('redirect_uri', REDIRECT_URI);

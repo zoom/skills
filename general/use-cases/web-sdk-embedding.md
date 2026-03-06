@@ -203,5 +203,5 @@ window.addEventListener('message', (event) => {
 
 ## Resources
 
-- **Meeting SDK Web**: https://developers.zoom.us/do../meeting-sdk/web/
-- **Video SDK Web**: https://developers.zoom.us/do../video-sdk/web/
+- **Meeting SDK Web**: https://developers.zoom.us/docs/meeting-sdk/web/
+- **Video SDK Web**: https://developers.zoom.us/docs/video-sdk/web/

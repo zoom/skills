@@ -338,6 +338,6 @@ Use the [Team Chat App Card Builder](https://appssdk.zoom.us/cardbuilder/) to:
 
 ## Resources
 
-- [Official Card Components](https://developers.zoom.us/do../team-chat/customizing-messages/)
+- [Official Card Components](https://developers.zoom.us/docs/team-chat/customizing-messages/)
 - [App Card Builder](https://appssdk.zoom.us/cardbuilder/)
 - [Sample Chatbots](https://github.com/zoom?q=chatbot)

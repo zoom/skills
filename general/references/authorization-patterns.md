@@ -143,7 +143,7 @@ async function getTokenInfo(accessToken) {
  * Example: Store scopes during OAuth token exchange
  */
 async function handleOAuthCallback(code) {
-  const response = await axios.post('https://zoom.../oauth/token', null, {
+  const response = await axios.post('https://zoom.us/oauth/token', null, {
     params: {
       grant_type: 'authorization_code',
       code: code,

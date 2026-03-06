@@ -31,6 +31,6 @@ Use **client credentials** when you want messages/actions to appear as a bot.
 - **Server-to-Server OAuth** is not a fit for Zoom Team Chat chatbot features.
 - Team Chat API calls require a user token with the right scopes; “invalid access token” errors are almost always missing scopes or wrong app type.
 - OAuth URL split is easy to mix up:
-  - authorize step: `https://zoom.../oauth/authorize`
+  - authorize step: `https://zoom.us/oauth/authorize`
   - token step (all grant types): `https://zoom.us/oauth/token`
 - In browser demos, complete OAuth end-to-end in app (state verify -> callback -> code exchange -> token store) to avoid copy/paste mistakes.

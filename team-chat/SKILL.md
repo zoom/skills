@@ -31,8 +31,8 @@ There are two different integration types and they are not interchangeable:
 
 If you choose the wrong type early, auth/scopes/endpoints all mismatch and implementation fails.
 
-**Official Documentation**: https://developers.zoom.us/do../team-chat/  
-**Chatbot Documentation**: https://developers.zoom.us/do../team-chat/chatbot/extend/  
+**Official Documentation**: https://developers.zoom.us/docs/team-chat/  
+**Chatbot Documentation**: https://developers.zoom.us/docs/team-chat/chatbot/extend/  
 **API Reference**: https://developers.zoom.us/docs/api/rest/reference/chatbot/
 
 ## Quick Links
@@ -59,7 +59,7 @@ If you choose the wrong type early, auth/scopes/endpoints all mismatch and imple
 - Start with quick checks → [5-Minute Runbook](RUNBOOK.md)
 
 **OAuth endpoint sanity check:**
-- Authorize URL: `https://zoom.../oauth/authorize`
+- Authorize URL: `https://zoom.us/oauth/authorize`
 - Token URL: `https://zoom.us/oauth/token`
 - If../oauth/token` returns 404/HTML, use `/oauth/token`.
 
@@ -428,7 +428,7 @@ ngrok http 4000
 
 ## Resources
 
-- **Official Docs**: https://developers.zoom.us/do../team-chat/
+- **Official Docs**: https://developers.zoom.us/docs/team-chat/
 - **API Reference**: https://developers.zoom.us/docs/api/rest/reference/chatbot/
 - **Dev Forum**: https://devforum.zoom.us/
 - **App Marketplace**: https://marketplace.zoom.us/
@@ -531,7 +531,6 @@ Working code for common scenarios.
 | Reference | Description |
 |-----------|-------------|
 | [Sample Applications](references/samples.md) | Sample app index/notes |
-| [Sample Comparison](references/sample-comparison.md) | Feature comparison matrix |
 
 ### Field Guides
 | Reference | Description |
@@ -599,8 +598,8 @@ Request → Send card with buttons → User clicks → Update status → Notify
 ## Resource Links
 
 ### Official Documentation
-- **[Team Chat Docs](https://developers.zoom.us/do../team-chat/)** - Official overview
-- **[Chatbot Docs](https://developers.zoom.us/do../team-chat/chatbot/extend/)** - Chatbot guide
+- **[Team Chat Docs](https://developers.zoom.us/docs/team-chat/)** - Official overview
+- **[Chatbot Docs](https://developers.zoom.us/docs/team-chat/chatbot/extend/)** - Chatbot guide
 - **[API Reference](https://developers.zoom.us/docs/api/rest/reference/chatbot/)** - REST API docs
 - **[App Marketplace](https://marketplace.zoom.us/)** - Create and manage apps
 

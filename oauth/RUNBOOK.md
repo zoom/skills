@@ -19,7 +19,7 @@ Wrong flow choice causes scope and token errors later.
 
 ## 2) Confirm Endpoint Split
 
-- Authorize URL: `https://zoom.../oauth/authorize`
+- Authorize URL: `https://zoom.us/oauth/authorize`
 - Token URL: `https://zoom.us/oauth/token`
 
 If token requests return 404/HTML, verify you are not calling../oauth/token`.

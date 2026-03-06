@@ -298,7 +298,7 @@ If you need more customization than UI Toolkit provides:
 
 - **Skill**: [zoom-ui-toolkit](../../ui-toolkit/SKILL.md)
 - **Live Demo**: https://sdk.zoom.com/videosdk-uitoolkit
-- **Official Docs**: https://developers.zoom.us/do../video-sdk/w../ui-toolkit/
+- **Official Docs**: https://developers.zoom.us/docs/video-sdk/web/ui-toolkit/
 - **NPM Package**: https://www.npmjs.com/package/@zoom/videosdk-zoom-ui-toolkit
 - **Sample Apps**:
   - React: https://github.com/zoom/videosdk-zoom-ui-toolkit-react-sample

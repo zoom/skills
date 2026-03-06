@@ -1214,7 +1214,7 @@ USING_ZOOM_VIDEO_SDK_NAMESPACE
 
 ## Additional Resources
 
-- **Official Docs**: https://developers.zoom.us/do../video-sdk/windows/
+- **Official Docs**: https://developers.zoom.us/docs/video-sdk/windows/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/custom/windows/
 - **Sample Code**: https://github.com/zoom/videosdk-windows-rawdata-sample
 - **Dev Forum**: https://devforum.zoom.us

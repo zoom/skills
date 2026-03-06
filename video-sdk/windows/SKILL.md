@@ -1,13 +1,19 @@
 ---
 name: video-sdk/windows
 description: "Zoom Video SDK for Windows - C++ integration for video sessions, raw audio/video capture, screen sharing, recording, and real-time communication"
+triggers:
+  - "video sdk windows"
+  - "windows video sdk"
+  - "video sdk raw data windows"
+  - "windows custom video"
+  - "c++ video sdk"
 ---
 
 # Zoom Video SDK - Windows Development
 
 Expert guidance for developing with the Zoom Video SDK on Windows. This SDK enables custom video applications, raw media capture/injection, cloud recording, live streaming, and real-time transcription on Windows platforms.
 
-**Official Documentation**: https://developers.zoom.us/do../video-sdk/windows/
+**Official Documentation**: https://developers.zoom.us/docs/video-sdk/windows/
 **API Reference**: https://marketplacefront.zoom.us/sdk/custom/windows/
 **Sample Repository**: https://github.com/zoom/videosdk-windows-rawdata-sample
 
@@ -740,7 +746,7 @@ See: [SDK Architecture Pattern](concepts/sdk-architecture-pattern.md)
 
 ## Resources
 
-- **Official Docs**: https://developers.zoom.us/do../video-sdk/windows/
+- **Official Docs**: https://developers.zoom.us/docs/video-sdk/windows/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/custom/windows/
 - **Dev Forum**: https://devforum.zoom.us/
 - **GitHub Samples**: https://github.com/zoom/videosdk-windows-rawdata-sample

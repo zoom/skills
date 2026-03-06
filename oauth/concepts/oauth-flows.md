@@ -3,7 +3,7 @@
 Zoom supports 4 OAuth 2.0 flows. This guide helps you choose the right one and understand how each works.
 
 Endpoint split to remember:
-- Authorization URL: `https://zoom.../oauth/authorize`
+- Authorization URL: `https://zoom.us/oauth/authorize`
 - Token URL: `https://zoom.us/oauth/token`
 
 ## Quick Decision Matrix
@@ -185,7 +185,7 @@ app.get('/auth', (req, res) => {
   const state = crypto.randomBytes(16).toString('hex');
   req.session.oauthState = state; // Store for verification
 
-  const authURL = new URL('https://zoom.../oauth/authorize');
+  const authURL = new URL('https://zoom.us/oauth/authorize');
   authURL.searchParams.set('response_type', 'code');
   authURL.searchParams.set('client_id', process.env.ZOOM_CLIENT_ID);
   authURL.searchParams.set('redirect_uri', process.env.ZOOM_REDIRECT_URL);
@@ -315,7 +315,7 @@ app.get('/callback', async (req, res) => {
 ```javascript
 const requestDeviceCode = async () => {
   const response = await axios.post(
-    'https://zoom.../oauth/devicecode',
+    'https://zoom.us/oauth/devicecode',
     qs.stringify({
       client_id: process.env.ZOOM_CLIENT_ID
     }),

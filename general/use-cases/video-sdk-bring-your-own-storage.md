@@ -137,7 +137,7 @@ Record a Video SDK session and verify recordings appear in your S3 bucket.
 
 ### Via API
 
-Use the [Video SDK BYOS Storage APIs](https://developers.zoom.us/docs/a../video-sdk/#tag/byos-storage):
+Use the [Video SDK BYOS Storage APIs](https://developers.zoom.us/docs/api/video-sdk/#tag/byos-storage):
 
 | Endpoint | Description |
 |----------|-------------|
@@ -148,7 +148,7 @@ Use the [Video SDK BYOS Storage APIs](https://developers.zoom.us/docs/a../video-
 
 ## Managing Recordings
 
-Use the [Cloud Recording APIs](https://developers.zoom.us/docs/a../video-sdk/#tag/cloud-recording) to manage, play, and download BYOS recordings.
+Use the [Cloud Recording APIs](https://developers.zoom.us/docs/api/video-sdk/#tag/cloud-recording) to manage, play, and download BYOS recordings.
 
 **Important:** Cloud recordings have two components:
 
@@ -216,5 +216,5 @@ aws cloudtrail lookup-events \
 - **BYOS Overview:** https://developers.zoom.us/docs/build/storage/
 - **Get Started:** https://developers.zoom.us/docs/build/storage-get-started/
 - **Manage Storage:** https://developers.zoom.us/docs/build/storage-manage/
-- **BYOS Storage APIs:** https://developers.zoom.us/docs/a../video-sdk/#tag/byos-storage
-- **Cloud Recording APIs:** https://developers.zoom.us/docs/a../video-sdk/#tag/cloud-recording
+- **BYOS Storage APIs:** https://developers.zoom.us/docs/api/video-sdk/#tag/byos-storage
+- **Cloud Recording APIs:** https://developers.zoom.us/docs/api/video-sdk/#tag/cloud-recording

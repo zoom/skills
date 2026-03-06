@@ -580,6 +580,6 @@ curl -X POST http://localhost:3000/webhook \
 
 ## Resources
 
-- [Using Webhooks](https://developers.zoom.us/docs/a../webhooks/)
+- [Using Webhooks](https://developers.zoom.us/docs/api/webhooks/)
 - [Webhook Sample App](https://github.com/zoom/webhook-sample-node.js)
 - [Event Reference](https://developers.zoom.us/docs/api/rest/webhook-reference/)

@@ -784,7 +784,7 @@ See [bot-authentication.md](../../references/bot-authentication.md) for details.
 
 ## Resources
 
-- **Official docs**: https://developers.zoom.us/do../meeting-sdk/windows/
+- **Official docs**: https://developers.zoom.us/docs/meeting-sdk/windows/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/meeting/windows/annotated.html
 - **Sample code**: https://github.com/zoom/meetingsdk-windows-raw-recording-sample
 - **Developer forum**: https://devforum.zoom.us/

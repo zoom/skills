@@ -29,7 +29,7 @@ async function getAccessToken(accountId, clientId, clientSecret) {
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
   
   const response = await axios.post(
-    'https://zoom.../oauth/token',
+    'https://zoom.us/oauth/token',
     new URLSearchParams({
       grant_type: 'account_credentials',
       account_id: accountId
@@ -313,7 +313,7 @@ class ZoomWebSocketClient {
     ).toString('base64');
     
     const response = await axios.post(
-      'https://zoom.../oauth/token',
+      'https://zoom.us/oauth/token',
       new URLSearchParams({
         grant_type: 'account_credentials',
         account_id: this.config.accountId
@@ -431,5 +431,5 @@ client.connect();
 
 ## Resources
 
-- **WebSockets docs**: https://developers.zoom.us/docs/a../websockets/
+- **WebSockets docs**: https://developers.zoom.us/docs/api/websockets/
 - **S2S OAuth guide**: https://developers.zoom.us/docs/internal-apps/s2s-oauth/

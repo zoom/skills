@@ -271,5 +271,5 @@ const region = hostname.split('-')[1].replace(/[0-9]/g, '');  // sjc
 
 ## Resources
 
-- **Event reference**: https://developers.zoom.us/do../rtms/event-reference/
-- **RTMS docs**: https://developers.zoom.us/do../rtms/
+- **Event reference**: https://developers.zoom.us/docs/rtms/event-reference/
+- **RTMS docs**: https://developers.zoom.us/docs/rtms/

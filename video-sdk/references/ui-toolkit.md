@@ -203,6 +203,6 @@ uitoolkit.closeSession(sessionContainer);
 
 ## Resources
 
-- **Official docs**: https://developers.zoom.us/do../video-sdk/w../ui-toolkit/
+- **Official docs**: https://developers.zoom.us/docs/video-sdk/web/ui-toolkit/
 - **npm package**: https://www.npmjs.com/package/@zoom/videosdk-zoom-ui-toolkit
 - **GitHub**: https://github.com/zoom/videosdk-zoom-ui-toolkit-web

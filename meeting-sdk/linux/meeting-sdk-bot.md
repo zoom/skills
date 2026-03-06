@@ -706,9 +706,9 @@ int main() {
 
 ## Resources
 
-- **Meeting SDK Linux**: https://developers.zoom.us/do../meeting-sdk/linux/
-- **Raw Data Guide**: https://developers.zoom.us/do../meeting-sdk/linux/add-features/raw-data/
-- **OBF FAQ**: https://developers.zoom.us/do../meeting-sdk/obf-faq/
+- **Meeting SDK Linux**: https://developers.zoom.us/docs/meeting-sdk/linux/
+- **Raw Data Guide**: https://developers.zoom.us/docs/meeting-sdk/linux/add-features/raw-data/
+- **OBF FAQ**: https://developers.zoom.us/docs/meeting-sdk/obf-faq/
 - **REST API - Get Meeting**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/meeting
 - **REST API - Get OBF Token**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/userToken
 - **RTMS Bot Alternative**: [../../rtms/examples/rtms-bot.md](../../rtms/examples/rtms-bot.md)

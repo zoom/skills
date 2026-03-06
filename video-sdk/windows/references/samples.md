@@ -273,7 +273,7 @@ Each sample uses `config.json`:
 ## External Resources
 
 - **GitHub Repository**: https://github.com/zoom/videosdk-windows-rawdata-sample
-- **Official Documentation**: https://developers.zoom.us/do../video-sdk/windows/
+- **Official Documentation**: https://developers.zoom.us/docs/video-sdk/windows/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/custom/windows/
 - **Developer Forum**: https://devforum.zoom.us/
 

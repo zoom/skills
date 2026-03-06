@@ -194,7 +194,7 @@ app.post('/zoom/webhook', (req, res) => {
 ```javascript
 async function updateWebhookSubscription(accessToken, events) {
   const response = await axios.patch(
-    'https://api.zoom.../../webhooks/options',
+    'https://api.zoom.us/v2/webhooks/options',
     { events },
     {
       headers: {

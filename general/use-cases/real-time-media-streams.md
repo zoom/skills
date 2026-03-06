@@ -233,5 +233,5 @@ class RTMSClient {
 
 ## Resources
 
-- **RTMS docs**: https://developers.zoom.us/do../rtms/
-- **RTMS Quick Start**: https://developers.zoom.us/do../rtms/quick-start/
+- **RTMS docs**: https://developers.zoom.us/docs/rtms/
+- **RTMS Quick Start**: https://developers.zoom.us/docs/rtms/getting-started/

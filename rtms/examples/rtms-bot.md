@@ -688,8 +688,8 @@ main();
 
 ## Resources
 
-- **RTMS Docs**: https://developers.zoom.us/do../rtms/
-- **RTMS WebSocket Guide**: https://developers.zoom.us/do../rt../websockets/
+- **RTMS Docs**: https://developers.zoom.us/docs/rtms/
+- **RTMS WebSocket Guide**: https://developers.zoom.us/docs/api/websockets/
 - **RTMS SDK**: https://github.com/zoom/rtms
 - **Webhook Reference**: [../references/webhooks.md](../references/webhooks.md)
 - **Connection Architecture**: [../concepts/connection-architecture.md](../concepts/connection-architecture.md)

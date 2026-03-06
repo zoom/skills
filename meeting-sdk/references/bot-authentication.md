@@ -110,7 +110,7 @@ A short-lived credential that proves your bot/app is authenticated as a specific
 **Step 1: Get OAuth Access Token**
 
 ```bash
-curl -X POST "https://zoom.../oauth/token" \
+curl -X POST "https://zoom.us/oauth/token" \
   -H "Authorization: Basic {BASE64(client_id:client_secret)}" \
   -d "grant_type=authorization_code&code={auth_code}&redirect_uri={redirect_uri}"
 ```
@@ -379,7 +379,7 @@ docker compose up
 
 ## Resources
 
-- **Meeting SDK Auth**: https://developers.zoom.us/do../meeting-sdk/auth/
+- **Meeting SDK Auth**: https://developers.zoom.us/docs/meeting-sdk/auth/
 - **OBF Token Announcement**: https://developers.zoom.us/blog/transition-to-obf-token-meetingsdk-apps/
 - **Linux SDK Sample**: https://github.com/zoom/meetingsdk-headless-linux-sample
 - **Developer Forum**: https://devforum.zoom.us/

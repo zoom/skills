@@ -168,5 +168,5 @@ There is no native SDK support for raw recording on Web. For browser-based recor
 
 ## Resources
 
-- **Meeting SDK docs**: https://developers.zoom.us/do../meeting-sdk/
-- **Video SDK docs**: https://developers.zoom.us/do../video-sdk/
+- **Meeting SDK docs**: https://developers.zoom.us/docs/meeting-sdk/
+- **Video SDK docs**: https://developers.zoom.us/docs/video-sdk/

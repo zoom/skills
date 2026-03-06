@@ -208,5 +208,5 @@ location /my-app/rtms-socket {
 
 ## Resources
 
-- **RTMS docs**: https://developers.zoom.us/do../rtms/
+- **RTMS docs**: https://developers.zoom.us/docs/rtms/
 - **rtms-samples**: https://github.com/zoom/rtms-samples

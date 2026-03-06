@@ -64,7 +64,7 @@ User clicks "Add" in Marketplace
          │
          ▼
 Browser opens Zoom OAuth page
-(https://zoom.../oauth/authorize?client_id=...&code_challenge=...)
+(https://zoom.us/oauth/authorize?client_id=...&code_challenge=...)
          │
          ▼
 User clicks "Allow"

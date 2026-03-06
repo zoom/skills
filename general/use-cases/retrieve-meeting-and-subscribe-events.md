@@ -92,7 +92,7 @@ async function getAccessToken() {
   ).toString('base64');
   
   const response = await axios.post(
-    `https://zoom.../oauth/token?grant_type=account_credentials&account_id=${process.env.ZOOM_ACCOUNT_ID}`,
+    `https://zoom.us/oauth/token?grant_type=account_credentials&account_id=${process.env.ZOOM_ACCOUNT_ID}`,
     null,
     { headers: { 'Authorization': `Basic ${credentials}` } }
   );
@@ -289,7 +289,7 @@ async function getAccessToken() {
   ).toString('base64');
   
   const response = await axios.post(
-    'https://zoom.../oauth/token',
+    'https://zoom.us/oauth/token',
     new URLSearchParams({
       grant_type: 'account_credentials',
       account_id: process.env.ZOOM_ACCOUNT_ID
@@ -938,6 +938,6 @@ async function analyzeMeeting(meetingId) {
 
 - **REST API**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Meetings
 - **Webhooks**: https://developers.zoom.us/docs/api/rest/webhook-reference/
-- **WebSockets**: https://developers.zoom.us/docs/a../websockets/
-- **Meeting SDK**: https://developers.zoom.us/do../meeting-sdk/web/
-- **RTMS**: https://developers.zoom.us/do../rtms/
+- **WebSockets**: https://developers.zoom.us/docs/api/websockets/
+- **Meeting SDK**: https://developers.zoom.us/docs/meeting-sdk/web/
+- **RTMS**: https://developers.zoom.us/docs/rtms/

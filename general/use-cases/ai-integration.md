@@ -218,7 +218,7 @@ async function extractActionItems(transcript) {
 
 ## Resources
 
-- **RTMS docs**: https://developers.zoom.us/do../rtms/
-- **Meeting SDK Linux**: https://developers.zoom.us/do../meeting-sdk/linux/
+- **RTMS docs**: https://developers.zoom.us/docs/rtms/
+- **Meeting SDK Linux**: https://developers.zoom.us/docs/meeting-sdk/linux/
 - **Deepgram**: https://deepgram.com/
 - **OpenAI API**: https://platform.openai.com/docs

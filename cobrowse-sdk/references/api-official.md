@@ -101,4 +101,4 @@ cobrowse.on('error', (error) => {
 
 ## Resources
 
-- **SDK Reference**: https://developers.zoom.us/do../cobrowse-sdk/sdk-reference/
+- **SDK Reference**: https://developers.zoom.us/docs/cobrowse-sdk/sdk-reference/

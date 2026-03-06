@@ -28,7 +28,7 @@ No user interaction required. Best for automation, scheduled tasks, and backend 
 ### Get Access Token
 
 ```bash
-curl -X POST "https://zoom.../oauth/token" \
+curl -X POST "https://zoom.us/oauth/token" \
   -H "Authorization: Basic $(echo -n 'CLIENT_ID:CLIENT_SECRET' | base64)" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=account_credentials&account_id=ACCOUNT_ID"
@@ -68,7 +68,7 @@ class ZoomS2SAuth {
       `${this.clientId}:${this.clientSecret}`
     ).toString('base64');
 
-    const response = await fetch('https://zoom.../oauth/token', {
+    const response = await fetch('https://zoom.us/oauth/token', {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${credentials}`,
@@ -149,7 +149,7 @@ class ZoomS2SAuth:
         ).decode()
 
         response = requests.post(
-            'https://zoom.../oauth/token',
+            'https://zoom.us/oauth/token',
             headers={
                 'Authorization': f'Basic {credentials}',
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -183,7 +183,7 @@ For apps that act on behalf of individual Zoom users.
 
 ```
 1. User clicks "Connect to Zoom"
-2. Redirect to: https://zoom.../oauth/authorize?response_type=code&client_id=XXX&redirect_uri=YYY&state=ZZZ
+2. Redirect to: https://zoom.us/oauth/authorize?response_type=code&client_id=XXX&redirect_uri=YYY&state=ZZZ
 3. User grants permission
 4. Zoom redirects to callback: https://yourapp.com/callback?code=AUTH_CODE&state=ZZZ
 5. Exchange code for tokens
@@ -194,7 +194,7 @@ For apps that act on behalf of individual Zoom users.
 ### Exchange Code for Token
 
 ```bash
-curl -X POST "https://zoom.../oauth/token" \
+curl -X POST "https://zoom.us/oauth/token" \
   -H "Authorization: Basic $(echo -n 'CLIENT_ID:CLIENT_SECRET' | base64)" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=authorization_code&code=AUTH_CODE&redirect_uri=https://yourapp.com/callback"
@@ -203,7 +203,7 @@ curl -X POST "https://zoom.../oauth/token" \
 ### Refresh Token
 
 ```bash
-curl -X POST "https://zoom.../oauth/token" \
+curl -X POST "https://zoom.us/oauth/token" \
   -H "Authorization: Basic $(echo -n 'CLIENT_ID:CLIENT_SECRET' | base64)" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=refresh_token&refresh_token=REFRESH_TOKEN"

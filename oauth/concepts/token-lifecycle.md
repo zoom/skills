@@ -327,7 +327,7 @@ app.get('/callback', async (req, res) => {
 ```javascript
 const revokeToken = async (access_token) => {
   await axios.post(
-    'https://zoom.../oauth/revoke',
+    'https://zoom.us/oauth/revoke',
     qs.stringify({
       token: access_token
     }),

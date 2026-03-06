@@ -138,7 +138,7 @@ app.get('/auth', (req, res) => {
   // Store verifier for later (Step 5)
   req.session.pkce_verifier = code_verifier;
   
-  const authURL = new URL('https://zoom.../oauth/authorize');
+  const authURL = new URL('https://zoom.us/oauth/authorize');
   authURL.searchParams.set('response_type', 'code');
   authURL.searchParams.set('client_id', process.env.ZOOM_CLIENT_ID);
   authURL.searchParams.set('redirect_uri', process.env.ZOOM_REDIRECT_URL);

@@ -483,8 +483,8 @@ See: https://developers.zoom.us/blog/build-breakout-rooms-for-video-sdk/
 
 ## Resources
 
-- **Web SDK Docs**: https://developers.zoom.us/do../meeting-sdk/web/
-- **iOS SDK Docs**: https://developers.zoom.us/do../meeting-sdk/ios/
-- **Android SDK Docs**: https://developers.zoom.us/do../meeting-sdk/android/
+- **Web SDK Docs**: https://developers.zoom.us/docs/meeting-sdk/web/
+- **iOS SDK Docs**: https://developers.zoom.us/docs/meeting-sdk/ios/
+- **Android SDK Docs**: https://developers.zoom.us/docs/meeting-sdk/android/
 - **REST API - Meetings**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Meetings
 - **Developer Forum**: https://devforum.zoom.us/

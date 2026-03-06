@@ -86,4 +86,4 @@ function generateSignature(sdkKey, sdkSecret, meetingNumber, role) {
 
 ## Resources
 
-- **Auth docs**: https://developers.zoom.us/do../meeting-sdk/auth/
+- **Auth docs**: https://developers.zoom.us/docs/meeting-sdk/auth/

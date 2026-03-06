@@ -4,7 +4,7 @@
 
 - The redirect URL in the token exchange must exactly match what's configured in Marketplace.
 - Keep endpoint split correct:
-  - authorize: `https://zoom.../oauth/authorize`
+  - authorize: `https://zoom.us/oauth/authorize`
   - token exchange: `https://zoom.us/oauth/token`
 
 ## "Invalid access token, does not contain scopes"

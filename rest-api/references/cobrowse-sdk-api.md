@@ -313,6 +313,6 @@ await cobrowse.annotate({
 
 ## Resources
 
-- **Co-browse SDK Guide**: https://developers.zoom.us/do../cobrowse-sdk/
+- **Co-browse SDK Guide**: https://developers.zoom.us/docs/cobrowse-sdk/
 - **API Reference**: https://developers.zoom.us/docs/api/rest/reference/cobrowse-api/methods/
-- **Security Best Practices**: https://developers.zoom.us/do../cobrowse-sdk/security/
+- **Security Best Practices**: https://developers.zoom.us/docs/cobrowse-sdk/security/

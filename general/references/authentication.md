@@ -30,13 +30,13 @@ For apps that act on behalf of users.
 ### Authorization URL
 
 ```
-https://zoom.../oauth/authorize?response_type=code&client_id={clientId}&redirect_uri={redirectUri}
+https://zoom.us/oauth/authorize?response_type=code&client_id={clientId}&redirect_uri={redirectUri}
 ```
 
 ### Token Exchange
 
 ```bash
-curl -X POST "https://zoom.../oauth/token" \
+curl -X POST "https://zoom.us/oauth/token" \
   -H "Authorization: Basic {base64(clientId:clientSecret)}" \
   -d "grant_type=authorization_code&code={authCode}&redirect_uri={redirectUri}"
 ```
@@ -48,7 +48,7 @@ For server-side automation without user interaction.
 ### Get Access Token
 
 ```bash
-curl -X POST "https://zoom.../oauth/token?grant_type=account_credentials&account_id={accountId}" \
+curl -X POST "https://zoom.us/oauth/token?grant_type=account_credentials&account_id={accountId}" \
   -H "Authorization: Basic {base64(clientId:clientSecret)}"
 ```
 

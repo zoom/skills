@@ -227,6 +227,6 @@ const speakers = await ZoomVideo.getSpeakers();
 
 ## Resources
 
-- **Video SDK docs**: https://developers.zoom.us/do../video-sdk/
+- **Video SDK docs**: https://developers.zoom.us/docs/video-sdk/
 - **Web sample**: https://github.com/zoom/videosdk-web-sample
-- **UI Toolkit**: https://developers.zoom.us/do../video-sdk/w../ui-toolkit/
+- **UI Toolkit**: https://developers.zoom.us/docs/video-sdk/web/ui-toolkit/

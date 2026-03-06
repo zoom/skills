@@ -113,7 +113,7 @@ router.post('/api/auth/token', async (req, res) => {
   }
 
   try {
-    const tokenResponse = await axios.post('https://zoom.../oauth/token', null, {
+    const tokenResponse = await axios.post('https://zoom.us/oauth/token', null, {
       params: {
         grant_type: 'authorization_code',
         code,
@@ -156,7 +156,7 @@ router.get('/api/auth/status', (req, res) => {
 async function refreshTokens(req) {
   const { refresh_token } = req.session.tokens;
 
-  const response = await axios.post('https://zoom.../oauth/token', null, {
+  const response = await axios.post('https://zoom.us/oauth/token', null, {
     params: {
       grant_type: 'refresh_token',
       refresh_token

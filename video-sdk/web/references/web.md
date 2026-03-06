@@ -916,7 +916,7 @@ These are caused by COOP/COEP headers blocking telemetry requests. They don't af
 
 ## Resources
 
-- **Official docs**: https://developers.zoom.us/do../video-sdk/web/
+- **Official docs**: https://developers.zoom.us/docs/video-sdk/web/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/custom/web/modules.html
 - **Sample app**: https://github.com/zoom/videosdk-web-sample
 

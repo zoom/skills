@@ -271,7 +271,7 @@ await stream.startAudio();
 
 ## Resources
 
-- **Video SDK Overview**: https://developers.zoom.us/do../video-sdk/
+- **Video SDK Overview**: https://developers.zoom.us/docs/video-sdk/
 - **API Reference**: https://developers.zoom.us/docs/api/rest/reference/zoom-video-sdk-api/methods/
-- **JWT Guide**: https://developers.zoom.us/do../video-sdk/auth/
+- **JWT Guide**: https://developers.zoom.us/docs/video-sdk/auth/
 - **Sample Apps**: https://github.com/zoom/videosdk-web-sample

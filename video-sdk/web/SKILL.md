@@ -1,13 +1,19 @@
 ---
 name: video-sdk/web
 description: "Zoom Video SDK for Web - JavaScript/TypeScript integration for browser-based video sessions, real-time communication, screen sharing, recording, and live transcription"
+triggers:
+  - "video sdk web"
+  - "custom video web"
+  - "attachvideo"
+  - "peer-video-state-change"
+  - "web videosdk"
 ---
 
 # Zoom Video SDK - Web Development
 
 Expert guidance for developing with the Zoom Video SDK on Web. This SDK enables custom video applications in the browser with real-time video/audio, screen sharing, cloud recording, live streaming, chat, and live transcription.
 
-**Official Documentation**: https://developers.zoom.us/do../video-sdk/web/
+**Official Documentation**: https://developers.zoom.us/docs/video-sdk/web/
 **API Reference**: https://marketplacefront.zoom.us/sdk/custom/web/modules.html
 **Sample Repository**: https://github.com/zoom/videosdk-web-sample
 
@@ -574,7 +580,7 @@ These are caused by COOP/COEP headers blocking telemetry requests. They don't af
 
 ## Resources
 
-- **Official Docs**: https://developers.zoom.us/do../video-sdk/web/
+- **Official Docs**: https://developers.zoom.us/docs/video-sdk/web/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/custom/web/modules.html
 - **Dev Forum**: https://devforum.zoom.us/
 - **GitHub Samples**: https://github.com/zoom/videosdk-web-sample

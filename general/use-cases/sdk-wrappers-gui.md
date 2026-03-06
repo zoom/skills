@@ -555,6 +555,6 @@ target_link_libraries(SkeletonDemo
 
 ### Official Documentation
 
-- [Windows Meeting SDK](https://developers.zoom.us/do../meeting-sdk/windows/)
-- [Windows Video SDK](https://developers.zoom.us/do../video-sdk/windows/)
-- [Linux Video SDK](https://developers.zoom.us/do../video-sdk/linux/)
+- [Windows Meeting SDK](https://developers.zoom.us/docs/meeting-sdk/windows/)
+- [Windows Video SDK](https://developers.zoom.us/docs/video-sdk/windows/)
+- [Linux Video SDK](https://developers.zoom.us/docs/video-sdk/linux/)

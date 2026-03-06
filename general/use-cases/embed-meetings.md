@@ -225,6 +225,6 @@ For native mobile apps, see:
 
 ## Resources
 
-- **Meeting SDK docs**: https://developers.zoom.us/do../meeting-sdk/
+- **Meeting SDK docs**: https://developers.zoom.us/docs/meeting-sdk/
 - **Web sample**: https://github.com/zoom/meetingsdk-web-sample
-- **Component View docs**: https://developers.zoom.us/do../meeting-sdk/web/component-view/
+- **Component View docs**: https://developers.zoom.us/docs/meeting-sdk/web/component-view/

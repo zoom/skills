@@ -69,7 +69,7 @@ export function detectSignals(rawQuery: string): Signals {
     meetingEmbed: hasAny(q, ['meeting sdk', 'embed meeting', 'join meeting ui', 'client view', 'component view']),
     customVideo: hasAny(q, ['video sdk', 'custom video', 'attachvideo', 'peer-video-state-change']),
     restApi: hasAny(q, ['rest api', 'api create meeting', 'api list meetings', '/v2/', 'list users', 's2s oauth', 'meeting endpoint']),
-    mcp: hasAny(q, ['zoom mcp', 'mcp server', 'agentic retrieval', 'tools/list', 'tools/call', 'semantic meeting search', 'create zoom doc']),
+    mcp: hasAny(q, ['zoom mcp', 'mcp server', 'agentic retrieval', 'tools/list', 'tools/call', 'semantic meeting search']),
     webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
     websockets: hasAny(q, ['websocket', 'real-time events', 'persistent connection']),
     zoomApps: hasAny(q, ['zoom apps sdk', 'in-client app', 'layers api', 'collaborate mode']),

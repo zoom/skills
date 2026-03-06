@@ -118,4 +118,4 @@ function generateSignature(sdkKey, sdkSecret, topic, role, userIdentity) {
 
 ## Resources
 
-- **Auth docs**: https://developers.zoom.us/do../video-sdk/auth/
+- **Auth docs**: https://developers.zoom.us/docs/video-sdk/auth/

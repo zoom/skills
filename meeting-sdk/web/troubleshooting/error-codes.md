@@ -270,6 +270,6 @@ client.on('connection-change', (payload) => {
 
 ## Additional Resources
 
-- [OBF FAQ](https://developers.zoom.us/do../meeting-sdk/obf-faq/)
-- [Signature Generation](https://developers.zoom.us/do../meeting-sdk/auth/)
+- [OBF FAQ](https://developers.zoom.us/docs/meeting-sdk/obf-faq/)
+- [Signature Generation](https://developers.zoom.us/docs/meeting-sdk/auth/)
 - [ZAK Token API](https://developers.zoom.us/docs/api/users/#tag/users/get/users/me/zak)

@@ -44,7 +44,7 @@ app.get('/connect-zoom', (req, res) => {
   req.session.oauthState = state;
   
   res.redirect(
-    `https://zoom.../oauth/authorize?` +
+    `https://zoom.us/oauth/authorize?` +
     `response_type=code&` +
     `client_id=${CLIENT_ID}&` +
     `redirect_uri=${REDIRECT_URI}&` +

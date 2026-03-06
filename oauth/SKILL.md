@@ -145,7 +145,7 @@ For apps that act on behalf of users.
 ### Step 1: Redirect User to Authorize
 
 ```
-https://zoom.../oauth/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}
+https://zoom.us/oauth/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}
 ```
 
 Use../oauth/authorize` for consent, but `/oauth/token` for token exchange.
@@ -224,7 +224,7 @@ Enable "Use App on Device" in: Features > Embed > Enable Meeting SDK
 ### Step 1: Request Device Code
 
 ```bash
-POST https://zoom.../oauth/devicecode?client_id={CLIENT_ID}
+POST https://zoom.us/oauth/devicecode?client_id={CLIENT_ID}
 
 Headers:
 Authorization: Basic {Base64(ClientID:ClientSecret)}
@@ -237,7 +237,7 @@ Authorization: Basic {Base64(ClientID:ClientSecret)}
   "device_code": "DEVICE_CODE",
   "user_code": "abcd1234",
   "verification_uri": "https://zoom.us/oauth_device",
-  "verification_uri_complete": "https://zoom.../oauth/device/complete/{CODE}",
+  "verification_uri_complete": "https://zoom.us/oauth/device/complete/{CODE}",
   "expires_in": 900,
   "interval": 5
 }
@@ -374,7 +374,7 @@ Replace `userID` with `me` to target the token's associated user:
 Works for all authorization types.
 
 ```bash
-POST https://zoom.../oauth/revoke?token={ACCESS_TOKEN}
+POST https://zoom.us/oauth/revoke?token={ACCESS_TOKEN}
 
 Headers:
 Authorization: Basic {Base64(ClientID:ClientSecret)}
@@ -441,7 +441,7 @@ function generatePKCE() {
 
 const pkce = generatePKCE();
 
-const authUrl = `https://zoom.../oauth/authorize?` +
+const authUrl = `https://zoom.us/oauth/authorize?` +
   `response_type=code&` +
   `client_id=${CLIENT_ID}&` +
   `redirect_uri=${REDIRECT_URI}&` +
@@ -547,17 +547,17 @@ Granular scopes can be marked as **optional** - users choose whether to grant th
 
 **Basic authorization** (uses build flow defaults):
 ```
-https://zoom.../oauth/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}
+https://zoom.us/oauth/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}
 ```
 
 **Advanced authorization** (custom scopes per request):
 ```
-https://zoom.../oauth/authorize?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={required_scopes}&optional_scope={optional_scopes}
+https://zoom.us/oauth/authorize?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={required_scopes}&optional_scope={optional_scopes}
 ```
 
 **Include previously granted scopes:**
 ```
-https://zoom.../oauth/authorize?...&include_granted_scopes&scope={additional_scopes}
+https://zoom.us/oauth/authorize?...&include_granted_scopes&scope={additional_scopes}
 ```
 
 ### Migrating Classic to Granular

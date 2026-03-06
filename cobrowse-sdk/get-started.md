@@ -527,7 +527,7 @@ The Cobrowse SDK supports connecting agents and customers using a PIN code. In t
 
 ## Resources
 
-- **Official Docs**: https://developers.zoom.us/do../cobrowse-sdk/
+- **Official Docs**: https://developers.zoom.us/docs/cobrowse-sdk/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/cobrowse/
 - **Quickstart Repo**: https://github.com/zoom/CobrowseSDK-Quickstart
 - **Auth Endpoint Sample**: https://github.com/zoom/cobrowsesdk-auth-endpoint-sample

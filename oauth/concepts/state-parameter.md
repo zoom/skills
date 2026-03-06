@@ -38,7 +38,7 @@ app.get('/auth', (req, res) => {
   // Store in session (server-side)
   req.session.oauthState = state;
   
-  const authURL = new URL('https://zoom.../oauth/authorize');
+  const authURL = new URL('https://zoom.us/oauth/authorize');
   authURL.searchParams.set('response_type', 'code');
   authURL.searchParams.set('client_id', process.env.ZOOM_CLIENT_ID);
   authURL.searchParams.set('redirect_uri', process.env.ZOOM_REDIRECT_URL);
@@ -171,7 +171,7 @@ app.get('/auth', (req, res) => {
   const { code_verifier, code_challenge } = generatePKCE();
   req.session.pkceVerifier = code_verifier;
   
-  const authURL = new URL('https://zoom.../oauth/authorize');
+  const authURL = new URL('https://zoom.us/oauth/authorize');
   authURL.searchParams.set('response_type', 'code');
   authURL.searchParams.set('client_id', CLIENT_ID);
   authURL.searchParams.set('redirect_uri', REDIRECT_URI);

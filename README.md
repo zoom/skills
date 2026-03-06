@@ -1,6 +1,6 @@
 # Zoom Developer Platform Skills
 
-Skills for building with Zoom SDKs, APIs, and integrations. Focused on web development.
+Skills for building with Zoom SDKs, APIs, MCP servers, and integrations across web, mobile, desktop, and server environments.
 
 Primary skill entrypoint: [SKILL.md](SKILL.md)
 

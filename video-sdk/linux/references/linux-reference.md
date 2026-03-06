@@ -794,7 +794,7 @@ enum ZoomVideoSDKRawDataMemoryMode {
 
 ## Additional Resources
 
-- **Official Docs**: https://developers.zoom.us/do../video-sdk/linux/
+- **Official Docs**: https://developers.zoom.us/docs/video-sdk/linux/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/custom/linux/
 - **Sample Code**: https://github.com/zoom/videosdk-linux-raw-recording-sample
 - **Dev Forum**: https://devforum.zoom.us

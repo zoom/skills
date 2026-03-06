@@ -4,15 +4,22 @@ description: |
   Zoom Developer Platform skills organized by product. Each folder contains product-specific 
   documentation and use cases. The zoom-general folder contains generic, cross-product skills 
   and references.
+triggers:
+  - "zoom skills"
+  - "zoom developer tools"
+  - "zoom developer platform skills"
+  - "zoom skill repository"
+  - "zoom skill routing"
 ---
 
 # Zoom Developer Platform Skills
 
-This repository contains skills for building with Zoom APIs and SDKs, focused on web development.
+This repository contains skills for building with Zoom SDKs, APIs, MCP servers, and integrations across web, mobile, desktop, and server environments.
 
 ## Repo Notes
 
 - [tools/zoom-crawler/README.md](tools/zoom-crawler/README.md) - crawler usage for ingesting Zoom docs and API references into markdown
+- [tools/thread-triage/README.md](tools/thread-triage/README.md) - forum triage outputs, product backlogs, and skill coverage gap reports
 - [general/references/sdk-upgrade-workflow.md](general/references/sdk-upgrade-workflow.md) - reusable changelog + RSS version-by-version SDK upgrade workflow
 
 ## Folder Structure

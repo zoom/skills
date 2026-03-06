@@ -13,7 +13,7 @@ For complete documentation, see **[SKILL.md](SKILL.md)**
 
 - **[Windows SDK Guide](SKILL.md)** - Complete Windows development guide
 - **[API Reference](references/windows-reference.md)** - Complete API documentation
-- **Official Docs**: https://developers.zoom.us/do../video-sdk/windows/
+- **Official Docs**: https://developers.zoom.us/docs/video-sdk/windows/
 
 ## Features
 

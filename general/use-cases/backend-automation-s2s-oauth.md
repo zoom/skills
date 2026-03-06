@@ -50,7 +50,7 @@ async function getZoomToken() {
   if (!token) {
     // Request new token
     const response = await axios.post(
-      'https://zoom.../oauth/token',
+      'https://zoom.us/oauth/token',
       'grant_type=account_credentials&account_id=' + ACCOUNT_ID,
       {
         headers: {

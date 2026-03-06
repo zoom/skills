@@ -88,4 +88,4 @@ Agents join via iframe:
 
 ## Resources
 
-- **Cobrowse docs**: https://developers.zoom.us/do../cobrowse-sdk/get-started/
+- **Cobrowse docs**: https://developers.zoom.us/docs/cobrowse-sdk/get-started/

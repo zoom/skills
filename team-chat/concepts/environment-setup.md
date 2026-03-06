@@ -88,7 +88,7 @@ https://yourdomain.com/auth/callback
 Add all URLs that Zoom should allow as valid OAuth redirects:
 
 **Examples**:
-- Complete URL: `https://subdomain.domain.tld/pa../../oauth/callback`
+- Complete URL: `https://subdomain.domain.tld/path/oauth/callback`
 - Base URL: `https://subdomain.domain.tld`
 
 ## Step 3: Enable Team Chat (Chatbot API Only)
@@ -297,5 +297,5 @@ Before proceeding to development, verify:
 
 - [Zoom App Marketplace](https://marketplace.zoom.us/)
 - [OAuth Documentation](https://developers.zoom.us/docs/integratio../oauth/)
-- [Chatbot Documentation](https://developers.zoom.us/do../team-chat/chatbot/extend/)
+- [Chatbot Documentation](https://developers.zoom.us/docs/team-chat/chatbot/extend/)
 - [Using Role Management](https://support.zoom.us/hc/en-us/articles/115001078646)

@@ -389,4 +389,4 @@ async function archiveMeetingAIContent(meetingId) {
 - **AI Companion APIs**: https://developers.zoom.us/docs/api/ai-companion/
 - **Meeting Summary API**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/meetingSummary
 - **Cloud Recording API**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Cloud-Recording
-- **RTMS Documentation**: https://developers.zoom.us/do../rtms/
+- **RTMS Documentation**: https://developers.zoom.us/docs/rtms/

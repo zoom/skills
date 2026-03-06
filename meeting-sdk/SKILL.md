@@ -265,7 +265,7 @@ Meeting SDK provides **Zoom's UI with customization options**:
 
 ## Resources
 
-- **Official docs**: https://developers.zoom.us/do../meeting-sdk/
+- **Official docs**: https://developers.zoom.us/docs/meeting-sdk/
 - **Developer forum**: https://devforum.zoom.us/
 
 ## Environment Variables

@@ -466,6 +466,6 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
 ## Getting Help
 
 1. **Check error codes**: [troubleshooting/error-codes.md](error-codes.md)
-2. **Official docs**: https://developers.zoom.us/do../meeting-sdk/web/
+2. **Official docs**: https://developers.zoom.us/docs/meeting-sdk/web/
 3. **Developer forum**: https://devforum.zoom.us/
 4. **GitHub issues**: https://github.com/zoom/meetingsdk-web-sample/issues

@@ -139,7 +139,7 @@ The Chatbot API allows your application to send messages **as a bot**. Bots can 
 
 ```javascript
 // Step 1: Redirect user to OAuth consent page
-const authUrl = `https://zoom.../oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
+const authUrl = `https://zoom.us/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
 
 // Step 2: Exchange auth code for access token
 const tokens = await exchangeCodeForToken(code);
@@ -207,7 +207,7 @@ Need rich interactive messages?
 **Reality**: Chatbot API uses client_credentials flow (no user login needed).
 
 ### ❌ "OAuth token endpoint i../oauth/token"
-**Reality**: Use `https://zoom.us/oauth/token` for token exchange. Keep `https://zoom.../oauth/authorize` for the user consent step.
+**Reality**: Use `https://zoom.us/oauth/token` for token exchange. Keep `https://zoom.us/oauth/authorize` for the user consent step.
 
 ### ❌ "I can only use one API per app"
 **Reality**: You can use both APIs in the same application.

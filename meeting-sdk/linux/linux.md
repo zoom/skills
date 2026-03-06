@@ -357,7 +357,7 @@ Use one of:
 
 ## Resources
 
-- **Official docs**: https://developers.zoom.us/do../meeting-sdk/linux/
+- **Official docs**: https://developers.zoom.us/docs/meeting-sdk/linux/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/meeting/linux/index.html
 - **Developer forum**: https://devforum.zoom.us/
 - **SDK download**: https://marketplace.zoom.us/

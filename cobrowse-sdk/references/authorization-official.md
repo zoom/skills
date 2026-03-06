@@ -87,4 +87,4 @@ const token = jwt.sign(agentPayload, SDK_SECRET, { algorithm: 'HS256' });
 
 ## Resources
 
-- **Auth docs**: https://developers.zoom.us/do../cobrowse-sdk/authorize/
+- **Auth docs**: https://developers.zoom.us/docs/cobrowse-sdk/authorize/

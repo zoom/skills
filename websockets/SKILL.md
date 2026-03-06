@@ -4,6 +4,12 @@ description: |
   Zoom WebSockets for real-time event notifications via persistent connection. Alternative to webhooks 
   with lower latency, bidirectional communication, and enhanced security. Use when you need real-time 
   event updates, are in security-sensitive industries, or want faster event delivery than webhooks.
+triggers:
+  - "zoom websockets"
+  - "websocket event subscription"
+  - "persistent zoom events"
+  - "low latency zoom events"
+  - "zoom websocket connection"
 ---
 
 # Zoom WebSockets
@@ -69,7 +75,7 @@ async function getAccessToken() {
   const credentials = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
   
   const response = await axios.post(
-    'https://zoom.../oauth/token',
+    'https://zoom.us/oauth/token',
     new URLSearchParams({
       grant_type: 'account_credentials',
       account_id: ACCOUNT_ID
@@ -237,7 +243,7 @@ For real-time audio/video/transcript data, use the **rtms** skill instead.
 
 ## Resources
 
-- **WebSockets docs**: https://developers.zoom.us/docs/a../websockets/
+- **WebSockets docs**: https://developers.zoom.us/docs/api/websockets/
 - **Webhooks comparison**: https://www.zoom.com/en/blog/a-guide-to-webhooks-and-websockets/
 - **Developer forum**: https://devforum.zoom.us/
 

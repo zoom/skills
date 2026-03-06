@@ -330,7 +330,7 @@ async function subscribeToVideo(userId, preferredQuality) {
 
 ## Resources
 
-- **Video SDK HD docs**: https://developers.zoom.us/do../video-sdk/web/video-hd/
-- **Meeting SDK resizing**: https://developers.zoom.us/do../meeting-sdk/web/component-view/resizing/
-- **SharedArrayBuffer docs**: https://developers.zoom.us/do../meeting-sdk/web/sharedarraybuffer/
+- **Video SDK HD docs**: https://developers.zoom.us/docs/video-sdk/web/video-hd/
+- **Meeting SDK resizing**: https://developers.zoom.us/docs/meeting-sdk/web/component-view/resizing/
+- **SharedArrayBuffer docs**: https://developers.zoom.us/docs/meeting-sdk/web/sharedarraybuffer/
 - **Cross-Origin Isolation**: https://web.dev/articles/coop-coep/

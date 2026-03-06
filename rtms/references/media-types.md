@@ -213,6 +213,6 @@ const mediaParams = {
 
 ## Resources
 
-- **Data types**: https://developers.zoom.us/do../rtms/data-types/
-- **Media params**: https://developers.zoom.us/do../rtms/media-parameter-definition/
+- **Data types**: https://developers.zoom.us/docs/rtms/data-types/
+- **Media params**: https://developers.zoom.us/docs/rtms/media-parameter-definition/
 - **MEDIA_PARAMETERS.md**: https://github.com/zoom/rtms-samples/blob/main/MEDIA_PARAMETERS.md

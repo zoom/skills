@@ -4,6 +4,12 @@ description: |
   Zoom Meeting SDK Web - Component View. Embeddable Zoom meeting components with Promise-based API
   for flexible integration. Ideal for React/Vue/Angular apps and custom layouts. Uses ZoomMtgEmbedded
   with async/await patterns and embeddable UI containers.
+triggers:
+  - "meeting sdk component view"
+  - "zoommtgembedded"
+  - "zoomapproot"
+  - "embeddable meeting ui"
+  - "component view embedded zoom"
 ---
 
 # Zoom Meeting SDK Web - Component View
@@ -595,6 +601,7 @@ try {
 ## Resources
 
 - [Main Web SDK Skill](../SKILL.md)
+- [Reference Index](references/README.md)
 - [Error Codes](../troubleshooting/error-codes.md)
 - [Common Issues](../troubleshooting/common-issues.md)
 - [SharedArrayBuffer Setup](../concepts/sharedarraybuffer.md)

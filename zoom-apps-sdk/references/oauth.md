@@ -33,7 +33,7 @@ const challenge = crypto.createHash('sha256')
 User clicks "Add" in Marketplace
     |
     v
-GET https://zoom.../oauth/authorize
+GET https://zoom.us/oauth/authorize
   ?client_id=YOUR_CLIENT_ID
   &response_type=code
   &redirect_uri=YOUR_REDIRECT_URI
@@ -63,7 +63,7 @@ app.get('/auth', async (req, res) => {
   }
 
   // Exchange code for tokens
-  const tokenResponse = await axios.post('https://zoom.../oauth/token', null, {
+  const tokenResponse = await axios.post('https://zoom.us/oauth/token', null, {
     params: {
       grant_type: 'authorization_code',
       code,
@@ -116,7 +116,7 @@ See **[In-Client OAuth example](../examples/in-client-oauth.md)** for complete i
 ## Token Exchange Endpoint
 
 ```
-POST https://zoom.../oauth/token
+POST https://zoom.us/oauth/token
 
 Headers:
   Authorization: Basic base64(CLIENT_ID:CLIENT_SECRET)
@@ -145,7 +145,7 @@ Access tokens expire in 1 hour. Use refresh token to get new ones:
 
 ```javascript
 async function refreshTokens(refreshToken) {
-  const response = await axios.post('https://zoom.../oauth/token', null, {
+  const response = await axios.post('https://zoom.us/oauth/token', null, {
     params: {
       grant_type: 'refresh_token',
       refresh_token: refreshToken

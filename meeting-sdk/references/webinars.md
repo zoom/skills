@@ -345,5 +345,5 @@ function setupUI(role) {
 ## Resources
 
 - **Webinar API**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Webinars
-- **Meeting SDK Webinar**: https://developers.zoom.us/do../meeting-sdk/web/webinar/
+- **Meeting SDK Webinar**: https://developers.zoom.us/docs/meeting-sdk/web/webinar/
 - **Developer Forum**: https://devforum.zoom.us/

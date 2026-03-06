@@ -496,7 +496,7 @@ echo -e "[General]\nsystem.audio.type=default" > ~/.config/zoomus.conf
 
 **Fix**: Either:
 1. Wait for host to grant recording permission
-2. Use `recording_token` in config (get from [Recording Token API](https://developers.zoom.us/do../meeting-sdk/apis/#operation/meetingLocalRecordingJoinToken))
+2. Use `recording_token` in config (get from [Recording Token API](https://developers.zoom.us/docs/meeting-sdk/apis/#operation/meetingLocalRecordingJoinToken))
 3. Join as host using `onBehalfOf_Token`
 
 ## Cleanup
@@ -705,7 +705,7 @@ Options:
 
 ## Resources
 
-- **Official docs**: https://developers.zoom.us/do../meeting-sdk/linux/
+- **Official docs**: https://developers.zoom.us/docs/meeting-sdk/linux/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/meeting/linux/index.html
 - **Headless sample**: https://github.com/zoom/meetingsdk-headless-linux-sample
 - **Raw recording sample**: https://github.com/zoom/meetingsdk-linux-raw-recording-sample

@@ -1,8 +1,11 @@
-# Create a Zoom Doc
+# Experimental: Create a Zoom Doc
 
 A Zoom Doc is Zoom's native document format — comparable to a Notion page. The Zoom MCP
 Server can create Zoom Docs directly, making it easy to turn meeting content into a
 persistent, shareable document without leaving the workflow.
+
+This page is quarantined on purpose. Do not route here automatically until live MCP tool
+discovery confirms the tool name and parameter schema.
 
 **Primary use cases:**
 - Generate action item lists from a meeting AI summary

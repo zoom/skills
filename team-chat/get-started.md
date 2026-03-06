@@ -33,7 +33,7 @@ See: `concepts/environment-setup.md`
 1. Implement OAuth code flow.
 2. Call `POST /v2/chat/users/me/messages` with bearer token.
 3. Use OAuth endpoints correctly:
-   - authorize: `https://zoom.../oauth/authorize`
+   - authorize: `https://zoom.us/oauth/authorize`
    - token exchange: `https://zoom.us/oauth/token`
 
 See:

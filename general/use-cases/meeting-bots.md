@@ -245,8 +245,8 @@ void onMeetingStatusChanged(MeetingStatus status, int iResult) {
 
 ## Resources
 
-- **Meeting SDK Linux Docs**: https://developers.zoom.us/do../meeting-sdk/linux/
+- **Meeting SDK Linux Docs**: https://developers.zoom.us/docs/meeting-sdk/linux/
 - **Meeting SDK Linux API**: https://marketplacefront.zoom.us/sdk/meeting/linux/
 - **Headless Sample (Modern)**: https://github.com/zoom/meetingsdk-headless-linux-sample
 - **Raw Recording Sample (Traditional)**: https://github.com/zoom/meetingsdk-linux-raw-recording-sample
-- **RTMS (Alternative)**: https://developers.zoom.us/do../rtms/
+- **RTMS (Alternative)**: https://developers.zoom.us/docs/rtms/

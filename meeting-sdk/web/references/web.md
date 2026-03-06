@@ -304,6 +304,6 @@ client.init({
 
 ## Resources
 
-- **Official docs**: https://developers.zoom.us/do../meeting-sdk/web/
+- **Official docs**: https://developers.zoom.us/docs/meeting-sdk/web/
 - **Component View sample**: https://github.com/zoom/meetingsdk-web-sample
 - **Client View sample**: https://github.com/zoom/meetingsdk-sample-signature-node.js

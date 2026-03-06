@@ -19,7 +19,7 @@ Quick diagnostics and solutions for Zoom Team Chat development.
 
 **Fix**:
 - Use `https://zoom.us/oauth/token` for token exchange.
-- Do not use `https://zoom.../oauth/token` for chatbot token requests.
+- Do not use `https://zoom.us/oauth/token` for chatbot token requests.
 
 Quick check:
 ```bash

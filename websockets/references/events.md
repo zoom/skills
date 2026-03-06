@@ -519,4 +519,4 @@ ws.on('message', (data) => {
 ## Resources
 
 - **Event reference**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/events/
-- **WebSockets docs**: https://developers.zoom.us/docs/a../websockets/
+- **WebSockets docs**: https://developers.zoom.us/docs/api/websockets/

@@ -39,9 +39,9 @@ Optional architecture (common):
 
 Use RTMS for media/data plane, and use frontend frameworks/Zoom Apps for presentation + user interactions.
 
-**Official Documentation**: https://developers.zoom.us/do../rtms/
-**SDK Reference (JS)**: https://zoom.github.../rtms/js/
-**SDK Reference (Python)**: https://zoom.github.../rtms/py/
+**Official Documentation**: https://developers.zoom.us/docs/rtms/
+**SDK Reference (JS)**: https://zoom.github.io/rtms/js/
+**SDK Reference (Python)**: https://zoom.github.io/rtms/py/
 **Sample Repository**: https://github.com/zoom/rtms-samples
 
 ## Quick Links
@@ -322,9 +322,9 @@ ZOOM_SECRET_TOKEN=your_webhook_token   # For webhook validation
 
 ## Resources
 
-- **Official docs**: https://developers.zoom.us/do../rtms/
-- **Data types**: https://developers.zoom.us/do../rtms/data-types/
-- **Media params**: https://developers.zoom.us/do../rtms/media-parameter-definition/
+- **Official docs**: https://developers.zoom.us/docs/rtms/
+- **Data types**: https://developers.zoom.us/docs/rtms/data-types/
+- **Media params**: https://developers.zoom.us/docs/rtms/media-parameter-definition/
 - **Developer forum**: https://devforum.zoom.us/
 
 ---

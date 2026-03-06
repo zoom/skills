@@ -17,7 +17,7 @@ If this is wrong, everything else will fail.
 
 ## 2) Confirm OAuth Endpoints
 
-- Authorize URL: `https://zoom.../oauth/authorize`
+- Authorize URL: `https://zoom.us/oauth/authorize`
 - Token URL: `https://zoom.us/oauth/token`
 
 If token requests hit../oauth/token`, expect 404/HTML.

@@ -936,7 +936,7 @@ if (!requirements.browserInfo.isChrome && !requirements.browserInfo.isFirefox) {
 
 ## Official Resources
 
-- **Official docs**: https://developers.zoom.us/do../meeting-sdk/web/
+- **Official docs**: https://developers.zoom.us/docs/meeting-sdk/web/
 - **Client View API Reference**: https://marketplacefront.zoom.us/sdk/meeting/web/index.html
 - **Component View API Reference**: https://marketplacefront.zoom.us/sdk/meeting/web/components/index.html
 - **Developer forum**: https://devforum.zoom.us/
@@ -966,13 +966,11 @@ Quick navigation guide for all Web SDK documentation.
 | Document | Description |
 |----------|-------------|
 | **[client-view/SKILL.md](client-view/SKILL.md)** | Complete Client View reference |
-| [client-view/references/README.md](client-view/references/README.md) | API method documentation (placeholder) |
 
 ### Component View (Embeddable)
 | Document | Description |
 |----------|-------------|
 | **[component-view/SKILL.md](component-view/SKILL.md)** | Complete Component View reference |
-| [component-view/references/README.md](component-view/references/README.md) | API method documentation (placeholder) |
 
 ## Concepts
 
@@ -1041,7 +1039,7 @@ Quick navigation guide for all Web SDK documentation.
 
 ## External Resources
 
-- **Official docs**: https://developers.zoom.us/do../meeting-sdk/web/
+- **Official docs**: https://developers.zoom.us/docs/meeting-sdk/web/
 - **Client View API**: https://marketplacefront.zoom.us/sdk/meeting/web/index.html
 - **Component View API**: https://marketplacefront.zoom.us/sdk/meeting/web/components/index.html
 - **GitHub samples**: https://github.com/zoom/meetingsdk-web-sample

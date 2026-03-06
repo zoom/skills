@@ -7,7 +7,7 @@ description: "Zoom Video SDK for Linux - C++ integration for video sessions, raw
 
 Expert guidance for developing with the Zoom Video SDK on Linux. This SDK enables headless video conferencing bots, raw media capture/injection, cloud recording, live streaming, and real-time transcription.
 
-**Official Documentation**: https://developers.zoom.us/do../video-sdk/linux/
+**Official Documentation**: https://developers.zoom.us/docs/video-sdk/linux/
 **API Reference**: https://marketplacefront.zoom.us/sdk/custom/linux/
 **Sample Repository**: https://github.com/zoom/videosdk-linux-raw-recording-sample
 

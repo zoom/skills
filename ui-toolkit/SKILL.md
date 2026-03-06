@@ -15,7 +15,7 @@ triggers:
 
 Pre-built video conferencing UI powered by Zoom Video SDK. Drop-in solution for web applications.
 
-**Official Documentation**: https://developers.zoom.us/do../video-sdk/w../ui-toolkit/
+**Official Documentation**: https://developers.zoom.us/docs/video-sdk/web/ui-toolkit/
 **API Reference**: https://marketplacefront.zoom.us/sdk/uitoolkit/web/
 **NPM Package**: https://www.npmjs.com/package/@zoom/videosdk-zoom-ui-toolkit
 **Live Demo**: https://sdk.zoom.com/videosdk-uitoolkit
@@ -324,7 +324,7 @@ fetch('/your-app-path/api/token', { ... })
 ## Resources
 
 - **GitHub**: https://github.com/zoom/videosdk-zoom-ui-toolkit-web
-- **UI Toolkit Docs**: https://developers.zoom.us/do../video-sdk/w../ui-toolkit/
+- **UI Toolkit Docs**: https://developers.zoom.us/docs/video-sdk/web/ui-toolkit/
 - **Auth Endpoint Sample**: https://github.com/zoom/videosdk-auth-endpoint-sample
 - **Marketplace**: https://marketplace.zoom.us/
 
@@ -475,7 +475,7 @@ See: **[troubleshooting/common-issues.md](troubleshooting/common-issues.md)**
 
 ## 🌐 External Resources
 
-- **Official Documentation**: https://developers.zoom.us/do../video-sdk/w../ui-toolkit/
+- **Official Documentation**: https://developers.zoom.us/docs/video-sdk/web/ui-toolkit/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/uitoolkit/web/
 - **NPM Package**: https://www.npmjs.com/package/@zoom/videosdk-zoom-ui-toolkit
 - **Marketplace**: https://marketplace.zoom.us/

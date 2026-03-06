@@ -50,7 +50,7 @@ Construct your regional base URL by appending `/v2/`:
 async function getZoomClient(accountId, clientId, clientSecret) {
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
-  const tokenRes = await fetch('https://zoom.../oauth/token', {
+  const tokenRes = await fetch('https://zoom.us/oauth/token', {
     method: 'POST',
     headers: {
       'Authorization': `Basic ${credentials}`,

@@ -1,6 +1,6 @@
 ---
 name: zoom-mcp
-description: Connects Claude to the official Zoom MCP Server for meeting management, recording access, and Zoom Doc creation. Uses AI Companion's Agentic Retrieval API to search meeting content semantically — returns inline AI summaries, Zoom Doc URLs, recording references, and whiteboards. Creates, searches, lists, updates, and deletes Zoom meetings; retrieves cloud recordings; creates Zoom Docs. Use when the user asks to manage Zoom meetings, find past meetings by content, access AI meeting summaries, retrieve transcripts, create meeting notes as a Zoom Doc, or automate Zoom workflows. Requires a Zoom OAuth Bearer token and AI Companion enabled.
+description: Connects Claude to the official Zoom MCP Server for meeting management, recording access, and AI Companion retrieval. Uses Agentic Retrieval to search meeting content semantically and returns inline AI summaries, Zoom Doc URLs, recording references, and whiteboards. Creates, searches, lists, updates, and deletes Zoom meetings and retrieves cloud recordings. Use when the user asks to manage Zoom meetings, find past meetings by content, access AI meeting summaries, retrieve transcripts, or automate Zoom workflows through MCP. Requires a Zoom OAuth Bearer token and AI Companion enabled.
 triggers:
   - "zoom mcp"
   - "mcp server"
@@ -15,8 +15,6 @@ triggers:
   - "ai-driven meeting retrieval"
   - "zoom transcript via mcp"
   - "meeting transcript via mcp"
-  - "zoom doc"
-  - "create zoom doc"
   - "meeting notes from ai"
 ---
 
@@ -29,7 +27,7 @@ the Zoom for ChatGPT app. Core capabilities:
   results include inline AI summaries, Zoom Doc URLs, recording references, and whiteboards
 - **Meeting management** — create, list, search, update, delete meetings
 - **Recordings** — list and retrieve cloud recordings with transcript files
-- **Zoom Docs** — create native Zoom documents (meeting notes, action items)
+- **Attached Zoom Docs** — search results can include linked Zoom Docs when AI Companion recap data exists
 
 ## Quick Start
 
@@ -104,10 +102,6 @@ AI summaries generated.
 
 **View recording** — full recording details for meetings with cloud recordings
 
-> **[CONTRIBUTOR NEEDED]** Exact field names for both result types. What are the JSON
-> property names for: the inline AI summary text, the docs array, the recording reference,
-> and the whiteboards in a Recap meeting result? What fields does a View recording result
-> contain? Source: Zoom MCP Server engineering team or API schema.
 
 See [examples/transcript-retrieval.md](examples/transcript-retrieval.md) for the full workflow.
 
@@ -144,14 +138,13 @@ Full parameter schemas: [references/tools.md](references/tools.md)
 `file_type: "VTT"` (with timestamps) or `file_type: "TRANSCRIPT"` (with speaker labels).
 Fetch `download_url` with `Authorization: Bearer TOKEN` to retrieve content.
 
-### Zoom Docs
+### Experimental / Unverified Surfaces
 
-> **[CONTRIBUTOR NEEDED]** Verify the exact tool name for Zoom Doc creation. The tool name
-> below is a placeholder. Source: `zoom-mcp:list_available_tools` or engineering team.
+Do not auto-route or promise these surfaces until a live `zoom-mcp:list_available_tools`
+result confirms them. Keep them in manual-review mode only.
 
-| Tool | Key Parameters | Description |
-|------|---------------|-------------|
-| `zoom-mcp:create_zoom_doc` *(verify name)* | `[CONTRIBUTOR NEEDED]` | Creates a Zoom Doc (native Zoom document, like a Notion page). Returns the URL of the created doc. |
+- [Experimental Zoom Doc creation notes](examples/create-zoom-doc.md)
+- [Draft tool reference details](references/tools.md)
 
 ### User & Utility
 
@@ -175,16 +168,8 @@ zoom-mcp:search_meetings  query: "Q4 planning discussion"
 ```
 Full walkthrough: [examples/transcript-retrieval.md](examples/transcript-retrieval.md)
 
-**Create a Zoom Doc from meeting content:**
-```
-1. zoom-mcp:search_meetings  →  find the meeting, get AI summary from Recap result
-2. zoom-mcp:create_zoom_doc  →  pass content (title, action items, notes)
-→ Returns URL of the new Zoom Doc
-```
-Full example: [examples/create-zoom-doc.md](examples/create-zoom-doc.md)
-
 **Create a scheduled meeting with cloud recording:**
-```
+``` 
 zoom-mcp:create_meeting
   topic: "Weekly sync", type: 2, startTime: "2025-03-10T14:00:00"
   timezone: "America/New_York", duration: 60

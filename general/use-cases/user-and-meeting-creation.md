@@ -394,7 +394,7 @@ async function getAccessToken() {
   ).toString('base64');
   
   const response = await axios.post(
-    `https://zoom.../oauth/token?grant_type=account_credentials&account_id=${process.env.ZOOM_ACCOUNT_ID}`,
+    `https://zoom.us/oauth/token?grant_type=account_credentials&account_id=${process.env.ZOOM_ACCOUNT_ID}`,
     null,
     { headers: { 'Authorization': `Basic ${credentials}` } }
   );

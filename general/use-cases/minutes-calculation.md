@@ -792,7 +792,7 @@ async function getUsageDashboard() {
 
 ## Related Resources
 
-- **Video SDK Session Quality**: https://developers.zoom.us/do../video-sdk/session-quality/
+- **Video SDK Session Quality**: https://developers.zoom.us/docs/video-sdk/session-quality/
 - **Reports API**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Reports
 - **Usage reporting guide**: See `usage-reporting-analytics.md`
 - **Webhooks reference**: See `webhooks` skill

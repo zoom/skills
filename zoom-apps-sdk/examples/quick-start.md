@@ -78,7 +78,7 @@ app.get('/install', (req, res) => {
   req.session.codeVerifier = verifier;
   req.session.state = state;
 
-  const url = `https://zoom.../oauth/authorize?` +
+  const url = `https://zoom.us/oauth/authorize?` +
     `client_id=${process.env.ZOOM_APP_CLIENT_ID}` +
     `&response_type=code` +
     `&redirect_uri=${encodeURIComponent(process.env.ZOOM_APP_REDIRECT_URI)}` +
@@ -99,7 +99,7 @@ app.get('/auth', async (req, res) => {
 
   try {
     // Exchange authorization code for tokens
-    const tokenResponse = await axios.post('https://zoom.../oauth/token', null, {
+    const tokenResponse = await axios.post('https://zoom.us/oauth/token', null, {
       params: {
         grant_type: 'authorization_code',
         code,

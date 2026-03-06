@@ -29,7 +29,7 @@ For backend services that don't need user interaction.
 ### Get Access Token
 
 ```bash
-curl -X POST "https://zoom.../oauth/token" \
+curl -X POST "https://zoom.us/oauth/token" \
   -H "Authorization: Basic $(echo -n '{clientId}:{clientSecret}' | base64)" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=account_credentials&account_id={accountId}"
@@ -71,7 +71,7 @@ class ZoomAuth {
     ).toString('base64');
 
     const response = await axios.post(
-      'https://zoom.../oauth/token',
+      'https://zoom.us/oauth/token',
       `grant_type=account_credentials&account_id=${this.accountId}`,
       {
         headers: {
@@ -154,7 +154,7 @@ For applications that act on behalf of individual users.
 Redirect users to:
 
 ```
-https://zoom.../oauth/authorize?response_type=code&client_id={clientId}&redirect_uri={redirectUri}&state={state}
+https://zoom.us/oauth/authorize?response_type=code&client_id={clientId}&redirect_uri={redirectUri}&state={state}
 ```
 
 | Parameter | Description |
@@ -175,7 +175,7 @@ https://yourapp.com/callback?code=AUTH_CODE&state=STATE
 ### Step 4: Exchange Code for Token
 
 ```bash
-curl -X POST "https://zoom.../oauth/token" \
+curl -X POST "https://zoom.us/oauth/token" \
   -H "Authorization: Basic $(echo -n '{clientId}:{clientSecret}' | base64)" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=authorization_code&code={authCode}&redirect_uri={redirectUri}"
@@ -196,7 +196,7 @@ curl -X POST "https://zoom.../oauth/token" \
 ### Step 5: Refresh Token
 
 ```bash
-curl -X POST "https://zoom.../oauth/token" \
+curl -X POST "https://zoom.us/oauth/token" \
   -H "Authorization: Basic $(echo -n '{clientId}:{clientSecret}' | base64)" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=refresh_token&refresh_token={refreshToken}"
@@ -220,7 +220,7 @@ app.get('/auth/zoom', (req, res) => {
   const state = crypto.randomBytes(16).toString('hex');
   req.session.oauthState = state;
   
-  const authUrl = new URL('https://zoom.../oauth/authorize');
+  const authUrl = new URL('https://zoom.us/oauth/authorize');
   authUrl.searchParams.set('response_type', 'code');
   authUrl.searchParams.set('client_id', ZOOM_CLIENT_ID);
   authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
@@ -245,7 +245,7 @@ app.get('/auth/zoom/callback', async (req, res) => {
     ).toString('base64');
     
     const tokenResponse = await axios.post(
-      'https://zoom.../oauth/token',
+      'https://zoom.us/oauth/token',
       `grant_type=authorization_code&code=${code}&redirect_uri=${REDIRECT_URI}`,
       {
         headers: {
@@ -282,7 +282,7 @@ async function getValidToken(userId) {
     ).toString('base64');
     
     const response = await axios.post(
-      'https://zoom.../oauth/token',
+      'https://zoom.us/oauth/token',
       `grant_type=refresh_token&refresh_token=${tokens.refreshToken}`,
       {
         headers: {

@@ -487,5 +487,5 @@ curl -X POST http://localhost:4000/webhook \
 ## Resources
 
 - [Chatbot Webhook Events](https://developers.zoom.us/docs/api/chatbot/events/)
-- [Webhook Verification](https://developers.zoom.us/docs/a../webhooks/#verify-webhook-events)
+- [Webhook Verification](https://developers.zoom.us/docs/api/webhooks/#verify-webhook-events)
 - [Chatbot Quickstart](https://github.com/zoom/chatbot-nodejs-quickstart)

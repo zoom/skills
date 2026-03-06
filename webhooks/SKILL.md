@@ -4,6 +4,12 @@ description: |
   Zoom webhooks for real-time event notifications. Covers webhook verification, event types,
   and subscription management. Use when you need to receive notifications about meetings,
   users, recordings, or other Zoom events.
+triggers:
+  - "zoom webhook"
+  - "webhook signature"
+  - "x-zm-signature"
+  - "event subscription"
+  - "recording completed webhook"
 ---
 
 # Zoom Webhooks
@@ -105,7 +111,7 @@ app.post('/webhook', (req, res) => {
 
 ## Resources
 
-- **Webhook docs**: https://developers.zoom.us/docs/a../webhooks/
+- **Webhook docs**: https://developers.zoom.us/docs/api/webhooks/
 - **Event reference**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/events/
 - **Developer forum**: https://devforum.zoom.us/
 

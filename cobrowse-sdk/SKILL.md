@@ -14,7 +14,7 @@ triggers:
 
 Expert guidance for implementing collaborative browsing with the Zoom Cobrowse SDK. This SDK enables support agents to view and interact with a customer's browser session in real-time, with privacy controls and annotation tools.
 
-**Official Documentation**: https://developers.zoom.us/do../cobrowse-sdk/  
+**Official Documentation**: https://developers.zoom.us/docs/cobrowse-sdk/  
 **API Reference**: https://marketplacefront.zoom.us/sdk/cobrowse/  
 **Quickstart Repository**: https://github.com/zoom/CobrowseSDK-Quickstart  
 **Auth Endpoint Sample**: https://github.com/zoom/cobrowsesdk-auth-endpoint-sample
@@ -615,7 +615,7 @@ This skill includes comprehensive guides organized by category:
 
 ## Resources
 
-- **Official Docs**: https://developers.zoom.us/do../cobrowse-sdk/
+- **Official Docs**: https://developers.zoom.us/docs/cobrowse-sdk/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/cobrowse/
 - **Quickstart Repo**: https://github.com/zoom/CobrowseSDK-Quickstart
 - **Auth Endpoint Sample**: https://github.com/zoom/cobrowsesdk-auth-endpoint-sample
@@ -820,7 +820,7 @@ Quick lookup for error code solutions:
 
 External documentation and samples:
 
-- **Official Docs**: https://developers.zoom.us/do../cobrowse-sdk/
+- **Official Docs**: https://developers.zoom.us/docs/cobrowse-sdk/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/cobrowse/
 - **Quickstart Repo**: https://github.com/zoom/CobrowseSDK-Quickstart
 - **Auth Endpoint Sample**: https://github.com/zoom/cobrowsesdk-auth-endpoint-sample
@@ -886,7 +886,7 @@ cobrowse-sdk/
 
 ---
 
-**Not finding what you need?** Check the [Official Documentation](https://developers.zoom.us/do../cobrowse-sdk/) or ask on the [Dev Forum](https://devforum.zoom.us/).
+**Not finding what you need?** Check the [Official Documentation](https://developers.zoom.us/docs/cobrowse-sdk/) or ask on the [Dev Forum](https://devforum.zoom.us/).
 
 ## Environment Variables
 

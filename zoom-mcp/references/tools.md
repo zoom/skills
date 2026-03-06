@@ -189,7 +189,10 @@ Delete or trash a cloud recording.
 
 ---
 
-## Zoom Docs
+## Experimental / Unverified: Zoom Docs
+
+This section is intentionally quarantined. Do not treat it as a stable public surface until a
+live `zoom-mcp:list_available_tools` response confirms the tool name and schema.
 
 ### `zoom-mcp:create_zoom_doc` *(verify tool name)*
 

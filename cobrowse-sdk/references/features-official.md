@@ -108,4 +108,4 @@ cobrowse.on('sessionEnded', () => {
 
 ## Resources
 
-- **Features docs**: https://developers.zoom.us/do../cobrowse-sdk/add-features/
+- **Features docs**: https://developers.zoom.us/docs/cobrowse-sdk/add-features/
