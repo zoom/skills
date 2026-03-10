@@ -1,135 +1,131 @@
 # Zoom Mail API
 
-Email service API integrated with Zoom Workplace.
+Authoritative endpoint inventory for Mail. This file mirrors the official Zoom API Hub OpenAPI document for this product area.
 
-## Overview
+## Canonical Source
 
-Zoom Mail provides email services integrated into the Zoom platform. The API allows programmatic access to email functionality including reading, sending, and managing email messages and folders.
+- OpenAPI JSON: https://developers.zoom.us/api-hub/mail/methods/endpoints.json
+- Base URL: `https://api.zoom.us/v2`
+- Authentication details: [authentication.md](authentication.md)
 
-## Base URL
+## Notes
 
-```
-https://api.zoom.us/v2
-```
+- Endpoint methods and paths below are generated from the official Zoom API Hub `paths` object.
+- Scope names are defined per operation and frequently use granular scope names. Check the API Hub operation page for the exact scopes before implementation.
+- Use this file for endpoint discovery and inventory. Use `../examples/` for orchestration patterns, not as the canonical source of path names.
 
-## Authentication
+## Coverage
 
-Requires OAuth 2.0 with mail scopes:
-- `mail:read` - Read email messages
-- `mail:write` - Send and manage emails
-- `mail:read:admin` - Admin read access
-- `mail:write:admin` - Admin write access
+| Metric | Value |
+|--------|-------|
+| Endpoint operations | 41 |
+| Path templates | 26 |
+| Tags | 10 |
 
-## Key Endpoints
+## Tag Index
 
-### Messages
+| Tag | Operations |
+|-----|------------|
+| Drafts | 6 |
+| History | 1 |
+| Labels | 6 |
+| Mailbox | 1 |
+| Messages | 10 |
+| Messages.Attachments | 1 |
+| Settings | 2 |
+| Settings.Delegates | 4 |
+| Settings.Filters | 4 |
+| Threads | 6 |
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/mail/mailboxes/{mailboxId}/messages` | List messages |
-| GET | `/mail/mailboxes/{mailboxId}/messages/{messageId}` | Get message details |
-| POST | `/mail/mailboxes/{mailboxId}/messages` | Send/create message |
-| DELETE | `/mail/mailboxes/{mailboxId}/messages/{messageId}` | Delete message |
-| PATCH | `/mail/mailboxes/{mailboxId}/messages/{messageId}` | Update message (read/unread, move) |
-
-### Folders
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/mail/mailboxes/{mailboxId}/folders` | List folders |
-| POST | `/mail/mailboxes/{mailboxId}/folders` | Create folder |
-| GET | `/mail/mailboxes/{mailboxId}/folders/{folderId}` | Get folder details |
-| PATCH | `/mail/mailboxes/{mailboxId}/folders/{folderId}` | Update folder |
-| DELETE | `/mail/mailboxes/{mailboxId}/folders/{folderId}` | Delete folder |
-
-### Mailboxes
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/mail/mailboxes` | List user mailboxes |
-| GET | `/mail/mailboxes/{mailboxId}` | Get mailbox details |
-| GET | `/mail/mailboxes/{mailboxId}/settings` | Get mailbox settings |
-| PATCH | `/mail/mailboxes/{mailboxId}/settings` | Update mailbox settings |
-
-### Attachments
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/mail/mailboxes/{mailboxId}/messages/{messageId}/attachments` | List attachments |
-| GET | `/mail/mailboxes/{mailboxId}/messages/{messageId}/attachments/{attachmentId}` | Download attachment |
+## Endpoints by Tag
 
 ### Drafts
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/mail/mailboxes/{mailboxId}/drafts` | List drafts |
-| POST | `/mail/mailboxes/{mailboxId}/drafts` | Create draft |
-| PATCH | `/mail/mailboxes/{mailboxId}/drafts/{draftId}` | Update draft |
-| DELETE | `/mail/mailboxes/{mailboxId}/drafts/{draftId}` | Delete draft |
-| POST | `/mail/mailboxes/{mailboxId}/drafts/{draftId}/send` | Send draft |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/emails/mailboxes/{email}/drafts` | List emails from draft folder | `list_draft_emails` |
+| POST | `/emails/mailboxes/{email}/drafts` | Create a new draft email | `create_draft_email` |
+| POST | `/emails/mailboxes/{email}/drafts/send` | Send out a draft email | `send_draft_email` |
+| DELETE | `/emails/mailboxes/{email}/drafts/{draftId}` | Delete an existing draft email | `delete_draft_email` |
+| GET | `/emails/mailboxes/{email}/drafts/{draftId}` | Get the specified draft email | `get_draft_email` |
+| PUT | `/emails/mailboxes/{email}/drafts/{draftId}` | Update the specified draft email | `update_draft_email` |
 
-## Example: Send Email
+### History
 
-```bash
-curl -X POST "https://api.zoom.us/v2/mail/mailboxes/{mailboxId}/messages" \
-  -H "Authorization: Bearer {accessToken}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "to": [{"email": "recipient@example.com", "name": "John Doe"}],
-    "subject": "Meeting Follow-up",
-    "body": {
-      "content_type": "text/html",
-      "content": "<p>Thank you for joining the meeting today.</p>"
-    },
-    "cc": [],
-    "bcc": []
-  }'
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/emails/mailboxes/{email}/history` | List history of events for mailbox | `list_mailbox_history` |
 
-### Response
+### Labels
 
-```json
-{
-  "id": "msg_abc123",
-  "thread_id": "thread_xyz",
-  "from": {
-    "email": "sender@example.com",
-    "name": "Sender Name"
-  },
-  "to": [{"email": "recipient@example.com", "name": "John Doe"}],
-  "subject": "Meeting Follow-up",
-  "sent_time": "2024-01-15T10:30:00Z",
-  "status": "sent"
-}
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/emails/mailboxes/{email}/labels` | List labels in the mailbox | `list_labels_in_mailbox` |
+| POST | `/emails/mailboxes/{email}/labels` | Create a new label in mailbox | `create_label_in_mailbox` |
+| DELETE | `/emails/mailboxes/{email}/labels/{labelId}` | Delete an existing label from mailbox | `delete_label_from_mailbox` |
+| GET | `/emails/mailboxes/{email}/labels/{labelId}` | Get the specified label in mailbox | `get_label_in_mailbox` |
+| PATCH | `/emails/mailboxes/{email}/labels/{labelId}` | Patch the specified label in mailbox | `patch_label_in_mailbox` |
+| PUT | `/emails/mailboxes/{email}/labels/{labelId}` | Update the specified label in mailbox | `update_label_in_mailbox` |
 
-## Example: List Messages
+### Mailbox
 
-```bash
-curl -X GET "https://api.zoom.us/v2/mail/mailboxes/{mailboxId}/messages?folder_id=inbox&page_size=50" \
-  -H "Authorization: Bearer {accessToken}"
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/emails/mailboxes/{email}/profile` | Get the mailbox profile | `get_mailbox_profile` |
 
-## Standard Folders
+### Messages
 
-| Folder | Description |
-|--------|-------------|
-| `inbox` | Incoming messages |
-| `sent` | Sent messages |
-| `drafts` | Draft messages |
-| `trash` | Deleted messages |
-| `spam` | Spam/junk messages |
-| `archive` | Archived messages |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/emails/mailboxes/{email}/messages` | List emails from the mailbox | `list_emails` |
+| POST | `/emails/mailboxes/{email}/messages` | Create a new email | `create_email` |
+| POST | `/emails/mailboxes/{email}/messages/batchDelete` | Batch delete the specified emails | `batch_delete_emails` |
+| POST | `/emails/mailboxes/{email}/messages/batchModify` | Batch modify the specified emails | `batch_modify_emails` |
+| POST | `/emails/mailboxes/{email}/messages/send` | Send out an email | `send_email` |
+| DELETE | `/emails/mailboxes/{email}/messages/{messageId}` | Delete an existing email | `delete_email` |
+| GET | `/emails/mailboxes/{email}/messages/{messageId}` | Get the specified email | `get_email` |
+| POST | `/emails/mailboxes/{email}/messages/{messageId}/modify` | Update the specified email | `update_email` |
+| POST | `/emails/mailboxes/{email}/messages/{messageId}/trash` | Move the specified email to TRASH folder | `trash_email` |
+| POST | `/emails/mailboxes/{email}/messages/{messageId}/untrash` | Move the specified email out of TRASH folder | `untrash_email` |
 
-## Message Flags
+### Messages.Attachments
 
-| Flag | Description |
-|------|-------------|
-| `read` | Message has been read |
-| `starred` | Message is starred/flagged |
-| `important` | Message marked as important |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/emails/mailboxes/{email}/messages/{messageId}/attachments/{attachmentId}` | Get the specified attachment for an email | `get_email_attachment` |
 
-## Resources
+### Settings
 
-- **API Reference**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Mail
-- **Zoom Mail Documentation**: https://developers.zoom.us/docs/zoom-mail/
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/emails/mailboxes/{email}/settings/vacation` | Get mailbox vacation response setting | `get_mail_vacation_response_setting` |
+| PUT | `/emails/mailboxes/{email}/settings/vacation` | Update mailbox vacation response setting | `update_mailbox_vacation_response_setting` |
+
+### Settings.Delegates
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/emails/mailboxes/{email}/settings/delegates` | List delegates on the mailbox | `list_mailbox_delegates` |
+| POST | `/emails/mailboxes/{email}/settings/delegates` | Grant a new delegate access on the mailbox | `grant_mailbox_delegate` |
+| DELETE | `/emails/mailboxes/{email}/settings/delegates/{delegateEmail}` | Revoke an existing delegate access from the mailbox | `revoke_mailbox_delegate` |
+| GET | `/emails/mailboxes/{email}/settings/delegates/{delegateEmail}` | Get the specified delegate on the mailbox | `get_mailbox_delegate` |
+
+### Settings.Filters
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/emails/mailboxes/{email}/settings/filters` | List email filters | `list_email_filters` |
+| POST | `/emails/mailboxes/{email}/settings/filters` | Create an email filter | `create_email_filter` |
+| DELETE | `/emails/mailboxes/{email}/settings/filters/{filterId}` | Delete the specified email filter | `delete_email_filter` |
+| GET | `/emails/mailboxes/{email}/settings/filters/{filterId}` | Get the specified email filter | `get_email_filter` |
+
+### Threads
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/emails/mailboxes/{email}/threads` | List email threads from the mailbox | `list_email_threads` |
+| DELETE | `/emails/mailboxes/{email}/threads/{threadId}` | Delete an existing email thread | `delete_email_thread` |
+| GET | `/emails/mailboxes/{email}/threads/{threadId}` | Get the specified email thread | `get_email_thread` |
+| POST | `/emails/mailboxes/{email}/threads/{threadId}/modify` | Update the specified thread | `update_email_thread` |
+| POST | `/emails/mailboxes/{email}/threads/{threadId}/trash` | Move the specified thread to TRASH folder | `trash_email_thread` |
+| POST | `/emails/mailboxes/{email}/threads/{threadId}/untrash` | Move the specified thread out of TRASH folder | `untrash_email_thread` |

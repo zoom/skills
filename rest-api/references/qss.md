@@ -1,115 +1,45 @@
-# REST API - QSS (Quality of Service Subscription)
+# Zoom QSS API
 
-Near real-time quality metrics API.
+Authoritative endpoint inventory for QSS. This file mirrors the official Zoom API Hub OpenAPI document for this product area.
 
-## Overview
+## Canonical Source
 
-QSS provides quality of service telemetry for Zoom Meetings, Webinars, and Phone via webhooks and API endpoints.
+- OpenAPI JSON: https://developers.zoom.us/api-hub/qss/methods/endpoints.json
+- Base URL: `https://api.zoom.us/v2`
+- Authentication details: [authentication.md](authentication.md)
 
-## Prerequisites
+## Notes
 
-- QSS add-on subscription
-- Business or Enterprise account
+- Endpoint methods and paths below are generated from the official Zoom API Hub `paths` object.
+- Scope names are defined per operation and frequently use granular scope names. Check the API Hub operation page for the exact scopes before implementation.
+- Use this file for endpoint discovery and inventory. Use `../examples/` for orchestration patterns, not as the canonical source of path names.
 
-## Webhook Events
+## Coverage
 
-QSS delivers data via webhook events:
+| Metric | Value |
+|--------|-------|
+| Endpoint operations | 3 |
+| Path templates | 3 |
+| Tags | 2 |
 
-### Event Types
+## Tag Index
 
-| Event | Description |
-|-------|-------------|
-| `qss.meeting_participant_qos` | Participant quality metrics |
-| `qss.meeting_qos_summary` | Meeting quality summary |
-| `qss.phone_call_qos` | Phone call quality metrics |
+| Tag | Operations |
+|-----|------------|
+| Dashboards | 2 |
+| Video SDK Sessions | 1 |
 
-### Event Payload
+## Endpoints by Tag
 
-```json
-{
-  "event": "qss.meeting_participant_qos",
-  "payload": {
-    "account_id": "account_id",
-    "object": {
-      "meeting_id": "meeting_id",
-      "participant_id": "participant_id",
-      "user_id": "user_id",
-      "metrics": {
-        "audio": {
-          "bitrate": 64,
-          "latency": 50,
-          "jitter": 10,
-          "packet_loss": 0.5
-        },
-        "video": {
-          "bitrate": 1500,
-          "latency": 60,
-          "jitter": 15,
-          "packet_loss": 0.2,
-          "resolution": "1280x720",
-          "frame_rate": 30
-        },
-        "cpu_usage": 25
-      },
-      "timestamp": "2024-01-15T10:30:00Z"
-    }
-  }
-}
-```
+### Dashboards
 
-## API Endpoints
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/metrics/meetings/{meetingId}/participants/qos_summary` | List meeting participants QoS Summary | `dashboardMeetingParticipantsQOSSummary` |
+| GET | `/metrics/webinars/{webinarId}/participants/qos_summary` | List webinar participants QoS Summary | `dashboardWebinarParticipantsQOSSummary` |
 
-### Get QSS Settings
+### Video SDK Sessions
 
-```bash
-GET /accounts/{accountId}/qss/settings
-```
-
-### List QSS Events
-
-```bash
-GET /accounts/{accountId}/qss/events
-```
-
-Query parameters:
-- `from` - Start date
-- `to` - End date
-- `meeting_id` - Filter by meeting
-
-## Metrics Reference
-
-### Audio Metrics
-
-| Metric | Unit | Description |
-|--------|------|-------------|
-| `bitrate` | kbps | Audio bitrate |
-| `latency` | ms | Round-trip delay |
-| `jitter` | ms | Latency variation |
-| `packet_loss` | % | Packet loss percentage |
-
-### Video Metrics
-
-| Metric | Unit | Description |
-|--------|------|-------------|
-| `bitrate` | kbps | Video bitrate |
-| `latency` | ms | Round-trip delay |
-| `jitter` | ms | Latency variation |
-| `packet_loss` | % | Packet loss percentage |
-| `resolution` | pixels | Video resolution |
-| `frame_rate` | fps | Frames per second |
-
-### System Metrics
-
-| Metric | Unit | Description |
-|--------|------|-------------|
-| `cpu_usage` | % | Client CPU usage |
-
-## Data Frequency
-
-- Events delivered approximately every minute per participant
-- Aggregation may vary by account configuration
-
-## Resources
-
-- **QSS API docs**: https://developers.zoom.us/docs/api/rest/qss-api/
-- **QSS API reference**: https://developers.zoom.us/docs/api/rest/reference/qss/methods/
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/videosdk/sessions/{sessionId}/users/qos_summary` | List session users QoS Summary | `sessionUsersQOSSummary` |

@@ -1,329 +1,100 @@
 # Zoom Calendar API
 
-Manage calendar events, secondary calendars, and scheduling via REST API.
+Authoritative endpoint inventory for Calendar. This file mirrors the official Zoom API Hub OpenAPI document for this product area.
 
-## Overview
+## Canonical Source
 
-Zoom Calendar Service is a fully integrated calendar built into Zoom Workplace. The API allows you to:
-- Create and manage calendar events
-- Manage secondary/shared calendars
-- Configure access controls and permissions
-- Integrate with external calendar providers
+- OpenAPI JSON: https://developers.zoom.us/api-hub/calendar/methods/endpoints.json
+- Base URL: `https://api.zoom.us/v2`
+- Authentication details: [authentication.md](authentication.md)
 
-## Base URL
+## Notes
 
-```
-https://api.zoom.us/v2
-```
+- Endpoint methods and paths below are generated from the official Zoom API Hub `paths` object.
+- Scope names are defined per operation and frequently use granular scope names. Check the API Hub operation page for the exact scopes before implementation.
+- Use this file for endpoint discovery and inventory. Use `../examples/` for orchestration patterns, not as the canonical source of path names.
 
-## Authentication
+## Coverage
 
-OAuth 2.0 (Server-to-Server or User OAuth). See `general/references/authentication.md`.
+| Metric | Value |
+|--------|-------|
+| Endpoint operations | 28 |
+| Path templates | 16 |
+| Tags | 7 |
 
-## Key Features
+## Tag Index
 
-| Feature | Description |
-|---------|-------------|
-| **External Booking** | Allow external contacts to schedule appointments |
-| **Shared Calendars** | Create team calendars for collaboration |
-| **Resource Calendars** | Manage conference rooms, workspaces |
-| **Delegate Scheduling** | Schedule on behalf of others |
+| Tag | Operations |
+|-----|------------|
+| acl | 5 |
+| calendar list | 5 |
+| calendars | 4 |
+| colors | 1 |
+| events | 9 |
+| freebusy | 1 |
+| settings | 3 |
 
-## Core Endpoints
+## Endpoints by Tag
 
-### Events
+### acl
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/calendars/{calendarId}/events` | List events |
-| POST | `/calendars/{calendarId}/events` | Create event |
-| GET | `/calendars/{calendarId}/events/{eventId}` | Get event |
-| PATCH | `/calendars/{calendarId}/events/{eventId}` | Update event |
-| DELETE | `/calendars/{calendarId}/events/{eventId}` | Delete event |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/calendars/{calId}/acl` | List ACL rules of specified calendar | `Listacl` |
+| POST | `/calendars/{calId}/acl` | Create a new ACL rule | `Insertacl` |
+| DELETE | `/calendars/{calId}/acl/{aclId}` | Delete an existing ACL rule | `Deleteacl` |
+| GET | `/calendars/{calId}/acl/{aclId}` | Get the specified ACL rule | `Getacl` |
+| PATCH | `/calendars/{calId}/acl/{aclId}` | Update the specified ACL rule | `Patchacl` |
 
-### Calendars
+### calendar list
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/users/{userId}/calendars` | List user's calendars |
-| POST | `/users/{userId}/calendars` | Create secondary calendar |
-| GET | `/calendars/{calendarId}` | Get calendar details |
-| PATCH | `/calendars/{calendarId}` | Update calendar |
-| DELETE | `/calendars/{calendarId}` | Delete calendar |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/calendars/users/{userIdentifier}/calendarList` | List the calendars in the user's own calendarList | `ListcalendarList` |
+| POST | `/calendars/users/{userIdentifier}/calendarList` | Insert an existing calendar to the user's own calendarList | `InsertcalendarList` |
+| DELETE | `/calendars/users/{userIdentifier}/calendarList/{calendarId}` | Delete an existing calendar from the user's own calendarList | `DeletecalendarList` |
+| GET | `/calendars/users/{userIdentifier}/calendarList/{calendarId}` | Get a specified calendar from the user's own calendarList | `GetcalendarList` |
+| PATCH | `/calendars/users/{userIdentifier}/calendarList/{calendarId}` | Update an existing calendar in the user's own calendarList | `PatchcalendarList` |
 
-### Access Control
+### calendars
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/calendars/{calendarId}/access` | Get access list |
-| POST | `/calendars/{calendarId}/access` | Grant access |
-| DELETE | `/calendars/{calendarId}/access/{userId}` | Revoke access |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/calendars` | Create a new secondary calendar | `Insertcalendar` |
+| DELETE | `/calendars/{calId}` | Delete a calendar owned by a user | `Deletecalendar` |
+| GET | `/calendars/{calId}` | Get the specified calendar | `Getcalendar` |
+| PATCH | `/calendars/{calId}` | Update the specified calendar | `Patchcalendar` |
 
-## Common Operations
+### colors
 
-### Create Calendar Event
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/calendars/colors` | Get the color definitions for calendars and events | `Getcolor` |
 
-```javascript
-async function createCalendarEvent(calendarId, event) {
-  const response = await fetch(
-    `https://api.zoom.us/v2/calendars/${calendarId}/events`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        summary: event.title,
-        description: event.description,
-        start: {
-          dateTime: event.startTime,  // ISO 8601
-          timeZone: event.timeZone
-        },
-        end: {
-          dateTime: event.endTime,
-          timeZone: event.timeZone
-        },
-        attendees: event.attendees.map(email => ({ email })),
-        location: event.location,
-        reminders: {
-          useDefault: false,
-          overrides: [
-            { method: 'popup', minutes: 15 }
-          ]
-        }
-      })
-    }
-  );
-  
-  return response.json();
-}
+### events
 
-// Usage
-await createCalendarEvent('primary', {
-  title: 'Team Standup',
-  description: 'Daily standup meeting',
-  startTime: '2024-01-15T09:00:00',
-  endTime: '2024-01-15T09:30:00',
-  timeZone: 'America/Los_Angeles',
-  attendees: ['john@example.com', 'sarah@example.com'],
-  location: 'Zoom Meeting'
-});
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/calendars/{calId}/events` | List events on the specified calendar | `Listevent` |
+| POST | `/calendars/{calId}/events` | Insert a new event to the specified calendar | `Insertevent` |
+| POST | `/calendars/{calId}/events/import` | Import event to the specified calendar | `Importevent` |
+| POST | `/calendars/{calId}/events/quickAdd` | Quick add an event to the specified calendar | `Quickaddevent` |
+| DELETE | `/calendars/{calId}/events/{eventId}` | Delete an existing event from the specified calendar | `Deleteevent` |
+| GET | `/calendars/{calId}/events/{eventId}` | Get the specified event on the specified calendar | `Getevent` |
+| PATCH | `/calendars/{calId}/events/{eventId}` | Update the specified event on the specified calendar | `Patchevent` |
+| GET | `/calendars/{calId}/events/{eventId}/instances` | List all instances of the specified recurring event | `Instanceevent` |
+| POST | `/calendars/{calId}/events/{eventId}/move` | Move the specified event from a calendar to another specified calendar | `Moveevent` |
 
-### List Events
+### freebusy
 
-```javascript
-async function listEvents(calendarId, from, to) {
-  const params = new URLSearchParams({
-    time_min: from,  // ISO 8601
-    time_max: to,
-    page_size: 50
-  });
-  
-  const response = await fetch(
-    `https://api.zoom.us/v2/calendars/${calendarId}/events?${params}`,
-    {
-      headers: { 'Authorization': `Bearer ${accessToken}` }
-    }
-  );
-  
-  return response.json();
-}
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/calendars/freeBusy` | Query freebusy information for a set of calendars | `Queryfreebusy` |
 
-// Get events for January 2024
-const events = await listEvents(
-  'primary',
-  '2024-01-01T00:00:00Z',
-  '2024-01-31T23:59:59Z'
-);
-```
+### settings
 
-### Create Secondary Calendar
-
-```javascript
-async function createSecondaryCalendar(userId, name, description) {
-  const response = await fetch(
-    `https://api.zoom.us/v2/users/${userId}/calendars`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: name,
-        description: description,
-        color: '#4285F4',  // Optional: calendar color
-        timezone: 'America/Los_Angeles'
-      })
-    }
-  );
-  
-  return response.json();
-}
-
-// Create a team calendar
-await createSecondaryCalendar('me', 'Engineering Team', 'Shared engineering calendar');
-```
-
-### Share Calendar
-
-```javascript
-async function shareCalendar(calendarId, email, role) {
-  const response = await fetch(
-    `https://api.zoom.us/v2/calendars/${calendarId}/access`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: email,
-        role: role  // 'reader', 'writer', 'owner'
-      })
-    }
-  );
-  
-  return response.json();
-}
-
-// Share calendar with a colleague
-await shareCalendar('calendar_abc123', 'colleague@example.com', 'writer');
-```
-
-## Calendar Integration
-
-### Bi-Directional Sync
-
-Zoom Calendar supports bi-directional sync with:
-- **Google Calendar** - OAuth-based, automatic sync
-- **Microsoft 365 / Outlook** - Graph API integration
-
-Sync 2.0 features:
-- Automatically enabled by default
-- Stores up to 24 months of data (6 months past, 18 months future)
-- Real-time synchronization via webhooks
-
-### Data Synced
-
-| Field | Description |
-|-------|-------------|
-| `summary` | Event title |
-| `description` | Event description |
-| `location` | Event location |
-| `attendees` | Participant list |
-| `organizer` | Event organizer |
-| `iCalUID` | Unique calendar ID |
-
-### Security
-
-- Tokens encrypted at rest (256-bit AES-GCM)
-- TLS 1.2 encryption in transit
-- OAuth access tokens: 1 hour expiry
-- OAuth refresh tokens: 90 days expiry
-
-## Create Event with Zoom Meeting
-
-```javascript
-async function createEventWithZoomMeeting(calendarId, event) {
-  // 1. Create Zoom meeting first
-  const meetingResponse = await fetch(
-    'https://api.zoom.us/v2/users/me/meetings',
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        topic: event.title,
-        type: 2,  // Scheduled meeting
-        start_time: event.startTime,
-        duration: event.duration,
-        timezone: event.timeZone
-      })
-    }
-  );
-  
-  const meeting = await meetingResponse.json();
-  
-  // 2. Create calendar event with meeting link
-  const eventResponse = await fetch(
-    `https://api.zoom.us/v2/calendars/${calendarId}/events`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        summary: event.title,
-        description: `${event.description}\n\nJoin Zoom Meeting:\n${meeting.join_url}`,
-        start: {
-          dateTime: event.startTime,
-          timeZone: event.timeZone
-        },
-        end: {
-          dateTime: event.endTime,
-          timeZone: event.timeZone
-        },
-        attendees: event.attendees.map(email => ({ email })),
-        location: meeting.join_url,
-        conferenceData: {
-          conferenceId: meeting.id.toString(),
-          conferenceSolution: {
-            name: 'Zoom Meeting'
-          },
-          entryPoints: [
-            {
-              entryPointType: 'video',
-              uri: meeting.join_url
-            }
-          ]
-        }
-      })
-    }
-  );
-  
-  return {
-    event: await eventResponse.json(),
-    meeting: meeting
-  };
-}
-```
-
-## Use Cases
-
-| Use Case | Description |
-|----------|-------------|
-| **Healthcare** | Integrate appointments into patient management systems |
-| **Education** | Manage virtual classes, office hours, tutoring |
-| **Event Management** | Virtual event scheduling and management |
-| **Sales** | Schedule demos and customer meetings |
-| **HR** | Interview scheduling and onboarding |
-
-## Required Scopes
-
-| Scope | Description |
-|-------|-------------|
-| `calendar:read` | Read calendar data |
-| `calendar:write` | Create/update calendar events |
-| `calendar:read:admin` | Account-wide read access |
-| `calendar:write:admin` | Account-wide write access |
-
-## Webhooks
-
-| Event | Trigger |
-|-------|---------|
-| `calendar.event_created` | New event created |
-| `calendar.event_updated` | Event modified |
-| `calendar.event_deleted` | Event deleted |
-| `calendar.event_reminder` | Event reminder triggered |
-
-## Resources
-
-- **Calendar API Docs**: https://developers.zoom.us/docs/api/rest/zoom-calendar/
-- **Calendar Service Overview**: https://developers.zoom.us/docs/zoom-calendar/
-- **Postman Collection**: https://www.postman.com/zoom-developer
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/calendars/users/{userIdentifier}/settings` | List all user calendar settings of the authenticated user | `Listsettings` |
+| GET | `/calendars/users/{userIdentifier}/settings/{settingId}` | Get the specified user calendar settings of the authenticated user | `Getsetting` |
+| PATCH | `/calendars/users/{userIdentifier}/settings/{settingId}` | Patch the specified user calendar settings of the authenticated user | `Patchsetting` |

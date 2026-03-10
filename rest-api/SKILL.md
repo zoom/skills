@@ -32,9 +32,9 @@ triggers:
 
 Expert guidance for building server-side integrations with the Zoom REST API. This API provides 600+ endpoints for managing meetings, users, webinars, recordings, reports, and all Zoom platform resources programmatically.
 
-**Official Documentation**: https://developers.zoom.us/docs/api/
-**API Reference**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/
-**OpenAPI Spec**: https://marketplace.zoom.us/docs/api-reference/using-zoom-apis/
+**Official Documentation**: https://developers.zoom.us/api-hub/
+**API Hub Reference**: https://developers.zoom.us/api-hub/meetings/
+**OpenAPI Inventories**: `https://developers.zoom.us/api-hub/<domain>/methods/endpoints.json`
 
 ## Quick Links
 
@@ -52,6 +52,8 @@ Expert guidance for building server-side integrations with the Zoom REST API. Th
 - **[Recordings](references/recordings.md)** - Cloud recording access and download
 - **[GraphQL Queries](examples/graphql-queries.md)** - Alternative query API (beta)
 - **Integrated Index** - see the section below in this file
+
+Most domain files under `references/` are aligned to the official API Hub `endpoints.json` inventories. Treat those files as the local source of truth for method/path discovery.
 
 **Having issues?**
 - Start with preflight checks → [5-Minute Runbook](RUNBOOK.md)
@@ -91,7 +93,7 @@ Response:
 ### Create a Meeting
 
 ```bash
-curl -X POST "https://api.zoom.us/v2/users/me/meetings" \
+curl -X POST "https://api.zoom.us/v2/users/HOST_USER_ID/meetings" \
   -H "Authorization: Bearer ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -105,6 +107,8 @@ curl -X POST "https://api.zoom.us/v2/users/me/meetings" \
     }
   }'
 ```
+
+For S2S OAuth, use an explicit host user ID or email in the path. Do not use `me`.
 
 ### List Users with Pagination
 
@@ -275,6 +279,7 @@ This skill includes comprehensive guides organized by category:
 
 #### Infrastructure
 - **[references/rooms.md](references/rooms.md)** - Zoom Rooms
+- **[references/scim2.md](references/scim2.md)** - SCIM 2.0 provisioning APIs
 - **[references/rate-limits.md](references/rate-limits.md)** - Rate limit details
 - **[references/qss.md](references/qss.md)** - Quality of Service Subscription
 
@@ -323,7 +328,7 @@ This skill includes comprehensive guides organized by category:
 
 ## Resources
 
-- **API Reference**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/
+- **API Reference**: https://developers.zoom.us/api-hub/
 - **GraphQL Playground**: https://nws.zoom.us/graphql/playground
 - **Postman Collection**: https://marketplace.zoom.us/docs/api-reference/postman
 - **Developer Forum**: https://devforum.zoom.us/

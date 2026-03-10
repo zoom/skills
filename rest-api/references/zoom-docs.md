@@ -1,178 +1,82 @@
 # Zoom Docs API
 
-Document collaboration and management API.
+Authoritative endpoint inventory for Zoom Docs. This file mirrors the official Zoom API Hub OpenAPI document for this product area.
 
-## Overview
+## Canonical Source
 
-Zoom Docs provides collaborative document editing integrated with Zoom Workplace. The API enables creating, editing, and managing documents with real-time collaboration features.
+- OpenAPI JSON: https://developers.zoom.us/api-hub/zoom-docs/methods/endpoints.json
+- Base URL: `https://api.zoom.us/v2`
+- Authentication details: [authentication.md](authentication.md)
 
-## Base URL
+## Notes
 
-```
-https://api.zoom.us/v2
-```
+- Endpoint methods and paths below are generated from the official Zoom API Hub `paths` object.
+- Scope names are defined per operation and frequently use granular scope names. Check the API Hub operation page for the exact scopes before implementation.
+- Use this file for endpoint discovery and inventory. Use `../examples/` for orchestration patterns, not as the canonical source of path names.
 
-## Authentication
+## Coverage
 
-Requires OAuth 2.0 with docs scopes:
-- `docs:read` - Read documents
-- `docs:write` - Create/edit documents
-- `docs:read:admin` - Admin read access
-- `docs:write:admin` - Admin write access
+| Metric | Value |
+|--------|-------|
+| Endpoint operations | 16 |
+| Path templates | 11 |
+| Tags | 6 |
 
-## Key Endpoints
+## Tag Index
 
-### Documents
+| Tag | Operations |
+|-----|------------|
+| Collaborator | 4 |
+| Export | 2 |
+| File Management | 5 |
+| File Uploads | 1 |
+| General Access | 2 |
+| Import | 2 |
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/docs` | List documents |
-| POST | `/docs` | Create document |
-| GET | `/docs/{docId}` | Get document details |
-| PATCH | `/docs/{docId}` | Update document metadata |
-| DELETE | `/docs/{docId}` | Delete document |
-| GET | `/docs/{docId}/content` | Get document content |
-| PUT | `/docs/{docId}/content` | Update document content |
+## Endpoints by Tag
 
-### Sharing & Permissions
+### Collaborator
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/docs/{docId}/sharing` | Get sharing settings |
-| PATCH | `/docs/{docId}/sharing` | Update sharing settings |
-| GET | `/docs/{docId}/collaborators` | List collaborators |
-| POST | `/docs/{docId}/collaborators` | Add collaborators |
-| DELETE | `/docs/{docId}/collaborators/{userId}` | Remove collaborator |
-
-### Folders
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/docs/folders` | List folders |
-| POST | `/docs/folders` | Create folder |
-| PATCH | `/docs/folders/{folderId}` | Update folder |
-| DELETE | `/docs/folders/{folderId}` | Delete folder |
-| POST | `/docs/{docId}/move` | Move document to folder |
-
-### Comments
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/docs/{docId}/comments` | List comments |
-| POST | `/docs/{docId}/comments` | Add comment |
-| PATCH | `/docs/{docId}/comments/{commentId}` | Update comment |
-| DELETE | `/docs/{docId}/comments/{commentId}` | Delete comment |
-| POST | `/docs/{docId}/comments/{commentId}/resolve` | Resolve comment |
-
-### Version History
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/docs/{docId}/versions` | List versions |
-| GET | `/docs/{docId}/versions/{versionId}` | Get specific version |
-| POST | `/docs/{docId}/restore` | Restore to version |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/docs/files/{fileId}/collaborators` | List collaborators of a file | `ListCollaborators` |
+| POST | `/docs/files/{fileId}/collaborators` | Add collaborators for a file | `AddCollaborators` |
+| DELETE | `/docs/files/{fileId}/collaborators/{collaboratorId}` | Remove a collaborator from a file | `RemoveACollaborator` |
+| PATCH | `/docs/files/{fileId}/collaborators/{collaboratorId}` | Modify a collaborator’s role on a file | `ModifyCollaboratorRole` |
 
 ### Export
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/docs/{docId}/export` | Export document |
-| GET | `/docs/{docId}/export/{exportId}` | Get export status |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/docs/exports` | Create a file export | `Createafileexport` |
+| GET | `/docs/exports/{exportId}/status` | Get file export status | `Getfileexportstatus` |
 
-## Example: Create a Document
+### File Management
 
-```bash
-curl -X POST "https://api.zoom.us/v2/docs" \
-  -H "Authorization: Bearer {accessToken}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Project Proposal",
-    "folder_id": "folder_abc",
-    "template_id": "template_xyz"
-  }'
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/docs/files` | Create a new file | `CreateDoc` |
+| DELETE | `/docs/files/{fileId}` | Delete a file | `DeleteFile` |
+| GET | `/docs/files/{fileId}` | Get metadata of a file | `QueryFileMetadata` |
+| PATCH | `/docs/files/{fileId}` | Modify metadata of a file | `ModifyMetadata` |
+| GET | `/docs/files/{fileId}/children` | List all children of a file | `ListAllChildren` |
 
-### Response
+### File Uploads
 
-```json
-{
-  "id": "doc_abc123",
-  "title": "Project Proposal",
-  "owner_id": "user_xyz",
-  "created_at": "2024-01-15T10:00:00Z",
-  "modified_at": "2024-01-15T10:00:00Z",
-  "share_url": "https://zoom.us/docs/abc123"
-}
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/docs/file_uploads` | Create file upload for docs import or attachments | `Uploadfilefordocsimportorattachments` |
 
-## Example: Add Collaborators
+### General Access
 
-```bash
-curl -X POST "https://api.zoom.us/v2/docs/{docId}/collaborators" \
-  -H "Authorization: Bearer {accessToken}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "collaborators": [
-      {
-        "email": "editor@example.com",
-        "permission": "editor"
-      },
-      {
-        "email": "viewer@example.com",
-        "permission": "viewer"
-      }
-    ]
-  }'
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/docs/files/{fileId}/general_access_setting` | Get the general access setting of a file | `GetFileGeneralAccess` |
+| PATCH | `/docs/files/{fileId}/general_access_setting` | Modify the general access setting of a file | `ModifyFileGeneralAccess` |
 
-## Example: Export Document
+### Import
 
-```bash
-curl -X POST "https://api.zoom.us/v2/docs/{docId}/export" \
-  -H "Authorization: Bearer {accessToken}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "format": "pdf"
-  }'
-```
-
-### Response
-
-```json
-{
-  "export_id": "exp_xyz",
-  "status": "processing",
-  "download_url": null
-}
-```
-
-## Permission Levels
-
-| Level | Description |
-|-------|-------------|
-| `owner` | Full control |
-| `editor` | Can view and edit |
-| `commenter` | Can view and comment |
-| `viewer` | Read-only access |
-
-## Export Formats
-
-| Format | Description |
-|--------|-------------|
-| `pdf` | PDF document |
-| `docx` | Microsoft Word |
-| `md` | Markdown |
-| `html` | HTML |
-
-## Document Templates
-
-Templates provide pre-formatted starting points:
-- Meeting notes
-- Project plans
-- Team wikis
-- Status reports
-
-## Resources
-
-- **API Reference**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Docs
-- **Zoom Docs Documentation**: https://developers.zoom.us/docs/zoom-docs/
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/docs/imports` | Create a new file by import | `Createanewfilebyimport` |
+| GET | `/docs/imports/{importId}/status` | Get file import status | `Getdocsfileimportstatus` |

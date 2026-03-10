@@ -1,167 +1,105 @@
 # Zoom Scheduler API
 
-Appointment scheduling and booking management API.
+Authoritative endpoint inventory for Scheduler. This file mirrors the official Zoom API Hub OpenAPI document for this product area.
 
-## Overview
+## Canonical Source
 
-Zoom Scheduler enables users to share their availability and let others book time with them. The API provides endpoints for managing schedules, availability windows, scheduled events, and routing forms.
+- OpenAPI JSON: https://developers.zoom.us/api-hub/scheduler/methods/endpoints.json
+- Base URL: `https://api.zoom.us/v2`
+- Authentication details: [authentication.md](authentication.md)
 
-## Base URL
+## Notes
 
-```
-https://api.zoom.us/v2
-```
+- Endpoint methods and paths below are generated from the official Zoom API Hub `paths` object.
+- Scope names are defined per operation and frequently use granular scope names. Check the API Hub operation page for the exact scopes before implementation.
+- Use this file for endpoint discovery and inventory. Use `../examples/` for orchestration patterns, not as the canonical source of path names.
 
-## Authentication
+## Coverage
 
-Requires OAuth 2.0 with scheduler scopes:
-- `scheduler:read` - Read scheduling data
-- `scheduler:write` - Create/update schedules
-- `scheduler:read:admin` - Admin read access
-- `scheduler:write:admin` - Admin write access
+| Metric | Value |
+|--------|-------|
+| Endpoint operations | 21 |
+| Path templates | 13 |
+| Tags | 9 |
 
-## Key Endpoints
+## Tag Index
 
-### Schedules
+| Tag | Operations |
+|-----|------------|
+| analytics | 1 |
+| availability | 5 |
+| Routing Forms | 1 |
+| scheduled events | 5 |
+| schedules | 5 |
+| scheduling links | 1 |
+| shares | 1 |
+| team | 1 |
+| users | 1 |
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/scheduler/schedules` | List schedules |
-| POST | `/scheduler/schedules` | Create schedule |
-| GET | `/scheduler/schedules/{scheduleId}` | Get schedule details |
-| PATCH | `/scheduler/schedules/{scheduleId}` | Update schedule |
-| DELETE | `/scheduler/schedules/{scheduleId}` | Delete schedule |
+## Endpoints by Tag
 
-### Availability
+### analytics
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/scheduler/availability` | Get availability settings |
-| POST | `/scheduler/availability` | Create availability window |
-| PATCH | `/scheduler/availability` | Update availability |
-| DELETE | `/scheduler/availability` | Delete availability |
-| GET | `/scheduler/availability/list` | List all availability windows |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/scheduler/analytics` | Report analytics | `report_analytics` |
 
-### Scheduled Events
+### availability
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/scheduler/scheduled_events` | Get scheduled event |
-| GET | `/scheduler/scheduled_events/list` | List scheduled events |
-| PATCH | `/scheduler/scheduled_events` | Update scheduled event |
-| DELETE | `/scheduler/scheduled_events` | Cancel scheduled event |
-| GET | `/scheduler/scheduled_events/attendee` | Get attendee details |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/scheduler/availability` | List availability | `list_availability` |
+| POST | `/scheduler/availability` | Insert availability | `insert_availability` |
+| DELETE | `/scheduler/availability/{availabilityId}` | Delete availability | `delete_availability` |
+| GET | `/scheduler/availability/{availabilityId}` | Get availability | `get_availability` |
+| PATCH | `/scheduler/availability/{availabilityId}` | Patch availability | `patch_availability` |
 
 ### Routing Forms
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/scheduler/routing_forms` | List routing forms |
-| POST | `/scheduler/routing_forms` | Create routing form |
-| GET | `/scheduler/routing_forms/{formId}` | Get form details |
-| GET | `/scheduler/routing_forms/response` | Get form responses |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/scheduler/routing/forms/{formId}/response/{responseId}` | get routing response | `Getroutingresponse` |
 
-### Analytics
+### scheduled events
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/scheduler/analytics/report` | Get scheduling analytics |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/scheduler/events` | List scheduled events | `list_scheduled_events` |
+| DELETE | `/scheduler/events/{eventId}` | Delete scheduled events | `delete_scheduled_events` |
+| GET | `/scheduler/events/{eventId}` | Get scheduled events | `get_scheduled_events` |
+| PATCH | `/scheduler/events/{eventId}` | Patch scheduled events | `patch_scheduled_events` |
+| GET | `/scheduler/events/{eventId}/attendees/{attendeeId}` | Get scheduled event attendee | `get_scheduled_event_attendee` |
 
-## Example: Create a Schedule
+### schedules
 
-```bash
-curl -X POST "https://api.zoom.us/v2/scheduler/schedules" \
-  -H "Authorization: Bearer {accessToken}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "30-Minute Meeting",
-    "duration": 30,
-    "description": "Quick sync call",
-    "location": {
-      "type": "zoom_meeting"
-    },
-    "availability": {
-      "timezone": "America/Los_Angeles",
-      "windows": [
-        {
-          "day": "monday",
-          "start_time": "09:00",
-          "end_time": "17:00"
-        },
-        {
-          "day": "tuesday",
-          "start_time": "09:00",
-          "end_time": "17:00"
-        }
-      ]
-    }
-  }'
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/scheduler/schedules` | List schedules | `list_schedules` |
+| POST | `/scheduler/schedules` | Insert schedules | `insert_schedule` |
+| DELETE | `/scheduler/schedules/{scheduleId}` | Delete schedules | `delete_schedules` |
+| GET | `/scheduler/schedules/{scheduleId}` | Get schedules | `get_schedule` |
+| PATCH | `/scheduler/schedules/{scheduleId}` | Patch schedules | `patch_schedule` |
 
-### Response
+### scheduling links
 
-```json
-{
-  "id": "sched_abc123",
-  "name": "30-Minute Meeting",
-  "duration": 30,
-  "booking_url": "https://zoom.us/scheduler/abc123",
-  "created_at": "2024-01-15T10:00:00Z"
-}
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/scheduler/schedules/single_use_link` | Single use link | `single_use_link` |
 
-## Example: Get Available Slots
+### shares
 
-```bash
-curl -X GET "https://api.zoom.us/v2/scheduler/schedules/{scheduleId}/slots?start_date=2024-01-20&end_date=2024-01-27" \
-  -H "Authorization: Bearer {accessToken}"
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/scheduler/shares` | Create shares | `create_shares` |
 
-### Response
+### team
 
-```json
-{
-  "slots": [
-    {
-      "start_time": "2024-01-20T09:00:00-08:00",
-      "end_time": "2024-01-20T09:30:00-08:00",
-      "available": true
-    },
-    {
-      "start_time": "2024-01-20T09:30:00-08:00",
-      "end_time": "2024-01-20T10:00:00-08:00",
-      "available": true
-    }
-  ]
-}
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/scheduler/teams` | List team | `Listteam` |
 
-## Example: List Scheduled Events
+### users
 
-```bash
-curl -X GET "https://api.zoom.us/v2/scheduler/scheduled_events/list?from=2024-01-01&to=2024-01-31" \
-  -H "Authorization: Bearer {accessToken}"
-```
-
-## Schedule Types
-
-| Type | Description |
-|------|-------------|
-| `one_on_one` | Individual meeting |
-| `group` | Group meeting with multiple invitees |
-| `round_robin` | Distributed among team members |
-| `collective` | Requires all team members available |
-
-## Location Types
-
-| Type | Description |
-|------|-------------|
-| `zoom_meeting` | Automatically creates Zoom meeting |
-| `phone` | Phone call |
-| `in_person` | Physical location |
-| `custom` | Custom location/instructions |
-
-## Resources
-
-- **API Reference**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Scheduler
-- **Scheduler Documentation**: https://developers.zoom.us/docs/zoom-scheduler/
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/scheduler/users/{userId}` | Get user | `get_user` |

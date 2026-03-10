@@ -1,343 +1,125 @@
-# REST API - Users
+# Zoom Users API
 
-User management endpoints for Zoom accounts.
+Authoritative endpoint inventory for Users. This file mirrors the official Zoom API Hub OpenAPI document for this product area.
 
-## Overview
+## Canonical Source
 
-Manage Zoom users programmatically - list, create, update, and delete users. This is essential for:
-- Automated user provisioning (HR system integration)
-- Bulk user management
-- User lifecycle management (onboarding/offboarding)
-- Skill chaining: Create users before scheduling meetings on their behalf
+- OpenAPI JSON: https://developers.zoom.us/api-hub/users/methods/endpoints.json
+- Base URL: `https://api.zoom.us/v2`
+- Authentication details: [authentication.md](authentication.md)
 
-## Endpoints
+## Notes
 
-### List Users
+- Endpoint methods and paths below are generated from the official Zoom API Hub `paths` object.
+- Scope names are defined per operation and frequently use granular scope names. Check the API Hub operation page for the exact scopes before implementation.
+- Use this file for endpoint discovery and inventory. Use `../examples/` for orchestration patterns, not as the canonical source of path names.
 
-```bash
-GET /users
-```
+## Coverage
 
-**Query parameters:**
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `status` | string | `active`, `inactive`, or `pending` |
-| `page_size` | integer | Results per page (default 30, max 300) |
-| `next_page_token` | string | Token for pagination |
-| `role_id` | string | Filter by role |
-| `include_fields` | string | `custom_attributes`, `host_key` |
+| Metric | Value |
+|--------|-------|
+| Endpoint operations | 71 |
+| Path templates | 41 |
+| Tags | 4 |
 
-**Response:**
-```json
-{
-  "page_count": 1,
-  "page_number": 1,
-  "page_size": 30,
-  "total_records": 2,
-  "next_page_token": "",
-  "users": [
-    {
-      "id": "abcD3ojkdbjfg",
-      "first_name": "John",
-      "last_name": "Doe",
-      "email": "john@example.com",
-      "type": 2,
-      "status": "active",
-      "created_at": "2024-01-15T10:30:00Z"
-    }
-  ]
-}
-```
+## Tag Index
 
-### Get User
+| Tag | Operations |
+|-----|------------|
+| Contact Groups | 8 |
+| Divisions | 7 |
+| Groups | 21 |
+| Users | 35 |
 
-```bash
-GET /users/{userId}
-```
+## Endpoints by Tag
 
-**Path parameters:**
-- `userId` - User ID or email address (or `me` for current user)
+### Contact Groups
 
-**Response includes:** `id`, `first_name`, `last_name`, `email`, `type`, `role_name`, `pmi`, `timezone`, `created_at`, `last_login_time`, `host_key`, etc.
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/contacts/groups` | List contact groups | `contactGroups` |
+| POST | `/contacts/groups` | Create a contact group | `contactGroupCreate` |
+| DELETE | `/contacts/groups/{groupId}` | Delete a contact group | `contactGroupDelete` |
+| GET | `/contacts/groups/{groupId}` | Get a contact group | `contactGroup` |
+| PATCH | `/contacts/groups/{groupId}` | Update a contact group | `contactGroupUpdate` |
+| DELETE | `/contacts/groups/{groupId}/members` | Remove members in a contact group | `contactGroupMemberRemove` |
+| GET | `/contacts/groups/{groupId}/members` | List contact group members | `contactGroupMembers` |
+| POST | `/contacts/groups/{groupId}/members` | Add contact group members | `contactGroupMemberAdd` |
 
-### Create User
+### Divisions
 
-```bash
-POST /users
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/divisions` | List divisions | `listDivisions` |
+| POST | `/divisions` | Create a division | `Createadivision` |
+| DELETE | `/divisions/{divisionId}` | Delete a division | `Deletedivision` |
+| GET | `/divisions/{divisionId}` | Get a division | `Getdivision` |
+| PATCH | `/divisions/{divisionId}` | Update a division | `Updateadivision` |
+| GET | `/divisions/{divisionId}/users` | List division members | `listDivisionMembers` |
+| POST | `/divisions/{divisionId}/users` | Assign a division | `assigndivisionMember` |
 
-**IMPORTANT:** The `action` field determines how the user is created.
+### Groups
 
-#### Action Types
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/groups` | List groups | `groups` |
+| POST | `/groups` | Create a group | `groupCreate` |
+| DELETE | `/groups/{groupId}` | Delete a group | `groupDelete` |
+| GET | `/groups/{groupId}` | Get a group | `group` |
+| PATCH | `/groups/{groupId}` | Update a group | `groupUpdate` |
+| GET | `/groups/{groupId}/admins` | List group admins | `groupAdmins` |
+| POST | `/groups/{groupId}/admins` | Add group admins | `groupAdminsCreate` |
+| DELETE | `/groups/{groupId}/admins/{userId}` | Delete a group admin | `groupAdminsDelete` |
+| GET | `/groups/{groupId}/channels` | List group channels | `groupChannels` |
+| GET | `/groups/{groupId}/lock_settings` | Get locked settings | `getGroupLockSettings` |
+| PATCH | `/groups/{groupId}/lock_settings` | Update locked settings | `groupLockedSettings` |
+| GET | `/groups/{groupId}/members` | List group members | `groupMembers` |
+| POST | `/groups/{groupId}/members` | Add group members | `groupMembersCreate` |
+| DELETE | `/groups/{groupId}/members/{memberId}` | Delete a group member | `groupMembersDelete` |
+| PATCH | `/groups/{groupId}/members/{memberId}` | Update a group member | `updateAGroupMember` |
+| GET | `/groups/{groupId}/settings` | Get a group's settings | `getGroupSettings` |
+| PATCH | `/groups/{groupId}/settings` | Update a group's settings | `updateGroupSettings` |
+| GET | `/groups/{groupId}/settings/registration` | Get a group's webinar registration settings | `groupSettingsRegistration` |
+| PATCH | `/groups/{groupId}/settings/registration` | Update a group's webinar registration settings | `groupSettingsRegistrationUpdate` |
+| DELETE | `/groups/{groupId}/settings/virtual_backgrounds` | Delete Virtual Background files | `delGroupVB` |
+| POST | `/groups/{groupId}/settings/virtual_backgrounds` | Upload Virtual Background files | `uploadGroupVB` |
 
-| Action | Description | Email Sent? |
-|--------|-------------|-------------|
-| `create` | Standard creation - sends email, user sets password | Yes |
-| `autoCreate` | Auto-provision with temporary password | No |
-| `custCreate` | Create without email (managed by SSO) | No |
-| `ssoCreate` | SSO-managed user, added to default group | No |
+### Users
 
-#### Example: Standard Create
-
-```json
-{
-  "action": "create",
-  "user_info": {
-    "email": "john.doe@example.com",
-    "type": 2,
-    "first_name": "John",
-    "last_name": "Doe"
-  }
-}
-```
-
-#### Example: Auto-Create (No Email)
-
-```json
-{
-  "action": "autoCreate",
-  "user_info": {
-    "email": "jane.doe@example.com",
-    "type": 2,
-    "first_name": "Jane",
-    "last_name": "Doe",
-    "password": "TempPass123!"
-  }
-}
-```
-
-#### Example: SSO Create
-
-```json
-{
-  "action": "ssoCreate",
-  "user_info": {
-    "email": "sso.user@example.com",
-    "type": 2,
-    "first_name": "SSO",
-    "last_name": "User"
-  }
-}
-```
-
-**Success Response (201):**
-```json
-{
-  "id": "abcD3ojkdbjfg",
-  "first_name": "John",
-  "last_name": "Doe",
-  "email": "john.doe@example.com",
-  "type": 2
-}
-```
-
-### Update User
-
-```bash
-PATCH /users/{userId}
-```
-
-**Request body (all fields optional):**
-```json
-{
-  "first_name": "Jonathan",
-  "last_name": "Doe",
-  "type": 2,
-  "pmi": 1234567890,
-  "timezone": "America/Los_Angeles",
-  "language": "en-US",
-  "dept": "Engineering",
-  "job_title": "Senior Developer",
-  "company": "Acme Corp"
-}
-```
-
-### Delete User
-
-```bash
-DELETE /users/{userId}
-```
-
-**Query parameters:**
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `action` | string | `disassociate` (default) or `delete` |
-| `transfer_email` | string | Email to transfer meetings/webinars |
-| `transfer_meeting` | boolean | Transfer scheduled meetings |
-| `transfer_webinar` | boolean | Transfer scheduled webinars |
-| `transfer_recording` | boolean | Transfer cloud recordings |
-
-**Example - Delete and transfer:**
-```bash
-DELETE /users/abcD3ojkdbjfg?action=delete&transfer_email=admin@example.com&transfer_meeting=true
-```
-
-## User Types
-
-| Type | Value | Description | License Required |
-|------|-------|-------------|------------------|
-| Basic | 1 | Free user, limited features | No |
-| Licensed | 2 | Full Zoom license | Yes |
-| On-prem | 3 | On-premise deployment | Special |
-| None | 99 | No plan (deactivated) | No |
-
-## Error Responses
-
-### 409 Conflict - User Exists
-
-```json
-{
-  "code": 409,
-  "message": "User already exists: john@example.com"
-}
-```
-
-### 400 Bad Request - Validation Error
-
-```json
-{
-  "code": 300,
-  "message": "Validation Failed",
-  "errors": [
-    {
-      "field": "email",
-      "message": "Invalid email format"
-    }
-  ]
-}
-```
-
-### 404 Not Found
-
-```json
-{
-  "code": 1001,
-  "message": "User does not exist: invalid-user-id"
-}
-```
-
-## Code Examples
-
-### JavaScript/Node.js - Create User
-
-```javascript
-const axios = require('axios');
-
-async function createZoomUser(accessToken, userData) {
-  const response = await axios.post(
-    'https://api.zoom.us/v2/users',
-    {
-      action: 'autoCreate',
-      user_info: {
-        email: userData.email,
-        type: 2,
-        first_name: userData.firstName,
-        last_name: userData.lastName,
-        password: generateTempPassword()
-      }
-    },
-    {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      }
-    }
-  );
-  
-  return response.data;
-}
-
-// Usage
-const newUser = await createZoomUser(token, {
-  email: 'new.employee@company.com',
-  firstName: 'New',
-  lastName: 'Employee'
-});
-console.log(`Created user: ${newUser.id}`);
-```
-
-### JavaScript/Node.js - List All Users (with pagination)
-
-```javascript
-async function listAllZoomUsers(accessToken) {
-  const users = [];
-  let nextPageToken = '';
-  
-  do {
-    const params = new URLSearchParams({
-      page_size: '300',
-      status: 'active'
-    });
-    
-    if (nextPageToken) {
-      params.append('next_page_token', nextPageToken);
-    }
-    
-    const response = await axios.get(
-      `https://api.zoom.us/v2/users?${params}`,
-      {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
-      }
-    );
-    
-    users.push(...response.data.users);
-    nextPageToken = response.data.next_page_token || '';
-    
-  } while (nextPageToken);
-  
-  return users;
-}
-```
-
-## Skill Chaining
-
-Users API is commonly chained with other skills:
-
-| Chain | Pattern | Use Case |
-|-------|---------|----------|
-| Users → Meetings | Create user, then schedule meetings | New employee onboarding |
-| Users → Webhooks | Create user, subscribe to user events | User lifecycle tracking |
-| Users → Recordings | Get user, list their recordings | Compliance/audit |
-
-**Example: Create user then schedule meeting**
-```javascript
-// Step 1: Create the user
-const user = await createZoomUser(token, { email, firstName, lastName });
-
-// Step 2: Schedule meeting for the new user
-const meeting = await axios.post(
-  `https://api.zoom.us/v2/users/${user.id}/meetings`,
-  {
-    topic: 'Onboarding Session',
-    type: 2,
-    start_time: '2024-02-01T10:00:00Z',
-    duration: 60
-  },
-  { headers: { 'Authorization': `Bearer ${token}` }}
-);
-```
-
-See [user-and-meeting-creation.md](../../general/use-cases/user-and-meeting-creation.md) for complete skill chaining patterns.
-
-## Required Scopes
-
-| Scope | Operations |
-|-------|------------|
-| `user:read:admin` | List users, get user details (account-wide) |
-| `user:write:admin` | Create, update, delete users (account-wide) |
-| `user:read:user` | Get own user details |
-| `user:write:user` | Update own user details |
-
-## Rate Limits
-
-- **Light**: GET operations (30 requests/second)
-- **Medium**: POST/PATCH operations (10 requests/second)  
-- **Heavy**: DELETE operations (10 requests/second)
-
-Daily limit: 5000 API calls per app.
-
-## Resources
-
-- **API Reference**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Users
-- **User provisioning guide**: https://developers.zoom.us/docs/api/rest/user-provisioning/
-- **SCIM 2.0 for enterprise**: See [scim2.md](scim2.md)
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/users` | List users | `users` |
+| POST | `/users` | Create users | `userCreate` |
+| GET | `/users/email` | Check a user email | `userEmail` |
+| POST | `/users/features` | Bulk update features for users | `bulkUpdateFeature` |
+| GET | `/users/me/zak` | Get the user's ZAK | `userZak` |
+| GET | `/users/summary` | Get user summary | `userSummary` |
+| GET | `/users/vanity_name` | Check a user's PM room | `userVanityName` |
+| DELETE | `/users/{userId}` | Delete a user | `userDelete` |
+| GET | `/users/{userId}` | Get a user | `user` |
+| PATCH | `/users/{userId}` | Update a user | `userUpdate` |
+| DELETE | `/users/{userId}/assistants` | Delete user assistants | `userAssistantsDelete` |
+| GET | `/users/{userId}/assistants` | List user assistants | `userAssistants` |
+| POST | `/users/{userId}/assistants` | Add assistants | `userAssistantCreate` |
+| DELETE | `/users/{userId}/assistants/{assistantId}` | Delete a user assistant | `userAssistantDelete` |
+| GET | `/users/{userId}/collaboration_devices` | List a user's collaboration devices | `listCollaborationDevices` |
+| GET | `/users/{userId}/collaboration_devices/{collaborationDeviceId}` | Get collaboration device detail | `getCollaborationDevice` |
+| PUT | `/users/{userId}/email` | Update a user's email | `userEmailUpdate` |
+| GET | `/users/{userId}/meeting_summary_templates` | Get meeting summary templates | `Getmeetingsummarytemplates` |
+| GET | `/users/{userId}/meeting_templates/{meetingTemplateId}` | Get meeting template detail | `getUserMeetingTemplates` |
+| PUT | `/users/{userId}/password` | Update a user's password | `userPassword` |
+| GET | `/users/{userId}/permissions` | Get user permissions | `userPermission` |
+| DELETE | `/users/{userId}/picture` | Delete a user's profile picture | `userPictureDelete` |
+| POST | `/users/{userId}/picture` | Upload a user's profile picture | `userPicture` |
+| GET | `/users/{userId}/presence_status` | Get a user presence status | `getUserPresenceStatus` |
+| PUT | `/users/{userId}/presence_status` | Update a user's presence status | `updatePresenceStatus` |
+| DELETE | `/users/{userId}/schedulers` | Delete user schedulers | `userSchedulersDelete` |
+| GET | `/users/{userId}/schedulers` | List user schedulers | `userSchedulers` |
+| DELETE | `/users/{userId}/schedulers/{schedulerId}` | Delete a scheduler | `userSchedulerDelete` |
+| GET | `/users/{userId}/settings` | Get user settings | `userSettings` |
+| PATCH | `/users/{userId}/settings` | Update user settings | `userSettingsUpdate` |
+| DELETE | `/users/{userId}/settings/virtual_backgrounds` | Delete Virtual Background files | `delUserVB` |
+| POST | `/users/{userId}/settings/virtual_backgrounds` | Upload Virtual Background files | `uploadVBuser` |
+| PUT | `/users/{userId}/status` | Update user status | `userStatus` |
+| DELETE | `/users/{userId}/token` | Revoke a user's SSO token | `userSSOTokenDelete` |
+| GET | `/users/{userId}/token` | Get a user's token | `userToken` |

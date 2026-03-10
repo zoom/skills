@@ -1,164 +1,80 @@
-# Zoom CRC (Cloud Room Connector) API
+# Zoom Conference Room Connector API
 
-Connect SIP/H.323 conference room systems to Zoom meetings.
+Authoritative endpoint inventory for Conference Room Connector. This file mirrors the official Zoom API Hub OpenAPI document for this product area.
 
-## Overview
+## Canonical Source
 
-Cloud Room Connector (CRC) enables traditional video conferencing systems (Cisco, Polycom, etc.) to join Zoom meetings via SIP or H.323 protocols. The API manages CRC configurations, dial-in settings, and room system integrations.
+- OpenAPI JSON: https://developers.zoom.us/api-hub/crc/methods/endpoints.json
+- Base URL: `https://api.zoom.us/v2`
+- Authentication details: [authentication.md](authentication.md)
 
-## Base URL
+## Notes
 
-```
-https://api.zoom.us/v2
-```
+- Endpoint methods and paths below are generated from the official Zoom API Hub `paths` object.
+- Scope names are defined per operation and frequently use granular scope names. Check the API Hub operation page for the exact scopes before implementation.
+- Use this file for endpoint discovery and inventory. Use `../examples/` for orchestration patterns, not as the canonical source of path names.
 
-## Authentication
+## Coverage
 
-Requires OAuth 2.0 with CRC scopes:
-- `crc:read` - Read CRC configurations
-- `crc:write` - Manage CRC settings
-- `crc:read:admin` - Admin read access
-- `crc:write:admin` - Admin write access
+| Metric | Value |
+|--------|-------|
+| Endpoint operations | 20 |
+| Path templates | 9 |
+| Tags | 5 |
 
-## Key Endpoints
+## Tag Index
 
-### CRC Settings
+| Tag | Operations |
+|-----|------------|
+| Account | 2 |
+| Api Connector | 7 |
+| Cisco/Polycom Rooms | 5 |
+| Participant | 1 |
+| Room Template | 5 |
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/accounts/{accountId}/crc` | Get CRC settings |
-| PATCH | `/accounts/{accountId}/crc` | Update CRC settings |
-| GET | `/accounts/{accountId}/crc/ports` | Get CRC port usage |
+## Endpoints by Tag
 
-### SIP Devices
+### Account
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/sip_phones` | List SIP devices |
-| POST | `/sip_phones` | Register SIP device |
-| GET | `/sip_phones/{deviceId}` | Get device details |
-| PATCH | `/sip_phones/{deviceId}` | Update device |
-| DELETE | `/sip_phones/{deviceId}` | Remove device |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/crc/managed_rooms/account_setting` | Get Cisco/Polycom Room Account Setting | `getCiscoPolycomRoomAccountSetting` |
+| PATCH | `/crc/managed_rooms/account_setting` | Update Cisco/Polycom Room Account Setting | `UpdateCiscoPolycomRoomAccountSetting` |
 
-### H.323 Devices
+### Api Connector
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/h323/devices` | List H.323 devices |
-| POST | `/h323/devices` | Register H.323 device |
-| GET | `/h323/devices/{deviceId}` | Get device details |
-| PATCH | `/h323/devices/{deviceId}` | Update device |
-| DELETE | `/h323/devices/{deviceId}` | Remove device |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/crc/api_connectors` | List API Connectors | `GetListAPIConnectors` |
+| POST | `/crc/api_connectors` | Create an API Connector | `CreateAPIConnector` |
+| DELETE | `/crc/api_connectors/{connectorId}` | Delete an API Connector | `DeleteAPIConnector` |
+| GET | `/crc/api_connectors/{connectorId}` | Get an API Connector | `GetAPIConnector` |
+| PATCH | `/crc/api_connectors/{connectorId}` | Update an API Connector | `UpdateAPIConnector` |
+| GET | `/crc/api_connectors/{connectorId}/private_key` | Get an API Connector's private key | `GetanAPIConnector'sprivatekey` |
+| PATCH | `/crc/api_connectors/{connectorId}/private_key` | Update an API Connector's private key | `UpdateAPIConnectorPrivateKey` |
 
-### Room Connectors
+### Cisco/Polycom Rooms
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/rooms/connectors` | List room connectors |
-| GET | `/rooms/connectors/{connectorId}` | Get connector details |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/crc/managed_rooms` | List Managed Rooms | `ListManagedRooms` |
+| POST | `/crc/managed_rooms` | Create a Managed Room | `CreateaManagedRoom` |
+| DELETE | `/crc/managed_rooms/{deviceId}` | Delete a managed room | `Deleteamanagedroom` |
+| GET | `/crc/managed_rooms/{deviceId}` | Get a Managed Room | `GetaManagedRoom` |
+| PATCH | `/crc/managed_rooms/{deviceId}` | Update a Managed Room | `UpdateaManagedRoom` |
 
-### Dial-In Information
+### Participant
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/meetings/{meetingId}/sip_dialing` | Get SIP dial-in info |
-| GET | `/meetings/{meetingId}/h323_dialing` | Get H.323 dial-in info |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/crc/participant_identifier_code` | Get participant identifier code | `get_participant_identifier_code` |
 
-## Example: Get CRC Settings
+### Room Template
 
-```bash
-curl -X GET "https://api.zoom.us/v2/accounts/{accountId}/crc" \
-  -H "Authorization: Bearer {accessToken}"
-```
-
-### Response
-
-```json
-{
-  "enabled": true,
-  "sip_uri": "meeting_id@zoomcrc.com",
-  "h323_ip_addresses": [
-    "162.255.37.11",
-    "162.255.36.11"
-  ],
-  "ports_allocated": 10,
-  "ports_in_use": 3
-}
-```
-
-## Example: Register SIP Device
-
-```bash
-curl -X POST "https://api.zoom.us/v2/sip_phones" \
-  -H "Authorization: Bearer {accessToken}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "authorization_name": "conf-room-1",
-    "domain": "sip.company.com",
-    "user_name": "conference_room_1",
-    "password": "secure_password",
-    "voice_mail": "Conference Room 1",
-    "registration_expire_time": 60
-  }'
-```
-
-## Example: Get Meeting SIP Dial-In
-
-```bash
-curl -X GET "https://api.zoom.us/v2/meetings/{meetingId}/sip_dialing" \
-  -H "Authorization: Bearer {accessToken}"
-```
-
-### Response
-
-```json
-{
-  "sip_dialing": {
-    "uri": "12345678910@zoomcrc.com",
-    "password": "abc123",
-    "ip_addresses": [
-      "162.255.37.11",
-      "162.255.36.11"
-    ]
-  }
-}
-```
-
-## SIP/H.323 Dial Strings
-
-### SIP URI Format
-```
-{meeting_id}.{passcode}@zoomcrc.com
-```
-
-### H.323 Format
-```
-IP: 162.255.37.11
-Meeting ID: {meeting_id}
-Passcode: {passcode}
-```
-
-## Device Registration Fields
-
-| Field | Description |
-|-------|-------------|
-| `authorization_name` | Unique device identifier |
-| `domain` | SIP domain |
-| `user_name` | Registration username |
-| `password` | Registration password |
-| `transport_protocol` | UDP, TCP, TLS, AUTO |
-| `registration_expire_time` | Expiration in seconds |
-
-## Port Management
-
-| Field | Description |
-|-------|-------------|
-| `ports_allocated` | Total CRC ports for account |
-| `ports_in_use` | Currently active connections |
-| `ports_available` | Remaining capacity |
-
-## Resources
-
-- **API Reference**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Cloud-Room-Connector
-- **CRC Documentation**: https://developers.zoom.us/docs/crc/
-- **SIP/H.323 Room Connector Guide**: https://support.zoom.us/hc/en-us/articles/201363273
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/crc/room_templates` | List Room Templates | `ListRoomTemplates` |
+| POST | `/crc/room_templates` | Create a Room Template | `CreateaRoomTemplate` |
+| DELETE | `/crc/room_templates/{templateId}` | Delete a room template | `Deletearoomtemplate` |
+| GET | `/crc/room_templates/{templateId}` | Get a Room Template | `GetaRoomTemplate` |
+| PATCH | `/crc/room_templates/{templateId}` | Update a Room Template | `UpdateaRoomTemplate` |

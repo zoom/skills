@@ -1,238 +1,111 @@
-# Commerce API
+# Zoom Commerce API
 
-App monetization and entitlement management for Zoom Marketplace apps.
+Authoritative endpoint inventory for Commerce. This file mirrors the official Zoom API Hub OpenAPI document for this product area.
 
-## Overview
+## Canonical Source
 
-The Commerce API enables Zoom App developers to manage in-app purchases, subscriptions, and user entitlements. It powers the monetization features for apps distributed through the Zoom App Marketplace.
+- OpenAPI JSON: https://developers.zoom.us/api-hub/commerce/methods/endpoints.json
+- Base URL: `https://api.zoom.us/v2`
+- Authentication details: [authentication.md](authentication.md)
 
-## Base URL
+## Notes
 
-```
-https://api.zoom.us/v2
-```
+- Endpoint methods and paths below are generated from the official Zoom API Hub `paths` object.
+- Scope names are defined per operation and frequently use granular scope names. Check the API Hub operation page for the exact scopes before implementation.
+- Use this file for endpoint discovery and inventory. Use `../examples/` for orchestration patterns, not as the canonical source of path names.
 
-## Authentication
+## Coverage
 
-Requires OAuth 2.0 with app-specific scopes:
-- `app:read:entitlements` - Read entitlements
-- `app:write:entitlements` - Manage entitlements
+| Metric | Value |
+|--------|-------|
+| Endpoint operations | 33 |
+| Path templates | 31 |
+| Tags | 8 |
 
-## Key Endpoints
+## Tag Index
 
-### Entitlements
+| Tag | Operations |
+|-----|------------|
+| Account Management | 4 |
+| Billing | 3 |
+| Deal Registration | 5 |
+| Order | 4 |
+| Platform | 3 |
+| Product Catalog | 3 |
+| Quote | 6 |
+| Subscription | 5 |
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/apps/{appId}/entitlements` | List all entitlements |
-| POST | `/apps/{appId}/entitlements/check` | Check user entitlement |
-| GET | `/apps/{appId}/users/{userId}/entitlements` | Get user's entitlements |
+## Endpoints by Tag
 
-### Subscriptions
+### Account Management
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/apps/{appId}/subscriptions` | List subscriptions |
-| GET | `/apps/{appId}/subscriptions/{subscriptionId}` | Get subscription details |
-| POST | `/apps/{appId}/subscriptions/{subscriptionId}/cancel` | Cancel subscription |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/commerce/account` | Create an end customer account | `createAccount` |
+| POST | `/commerce/account/{accountKey}/contacts` | Add contacts to an existing end customer or your own account. | `addAccountContact` |
+| GET | `/commerce/accounts` | Get the list of all accounts associated with a Zoom Partner/Sub-Reseller, by the account type | `getAllAccounts` |
+| GET | `/commerce/accounts/{accountKey}` | Get the account details for a Zoom Partner/Subreseller/End Customer | `getAccountDetails` |
 
-### Products
+### Billing
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/apps/{appId}/products` | List available products |
-| GET | `/apps/{appId}/products/{productId}` | Get product details |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/commerce/billing_documents` | Gets all billing documents for a distributor or a reseller | `getAllBillingDocs` |
+| GET | `/commerce/billing_documents/{documentNumber}/document` | Gets the PDF document for the billing document ID | `downloadBillingDoc` |
+| GET | `/commerce/invoices/{invoiceNumber}` | Get detailed information about a specific invoice for a distributor or a reseller | `getInvoiceDetail` |
 
-### Purchases
+### Deal Registration
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/apps/{appId}/purchases` | List purchases |
-| GET | `/apps/{appId}/purchases/{purchaseId}` | Get purchase details |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/commerce/campaigns` | Retrieves all valid Zoom Campaigns which a deal registration can be associated with. | `getCampaigns` |
+| POST | `/commerce/deal_registration` | Creates a new deal registration for a partner | `createDealReg` |
+| GET | `/commerce/deal_registrations` | Gets all valid Deal Registrations for a partner | `getAllDealRegs` |
+| GET | `/commerce/deal_registrations/{dealRegKey}` | Get details of a deal registration by registration number | `getDealRegDetails` |
+| PATCH | `/commerce/deal_registrations/{dealRegKey}` | Updates an existing deal registration | `Updatesanexistingdealregistration` |
 
-## Example: Check Entitlement
+### Order
 
-```bash
-curl -X POST "https://api.zoom.us/v2/apps/{appId}/entitlements/check" \
-  -H "Authorization: Bearer {accessToken}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_id": "user_abc",
-    "product_id": "premium_feature",
-    "account_id": "account_xyz"
-  }'
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/commerce/order` | Create a subscription order for a Zoom partner | `createOrder` |
+| POST | `/commerce/order/preview` | Preview delta order metrics and subscriptions in an order | `createOrderPreview` |
+| GET | `/commerce/orders` | Gets all orders for a Zoom partner. | `getAllOrders` |
+| GET | `/commerce/orders/{orderReferenceId}` | Get order details by order reference ID | `getOrderDetails` |
 
-### Response
+### Platform
 
-```json
-{
-  "entitled": true,
-  "entitlement": {
-    "id": "ent_123",
-    "product_id": "premium_feature",
-    "type": "subscription",
-    "status": "active",
-    "valid_until": "2024-12-31T23:59:59Z",
-    "quantity": 1
-  }
-}
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/commerce/file` | Upload an attachment pdf file in context of a deal registration or quote | `uploadFile` |
+| GET | `/commerce/files/{associatedReferenceId}/details` | Gets details of all files associated with a quote or deal registration | `allFileDetails` |
+| GET | `/commerce/files/{documentReferenceId}` | Download a file associated with a quote or deal registration. | `downloadFile.` |
 
-## Example: List User Entitlements
+### Product Catalog
 
-```bash
-curl "https://api.zoom.us/v2/apps/{appId}/users/{userId}/entitlements" \
-  -H "Authorization: Bearer {accessToken}"
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/commerce/catalog` | Gets Zoom Product Catalog for a Zoom Partner | `getOffers` |
+| GET | `/commerce/catalog/{offerId}` | Gets the details for a Zoom product or offer. | `getOfferDetail` |
+| GET | `/commerce/pricebooks` | Gets the pricebook in a downloadable file | `downloadPricebook` |
 
-### Response
+### Quote
 
-```json
-{
-  "entitlements": [
-    {
-      "id": "ent_123",
-      "product_id": "premium_plan",
-      "product_name": "Premium Plan",
-      "type": "subscription",
-      "status": "active",
-      "created_at": "2024-01-15T10:00:00Z",
-      "valid_until": "2024-02-15T10:00:00Z",
-      "auto_renew": true
-    },
-    {
-      "id": "ent_456",
-      "product_id": "addon_storage",
-      "product_name": "Extra Storage",
-      "type": "one_time",
-      "status": "active",
-      "created_at": "2024-01-20T14:30:00Z",
-      "valid_until": null
-    }
-  ]
-}
-```
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/commerce/quote` | Create a subscription quote for a Zoom Partner | `createQuote` |
+| POST | `/commerce/quote/preview` | Preview delta quote metrics and subscriptions in a quote | `createQuotePreview` |
+| GET | `/commerce/quotes` | Gets all quotes for a Zoom partner | `getAllQuotes` |
+| GET | `/commerce/quotes/{quoteReferenceId}` | Get quote details by quote reference ID | `getQuoteDetails` |
+| PATCH | `/commerce/quotes/{quoteReferenceId}` | Update a subscription quote for a Zoom partner | `updateQuote` |
+| PATCH | `/commerce/quotes/{quoteReferenceId}/fulfillment` | Submits a subscription quote for provisioning | `provisionQuote` |
 
-## Subscription Object
+### Subscription
 
-```json
-{
-  "id": "sub_abc123",
-  "product_id": "premium_monthly",
-  "user_id": "user_xyz",
-  "account_id": "acc_123",
-  "status": "active",
-  "plan": {
-    "id": "plan_monthly",
-    "name": "Premium Monthly",
-    "interval": "month",
-    "price": 9.99,
-    "currency": "USD"
-  },
-  "current_period": {
-    "start": "2024-01-15T00:00:00Z",
-    "end": "2024-02-15T00:00:00Z"
-  },
-  "cancel_at_period_end": false,
-  "created_at": "2024-01-15T10:00:00Z"
-}
-```
-
-## Entitlement Types
-
-| Type | Description |
-|------|-------------|
-| `subscription` | Recurring billing entitlement |
-| `one_time` | Single purchase, perpetual |
-| `trial` | Free trial period |
-| `promotional` | Promotional/gifted access |
-
-## Entitlement Status
-
-| Status | Description |
-|--------|-------------|
-| `active` | Currently valid |
-| `expired` | Past valid_until date |
-| `cancelled` | User cancelled |
-| `suspended` | Payment issue |
-| `pending` | Awaiting activation |
-
-## Webhook Events
-
-Handle these events in your app:
-
-| Event | Description |
-|-------|-------------|
-| `app.entitlement_granted` | New entitlement created |
-| `app.entitlement_revoked` | Entitlement removed |
-| `app.subscription_renewed` | Subscription renewed |
-| `app.subscription_cancelled` | User cancelled |
-| `app.trial_started` | Free trial began |
-| `app.trial_ended` | Free trial expired |
-| `app.payment_failed` | Payment processing failed |
-
-## Implementation Pattern
-
-```javascript
-// Middleware to check entitlement
-async function requireEntitlement(productId) {
-  return async (req, res, next) => {
-    const { entitled } = await checkEntitlement(
-      req.app.id,
-      req.user.id,
-      productId
-    );
-    
-    if (!entitled) {
-      return res.status(403).json({
-        error: 'subscription_required',
-        message: 'This feature requires a premium subscription',
-        upgrade_url: `/upgrade?product=${productId}`
-      });
-    }
-    
-    next();
-  };
-}
-
-// Usage
-app.get('/api/premium-feature', 
-  requireEntitlement('premium_plan'),
-  (req, res) => {
-    // Premium feature logic
-  }
-);
-```
-
-## Client-Side Purchase Flow
-
-```javascript
-// Initiate purchase from Zoom App
-import zoomSdk from '@zoom/appssdk';
-
-async function initiatePurchase(productId) {
-  try {
-    await zoomSdk.openPurchaseFlow({
-      product_id: productId,
-      success_url: 'https://yourapp.com/purchase/success',
-      cancel_url: 'https://yourapp.com/purchase/cancel'
-    });
-  } catch (error) {
-    console.error('Purchase flow error:', error);
-  }
-}
-```
-
-## Revenue Share
-
-| Party | Percentage |
-|-------|------------|
-| Developer | 85% |
-| Zoom | 15% |
-
-## Resources
-
-- **Monetization Guide**: https://developers.zoom.us/docs/distribute/monetization/
-- **Marketplace Distribution**: https://developers.zoom.us/docs/distribute/
-- **Webhook Events**: https://developers.zoom.us/docs/api/rest/reference/zoom-api/events/
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/commerce/subscriptions` | Gets paid subscriptions for a Zoom partner. | `getAllSubscriptions` |
+| GET | `/commerce/subscriptions/{subscriptionNumber}` | Gets subscription details for a given subscription number | `getSubscriptionDetails` |
+| GET | `/commerce/subscriptions/{subscriptionNumber}/versions` | Gets subscription changes/versions for a given subscription number. | `getSubscriptionVersions` |
+| GET | `/commerce/trials` | Get trial subscriptions for a Zoom partner | `getAllTrialSubscriptions` |
+| GET | `/commerce/trials/{trialReferenceId}` | Get trial details for an end customer by their Zoom account number or the trial ID | `getTrialDetails` |
