@@ -32,6 +32,7 @@ This repository contains skills for building with Zoom SDKs, APIs, MCP servers, 
 | **[zoom-meeting-sdk](meeting-sdk/SKILL.md)** | Embed Zoom meetings in your app (Web, React Native, Electron, Linux) |
 | **[zoom-video-sdk](video-sdk/SKILL.md)** | Custom video experiences (Web, React Native, Flutter, Android, iOS, macOS, Unity, Linux) |
 | **[zoom-apps-sdk](zoom-apps-sdk/SKILL.md)** | Apps that run inside the Zoom client |
+| **[scribe](scribe/SKILL.md)** | Zoom AI Services Scribe for synchronous and batch transcription of uploaded or stored media |
 | **[zoom-rtms](rtms/SKILL.md)** | Real-Time Media Streams (live audio/video/transcripts) |
 | **[zoom-team-chat](team-chat/SKILL.md)** | Team Chat messaging and channels |
 | **[virtual-agent](virtual-agent/SKILL.md)** | Virtual Agent web/mobile chat embeds and KB sync workflows |
@@ -87,6 +88,7 @@ Use `zoom-general` when:
 | Build custom video experiences | **zoom-video-sdk** |
 | Build an app inside Zoom client | **zoom-apps-sdk** |
 | Access live audio/video/transcripts | **zoom-rtms** |
+| Transcribe uploaded or stored media files into text | **scribe** |
 | Build Team Chat integrations | **zoom-team-chat** |
 | Build Virtual Agent chat/campaign experiences | **virtual-agent** |
 | Build Contact Center integrations (apps/web/mobile) | **contact-center** |

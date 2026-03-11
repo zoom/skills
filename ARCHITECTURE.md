@@ -54,6 +54,7 @@ Common route outcomes:
 - Embedded meetings -> `meeting-sdk`
 - Custom video sessions -> `video-sdk`
 - In-client apps -> `zoom-apps-sdk`
+- Uploaded/stored media transcription -> `scribe`
 - Live media streams -> `rtms`
 - Contact Center -> `contact-center`
 - Virtual Agent web/mobile chat and KB sync -> `virtual-agent`
@@ -83,6 +84,7 @@ repo/
 │   ├── meeting-sdk/
 │   ├── video-sdk/
 │   ├── zoom-apps-sdk/
+│   ├── scribe/
 │   ├── rtms/
 │   ├── team-chat/
 │   ├── contact-center/
@@ -140,6 +142,7 @@ Platform-heavy spokes (examples):
 | `meeting-sdk` | Embed Zoom meetings in apps |
 | `video-sdk` | Build custom video session experiences |
 | `zoom-apps-sdk` | Build apps inside Zoom client surfaces |
+| `scribe` | Zoom AI Services Scribe for synchronous and batch transcription of uploaded or stored media |
 | `rtms` | Real-time media streams |
 | `team-chat` | Team Chat integrations |
 | `contact-center` | Contact Center app/web/mobile integrations |

@@ -94,6 +94,7 @@ For the full TypeScript implementation and handoff contract, use
 | Embed Zoom meetings in my app | **[zoom-meeting-sdk](../meeting-sdk/SKILL.md)** |
 | Build custom video experiences (Web, React Native, Flutter, Android, iOS, macOS, Unity, Linux) | **[zoom-video-sdk](../video-sdk/SKILL.md)** |
 | Build an app that runs inside Zoom client | **[zoom-apps-sdk](../zoom-apps-sdk/SKILL.md)** |
+| Transcribe uploaded or stored media with AI Services Scribe | **[scribe](../scribe/SKILL.md)** |
 | Access live audio/video/transcripts from meetings | **[zoom-rtms](../rtms/SKILL.md)** |
 | Enable collaborative browsing for support | **[zoom-cobrowse-sdk](../cobrowse-sdk/SKILL.md)** |
 | Build Contact Center apps and channel integrations | **[contact-center](../contact-center/SKILL.md)** |
@@ -187,6 +188,7 @@ Both receive event notifications, but differ in approach:
 | Use Case | Description | Skills Needed |
 |----------|-------------|---------------|
 | [Meeting + Webhooks + OAuth Refresh](references/meeting-webhooks-oauth-refresh-orchestration.md) | Create a meeting, process real-time updates, and refresh OAuth tokens safely in one design | [zoom-rest-api](../rest-api/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) + [zoom-webhooks](../webhooks/SKILL.md) |
+| [Scribe Transcription Pipeline](use-cases/scribe-transcription-pipeline.md) | Transcribe uploaded files or S3 archives with AI Services Scribe using fast mode or batch jobs | [scribe](../scribe/SKILL.md) + optional [zoom-rest-api](../rest-api/SKILL.md) + optional [zoom-webhooks](../webhooks/SKILL.md) |
 | [APIs vs MCP Routing](use-cases/apis-vs-mcp-routing.md) | Decide whether to route to deterministic Zoom APIs, AI-driven MCP, or a hybrid design | [zoom-rest-api](../rest-api/SKILL.md) and/or [zoom-mcp](../zoom-mcp/SKILL.md) |
 | [Custom Meeting UI (Web)](use-cases/custom-meeting-ui-web.md) | Build a custom video UI for a real Zoom meeting in a web app using Meeting SDK Component View | [zoom-meeting-sdk-web-component-view](../meeting-sdk/web/component-view/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [Meeting Automation](use-cases/meeting-automation.md) | Schedule, update, delete meetings programmatically | [zoom-rest-api](../rest-api/SKILL.md) |
@@ -228,6 +230,7 @@ Both receive event notifications, but differ in approach:
 - [Probe SDK Preflight Readiness Gate](use-cases/probe-sdk-preflight-readiness-gate.md): run browser/device/network diagnostics before launching meeting or video session workflows.
 - [Custom Video](use-cases/custom-video.md): decide between Video SDK and related components for custom session UX.
 - [Custom Meeting UI (Web)](use-cases/custom-meeting-ui-web.md): use Meeting SDK Component View for a custom UI around a real Zoom meeting.
+- [Scribe Transcription Pipeline](use-cases/scribe-transcription-pipeline.md): use AI Services Scribe for on-demand file transcription and batch archive processing.
 - [Video SDK Bring Your Own Storage](use-cases/video-sdk-bring-your-own-storage.md): configure Video SDK cloud recordings to write directly to your own S3 bucket.
 - [Customer Support Cobrowsing](use-cases/customer-support-cobrowsing.md): implement customer-agent collaborative browsing support flows.
 - [Embed Meetings](use-cases/embed-meetings.md): embed Zoom meeting experience into your app.

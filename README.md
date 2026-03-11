@@ -136,6 +136,7 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | [zoom-meeting-sdk](skills/meeting-sdk/) | Embed Zoom meetings (Web, React Native, Electron, Linux headless bots) |
 | [zoom-video-sdk](skills/video-sdk/) | Custom video experiences (Web, React Native, Flutter, Linux headless bots) |
 | [zoom-apps-sdk](skills/zoom-apps-sdk/) | Apps that run inside Zoom client |
+| [scribe](skills/scribe/) | AI Services Scribe for uploaded-file and batch archive transcription |
 | [zoom-rtms](skills/rtms/) | Real-time Media Streams (live audio/video/transcripts) |
 | [zoom-team-chat](skills/team-chat/) | Team Chat APIs and integrations |
 | [virtual-agent](skills/virtual-agent/) | Virtual Agent web embeds, Android/iOS wrappers, and KB sync workflows |
@@ -158,6 +159,7 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | Custom video experiences | zoom-video-sdk |
 | Auto-download recordings to S3/GCS | webhooks + zoom-rest-api |
 | Real-time AI processing | rtms |
+| Batch or on-demand media transcription | scribe |
 | In-meeting collaborative apps | zoom-apps-sdk |
 | Team Chat integrations | zoom-team-chat |
 | Virtual Agent campaign/chat flows (web + mobile wrappers) | virtual-agent + contact-center |
@@ -182,6 +184,7 @@ zoom-general (HUB)
        ├── zoom-meeting-sdk
        ├── zoom-video-sdk
        ├── zoom-apps-sdk
+       ├── scribe
        ├── zoom-rtms
        ├── zoom-team-chat
        ├── virtual-agent
