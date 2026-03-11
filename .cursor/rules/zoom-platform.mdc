@@ -1,0 +1,43 @@
+---
+description: For Zoom Developer Platform tasks, prefer current official documentation over memory and route to the matching skill under skills/.
+alwaysApply: false
+globs:
+  - "**/*.md"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.mjs"
+  - "**/*.cjs"
+  - "**/*.json"
+---
+# Zoom Developer Platform
+
+Stop and verify current Zoom documentation before answering unstable questions about:
+- API endpoints and scopes
+- SDK versions and platform setup
+- MCP tools, scopes, and endpoints
+- rate limits
+- app types and Marketplace requirements
+
+## Preferred sources
+
+- Zoom API Hub: `https://developers.zoom.us/api-hub/`
+- Zoom docs: `https://developers.zoom.us/`
+- Zoom Developer Forum: `https://devforum.zoom.us/`
+- Zoom MCP:
+  - `https://mcp-us.zoom.us/mcp/zoom/streamable`
+  - `https://mcp-us.zoom.us/mcp/whiteboard/streamable`
+
+## Routing
+
+Route to the closest matching skill under `skills/` first:
+- `skills/general/` for cross-product routing
+- `skills/rest-api/` for deterministic API automation
+- `skills/meeting-sdk/` for embedded Zoom meetings
+- `skills/video-sdk/` for custom video sessions
+- `skills/zoom-mcp/` for Zoom-hosted MCP workflows
+- `skills/webhooks/` and `skills/websockets/` for event delivery
+
+Do not answer Meeting SDK and Video SDK tasks interchangeably.
+Do not answer REST API and MCP tasks interchangeably.

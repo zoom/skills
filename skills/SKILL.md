@@ -18,9 +18,8 @@ This repository contains skills for building with Zoom SDKs, APIs, MCP servers, 
 
 ## Repo Notes
 
-- [tools/zoom-crawler/README.md](tools/zoom-crawler/README.md) - crawler usage for ingesting Zoom docs and API references into markdown
-- [tools/thread-triage/README.md](tools/thread-triage/README.md) - forum triage outputs, product backlogs, and skill coverage gap reports
 - [general/references/sdk-upgrade-workflow.md](general/references/sdk-upgrade-workflow.md) - reusable changelog + RSS version-by-version SDK upgrade workflow
+- Repository-level tooling, plugin manifests, and maintenance docs live at the packaging root; raw-skill installs should treat this `skills/` tree as the portable boundary.
 
 ## Folder Structure
 
@@ -128,4 +127,4 @@ Source: https://developers.zoom.us/docs/mcp/library/resources/apis-vs-mcp/
 
 ## Operations
 
-- [RUNBOOK.md](RUNBOOK.md) - 5-minute preflight and debugging checklist.
+- Use the product `RUNBOOK.md` files inside each skill directory for runtime/debugging guidance during raw-skill installs.

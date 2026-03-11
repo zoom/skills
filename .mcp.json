@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "zoom-mcp": {
+      "type": "http",
+      "url": "https://mcp-us.zoom.us/mcp/zoom/streamable"
+    },
+    "zoom-whiteboard-mcp": {
+      "type": "http",
+      "url": "https://mcp-us.zoom.us/mcp/whiteboard/streamable"
+    }
+  }
+}

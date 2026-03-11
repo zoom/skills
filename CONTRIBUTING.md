@@ -68,7 +68,7 @@ description: |
 
 ### Repository Naming Conventions
 
-- Keep canonical skill folder names aligned with root [SKILL.md](SKILL.md).
+- Keep canonical skill folder names aligned with [skills/SKILL.md](skills/SKILL.md).
 - Current canonical folders include:
 - `general`, `rest-api`, `webhooks`, `websockets`, `meeting-sdk`, `video-sdk`, `zoom-apps-sdk`
 - `rtms`, `team-chat`, `ui-toolkit`, `cobrowse-sdk`, `oauth`, `zoom-mcp`

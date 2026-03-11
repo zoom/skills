@@ -1,0 +1,15 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "zoom-skills",
+  "owner": {
+    "name": "Zoom",
+    "url": "https://github.com/zoom/skills"
+  },
+  "plugins": [
+    {
+      "name": "zoom-skills",
+      "source": "./",
+      "description": "Skills for the Zoom Developer Platform"
+    }
+  ]
+}

@@ -2,53 +2,85 @@
 
 Skills for building with Zoom SDKs, APIs, MCP servers, and integrations across web, mobile, desktop, and server environments.
 
-Primary skill entrypoint: [SKILL.md](SKILL.md)
+Primary skill entrypoint: [skills/SKILL.md](skills/SKILL.md)
 
 ## Installation
 
-### Codex
+### Claude Code Plugin Install
 
-Codex loads skills from `~/.codex/skills/`. This repo is a single skill folder (it contains the root `SKILL.md`), so you can install it as one directory.
+This repository is packaged as a Claude plugin:
+- plugin manifest: [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json)
+- marketplace manifest: [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
+- bundled MCP servers: [`.mcp.json`](.mcp.json)
 
-Option A: clone directly into Codex skills:
+Install from GitHub using Claude Code:
 ```bash
-git clone https://github.com/zoom/skills.git ~/.codex/skills/zoom-skills
+/plugin marketplace add zoom/skills
+/plugin install zoom-skills@zoom-skills
 ```
 
-Option B: keep a working copy and symlink it (recommended for easy updates):
+Or add the local checkout as a marketplace source:
+```bash
+/plugin marketplace add /absolute/path/to/zoom-skills
+/plugin install zoom-skills@zoom-skills
+```
+
+### Native Agent Skills Installs
+
+These editors document native `SKILL.md` support or compatible skill directories:
+
+| Agent | Install Model | Location | Docs |
+|-------|---------------|----------|------|
+| Cline | Native skills | `~/.cline/skills/` or `.cline/skills/` | [skills](https://docs.cline.bot/customization/skills) |
+| BLACKBOX AI | Native skills | `.blackbox/skills/` | [skills](https://docs.blackbox.ai/features/blackbox-cli/skills) |
+
+Clone once:
+
 ```bash
 git clone https://github.com/zoom/skills.git ~/zoom-skills
-ln -s ~/zoom-skills ~/.codex/skills/zoom-skills
 ```
 
-If you previously installed it under a different folder name (for example `agent-skills`), remove/replace the old folder so Codex doesn’t load duplicates:
-```bash
-rm -rf ~/.codex/skills/agent-skills
-```
-
-### Claude Code
+Cline raw skill install:
 
 ```bash
-# Clone the repository
-git clone https://github.com/zoom/skills.git
-
-# Copy to Claude Code skills directory
-cp -r skills ~/.claude/skills/zoom-skills
+mkdir -p ~/.cline/skills
+find ~/zoom-skills/skills -mindepth 1 -maxdepth 1 -type d -exec cp -r {} ~/.cline/skills/ \;
 ```
 
-Or install individual skills:
-```bash
-cp -r skills/general ~/.claude/skills/
-cp -r skills/meeting-sdk ~/.claude/skills/
-cp -r skills/zoom-mcp ~/.claude/skills/
-```
-
-### OpenCode
+BLACKBOX AI project install:
 
 ```bash
-# Copy to OpenCode skills directory
-cp -r skills ~/.config/opencode/skills/zoom-skills
+mkdir -p .blackbox/skills
+find ~/zoom-skills/skills -mindepth 1 -maxdepth 1 -type d -exec cp -r {} .blackbox/skills/ \;
 ```
+
+If you previously installed this repo under the older `agent-skills` name, remove the old folder so your agent does not load duplicates.
+
+### Agents Without Native SKILL.md Installs
+
+These editors do not expose a documented first-class `SKILL.md` install flow comparable to Cline or BLACKBOX AI. Use the nearest equivalent:
+
+| Tool | Recommended Integration | Docs |
+|------|-------------------------|------|
+| Roo Code | Port the relevant skill into Custom Modes and add MCP servers separately | [docs](https://docs.roocode.com/) |
+| Kilo Code | Port the relevant skill into Custom Modes / Custom Rules and add MCP servers separately | [docs](https://kilocode.ai/docs) |
+
+Recommended starting point for Roo Code or Kilo Code:
+
+1. Start from [skills/general/SKILL.md](skills/general/SKILL.md) for routing and product selection.
+2. Copy the target product skill into your mode/rule prompt, for example:
+   - [skills/rest-api/SKILL.md](skills/rest-api/SKILL.md)
+   - [skills/meeting-sdk/SKILL.md](skills/meeting-sdk/SKILL.md)
+   - [skills/video-sdk/SKILL.md](skills/video-sdk/SKILL.md)
+   - [skills/zoom-mcp/SKILL.md](skills/zoom-mcp/SKILL.md)
+3. Add the Zoom MCP servers separately from [`.mcp.json`](.mcp.json) if your editor supports MCP.
+
+### Cursor
+
+Cursor packaging metadata is included for marketplace-style consumers:
+- plugin manifest: [`.cursor-plugin/plugin.json`](.cursor-plugin/plugin.json)
+- marketplace manifest: [`.cursor-plugin/marketplace.json`](.cursor-plugin/marketplace.json)
+- repo rules: [`.cursor/rules/`](.cursor/rules/)
 
 ### Context7
 
@@ -97,24 +129,24 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 
 | Skill | Description |
 |-------|-------------|
-| [zoom-general](general/) | **Hub** - Core concepts, authentication, use cases, routing |
-| [zoom-rest-api](rest-api/) | 600+ REST API endpoints, rate limits, pagination |
-| [zoom-webhooks](webhooks/) | Real-time event notifications |
-| [zoom-websockets](websockets/) | Real-time WebSocket event connections |
-| [zoom-meeting-sdk](meeting-sdk/) | Embed Zoom meetings (Web, React Native, Electron, Linux headless bots) |
-| [zoom-video-sdk](video-sdk/) | Custom video experiences (Web, React Native, Flutter, Linux headless bots) |
-| [zoom-apps-sdk](zoom-apps-sdk/) | Apps that run inside Zoom client |
-| [zoom-rtms](rtms/) | Real-time Media Streams (live audio/video/transcripts) |
-| [zoom-team-chat](team-chat/) | Team Chat APIs and integrations |
-| [virtual-agent](virtual-agent/) | Virtual Agent web embeds, Android/iOS wrappers, and KB sync workflows |
-| [contact-center](contact-center/) | Contact Center apps, web embeds, and Android/iOS native SDKs |
-| [phone](phone/) | Zoom Phone APIs, Smart Embed, URI schemes, and webhook patterns |
-| [rivet-sdk](rivet-sdk/) | Rivet JavaScript server framework for auth, webhooks, and typed endpoint wrappers |
-| [probe-sdk](probe-sdk/) | Browser/device/network readiness diagnostics before Meeting SDK or Video SDK joins |
-| [zoom-ui-toolkit](ui-toolkit/) | Pre-built UI components for Video SDK |
-| [zoom-cobrowse-sdk](cobrowse-sdk/) | Collaborative browsing for support |
-| [zoom-oauth](oauth/) | OAuth authentication (all 4 grant types) |
-| [zoom-mcp](zoom-mcp/) | Zoom-hosted MCP server workflows for AI-agent tooling, meeting summaries, and transcript retrieval |
+| [zoom-general](skills/general/) | **Hub** - Core concepts, authentication, use cases, routing |
+| [zoom-rest-api](skills/rest-api/) | 600+ REST API endpoints, rate limits, pagination |
+| [zoom-webhooks](skills/webhooks/) | Real-time event notifications |
+| [zoom-websockets](skills/websockets/) | Real-time WebSocket event connections |
+| [zoom-meeting-sdk](skills/meeting-sdk/) | Embed Zoom meetings (Web, React Native, Electron, Linux headless bots) |
+| [zoom-video-sdk](skills/video-sdk/) | Custom video experiences (Web, React Native, Flutter, Linux headless bots) |
+| [zoom-apps-sdk](skills/zoom-apps-sdk/) | Apps that run inside Zoom client |
+| [zoom-rtms](skills/rtms/) | Real-time Media Streams (live audio/video/transcripts) |
+| [zoom-team-chat](skills/team-chat/) | Team Chat APIs and integrations |
+| [virtual-agent](skills/virtual-agent/) | Virtual Agent web embeds, Android/iOS wrappers, and KB sync workflows |
+| [contact-center](skills/contact-center/) | Contact Center apps, web embeds, and Android/iOS native SDKs |
+| [phone](skills/phone/) | Zoom Phone APIs, Smart Embed, URI schemes, and webhook patterns |
+| [rivet-sdk](skills/rivet-sdk/) | Rivet JavaScript server framework for auth, webhooks, and typed endpoint wrappers |
+| [probe-sdk](skills/probe-sdk/) | Browser/device/network readiness diagnostics before Meeting SDK or Video SDK joins |
+| [zoom-ui-toolkit](skills/ui-toolkit/) | Pre-built UI components for Video SDK |
+| [zoom-cobrowse-sdk](skills/cobrowse-sdk/) | Collaborative browsing for support |
+| [zoom-oauth](skills/oauth/) | OAuth authentication (all 4 grant types) |
+| [zoom-mcp](skills/zoom-mcp/) | Zoom-hosted MCP server workflows for AI-agent tooling, meeting summaries, and transcript retrieval |
 
 ## Common Use Cases
 
@@ -166,32 +198,39 @@ zoom-general (HUB)
 ## Directory Structure
 
 ```text
-skills/
-├── README.md                 # This file
+repo/
+├── .claude-plugin/           # Claude plugin and marketplace manifests
+├── .cursor/                  # Cursor rules and repo guidance
+├── .cursor-plugin/           # Cursor plugin and marketplace manifests
+├── .mcp.json                 # Bundled Zoom MCP server endpoints
+├── README.md                 # Packaging and installation overview
 ├── ARCHITECTURE.md           # Full architecture diagram
-│
-├── general/                  # HUB (entry point)
-│   ├── SKILL.md
-│   ├── references/           # Cross-cutting docs
-│   └── use-cases/            # Multi-skill scenarios
-│
-├── rest-api/
-├── webhooks/
-├── websockets/
-├── meeting-sdk/
-├── video-sdk/
-├── zoom-apps-sdk/
-├── rtms/
-├── team-chat/
-├── contact-center/
-├── virtual-agent/
-├── phone/
-├── rivet-sdk/
-├── probe-sdk/
-├── ui-toolkit/
-├── cobrowse-sdk/
-├── oauth/
-└── zoom-mcp/
+├── CONTRIBUTING.md           # Contribution guidance
+├── RUNBOOK.md                # Repo-level maintenance notes
+├── skills/                   # Installable skill tree
+│   ├── SKILL.md              # Skill bundle entrypoint
+│   ├── general/              # HUB (entry point)
+│   │   ├── SKILL.md
+│   │   ├── references/       # Cross-cutting docs
+│   │   └── use-cases/        # Multi-skill scenarios
+│   ├── rest-api/
+│   ├── webhooks/
+│   ├── websockets/
+│   ├── meeting-sdk/
+│   ├── video-sdk/
+│   ├── zoom-apps-sdk/
+│   ├── rtms/
+│   ├── team-chat/
+│   ├── contact-center/
+│   ├── virtual-agent/
+│   ├── phone/
+│   ├── rivet-sdk/
+│   ├── probe-sdk/
+│   ├── ui-toolkit/
+│   ├── cobrowse-sdk/
+│   ├── oauth/
+│   └── zoom-mcp/
+└── tools/                    # Audit, crawl, and maintenance helpers
 ```
 
 ## Resources
@@ -200,6 +239,8 @@ skills/
 - [Zoom App Marketplace](https://marketplace.zoom.us/)
 - [Zoom Developer Forum](https://devforum.zoom.us/)
 - [Zoom GitHub](https://github.com/zoom)
+- [RUNBOOK.md](RUNBOOK.md) - repository maintenance and preflight checklist
+- [tools/thread-triage/README.md](tools/thread-triage/README.md) - forum triage outputs and skill-gap tracking
 
 ## Contributing
 

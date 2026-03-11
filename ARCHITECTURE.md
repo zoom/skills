@@ -4,13 +4,36 @@ This document describes the structure and routing model of the Zoom skills repos
 
 ## Overview
 
-The repository uses a hub-and-spoke model:
+The repository has two layers:
+
+- a **packaging layer** at repo root for plugin manifests, MCP server definitions, and editor rules
+- an **installable skill tree** under `skills/`
+
+Within the skill tree, the repository uses a hub-and-spoke model:
 
 - `general` is the hub for routing and cross-product guidance.
 - Product folders are spokes with product-specific `SKILL.md` files and deeper references/examples.
 - `SKILL.md` is the canonical entry file per skill directory.
 
-See also: [SKILL.md](SKILL.md)
+See also: [skills/SKILL.md](skills/SKILL.md)
+
+## Packaging Layer
+
+```text
+repo root
+  -> .claude-plugin/       Claude plugin metadata
+  -> .cursor-plugin/       Cursor marketplace-style metadata
+  -> .cursor/rules/        Cursor behavioral rules for this repo
+  -> .mcp.json             bundled Zoom MCP server endpoints
+  -> skills/               canonical skill content
+```
+
+Consumer model:
+
+- **Claude Code**: plugin install via `.claude-plugin/` and `skills/`
+- **Cline / BLACKBOX AI**: copy skill directories from `skills/` into their native skill folders
+- **Roo Code / Kilo Code**: adapt `skills/` content into modes/rules; add Zoom MCP servers separately
+- **Cursor-style consumers**: use `.cursor/rules/`, editor instructions, and `.mcp.json`
 
 ## Hub-and-Spoke Routing
 
@@ -41,29 +64,38 @@ Common route outcomes:
 ## Directory Structure
 
 ```text
-skills/
-├── SKILL.md
+repo/
+├── .claude-plugin/
+├── .cursor/
+│   └── rules/
+├── .cursor-plugin/
+├── .mcp.json
+├── README.md
 ├── ARCHITECTURE.md
 ├── CONTRIBUTING.md
-├── general/
-├── rest-api/
-├── webhooks/
-├── websockets/
-├── meeting-sdk/
-├── video-sdk/
-├── zoom-apps-sdk/
-├── rtms/
-├── team-chat/
-├── contact-center/
-├── virtual-agent/
-├── phone/
-├── rivet-sdk/
-├── probe-sdk/
-├── ui-toolkit/
-├── cobrowse-sdk/
-├── oauth/
-├── zoom-mcp/
-│   └── whiteboard/
+├── RUNBOOK.md
+├── skills/
+│   ├── SKILL.md
+│   ├── general/
+│   ├── rest-api/
+│   ├── webhooks/
+│   ├── websockets/
+│   ├── meeting-sdk/
+│   ├── video-sdk/
+│   ├── zoom-apps-sdk/
+│   ├── rtms/
+│   ├── team-chat/
+│   ├── contact-center/
+│   ├── virtual-agent/
+│   ├── phone/
+│   ├── rivet-sdk/
+│   ├── probe-sdk/
+│   ├── ui-toolkit/
+│   ├── cobrowse-sdk/
+│   ├── oauth/
+│   ├── zoom-mcp/
+│   │   └── whiteboard/
+│   └── ...
 └── tools/
 ```
 
@@ -92,6 +124,11 @@ Platform-heavy spokes (examples):
 - Put multi-product workflows in `general/use-cases/`.
 - Link chained skills explicitly from those use cases.
 
+5. Packaging separation
+- Keep repo-root packaging metadata separate from the installable skill tree.
+- Treat `skills/` as the canonical source for portable skill content.
+- Keep editor-specific adapters thin; they should point back to `skills/`, not fork the content.
+
 ## Product Skill Summary
 
 | Skill | Purpose |
@@ -119,5 +156,5 @@ Platform-heavy spokes (examples):
 ## Maintenance Notes
 
 - Use `tools/md-audit/md_audit.py` to validate links/orphans after large doc changes.
-- Keep naming/folder conventions aligned with root `SKILL.md`.
+- Keep naming/folder conventions aligned with `skills/SKILL.md`.
 - Update architecture references when adding/removing product folders.

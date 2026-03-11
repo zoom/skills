@@ -1,0 +1,33 @@
+---
+description: Protect Zoom secrets and prefer server-side token generation for SDK and OAuth workflows.
+alwaysApply: false
+globs:
+  - "**/*.md"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.mjs"
+  - "**/*.cjs"
+  - "**/*.json"
+  - "**/*.env*"
+---
+# Zoom Security
+
+Never expose the following in committed code or client-side examples:
+- SDK secrets
+- OAuth client secrets
+- Server-to-Server OAuth credentials
+- raw bearer tokens
+
+## Preferred patterns
+
+- Generate Meeting SDK or Video SDK signatures server-side
+- Exchange OAuth credentials server-side
+- Keep Zoom Docs, MCP, and REST API access tokens outside committed files
+- Use `.env.example` for placeholders only
+
+## Docs guidance
+
+- If an example requires a secret, show the environment variable name, not a real value
+- If a browser app needs authenticated data, document the backend handoff explicitly
