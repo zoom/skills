@@ -22,6 +22,67 @@ triggers:
 
 Entry point for building with Zoom. This skill helps you choose the right SDK or API and provides cross-product guidance.
 
+## How `zoom-general` Routes a Complex Developer Query
+
+Use `zoom-general` as the classifier and chaining layer:
+
+1. detect product signals in the query
+2. pick one primary skill
+3. attach secondary skills for auth, events, or deployment edges
+4. ask one short clarifier only when two routes match with similar confidence
+
+Minimal implementation:
+
+```ts
+type SkillId =
+  | 'zoom-general'
+  | 'zoom-rest-api'
+  | 'zoom-webhooks'
+  | 'zoom-oauth'
+  | 'zoom-meeting-sdk-web-component-view'
+  | 'zoom-video-sdk'
+  | 'zoom-mcp';
+
+const hasAny = (q: string, words: string[]) => words.some((w) => q.includes(w));
+
+function detectSignals(rawQuery: string) {
+  const q = rawQuery.toLowerCase();
+  return {
+    meetingCustomUi: hasAny(q, ['zoom meeting', 'custom ui', 'component view', 'embed meeting']),
+    customVideo: hasAny(q, ['video sdk', 'custom video session', 'peer-video-state-change']),
+    restApi: hasAny(q, ['rest api', '/v2/', 'create meeting', 'list users', 's2s oauth']),
+    webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
+    oauth: hasAny(q, ['oauth', 'pkce', 'token refresh', 'account_credentials']),
+    mcp: hasAny(q, ['zoom mcp', 'agentic retrieval', 'tools/list', 'semantic meeting search']),
+  };
+}
+
+function pickPrimarySkill(s: ReturnType<typeof detectSignals>): SkillId {
+  if (s.meetingCustomUi) return 'zoom-meeting-sdk-web-component-view';
+  if (s.mcp) return 'zoom-mcp';
+  if (s.restApi) return 'zoom-rest-api';
+  if (s.customVideo) return 'zoom-video-sdk';
+  return 'zoom-general';
+}
+
+function buildChain(primary: SkillId, s: ReturnType<typeof detectSignals>): SkillId[] {
+  const chain = [primary];
+  if (s.oauth && !chain.includes('zoom-oauth')) chain.push('zoom-oauth');
+  if (s.webhooks && !chain.includes('zoom-webhooks')) chain.push('zoom-webhooks');
+  return chain;
+}
+```
+
+Example:
+
+- `Create a meeting, configure webhooks, and handle OAuth token refresh` ->
+  `zoom-rest-api -> zoom-oauth -> zoom-webhooks`
+- `Build a custom video UI for a Zoom meeting on web` ->
+  `zoom-meeting-sdk-web-component-view`
+
+For the full TypeScript implementation and handoff contract, use
+[references/routing-implementation.md](references/routing-implementation.md).
+
 ## Choose Your Path
 
 | I want to... | Use this skill |
@@ -125,6 +186,7 @@ Both receive event notifications, but differ in approach:
 
 | Use Case | Description | Skills Needed |
 |----------|-------------|---------------|
+| [Meeting + Webhooks + OAuth Refresh](references/meeting-webhooks-oauth-refresh-orchestration.md) | Create a meeting, process real-time updates, and refresh OAuth tokens safely in one design | [zoom-rest-api](../rest-api/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) + [zoom-webhooks](../webhooks/SKILL.md) |
 | [APIs vs MCP Routing](use-cases/apis-vs-mcp-routing.md) | Decide whether to route to deterministic Zoom APIs, AI-driven MCP, or a hybrid design | [zoom-rest-api](../rest-api/SKILL.md) and/or [zoom-mcp](../zoom-mcp/SKILL.md) |
 | [Custom Meeting UI (Web)](use-cases/custom-meeting-ui-web.md) | Build a custom video UI for a real Zoom meeting in a web app using Meeting SDK Component View | [zoom-meeting-sdk-web-component-view](../meeting-sdk/web/component-view/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [Meeting Automation](use-cases/meeting-automation.md) | Schedule, update, delete meetings programmatically | [zoom-rest-api](../rest-api/SKILL.md) |

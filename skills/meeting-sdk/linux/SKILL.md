@@ -16,6 +16,55 @@ triggers:
 
 Expert guidance for building headless meeting bots with the Zoom Meeting SDK on Linux. This SDK enables server-side meeting participation, raw media capture, transcription, and AI-powered meeting automation.
 
+## How to Build a Meeting Bot That Automatically Joins and Records
+
+Use this skill when the requirement is:
+- visible bot joins a real Zoom meeting
+- the bot records raw media itself
+- or the bot triggers a Zoom-managed cloud-recording workflow after join
+
+Skill chain:
+- primary: `meeting-sdk/linux`
+- add `zoom-rest-api` for OBF/ZAK lookup, scheduling, or cloud-recording settings
+- add `zoom-webhooks` when post-meeting cloud recording retrieval is required
+
+Minimal raw-recording flow:
+
+```cpp
+JoinParam join_param;
+join_param.userType = SDK_UT_WITHOUT_LOGIN;
+auto& params = join_param.param.withoutloginuserJoin;
+params.meetingNumber = meeting_number;
+params.userName = "Recording Bot";
+params.psw = meeting_password.c_str();
+params.app_privilege_token = obf_token.c_str();
+
+SDKError join_err = meeting_service->Join(join_param);
+if (join_err != SDKERR_SUCCESS) {
+    throw std::runtime_error("join_failed");
+}
+
+// In MEETING_STATUS_INMEETING callback:
+auto* record_ctrl = meeting_service->GetMeetingRecordingController();
+if (!record_ctrl) {
+    throw std::runtime_error("recording_controller_unavailable");
+}
+
+if (record_ctrl->CanStartRawRecording() != SDKERR_SUCCESS) {
+    throw std::runtime_error("raw_recording_not_permitted");
+}
+
+SDKError record_err = record_ctrl->StartRawRecording();
+if (record_err != SDKERR_SUCCESS) {
+    throw std::runtime_error("start_raw_recording_failed");
+}
+
+GetAudioRawdataHelper()->subscribe(new MyAudioDelegate());
+```
+
+Use **raw recording** when the bot must own PCM/YUV media or feed an AI pipeline directly.  
+Use **cloud recording + webhooks** when the requirement is Zoom-managed MP4/M4A/transcript assets after the meeting.
+
 **Official Documentation**: https://developers.zoom.us/docs/meeting-sdk/linux/  
 **API Reference**: https://marketplacefront.zoom.us/sdk/meeting/linux/  
 **Sample Repository (Raw Recording)**: https://github.com/zoom/meetingsdk-linux-raw-recording-sample  

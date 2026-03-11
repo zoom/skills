@@ -5,6 +5,33 @@ This guide implements one solution that handles all three simultaneously:
 2. process webhook updates,
 3. refresh OAuth tokens safely.
 
+## Direct Answer
+
+Use this skill chain:
+
+1. `zoom-general` to classify the request
+2. `zoom-oauth` for token brokerage and refresh control
+3. `zoom-rest-api` to create the meeting
+4. `zoom-webhooks` to receive real-time updates
+
+Minimal flow:
+
+```text
+client request
+  -> TokenBroker.getToken()
+  -> POST /v2/users/{userId}/meetings
+  -> persist meeting + idempotency key
+  -> Zoom sends webhooks to your ingress
+  -> verify signature
+  -> enqueue event
+  -> projection worker updates meeting state
+```
+
+Webhook subscription note:
+- the receiver implementation lives in your app code
+- the actual Zoom event subscription is configured at the Marketplace app level
+- do not model webhook subscription enablement as a per-request runtime API step unless Zoom exposes a product-specific admin API for that exact surface
+
 ## Skill Chain
 
 1. `zoom-general`

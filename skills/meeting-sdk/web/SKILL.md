@@ -21,6 +21,69 @@ triggers:
 
 Embed Zoom meeting capabilities into web applications with two integration options: **Client View** (full-page) or **Component View** (embeddable).
 
+## How to Implement a Custom Video User Interface for a Zoom Meeting in a Web App
+
+Use **Meeting SDK Web Component View**.
+
+Do not use Video SDK for this question unless the user is explicitly building a non-meeting session
+product.
+
+Minimal architecture:
+
+```text
+Browser page
+  -> fetch Meeting SDK signature from backend
+  -> ZoomMtgEmbedded.createClient()
+  -> client.init({ zoomAppRoot })
+  -> client.join({ signature, sdkKey, meetingNumber, userName, password })
+  -> apply layout/style/customize options around the embedded meeting container
+```
+
+Minimal implementation:
+
+```ts
+import ZoomMtgEmbedded from '@zoom/meetingsdk/embedded';
+
+const client = ZoomMtgEmbedded.createClient();
+
+export async function startEmbeddedMeeting(meetingNumber: string, userName: string, password: string) {
+  const sigRes = await fetch('/api/signature', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ meetingNumber, role: 0 }),
+  });
+
+  if (!sigRes.ok) throw new Error(`signature_fetch_failed:${sigRes.status}`);
+
+  const { signature, sdkKey } = await sigRes.json();
+
+  await client.init({
+    zoomAppRoot: document.getElementById('meetingSDKElement')!,
+    language: 'en-US',
+    patchJsMedia: true,
+    leaveOnPageUnload: true,
+    customize: {
+      video: { isResizable: true, popper: { disableDraggable: false } },
+    },
+  });
+
+  await client.join({
+    signature,
+    sdkKey,
+    meetingNumber,
+    userName,
+    password,
+  });
+}
+```
+
+Common failure points:
+- wrong route: Video SDK instead of Meeting SDK Component View
+- missing backend signature endpoint
+- wrong password field (`password` here, not `passWord`)
+- missing OBF/ZAK requirements for meetings outside the app account
+- missing SharedArrayBuffer headers when higher-end meeting features are expected
+
 ## Hard Routing Rule
 
 If the user wants a **custom video user interface for a Zoom meeting in a web app**, route to
@@ -47,6 +110,7 @@ For the direct custom-meeting-UI path, start with
 - For a custom meeting UI, prefer **Component View** first
 - Cross-product routing example: [../../general/use-cases/custom-meeting-ui-web.md](../../general/use-cases/custom-meeting-ui-web.md)
 - [Browser Support](concepts/browser-support.md) - Feature matrix by browser
+- Exact deep-dive path: [component-view/SKILL.md](component-view/SKILL.md)
 
 **Having issues?**
 - Join errors → Check signature generation and password spelling (`passWord` vs `password`)
