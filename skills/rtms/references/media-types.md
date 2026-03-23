@@ -63,7 +63,7 @@ RTMSManager.on('audio', ({ buffer, userName, timestamp }) => {
 | Codec | **H.264 (7)**, JPG (5), PNG (6) |
 | Resolution | SD (1), **HD 720p (2)**, FHD 1080p (3), QHD 2K (4) |
 | FPS | 1-30 (typically 25) |
-| Data Option | **Single active (3)**, Speaker view (4), Gallery view (5) |
+| Data Option | **Single active (3)**, Speaker view (4), Gallery view (5), **Single individual stream** (March 2026) |
 
 **Rule**: Use JPG/PNG when fps <= 5, H.264 when fps > 5
 
@@ -77,6 +77,25 @@ const videoParams = {
   data_opt: 3       // Single active speaker
 };
 ```
+
+### Single Individual Participant Video
+
+March 2026 added a new pattern for selecting **one participant camera stream at a time**.
+
+Use it when you need:
+
+- per-user vision processing
+- a moderator-selected camera feed
+- deterministic participant focus instead of active speaker switching
+
+Configuration rules:
+
+- set the video `data_opt` to `VIDEO_SINGLE_INDIVIDUAL_STREAM`
+- subscribe to `PARTICIPANT_VIDEO_ON` / `PARTICIPANT_VIDEO_OFF`
+- send `VIDEO_SUBSCRIPTION_REQ` with the chosen `user_id`
+- a new subscription overrides the previous participant stream
+
+This is not a multi-participant subscription feature. RTMS currently supports only **one** individual participant video stream at a time.
 
 ### Processing Video
 
@@ -124,6 +143,8 @@ RTMSManager.on('sharescreen', ({ buffer, userName, timestamp }) => {
 | Format | JSON text |
 | Content Type | 5 (MEDIA_CONTENT_TYPE_TEXT) |
 | Languages | 36 supported (see below) |
+| `src_language` | Fixed requested language |
+| `enable_lid` | Toggle Language Identification (default enabled) |
 
 ### Language IDs (Common)
 
@@ -138,7 +159,7 @@ RTMSManager.on('sharescreen', ({ buffer, userName, timestamp }) => {
 | French (France) | 13 |
 | German | 14 |
 
-**Tip**: Set language explicitly to avoid 30-second auto-detection delay!
+**Tip**: Use `src_language` plus `enable_lid: false` to force a fixed language. Leave `enable_lid` enabled when you want automatic language switching.
 
 ### Transcript Structure
 
@@ -203,7 +224,8 @@ const mediaParams = {
   },
   transcript: {
     content_type: 5,  // TEXT
-    language: 9       // English
+    src_language: 9,  // English
+    enable_lid: false
   },
   chat: {
     content_type: 5   // TEXT

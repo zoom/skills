@@ -91,6 +91,15 @@ Complete flow from meeting/webinar/session start to media streaming.
          │
          ▼
 ┌─────────────────────────────┐
+│  Optional control-plane     │
+│  actions during stream      │
+│  - EVENT_SUBSCRIPTION       │
+│  - VIDEO_SUBSCRIPTION_REQ   │
+│  - STREAM_CLOSE_REQ         │
+└────────────┬────────────────┘
+             │
+             ▼
+┌─────────────────────────────┐
 │  meeting/webinar/session    │
 │  .rtms_stopped              │
 │                             │
@@ -268,7 +277,8 @@ function connectToMediaServer(mediaUrl) {
         },
         transcript: {
           content_type: 5,          // TEXT
-          language: 9               // English
+          src_language: 9,          // English
+          enable_lid: false         // Fixed language, no auto-switch
         }
       }
     }));
@@ -334,6 +344,50 @@ mediaWs.on('message', (data) => {
 });
 ```
 
+### Step 6A: Track Available Participant Video Streams
+
+When using the new single-individual-video mode, the signaling socket tells you whose camera is currently available.
+
+```javascript
+const activeVideoUsers = new Set();
+
+function handleEventUpdate(msg) {
+  const eventType = msg.event?.event_type;
+  const participants = msg.event?.participants || [];
+
+  if (eventType === 'PARTICIPANT_VIDEO_ON') {
+    for (const participant of participants) activeVideoUsers.add(participant.user_id);
+  }
+
+  if (eventType === 'PARTICIPANT_VIDEO_OFF') {
+    for (const participant of participants) activeVideoUsers.delete(participant.user_id);
+  }
+}
+```
+
+Use these events as the control-plane signal for which participant video streams are currently subscribable.
+
+### Step 6B: Select One Participant Video Stream
+
+```javascript
+function subscribeToParticipantVideo(streamId, userId) {
+  const signalingWs = signalingConnections.get(streamId);
+  if (!signalingWs) return;
+
+  signalingWs.send(JSON.stringify({
+    msg_type: 'VIDEO_SUBSCRIPTION_REQ',
+    user_id: userId,
+    subscribe: true,
+    timestamp: Date.now()
+  }));
+}
+```
+
+Important constraint:
+
+- only one participant stream can be active at a time
+- the newest successful subscription replaces the previous selection
+
 ### Step 7: Handle Session End
 
 ```javascript
@@ -364,6 +418,24 @@ signalingWs.on('close', (code, reason) => {
   // Implement reconnection if needed
 });
 ```
+
+### Optional: Client-Initiated Graceful Close
+
+The backend can now ask RTMS to terminate the stream cleanly:
+
+```javascript
+function closeStream(streamId) {
+  const signalingWs = signalingConnections.get(streamId);
+  if (!signalingWs) return;
+
+  signalingWs.send(JSON.stringify({
+    msg_type: 'STREAM_CLOSE_REQ',
+    rtms_stream_id: streamId
+  }));
+}
+```
+
+Expect a `STREAM_CLOSE_RESP` followed by normal socket teardown.
 
 ## Session Tracking
 

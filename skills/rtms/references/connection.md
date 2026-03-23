@@ -28,6 +28,8 @@ WebSocket connection protocol details.
 11. Receive media data (msg_type 14-18)
            ↓
 12. Respond to heartbeats (msg_type 12 → 13)
+           ↓
+13. Optionally react to `PARTICIPANT_VIDEO_ON/OFF`, send `VIDEO_SUBSCRIPTION_REQ`, or gracefully terminate with `STREAM_CLOSE_REQ`
 ```
 
 ## Signature Generation
@@ -108,7 +110,7 @@ RTMS does NOT auto-reconnect. Implement your own retry logic:
 
 | Server Type | Timeout |
 |-------------|---------|
-| Media Server | 30 seconds to reconnect |
+| Media Server | 65 seconds keep-alive tolerance before timeout |
 | Signaling Server | 60 seconds to reconnect |
 
 ```javascript
@@ -118,6 +120,84 @@ ws.on('close', () => {
   retryDelay = Math.min(retryDelay * 2, 30000);
 });
 ```
+
+## Transcript LID Control
+
+The transcript media handshake now supports explicit Language Identification control.
+
+```javascript
+mediaWs.send(JSON.stringify({
+  msg_type: 3,
+  protocol_version: 1,
+  meeting_uuid: idValue,
+  rtms_stream_id: streamId,
+  signature,
+  media_type: 8, // TRANSCRIPT
+  media_params: {
+    transcript: {
+      content_type: 5,   // TEXT
+      src_language: 9,   // English
+      enable_lid: false  // Lock to src_language instead of auto-switching
+    }
+  }
+}));
+```
+
+Use `enable_lid: false` when:
+
+- the meeting should stay on a known language
+- language-switching is undesirable
+- you want more predictable downstream transcript processing
+
+## Single Individual Video Subscription Flow
+
+RTMS now supports subscribing to **one participant camera stream at a time**.
+
+1. Open a video media socket with `data_opt = VIDEO_SINGLE_INDIVIDUAL_STREAM`
+2. Subscribe to `PARTICIPANT_VIDEO_ON` and `PARTICIPANT_VIDEO_OFF`
+3. When an event arrives, choose the `user_id` you want
+4. Send `VIDEO_SUBSCRIPTION_REQ` on the signaling socket
+5. Wait for `VIDEO_SUBSCRIPTION_RESP`
+6. Expect the newest successful subscription to replace the previous participant stream
+
+```javascript
+// Signaling socket: subscribe to control-plane events
+signalingWs.send(JSON.stringify({
+  msg_type: 5, // EVENT_SUBSCRIPTION
+  events: [
+    { event_type: 'PARTICIPANT_VIDEO_ON', subscribe: true },
+    { event_type: 'PARTICIPANT_VIDEO_OFF', subscribe: true }
+  ]
+}));
+
+// Signaling socket: select a participant stream
+signalingWs.send(JSON.stringify({
+  msg_type: 'VIDEO_SUBSCRIPTION_REQ',
+  user_id: selectedUserId,
+  subscribe: true,
+  timestamp: Date.now()
+}));
+```
+
+The March 2026 changelog did not publish the numeric values for the new message types. Use the protocol definitions before hard-coding them.
+
+## Graceful Stream Closure
+
+The backend can now request clean shutdown over the signaling socket:
+
+```javascript
+signalingWs.send(JSON.stringify({
+  msg_type: 'STREAM_CLOSE_REQ',
+  rtms_stream_id: streamId
+}));
+```
+
+Expect:
+
+- `STREAM_CLOSE_RESP`
+- then normal connection shutdown / cleanup
+
+Use this when your app wants deterministic teardown instead of waiting for a stop webhook or socket failure.
 
 ## Split vs Unified Mode
 

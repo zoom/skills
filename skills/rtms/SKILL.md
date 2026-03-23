@@ -1,10 +1,10 @@
 ---
 name: zoom-rtms
 description: |
-  Zoom Realtime Media Streams (RTMS) for accessing live audio, video, transcript, chat, and 
-  screen share from Zoom meetings, webinars, and Video SDK sessions. WebSocket-based protocol 
-  using open web standards. Use when building AI/ML applications, live transcription, recording, 
-  streaming, or real-time meeting/webinar/session analysis.
+  Zoom Realtime Media Streams (RTMS) for accessing live audio, video, transcript, chat, and
+  screen share from Zoom meetings, webinars, Video SDK sessions, and Zoom Contact Center Voice.
+  WebSocket-based protocol using open web standards. Use when building AI/ML applications, live
+  transcription, recording, streaming, or real-time meeting/webinar/session/contact-center analysis.
 triggers:
   - "real-time media"
   - "rtms"
@@ -18,11 +18,15 @@ triggers:
   - "streaming audio"
   - "streaming video"
   - "meeting bot media"
+  - "contact center voice media"
+  - "participant video on"
+  - "participant video off"
+  - "single individual video stream"
 ---
 
 # Zoom Realtime Media Streams (RTMS)
 
-Expert guidance for accessing live audio, video, transcript, chat, and screen share data from Zoom meetings, webinars, and Video SDK sessions in real-time. RTMS uses WebSocket-based protocol with open standards - no meeting bots required.
+Expert guidance for accessing live audio, video, transcript, chat, and screen share data from Zoom meetings, webinars, Video SDK sessions, and Zoom Contact Center Voice in real-time. RTMS uses a WebSocket-based protocol with open standards and does not require a meeting bot to capture the media plane.
 
 ## Read This First (Critical)
 
@@ -60,6 +64,7 @@ Use RTMS for media/data plane, and use frontend frameworks/Zoom Apps for present
 - **[Lifecycle Flow](concepts/lifecycle-flow.md)** - Complete webhook-to-streaming flow
 - **[Data Types](references/data-types.md)** - All enums and constants
 - **[Webhooks](references/webhooks.md)** - Event subscription details
+- **[Environment Variables](references/environment-variables.md)** - credential modes and runtime knobs
 - **[Quickstart Notes](references/quickstart.md)** - Secondary quickstart guide
 - **Integrated Index** - see the section below in this file
 
@@ -76,8 +81,9 @@ Use RTMS for media/data plane, and use frontend frameworks/Zoom Apps for present
 | **Meetings** | `meeting.rtms_started` / `meeting.rtms_stopped` | `meeting_uuid` | General App |
 | **Webinars** | `webinar.rtms_started` / `webinar.rtms_stopped` | `meeting_uuid` (same!) | General App |
 | **Video SDK** | `session.rtms_started` / `session.rtms_stopped` | `session_id` | Video SDK App |
+| **Zoom Contact Center Voice** | Product-specific RTMS/ZCC Voice events | Product-specific stream/session identifiers | Contact Center / approved RTMS integration |
 
-Once connected, the WebSocket protocol, media types, and streaming behavior are **identical** across all products.
+Once connected, the core signaling/media socket model is shared across products. Meetings, webinars, and Video SDK sessions use the familiar start/stop webhooks. Zoom Contact Center Voice adds its own RTMS/ZCC Voice event family and should be treated as the same transport model with product-specific event payloads.
 
 ## RTMS Overview
 
@@ -88,10 +94,18 @@ RTMS is a data pipeline that gives your app access to live media from Zoom meeti
 | Media Type | Format | Use Cases |
 |------------|--------|-----------|
 | **Audio** | PCM (L16), G.711, G.722, Opus | Transcription, voice analysis, recording |
-| **Video** | H.264, JPG, PNG | Recording, AI vision, thumbnails |
+| **Video** | H.264, JPG, PNG | Recording, AI vision, thumbnails, active participant selection |
 | **Screen Share** | H.264, JPG, PNG | Content capture, slide extraction |
 | **Transcript** | JSON text | Meeting notes, search, compliance |
 | **Chat** | JSON text | Archive, sentiment analysis |
+
+### March 2026 Protocol Changes
+
+- **Zoom Contact Center Voice support**: RTMS now covers Contact Center Voice audio and transcript scenarios.
+- **Transcript Language Identification control**: transcript media handshakes now support `src_language` and `enable_lid`. Default behavior is LID enabled. Set `enable_lid: false` to force a fixed language.
+- **Single individual video stream subscription**: RTMS can now stream one participant's camera feed at a time when `data_opt` is set to `VIDEO_SINGLE_INDIVIDUAL_STREAM`.
+- **Graceful client-initiated shutdown**: backends can send `STREAM_CLOSE_REQ` over the signaling socket and wait for `STREAM_CLOSE_RESP`.
+- **Media keep-alive tolerance increased**: media socket keep-alive timeout is now **65 seconds**, not 35.
 
 ### Two Approaches
 
@@ -218,8 +232,10 @@ Combine types with bitwise OR:
 | **Only 1 connection allowed** | New connections kick out existing ones. Track active sessions! |
 | **Respond 200 immediately** | If webhook delays, Zoom retries creating duplicate connections |
 | **Heartbeat mandatory** | Respond to msg_type 12 with msg_type 13, or connection dies |
-| **Reconnection is YOUR job** | RTMS doesn't auto-reconnect. Media: 30s, Signaling: 60s timeout |
-| **Transcript language delay** | Auto-detect takes 30s. Set language explicitly to skip delay |
+| **Reconnection is YOUR job** | RTMS doesn't auto-reconnect. Media keep-alive tolerance is now about **65s**; signaling remains around **60s** |
+| **Transcript language drift** | Use `src_language` plus `enable_lid: false` when you want fixed-language transcription instead of automatic language switching |
+| **Single participant video only** | `VIDEO_SINGLE_INDIVIDUAL_STREAM` supports one participant at a time. A new `VIDEO_SUBSCRIPTION_REQ` overrides the previous selection |
+| **Graceful close is explicit now** | Use `STREAM_CLOSE_REQ` / `STREAM_CLOSE_RESP` when your backend wants to terminate the stream cleanly |
 
 ## Environment Variables
 

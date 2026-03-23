@@ -5,7 +5,7 @@ Get started with Zoom Realtime Media Streams.
 ## Prerequisites
 
 1. **Node.js 20.3.0+** (24 LTS recommended)
-2. Zoom General App (for meetings/webinars) or Video SDK App (for Video SDK) with RTMS feature enabled
+2. Zoom General App (for meetings/webinars), Video SDK App (for Video SDK), or approved Contact Center / RTMS integration for Zoom Contact Center Voice
 3. Webhook endpoint configured
 4. Server to handle WebSocket connections
 
@@ -169,8 +169,11 @@ RTMS must be started for each meeting/webinar/session. Options:
 | Meeting | Zoom client, REST API, Zoom App SDK, or **autostart** (zoom.us settings) | `meeting.rtms_started` |
 | Webinar | Zoom client, REST API, Zoom App SDK, or **autostart** (zoom.us settings) | `webinar.rtms_started` |
 | Video SDK | Video SDK client or REST API | `session.rtms_started` |
+| Zoom Contact Center Voice | Product-specific RTMS/ZCC Voice flow | Product-specific RTMS/ZCC Voice events |
 
 > **Webinar note**: Panelists have full audio/video streams. Attendee streams may not be available individually.
+
+> **March 2026 note**: transcript handshakes now support `src_language` plus `enable_lid`, media socket keep-alive tolerance is now about **65s**, and RTMS supports one selected participant camera stream at a time via `VIDEO_SINGLE_INDIVIDUAL_STREAM` + `VIDEO_SUBSCRIPTION_REQ`.
 
 ## Deployment with Reverse Proxy
 

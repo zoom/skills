@@ -28,6 +28,20 @@ Complete reference for all RTMS enums and constants.
 | 19 | STREAM_STATE_REQ | Client -> Server | Request stream state |
 | 20 | STREAM_STATE_RESP | Server -> Client | Stream state response |
 
+## March 2026 Message Additions
+
+The March 2026 RTMS release added new protocol message names and expanded several enums. The changelog confirmed the following new flow-level message types, but did **not** provide numeric values in the release notes. Use the current RTMS protocol definitions for the authoritative numeric mapping before hard-coding them:
+
+- `VIDEO_SUBSCRIPTION_REQ`
+- `VIDEO_SUBSCRIPTION_RESP`
+- `STREAM_CLOSE_REQ`
+- `STREAM_CLOSE_RESP`
+
+These matter because RTMS now supports:
+
+- subscribing to **one individual participant video stream at a time**
+- **app/backend initiated** graceful stream shutdown
+
 ## Event Types (RTMS_EVENT_TYPE)
 
 | Value | Name | Description |
@@ -40,6 +54,22 @@ Complete reference for all RTMS enums and constants.
 | 5 | SHARING_START | Screen sharing started |
 | 6 | SHARING_STOP | Screen sharing stopped |
 | 7 | MEDIA_CONNECTION_INTERRUPTED | Connection interrupted |
+
+## March 2026 Event Additions
+
+The March 2026 release enhanced `RTMS_EVENT_TYPE` and added `RTMS_ZCC_VOICE_EVENT_TYPE`. The changelog specifically introduced these new video availability events:
+
+- `PARTICIPANT_VIDEO_ON`
+- `PARTICIPANT_VIDEO_OFF`
+
+Use them as the control-plane signal for individual video selection:
+
+1. subscribe to the events with `EVENT_SUBSCRIPTION`
+2. update your in-memory list of participants whose cameras are currently available
+3. send `VIDEO_SUBSCRIPTION_REQ` with a selected `user_id`
+4. remember that a new subscription replaces the previous participant stream
+
+For Zoom Contact Center Voice integrations, use the current `RTMS_ZCC_VOICE_EVENT_TYPE` definitions for the exact event inventory and numeric values.
 
 ## Status Codes (RTMS_STATUS_CODE)
 
@@ -64,6 +94,10 @@ Complete reference for all RTMS enums and constants.
 | 16 | STATUS_INVALID_MEETING_OR_STREAM_ID | Invalid meeting/stream |
 | 17 | STATUS_DUPLICATE_SIGNAL_REQUEST | Duplicate signaling connection |
 | 31 | STATUS_DUPLICATE_MEDIA_DATA_CONNECTION | Duplicate media connection |
+
+## March 2026 Status / Stop Reason Enhancements
+
+`RTMS_STATUS_CODE` and `RTMS_STOP_REASON` were enhanced in the March 2026 release. This file keeps the stable values already captured above, but treat the official protocol definitions as the authority for newly added or renamed values introduced after server release `2.6.7.289`.
 
 ## Media Data Types (MEDIA_DATA_TYPE)
 
@@ -117,6 +151,14 @@ Use bitwise OR to combine:
 | 3 | VIDEO_SINGLE_ACTIVE_STREAM | Active speaker video |
 | 4 | VIDEO_MIXED_SPEAKER_VIEW | Speaker view (coming soon) |
 | 5 | VIDEO_MIXED_GALLERY_VIEW | Gallery view (coming soon) |
+
+### March 2026 Video Option Addition
+
+The March 2026 release added:
+
+- `VIDEO_SINGLE_INDIVIDUAL_STREAM`
+
+Use this `data_opt` value when you want the video data socket to carry one selected participant's camera stream. RTMS currently supports **only one** such subscription at a time.
 
 ## Media Resolution (MEDIA_RESOLUTION)
 
@@ -232,6 +274,18 @@ Use bitwise OR to combine:
 | 34 | LANGUAGE_ID_TURKISH | Turkish |
 | 35 | LANGUAGE_ID_UKRAINIAN | Ukrainian |
 | 36 | LANGUAGE_ID_VIETNAMESE | Vietnamese |
+
+## Transcript Handshake Controls
+
+Transcript media handshakes now use:
+
+- `src_language`: fixed requested transcription language
+- `enable_lid`: boolean switch for Language Identification
+
+Behavior:
+
+- `enable_lid: true` or omitted: RTMS can automatically switch languages during transcription
+- `enable_lid: false`: RTMS stays on `src_language` and does not auto-switch
 
 ## Next Steps
 

@@ -106,7 +106,7 @@ const signature = crypto.createHmac('sha256', clientSecret)
 
 ### Connection Closes Unexpectedly
 
-**Problem**: Connection closes after ~30-60 seconds
+**Problem**: Connection closes after ~60 seconds
 
 **Cause**: Not responding to heartbeat
 
@@ -127,7 +127,7 @@ ws.on('message', (data) => {
 
 **Timeouts**:
 - Signaling: ~60 seconds
-- Media: ~30 seconds
+- Media: ~65 seconds
 
 ## Media Data Issues
 
@@ -154,6 +154,7 @@ ws.on('message', (data) => {
 1. Wrong media_type
 2. No video enabled
 3. Wrong codec for FPS
+4. Individual video mode enabled but no participant subscription sent
 
 **Solution**:
 1. Include VIDEO (2) in media_type
@@ -165,6 +166,10 @@ ws.on('message', (data) => {
      fps: 25          // > 5 requires H.264
    }
    ```
+3. If using `VIDEO_SINGLE_INDIVIDUAL_STREAM`, also:
+   - subscribe to `PARTICIPANT_VIDEO_ON` / `PARTICIPANT_VIDEO_OFF`
+   - send `VIDEO_SUBSCRIPTION_REQ` with a live `user_id`
+   - remember a new request replaces the previous participant stream
 
 ### No Screen Share Data
 
@@ -181,15 +186,16 @@ media_type: 32  // All media
 
 ### Transcript Language Delay
 
-**Problem**: 30-second delay before transcription starts
+**Problem**: noticeable startup delay before transcription stabilizes
 
-**Cause**: Auto-detection of language
+**Cause**: Language Identification (LID) is enabled and RTMS is auto-detecting / auto-switching languages
 
-**Solution**: Set language explicitly:
+**Solution**: Set a source language and disable LID when you want a fixed language:
 ```javascript
 transcript: {
   content_type: 5,
-  language: 9     // English (skips auto-detect)
+  src_language: 9,   // English
+  enable_lid: false  // Fixed language, no auto-switch
 }
 ```
 
@@ -203,6 +209,40 @@ transcript: {
 | 28 | Spanish |
 
 See [Data Types](../references/data-types.md#transcript-languages) for full list.
+
+### Participant Video Events Arrive But No Video Stream Follows
+
+**Problem**: You receive `PARTICIPANT_VIDEO_ON`, but no actual participant video frames arrive.
+
+**Cause**: Those events only tell you whose camera is currently available. They do not automatically switch the data socket to that participant.
+
+**Solution**:
+
+1. open the video media socket with `VIDEO_SINGLE_INDIVIDUAL_STREAM`
+2. handle `PARTICIPANT_VIDEO_ON` / `PARTICIPANT_VIDEO_OFF`
+3. choose one `user_id`
+4. send `VIDEO_SUBSCRIPTION_REQ`
+5. wait for `VIDEO_SUBSCRIPTION_RESP`
+
+Also remember:
+
+- only one participant stream is supported at a time
+- a newer subscription overrides the previous participant stream
+
+### Stream Never Closes Cleanly From Backend
+
+**Problem**: Your app finishes processing, but the RTMS stream remains open until external stop events arrive.
+
+**Solution**: Use the new graceful-close control message on the signaling socket:
+
+```javascript
+signalingWs.send(JSON.stringify({
+  msg_type: 'STREAM_CLOSE_REQ',
+  rtms_stream_id: streamId
+}));
+```
+
+Treat `STREAM_CLOSE_RESP` as acknowledgement, then continue with local cleanup.
 
 ## SDK-Specific Issues
 

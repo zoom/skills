@@ -173,7 +173,7 @@ ws.send(JSON.stringify({
 
 **Timeout**:
 - Signaling: ~60 seconds without heartbeat response
-- Media: ~30 seconds without heartbeat response
+- Media: ~65 seconds without heartbeat response
 
 **Failure to respond = connection closed!**
 
@@ -198,7 +198,7 @@ ws.on('close', (code, reason) => {
 | Connection | Reconnection Window |
 |------------|---------------------|
 | Signaling | 60 seconds |
-| Media | 30 seconds |
+| Media | 65 seconds |
 
 ## Server URL Geo-Routing
 

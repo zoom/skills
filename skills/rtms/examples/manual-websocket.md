@@ -30,6 +30,7 @@ const SECRET_TOKEN = process.env.ZOOM_SECRET_TOKEN;
 const signalingConnections = new Map();
 const mediaConnections = new Map();
 const activeSessions = new Map();
+const activeVideoUsers = new Map();
 
 // ============================================
 // SIGNATURE GENERATION
@@ -156,7 +157,7 @@ function handleSignalingMessage(msg, idValue, streamId) {
       break;
       
     case 6:  // EVENT_UPDATE
-      handleEventUpdate(msg);
+      handleEventUpdate(msg, streamId);
       break;
       
     case 8:  // STREAM_STATE_UPDATE
@@ -179,8 +180,11 @@ function handleSignalingMessage(msg, idValue, streamId) {
   }
 }
 
-function handleEventUpdate(msg) {
-  switch (msg.event_type) {
+function handleEventUpdate(msg, streamId) {
+  const eventType = msg.event?.event_type ?? msg.event_type;
+  const participants = msg.event?.participants ?? [];
+
+  switch (eventType) {
     case 2:  // ACTIVE_SPEAKER_CHANGE
       console.log('Active speaker:', msg.user_name);
       break;
@@ -195,6 +199,18 @@ function handleEventUpdate(msg) {
       break;
     case 6:  // SHARING_STOP
       console.log('Sharing stopped');
+      break;
+    case 'PARTICIPANT_VIDEO_ON':
+      for (const participant of participants) {
+        const set = activeVideoUsers.get(streamId) || new Set();
+        set.add(participant.user_id);
+        activeVideoUsers.set(streamId, set);
+      }
+      break;
+    case 'PARTICIPANT_VIDEO_OFF':
+      for (const participant of participants) {
+        activeVideoUsers.get(streamId)?.delete(participant.user_id);
+      }
       break;
   }
 }
@@ -233,7 +249,8 @@ function connectToMedia(idValue, streamId, mediaUrl) {
         },
         transcript: {
           content_type: 5,            // TEXT
-          language: 9                 // English
+          src_language: 9,            // English
+          enable_lid: false           // Fixed language, no auto-switch
         }
       }
     }));
@@ -419,7 +436,37 @@ app.listen(PORT, () => {
   data_opt: 1,         // 1=Mixed, 2=Multi-streams
   send_rate: 20        // Chunk size in ms (multiple of 20)
 }
+
+function subscribeToParticipantVideo(streamId, userId) {
+  const signalingWs = signalingConnections.get(streamId);
+  if (!signalingWs) return;
+
+  signalingWs.send(JSON.stringify({
+    msg_type: 'VIDEO_SUBSCRIPTION_REQ',
+    user_id: userId,
+    subscribe: true,
+    timestamp: Date.now()
+  }));
+}
+
+function closeStream(streamId) {
+  const signalingWs = signalingConnections.get(streamId);
+  if (!signalingWs) return;
+
+  signalingWs.send(JSON.stringify({
+    msg_type: 'STREAM_CLOSE_REQ',
+    rtms_stream_id: streamId
+  }));
+}
 ```
+
+## March 2026 Notes
+
+- The new `PARTICIPANT_VIDEO_ON` / `PARTICIPANT_VIDEO_OFF` events tell you which participants currently have subscribable camera streams.
+- To receive one participant camera feed, use `VIDEO_SINGLE_INDIVIDUAL_STREAM` in the video media handshake and then send `VIDEO_SUBSCRIPTION_REQ`.
+- RTMS currently supports only **one** individual participant video stream at a time. A new subscription replaces the previous one.
+- `STREAM_CLOSE_REQ` / `STREAM_CLOSE_RESP` let the backend terminate a stream cleanly.
+- The changelog did not publish numeric values for the new message/event constants. Verify them against the current protocol definitions before hard-coding them in production.
 
 ### Video Parameters
 
@@ -449,7 +496,8 @@ app.listen(PORT, () => {
 ```javascript
 {
   content_type: 5,     // 5=TEXT
-  language: 9          // 9=English (see data-types for all languages)
+  src_language: 9,     // 9=English
+  enable_lid: false    // Fixed language, no auto-switch
 }
 ```
 
