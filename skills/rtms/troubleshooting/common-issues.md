@@ -68,7 +68,7 @@ function handleRTMSStopped(payload) {
 
 ### Invalid Signature
 
-**Problem**: Handshake fails with status_code 15
+**Problem**: Handshake fails with status_code 3
 
 **Cause**: Signature generation incorrect
 
@@ -237,7 +237,7 @@ Also remember:
 
 ```javascript
 signalingWs.send(JSON.stringify({
-  msg_type: 'STREAM_CLOSE_REQ',
+  msg_type: 21, // STREAM_CLOSE_REQ
   rtms_stream_id: streamId
 }));
 ```
@@ -344,12 +344,11 @@ try {
 | Code | Name | Description |
 |------|------|-------------|
 | 0 | STATUS_OK | Success |
-| 1 | STATUS_CONNECTION_TIMEOUT | Connection timed out |
-| 13 | STATUS_SESSION_NOT_FOUND | Session not found |
-| 15 | STATUS_INVALID_SIGNATURE | Invalid signature |
-| 16 | STATUS_INVALID_MEETING_OR_STREAM_ID | Invalid meeting or stream |
-| 17 | STATUS_DUPLICATE_SIGNAL_REQUEST | Already connected (signaling) |
-| 31 | STATUS_DUPLICATE_MEDIA_DATA_CONNECTION | Already connected (media) |
+| 3 | STATUS_INVALID_SIGNATURE | Invalid signature |
+| 8 | STATUS_DUPLICATE_SIGNAL_REQUEST | Already connected (signaling) |
+| 16 | STATUS_DUPLICATE_MEDIA_DATA_CONNECTION | Already connected (media) |
+| 40 | STATUS_INVALID_RTMS_SESSION_ID | Invalid RTMS session ID |
+| 43 | STATUS_INVALID_MEDIA_TRANSCRIPT_SROUCE_LANGUAGE | Invalid transcript source language |
 
 See [Data Types](../references/data-types.md) for complete list.
 

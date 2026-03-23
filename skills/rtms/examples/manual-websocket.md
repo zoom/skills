@@ -200,14 +200,14 @@ function handleEventUpdate(msg, streamId) {
     case 6:  // SHARING_STOP
       console.log('Sharing stopped');
       break;
-    case 'PARTICIPANT_VIDEO_ON':
+    case 8:  // PARTICIPANT_VIDEO_ON
       for (const participant of participants) {
         const set = activeVideoUsers.get(streamId) || new Set();
         set.add(participant.user_id);
         activeVideoUsers.set(streamId, set);
       }
       break;
-    case 'PARTICIPANT_VIDEO_OFF':
+    case 9:  // PARTICIPANT_VIDEO_OFF
       for (const participant of participants) {
         activeVideoUsers.get(streamId)?.delete(participant.user_id);
       }
@@ -442,7 +442,7 @@ function subscribeToParticipantVideo(streamId, userId) {
   if (!signalingWs) return;
 
   signalingWs.send(JSON.stringify({
-    msg_type: 'VIDEO_SUBSCRIPTION_REQ',
+    msg_type: 28, // VIDEO_SUBSCRIPTION_REQ
     user_id: userId,
     subscribe: true,
     timestamp: Date.now()
@@ -454,7 +454,7 @@ function closeStream(streamId) {
   if (!signalingWs) return;
 
   signalingWs.send(JSON.stringify({
-    msg_type: 'STREAM_CLOSE_REQ',
+    msg_type: 21, // STREAM_CLOSE_REQ
     rtms_stream_id: streamId
   }));
 }
@@ -466,7 +466,13 @@ function closeStream(streamId) {
 - To receive one participant camera feed, use `VIDEO_SINGLE_INDIVIDUAL_STREAM` in the video media handshake and then send `VIDEO_SUBSCRIPTION_REQ`.
 - RTMS currently supports only **one** individual participant video stream at a time. A new subscription replaces the previous one.
 - `STREAM_CLOSE_REQ` / `STREAM_CLOSE_RESP` let the backend terminate a stream cleanly.
-- The changelog did not publish numeric values for the new message/event constants. Verify them against the current protocol definitions before hard-coding them in production.
+- Exact numeric values:
+  - `PARTICIPANT_VIDEO_ON = 8`
+  - `PARTICIPANT_VIDEO_OFF = 9`
+  - `STREAM_CLOSE_REQ = 21`
+  - `STREAM_CLOSE_RESP = 22`
+  - `VIDEO_SUBSCRIPTION_REQ = 28`
+  - `VIDEO_SUBSCRIPTION_RESP = 29`
 
 ### Video Parameters
 
@@ -506,11 +512,11 @@ function closeStream(streamId) {
 | Code | Name | Description |
 |------|------|-------------|
 | 0 | STATUS_OK | Success |
-| 1 | STATUS_CONNECTION_TIMEOUT | Connection timed out |
-| 13 | STATUS_SESSION_NOT_FOUND | Session not found |
-| 15 | STATUS_INVALID_SIGNATURE | Invalid signature |
-| 17 | STATUS_DUPLICATE_SIGNAL_REQUEST | Duplicate connection |
-| 31 | STATUS_DUPLICATE_MEDIA_DATA_CONNECTION | Already connected |
+| 3 | STATUS_INVALID_SIGNATURE | Invalid signature |
+| 8 | STATUS_DUPLICATE_SIGNAL_REQUEST | Duplicate signaling connection |
+| 16 | STATUS_DUPLICATE_MEDIA_DATA_CONNECTION | Duplicate media connection |
+| 40 | STATUS_INVALID_RTMS_SESSION_ID | Invalid RTMS session ID |
+| 43 | STATUS_INVALID_MEDIA_TRANSCRIPT_SROUCE_LANGUAGE | Invalid transcript source language |
 
 See [Data Types](../references/data-types.md) for complete list.
 

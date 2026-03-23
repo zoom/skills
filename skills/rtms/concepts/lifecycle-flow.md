@@ -355,11 +355,11 @@ function handleEventUpdate(msg) {
   const eventType = msg.event?.event_type;
   const participants = msg.event?.participants || [];
 
-  if (eventType === 'PARTICIPANT_VIDEO_ON') {
+  if (eventType === 8) { // PARTICIPANT_VIDEO_ON
     for (const participant of participants) activeVideoUsers.add(participant.user_id);
   }
 
-  if (eventType === 'PARTICIPANT_VIDEO_OFF') {
+  if (eventType === 9) { // PARTICIPANT_VIDEO_OFF
     for (const participant of participants) activeVideoUsers.delete(participant.user_id);
   }
 }
@@ -375,7 +375,7 @@ function subscribeToParticipantVideo(streamId, userId) {
   if (!signalingWs) return;
 
   signalingWs.send(JSON.stringify({
-    msg_type: 'VIDEO_SUBSCRIPTION_REQ',
+    msg_type: 28, // VIDEO_SUBSCRIPTION_REQ
     user_id: userId,
     subscribe: true,
     timestamp: Date.now()
@@ -429,7 +429,7 @@ function closeStream(streamId) {
   if (!signalingWs) return;
 
   signalingWs.send(JSON.stringify({
-    msg_type: 'STREAM_CLOSE_REQ',
+    msg_type: 21, // STREAM_CLOSE_REQ
     rtms_stream_id: streamId
   }));
 }

@@ -27,20 +27,15 @@ Complete reference for all RTMS enums and constants.
 | 18 | MEDIA_DATA_CHAT | Server -> Client | Chat data |
 | 19 | STREAM_STATE_REQ | Client -> Server | Request stream state |
 | 20 | STREAM_STATE_RESP | Server -> Client | Stream state response |
-
-## March 2026 Message Additions
-
-The March 2026 RTMS release added new protocol message names and expanded several enums. The changelog confirmed the following new flow-level message types, but did **not** provide numeric values in the release notes. Use the current RTMS protocol definitions for the authoritative numeric mapping before hard-coding them:
-
-- `VIDEO_SUBSCRIPTION_REQ`
-- `VIDEO_SUBSCRIPTION_RESP`
-- `STREAM_CLOSE_REQ`
-- `STREAM_CLOSE_RESP`
-
-These matter because RTMS now supports:
-
-- subscribing to **one individual participant video stream at a time**
-- **app/backend initiated** graceful stream shutdown
+| 21 | STREAM_CLOSE_REQ | Client -> Server | Request graceful stream shutdown |
+| 22 | STREAM_CLOSE_RESP | Server -> Client | Response to close stream request |
+| 23 | META_DATA_AUDIO | Server -> Client | Audio metadata |
+| 24 | META_DATA_VIDEO | Server -> Client | Reserved video metadata |
+| 25 | META_DATA_SHARE | Server -> Client | Reserved share metadata |
+| 26 | META_DATA_TRANSCRIPT | Server -> Client | Reserved transcript metadata |
+| 27 | META_DATA_CHAT | Server -> Client | Reserved chat metadata |
+| 28 | VIDEO_SUBSCRIPTION_REQ | Client -> Server | Subscribe or unsubscribe one participant video stream |
+| 29 | VIDEO_SUBSCRIPTION_RESP | Server -> Client | Response to participant video subscription |
 
 ## Event Types (RTMS_EVENT_TYPE)
 
@@ -54,50 +49,84 @@ These matter because RTMS now supports:
 | 5 | SHARING_START | Screen sharing started |
 | 6 | SHARING_STOP | Screen sharing stopped |
 | 7 | MEDIA_CONNECTION_INTERRUPTED | Connection interrupted |
+| 8 | PARTICIPANT_VIDEO_ON | Participant camera turned on |
+| 9 | PARTICIPANT_VIDEO_OFF | Participant camera turned off |
 
-## March 2026 Event Additions
+## Zoom Contact Center Voice Event Types (RTMS_ZCC_VOICE_EVENT_TYPE)
 
-The March 2026 release enhanced `RTMS_EVENT_TYPE` and added `RTMS_ZCC_VOICE_EVENT_TYPE`. The changelog specifically introduced these new video availability events:
-
-- `PARTICIPANT_VIDEO_ON`
-- `PARTICIPANT_VIDEO_OFF`
-
-Use them as the control-plane signal for individual video selection:
-
-1. subscribe to the events with `EVENT_SUBSCRIPTION`
-2. update your in-memory list of participants whose cameras are currently available
-3. send `VIDEO_SUBSCRIPTION_REQ` with a selected `user_id`
-4. remember that a new subscription replaces the previous participant stream
-
-For Zoom Contact Center Voice integrations, use the current `RTMS_ZCC_VOICE_EVENT_TYPE` definitions for the exact event inventory and numeric values.
+| Value | Name | Description |
+|-------|------|-------------|
+| 0 | UNDEFINED | Default |
+| 8 | CONSUMER_ANSWERED | Consumer answered the call |
+| 9 | CONSUMER_END | Consumer ended the call |
+| 10 | USER_ANSWERED | User or agent answered the call |
+| 11 | USER_END | User or agent ended the call |
+| 12 | USER_HOLD | User placed the call on hold |
+| 13 | USER_UNHOLD | User resumed the call |
+| 14 | MONITOR_STARTED | Monitoring started |
+| 15 | MONITOR_TRANSITIONED | Monitoring transitioned |
+| 16 | MONITOR_ENDED | Monitoring ended |
+| 17 | TAKEOVER_STARTED | Takeover started |
+| 18 | TRANSFER_INITIATED | Transfer initiated |
+| 19 | TRANSFER_CANCELED | Transfer canceled |
+| 20 | TRANSFER_ACCEPTED | Transfer accepted |
+| 21 | TRANSFER_COMPLETED | Transfer completed |
+| 22 | TRANSFER_REJECTED | Transfer rejected |
+| 23 | TRANSFER_TIMEOUT | Transfer timed out |
+| 24 | CONFERENCE_CANCELED | Conference canceled |
+| 25 | CONFERENCE_PARTICIPANT_CANCELED | Conference participant canceled |
+| 26 | CONFERENCE_PARTICIPANT_INVITED | Conference participant invited |
+| 27 | CONFERENCE_PARTICIPANT_REJECTED | Conference participant rejected |
+| 28 | CONFERENCE_PARTICIPANT_TIMEOUT | Conference participant timed out |
 
 ## Status Codes (RTMS_STATUS_CODE)
 
 | Value | Name | Description |
 |-------|------|-------------|
 | 0 | STATUS_OK | Success |
-| 1 | STATUS_CONNECTION_TIMEOUT | Connection timed out |
-| 2 | STATUS_INVALID_JSON_MSG_SIZE | Invalid JSON size |
-| 3 | STATUS_INVALID_JSON_MSG | Invalid JSON message |
-| 4 | STATUS_INVALID_MESSAGE_TYPE | Invalid message type |
-| 5 | STATUS_MSG_TYPE_NOT_EXIST | Message type missing |
-| 6 | STATUS_MSG_TYPE_NOT_UINT | Message type not integer |
-| 7 | STATUS_MEETING_UUID_NOT_EXIST | Meeting UUID missing |
-| 8 | STATUS_MEETING_UUID_NOT_STRING | Meeting UUID not string |
-| 9 | STATUS_MEETING_UUID_IS_EMPTY | Meeting UUID empty |
-| 10 | STATUS_RTMS_STREAM_ID_NOT_EXIST | Stream ID missing |
-| 11 | STATUS_RTMS_STREAM_ID_NOT_STRING | Stream ID not string |
-| 12 | STATUS_RTMS_STREAM_ID_IS_EMPTY | Stream ID empty |
-| 13 | STATUS_SESSION_NOT_FOUND | Session not found |
-| 14 | STATUS_SIGNATURE_NOT_EXIST | Signature missing |
-| 15 | STATUS_INVALID_SIGNATURE | Invalid signature |
-| 16 | STATUS_INVALID_MEETING_OR_STREAM_ID | Invalid meeting/stream |
-| 17 | STATUS_DUPLICATE_SIGNAL_REQUEST | Duplicate signaling connection |
-| 31 | STATUS_DUPLICATE_MEDIA_DATA_CONNECTION | Duplicate media connection |
-
-## March 2026 Status / Stop Reason Enhancements
-
-`RTMS_STATUS_CODE` and `RTMS_STOP_REASON` were enhanced in the March 2026 release. This file keeps the stable values already captured above, but treat the official protocol definitions as the authority for newly added or renamed values introduced after server release `2.6.7.289`.
+| 1 | STATUS_INVALID_MESSAGE_TYPE | Invalid message type |
+| 2 | STATUS_INVALID_RTMS_STREAM_ID | Invalid RTMS stream ID |
+| 3 | STATUS_INVALID_SIGNATURE | Invalid signature |
+| 4 | STATUS_INVALID_PAYLOAD | Invalid payload |
+| 5 | STATUS_INVALID_EVENTS | Invalid event list |
+| 6 | STATUS_INVALID_EVENT_TYPE | Invalid event type |
+| 7 | STATUS_INVALID_MEDIA_TYPE | Invalid media type |
+| 8 | STATUS_DUPLICATE_SIGNAL_REQUEST | Duplicate signaling connection |
+| 9 | STATUS_MEDIA_TYPE_AUDIO_NOT_SUPPORT | Audio stream not supported |
+| 10 | STATUS_MEDIA_TYPE_VIDEO_NOT_SUPPORT | Video stream not supported |
+| 11 | STATUS_MEDIA_TYPE_DESKSHARE_NOT_SUPPORT | Screen share stream not supported |
+| 12 | STATUS_MEDIA_TYPE_TRANSCRIPT_NOT_SUPPORT | Transcript stream not supported |
+| 13 | STATUS_MEDIA_TYPE_CHAT_NOT_SUPPORT | Chat stream not supported |
+| 14 | STATUS_MEDIA_TYPE_INVALID_VALUE | Invalid media type value |
+| 15 | STATUS_MEDIA_DATA_ALL_CONNECTION_EXIST | All media data connections already exist |
+| 16 | STATUS_DUPLICATE_MEDIA_DATA_CONNECTION | Duplicate media data connection |
+| 17 | STATUS_INVALID_MEDIA_PARAMS | Invalid media params |
+| 18 | STATUS_INVALID_MEDIA_AUDIO_PARAMS | Invalid audio params |
+| 19 | STATUS_INVALID_MEDIA_AUDIO_CONTENT_TYPE | Invalid audio content type |
+| 20 | STATUS_INVALID_MEDIA_AUDIO_SAMPLE_RATE | Invalid audio sample rate |
+| 21 | STATUS_INVALID_MEDIA_AUDIO_CHANNEL | Invalid audio channel count |
+| 22 | STATUS_INVALID_MEDIA_AUDIO_CODEC | Invalid audio codec |
+| 23 | STATUS_INVALID_MEDIA_AUDIO_DATA_OPT | Invalid audio data option |
+| 24 | STATUS_INVALID_MEDIA_AUDIO_SEND_RATE | Invalid audio send rate |
+| 25 | STATUS_INVALID_MEDIA_VIDEO_PARAMS | Invalid video params |
+| 26 | STATUS_INVALID_MEDIA_VIDEO_CONTENT_TYPE | Invalid video content type |
+| 27 | STATUS_INVALID_MEDIA_VIDEO_CODEC | Invalid video codec |
+| 28 | STATUS_INVALID_MEDIA_VIDEO_RESOLUTION | Invalid video resolution |
+| 29 | STATUS_INVALID_MEDIA_VIDEO_DATA_OPT | Invalid video data option |
+| 30 | STATUS_INVALID_MEDIA_VIDEO_FPS | Invalid video FPS |
+| 31 | STATUS_INVALID_MEDIA_DESKSHARE_PARAMS | Invalid deskshare params |
+| 32 | STATUS_INVALID_MEDIA_DESKSHARE_CONTENT_TYPE | Invalid deskshare content type |
+| 33 | STATUS_INVALID_MEDIA_DESKSHARE_CODEC | Invalid deskshare codec |
+| 34 | STATUS_INVALID_MEDIA_DESKSHARE_RESOLUTION | Invalid deskshare resolution |
+| 35 | STATUS_INVALID_MEDIA_DESKSHARE_FPS | Invalid deskshare FPS |
+| 36 | STATUS_INVALID_MEDIA_TRANSCRIPT_PARAMS | Invalid transcript params |
+| 37 | STATUS_INVALID_MEDIA_TRANSCRIPT_CONTENT_TYPE | Invalid transcript content type |
+| 38 | STATUS_INVALID_MEDIA_CHAT_PARAMS | Invalid chat params |
+| 39 | STATUS_INVALID_MEDIA_CHAT_CONTENT_TYPE | Invalid chat content type |
+| 40 | STATUS_INVALID_RTMS_SESSION_ID | Invalid RTMS session ID |
+| 41 | STATUS_INVALID_CLIENT_READY_ACK | Invalid client ready ack |
+| 42 | STATUS_INVALID_EVENT_SUBSCRIBE | Invalid event subscription payload |
+| 43 | STATUS_INVALID_MEDIA_TRANSCRIPT_SROUCE_LANGUAGE | Invalid transcript source language |
 
 ## Media Data Types (MEDIA_DATA_TYPE)
 
@@ -149,16 +178,7 @@ Use bitwise OR to combine:
 | 1 | AUDIO_MIXED_STREAM | All audio combined |
 | 2 | AUDIO_MULTI_STREAMS | Per-participant audio |
 | 3 | VIDEO_SINGLE_ACTIVE_STREAM | Active speaker video |
-| 4 | VIDEO_MIXED_SPEAKER_VIEW | Speaker view (coming soon) |
-| 5 | VIDEO_MIXED_GALLERY_VIEW | Gallery view (coming soon) |
-
-### March 2026 Video Option Addition
-
-The March 2026 release added:
-
-- `VIDEO_SINGLE_INDIVIDUAL_STREAM`
-
-Use this `data_opt` value when you want the video data socket to carry one selected participant's camera stream. RTMS currently supports **only one** such subscription at a time.
+| 4 | VIDEO_SINGLE_INDIVIDUAL_STREAM | One manually selected participant video stream |
 
 ## Media Resolution (MEDIA_RESOLUTION)
 
@@ -217,20 +237,28 @@ Use this `data_opt` value when you want the video data socket to carry one selec
 | 2 | STOP_BC_USER_TRIGGERED | User stopped |
 | 3 | STOP_BC_USER_LEFT | User left meeting |
 | 4 | STOP_BC_USER_EJECTED | User ejected by host |
-| 5 | STOP_BC_APP_DISABLED_BY_HOST | App disabled |
+| 5 | STOP_BC_HOST_DISABLED_APP | Host disabled app |
 | 6 | STOP_BC_MEETING_ENDED | Meeting ended |
 | 7 | STOP_BC_STREAM_CANCELED | Stream canceled |
 | 8 | STOP_BC_STREAM_REVOKED | Stream revoked (delete assets!) |
 | 9 | STOP_BC_ALL_APPS_DISABLED | All apps disabled |
 | 10 | STOP_BC_INTERNAL_EXCEPTION | Internal error |
 | 11 | STOP_BC_CONNECTION_TIMEOUT | Connection timeout |
-| 12 | STOP_BC_MEETING_CONNECTION_INTERRUPTED | Meeting connection issue |
+| 12 | STOP_BC_INSTANCE_CONNECTION_INTERRUPTED | Instance/media connection interrupted |
 | 13 | STOP_BC_SIGNAL_CONNECTION_INTERRUPTED | Signaling issue |
 | 14 | STOP_BC_DATA_CONNECTION_INTERRUPTED | Data connection issue |
 | 15 | STOP_BC_SIGNAL_CONNECTION_CLOSED_ABNORMALLY | Abnormal close |
 | 16 | STOP_BC_DATA_CONNECTION_CLOSED_ABNORMALLY | Abnormal close |
 | 17 | STOP_BC_EXIT_SIGNAL | Exit signal received |
 | 18 | STOP_BC_AUTHENTICATION_FAILURE | Auth failed |
+| 19 | STOP_BC_AWAIT_RECONNECTION_TIMEOUT | Awaited reconnection timed out |
+| 20 | STOP_BC_RECEIVER_REQUEST_CLOSE | Receiver requested stream close |
+| 21 | STOP_BC_CUSTOMER_DISCONNECTED | Contact Center customer disconnected |
+| 22 | STOP_BC_AGENT_DISCONNECTED | Contact Center agent disconnected |
+| 23 | STOP_BC_ADMIN_DISABLED_APP | Admin disabled app |
+| 24 | STOP_BC_KEEP_ALIVE_TIMEOUT | Three keep-alive requests missed |
+| 25 | STOP_BC_MANUAL_API_TRIGGERED | ZCC Voice API triggered stop |
+| 26 | STOP_BC_STREAMING_NOT_SUPPORTED | Queue does not support streaming |
 
 ## Transcript Languages (RTMS_TRANSCRIPT_LANGUAGE)
 

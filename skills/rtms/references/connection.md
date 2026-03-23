@@ -165,14 +165,14 @@ RTMS now supports subscribing to **one participant camera stream at a time**.
 signalingWs.send(JSON.stringify({
   msg_type: 5, // EVENT_SUBSCRIPTION
   events: [
-    { event_type: 'PARTICIPANT_VIDEO_ON', subscribe: true },
-    { event_type: 'PARTICIPANT_VIDEO_OFF', subscribe: true }
+    { event_type: 8, subscribe: true }, // PARTICIPANT_VIDEO_ON
+    { event_type: 9, subscribe: true }  // PARTICIPANT_VIDEO_OFF
   ]
 }));
 
 // Signaling socket: select a participant stream
 signalingWs.send(JSON.stringify({
-  msg_type: 'VIDEO_SUBSCRIPTION_REQ',
+  msg_type: 28, // VIDEO_SUBSCRIPTION_REQ
   user_id: selectedUserId,
   subscribe: true,
   timestamp: Date.now()
@@ -187,7 +187,7 @@ The backend can now request clean shutdown over the signaling socket:
 
 ```javascript
 signalingWs.send(JSON.stringify({
-  msg_type: 'STREAM_CLOSE_REQ',
+  msg_type: 21, // STREAM_CLOSE_REQ
   rtms_stream_id: streamId
 }));
 ```
