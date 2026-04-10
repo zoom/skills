@@ -233,7 +233,6 @@ repo/
 │   ├── cobrowse-sdk/
 │   ├── oauth/
 │   └── zoom-mcp/
-└── tools/                    # Audit, crawl, and maintenance helpers
 ```
 
 ## Resources
@@ -243,7 +242,6 @@ repo/
 - [Zoom Developer Forum](https://devforum.zoom.us/)
 - [Zoom GitHub](https://github.com/zoom)
 - [RUNBOOK.md](RUNBOOK.md) - repository maintenance and preflight checklist
-- [tools/thread-triage/README.md](tools/thread-triage/README.md) - forum triage outputs and skill-gap tracking
 
 ## Contributing
 
