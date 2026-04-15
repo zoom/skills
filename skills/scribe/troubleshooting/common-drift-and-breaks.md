@@ -29,6 +29,7 @@ Symptoms:
 
 Preferred fix:
 - treat uploaded files and URL-based files as two separate request paths instead of forcing both through one JSON shape
+- exception: a browser microphone demo may intentionally wrap short chunks as JSON `data:` URLs to avoid multipart edge behavior, but treat that as a demo-specific transport choice, not the default upload design
 
 ## 3. Fast mode returns `413 Request Entity Too Large`
 

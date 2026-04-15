@@ -60,7 +60,8 @@ Use this before deep debugging.
 
 - JWT generation works locally.
 - `POST /aiservices/scribe/transcribe` succeeds with a known small file.
-- For browser-uploaded files, backend forwarding should use `multipart/form-data` to Zoom, not a JSON `data:` URI wrapper.
+- For normal browser-uploaded files, backend forwarding should use `multipart/form-data` to Zoom.
+- Special-case demo path: short browser microphone chunks may be wrapped as JSON `data:` URLs if you intentionally choose a pseudo-streaming transport, but do not generalize that to your main file-upload flow.
 - Batch submit returns `201` with `job_id`.
 - Webhook signature verification works with the configured secret.
 
