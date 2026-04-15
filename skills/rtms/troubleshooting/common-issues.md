@@ -137,6 +137,7 @@ ws.on('message', (data) => {
 1. Wrong media_type in handshake
 2. No participants speaking
 3. Audio not enabled in meeting
+4. Unsupported audio parameter combination rejected by the media server
 
 **Solution**:
 1. Verify media_type includes AUDIO (1):
@@ -147,6 +148,46 @@ ws.on('message', (data) => {
    ```
 2. Wait for participant to speak
 3. Check meeting audio settings
+4. Validate the full audio parameter combination against the supported matrix:
+   - `RTP + OPUS + 48kHz + mono/stereo + 20ms`
+   - `RTP + G711 (PCMA) + 8kHz + mono + 20ms`
+   - `RTP + G722 + 16kHz + mono + 20ms`
+   - `RAW_AUDIO + L16 + 8/16/32/48kHz + mono/stereo + 20ms..1s` with `send_rate` multiple of `20`
+   - `RAW_AUDIO + OPUS + 48kHz + mono/stereo + 20ms`
+   - `RAW_AUDIO + G711 (PCMA) + 8kHz + mono + 20ms`
+   - `RAW_AUDIO + G722 + 16kHz + mono + 20ms`
+
+### Invalid Audio Media Params
+
+**Problem**: The handshake fails with audio validation status codes such as:
+
+- `18` `STATUS_INVALID_MEDIA_AUDIO_PARAMS`
+- `19` `STATUS_INVALID_MEDIA_AUDIO_CONTENT_TYPE`
+- `20` `STATUS_INVALID_MEDIA_AUDIO_SAMPLE_RATE`
+- `21` `STATUS_INVALID_MEDIA_AUDIO_CHANNEL`
+- `22` `STATUS_INVALID_MEDIA_AUDIO_CODEC`
+- `23` `STATUS_INVALID_MEDIA_AUDIO_DATA_OPT`
+- `24` `STATUS_INVALID_MEDIA_AUDIO_SEND_RATE`
+
+**Cause**: The media server validates the whole audio combination, not each field in isolation.
+
+**Solution**:
+
+1. pick a known-good matrix row
+2. use the exact sample rate, codec, channel count, and send rate from that row
+3. for `RAW_AUDIO + L16`, keep `send_rate` a multiple of `20`
+4. if you need a conservative default, use:
+
+```javascript
+audio: {
+  content_type: 2, // RAW_AUDIO
+  sample_rate: 1,  // 16kHz
+  channel: 1,
+  codec: 1,        // L16
+  data_opt: 1,
+  send_rate: 20
+}
+```
 
 ### No Video Data
 

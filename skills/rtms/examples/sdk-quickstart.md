@@ -160,7 +160,7 @@ client.setAudioParams({
   contentType: 2,    // RAW_AUDIO
   codec: 4,          // OPUS (default)
   sampleRate: 3,     // 48kHz
-  channel: 2,        // Stereo (only with OPUS)
+  channel: 2,        // Stereo is valid for this OPUS preset
   dataOpt: 2,        // AUDIO_MULTI_STREAMS (per-participant)
   duration: 20,      // 20ms chunks
   frameSize: 960     // Samples per frame
@@ -176,9 +176,11 @@ client.join(payload);
 | `contentType` | 1=RTP, 2=RAW_AUDIO |
 | `codec` | 1=L16 (PCM), 2=G.711, 3=G.722, 4=OPUS |
 | `sampleRate` | 0=8kHz, 1=16kHz, 2=32kHz, 3=48kHz |
-| `channel` | 1=Mono, 2=Stereo (OPUS only!) |
+| `channel` | 1=Mono, 2=Stereo when supported by the selected matrix row |
 | `dataOpt` | 1=Mixed stream, 2=Multi-streams (per participant) |
 | `duration` | Chunk size in ms (multiple of 20, max 1000) |
+
+**Supported matrix rule**: do not mix these values arbitrarily. Follow the supported combinations in `../references/media-types.md#supported-audio-media-parameter-matrix` or the media server can reject the handshake.
 
 ## Configuring Video Parameters
 

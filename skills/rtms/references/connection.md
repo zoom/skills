@@ -149,6 +149,39 @@ Use `enable_lid: false` when:
 - language-switching is undesirable
 - you want more predictable downstream transcript processing
 
+## Audio Parameter Matrix Rule
+
+Do not treat RTMS audio params as freely composable. The media server validates the full combination of:
+
+- `content_type`
+- `codec`
+- `sample_rate`
+- `channel`
+- `send_rate`
+
+Supported combinations:
+
+- `RTP + OPUS + 48kHz + mono/stereo + 20ms`
+- `RTP + G711 (PCMA) + 8kHz + mono + 20ms`
+- `RTP + G722 + 16kHz + mono + 20ms`
+- `RAW_AUDIO + L16 + 8/16/32/48kHz + mono/stereo + 20ms..1s` where `send_rate % 20 === 0`
+- `RAW_AUDIO + OPUS + 48kHz + mono/stereo + 20ms`
+- `RAW_AUDIO + G711 (PCMA) + 8kHz + mono + 20ms`
+- `RAW_AUDIO + G722 + 16kHz + mono + 20ms`
+
+If you are not sure which preset to use, start with:
+
+```javascript
+audio: {
+  content_type: 2, // RAW_AUDIO
+  sample_rate: 1,  // 16kHz
+  channel: 1,      // Mono
+  codec: 1,        // L16
+  data_opt: 1,
+  send_rate: 20
+}
+```
+
 ## Single Individual Video Subscription Flow
 
 RTMS now supports subscribing to **one participant camera stream at a time**.

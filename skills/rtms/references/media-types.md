@@ -31,7 +31,35 @@ const mediaTypes = RTMSManager.MEDIA.AUDIO | RTMSManager.MEDIA.TRANSCRIPT;  // 9
 | Data Option | **Mixed (1)**, Multi-stream (2) |
 | Send Rate | **20ms** (recommended) |
 
-**Important**: Stereo is ONLY supported with Opus codec!
+**Important**: Stereo support depends on the full content-type/codec matrix. `RTP + Opus`, `RAW + Opus`, and `RAW + PCM (L16)` support stereo; G.711 (PCMA) and G.722 are mono-only.
+
+### Supported Audio Media Parameter Matrix
+
+When calling the RTMS media server, audio parameters must follow the supported matrix. Unsupported combinations are rejected with media-audio validation status codes.
+
+#### RTP Audio
+
+| Content Type | Payload Type (Codec) | Sample Rate | Channel | Send Rate |
+|--------------|----------------------|-------------|---------|-----------|
+| RTP | Opus | 48kHz | Mono or Stereo | 20ms |
+| RTP | G.711 (PCMA) | 8kHz | Mono | 20ms |
+| RTP | G.722 | 16kHz | Mono | 20ms |
+
+#### RAW Audio
+
+| Content Type | Payload Type (Codec) | Sample Rate | Channel | Send Rate |
+|--------------|----------------------|-------------|---------|-----------|
+| RAW | PCM (L16) | 8kHz, 16kHz, 32kHz, 48kHz | Mono or Stereo | 20ms to 1s, multiple of 20ms |
+| RAW | Opus | 48kHz | Mono or Stereo | 20ms |
+| RAW | G.711 (PCMA) | 8kHz | Mono | 20ms |
+| RAW | G.722 | 16kHz | Mono | 20ms |
+
+Rules to enforce:
+
+- do not assume every codec works with every sample rate
+- stereo is valid only when the selected codec supports it
+- for RAW PCM/L16, `send_rate` must be a multiple of `20`
+- if you want a portable baseline, use `RAW/RAW_AUDIO + L16 + 16kHz + Mono + 20ms`
 
 ### Audio Configuration Example
 
@@ -40,9 +68,33 @@ const audioParams = {
   content_type: 1,  // MEDIA_CONTENT_TYPE_RTP
   sample_rate: 1,   // 16kHz
   channel: 1,       // Mono
-  codec: 1,         // L16 (PCM)
+  codec: 3,         // G722
   data_opt: 1,      // Mixed stream (all participants)
   send_rate: 20     // 20ms intervals
+};
+```
+
+### Safe Audio Presets
+
+```javascript
+// RAW PCM baseline
+const rawPcmAudioParams = {
+  content_type: 2,  // RAW_AUDIO
+  sample_rate: 1,   // 16kHz
+  channel: 1,       // Mono
+  codec: 1,         // L16
+  data_opt: 1,      // Mixed stream
+  send_rate: 20
+};
+
+// RTP Opus stereo
+const rtpOpusAudioParams = {
+  content_type: 1,  // RTP
+  sample_rate: 3,   // 48kHz
+  channel: 2,       // Stereo
+  codec: 4,         // OPUS
+  data_opt: 1,
+  send_rate: 20
 };
 ```
 
@@ -205,9 +257,9 @@ RTMSManager.on('chat', ({ text, userName, timestamp }) => {
 const mediaParams = {
   audio: {
     content_type: 1,  // RTP
-    sample_rate: 1,   // 16kHz
+    sample_rate: 3,   // 48kHz
     channel: 1,       // Mono
-    codec: 1,         // L16 (PCM)
+    codec: 4,         // OPUS
     data_opt: 1,      // Mixed stream
     send_rate: 20
   },

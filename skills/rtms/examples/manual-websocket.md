@@ -431,7 +431,7 @@ app.listen(PORT, () => {
 {
   content_type: 2,     // 1=RTP, 2=RAW_AUDIO
   sample_rate: 1,      // 0=8kHz, 1=16kHz, 2=32kHz, 3=48kHz
-  channel: 1,          // 1=Mono, 2=Stereo (OPUS only)
+  channel: 1,          // 1=Mono, 2=Stereo when supported by the selected matrix row
   codec: 1,            // 1=L16, 2=G.711, 3=G.722, 4=OPUS
   data_opt: 1,         // 1=Mixed, 2=Multi-streams
   send_rate: 20        // Chunk size in ms (multiple of 20)

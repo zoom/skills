@@ -234,6 +234,7 @@ Combine types with bitwise OR:
 | **Heartbeat mandatory** | Respond to msg_type 12 with msg_type 13, or connection dies |
 | **Reconnection is YOUR job** | RTMS doesn't auto-reconnect. Media keep-alive tolerance is now about **65s**; signaling remains around **60s** |
 | **Transcript language drift** | Use `src_language` plus `enable_lid: false` when you want fixed-language transcription instead of automatic language switching |
+| **Audio params must match the support matrix** | Do not mix arbitrary `content_type`, `codec`, `sample_rate`, `channel`, and `send_rate`. The media server rejects unsupported combinations |
 | **Single participant video only** | `VIDEO_SINGLE_INDIVIDUAL_STREAM` supports one participant at a time. A new `VIDEO_SUBSCRIPTION_REQ` overrides the previous selection |
 | **Graceful close is explicit now** | Use `STREAM_CLOSE_REQ` / `STREAM_CLOSE_RESP` when your backend wants to terminate the stream cleanly |
 
