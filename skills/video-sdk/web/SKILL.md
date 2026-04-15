@@ -1,820 +1,525 @@
 ---
 name: video-sdk/web
-description: "Zoom Video SDK for Web - JavaScript/TypeScript integration for browser-based video sessions, real-time communication, screen sharing, recording, and live transcription"
+description: Expert guidance for building browser-based video sessions with the Zoom Video SDK for Web (@zoom/videosdk v2.4.0) in React, Vue, Angular, Svelte, or vanilla TypeScript. Use this skill whenever the user is implementing or debugging any in-browser real-time communication feature — joining/leaving a session, capturing or rendering audio/video, gallery or active-speaker views, virtual backgrounds, screen sharing with annotation, in-session chat or command channel, recording, subsessions, live streaming, PSTN/SIP dial-out, PTZ cameras, quality stats, WebAssembly/SharedArrayBuffer setup, CSP/COOP/COEP headers, JWT session tokens, or resolving SDK error codes. Trigger even when the user doesn't explicitly say "Zoom" — signals include `@zoom/videosdk`, `ZoomVideo.createClient`, `client.getMediaStream`, `stream.startVideo`, `attachVideo`, "video conferencing", "video call app", "video SDK", "render remote video", or debugging black/green video tiles, audio that won't start, or `OperationBlockedByBrowserPolicy` errors. Prefer this skill over generic WebRTC advice whenever `@zoom/videosdk` is in play.
 triggers:
   - "video sdk web"
   - "custom video web"
   - "attachvideo"
-  - "peer-video-state-change"
   - "web videosdk"
+  - "zoom videosdk web"
+  - "@zoom/videosdk"
+  - "video web session"
+  - "peer-video-state-change"
+  - "video rendering"
 ---
 
-# Zoom Video SDK - Web Development
+# Zoom Video SDK Web (v2.4.0)
 
-Expert guidance for developing with the Zoom Video SDK on Web. This SDK enables custom video applications in the browser with real-time video/audio, screen sharing, cloud recording, live streaming, chat, and live transcription.
+Expert guidance for building video sessions with Zoom Video SDK for Web.
 
 This skill is for **custom video sessions**, not embedded Zoom meetings.
-If the user wants a custom UI for a real Zoom meeting, route to
-[../../meeting-sdk/web/component-view/SKILL.md](../../meeting-sdk/web/component-view/SKILL.md).
-
-**Official Documentation**: https://developers.zoom.us/docs/video-sdk/web/
-**API Reference**: https://marketplacefront.zoom.us/sdk/custom/web/modules.html
-**Sample Repository**: https://github.com/zoom/videosdk-web-sample
-
-## Quick Links
-
-**New to Video SDK? Follow this path:**
-
-1. **[SDK Architecture Pattern](concepts/sdk-architecture-pattern.md)** - Universal 3-step pattern for ANY feature
-2. **[Session Join Pattern](examples/session-join-pattern.md)** - Complete working code to join a session
-3. **[Video Rendering](examples/video-rendering.md)** - Display video with attachVideo()
-4. **[Event Handling](examples/event-handling.md)** - Required events for video/audio
-
-**Reference:**
-- **[Singleton Hierarchy](concepts/singleton-hierarchy.md)** - 4-level SDK navigation map
-- **[API Reference](references/web-reference.md)** - Methods, events, error codes
-- **[SKILL.md](SKILL.md)** - Complete documentation navigation
-- **[../../probe-sdk/SKILL.md](../../probe-sdk/SKILL.md)** - Optional browser/device/network readiness diagnostics before join
-
-**Having issues?**
-- Video not showing → [Video Rendering](examples/video-rendering.md) (use attachVideo, not renderVideo)
-- getMediaStream() returns undefined → Call AFTER join() completes
-- Quick diagnostics → [Common Issues](troubleshooting/common-issues.md)
-
-## SDK Overview
-
-The Zoom Video SDK for Web is a JavaScript library that provides:
-- **Session Management**: Join/leave video SDK sessions
-- **Video/Audio**: Start/stop camera and microphone
-- **Screen Sharing**: Share screens or browser tabs
-- **Cloud Recording**: Record sessions to Zoom cloud
-- **Live Streaming**: Stream to RTMP endpoints
-- **Chat**: In-session messaging
-- **Command Channel**: Custom command messaging
-- **Live Transcription**: Real-time speech-to-text
-- **Subsessions**: Breakout room support
-- **Whiteboard**: Collaborative whiteboard features
-- **Virtual Background**: Blur or custom image backgrounds
-
-## Prerequisites
-
-### System Requirements
-
-- **Modern Browser**: Chrome 80+, Firefox 75+, Safari 14+, Edge 80+
-- **Video SDK Credentials**: SDK Key and Secret from [Marketplace](https://marketplace.zoom.us/)
-- **JWT Token**: Server-side generated signature
-
-### Browser Feature Requirements
-
-```javascript
-// Check browser compatibility before init
-const compatibility = ZoomVideo.checkSystemRequirements();
-console.log('Audio:', compatibility.audio);
-console.log('Video:', compatibility.video);
-console.log('Screen:', compatibility.screen);
-
-// Check feature support
-const features = ZoomVideo.checkFeatureRequirements();
-console.log('Supported:', features.supportFeatures);
-console.log('Unsupported:', features.unSupportFeatures);
-```
-
-### Optional Pre-Join Diagnostics (Recommended for Reliability)
-
-Use Probe SDK as a readiness gate before `client.join(...)` when you need to reduce failed starts:
-
-1. Run diagnostics with [../../probe-sdk/SKILL.md](../../probe-sdk/SKILL.md).
-2. Evaluate policy (`allow`, `warn`, `block`).
-3. Start Video SDK join only when policy allows.
-
-Cross-skill flow: [../../general/use-cases/probe-sdk-preflight-readiness-gate.md](../../general/use-cases/probe-sdk-preflight-readiness-gate.md)
-
-## Installation
-
-### NPM (Recommended)
-
-```bash
-npm install @zoom/videosdk
-```
-
-```javascript
-import ZoomVideo from '@zoom/videosdk';
-```
-
-### CDN (Fallback Strategy Recommended)
-
-> **Note**: Some networks/ad blockers can block `source.zoom.us`. If you see flaky loads, first try allowlisting the domain in your environment. If needed, consider a fallback (mirror/self-host) only if it's permitted for your use case and you can keep versions in sync.
-
-```bash
-# Download SDK locally
-curl "https://source.zoom.us/videosdk/zoom-video-2.3.12.min.js" -o public/js/zoom-video-sdk.min.js
-```
-
-```html
-<!-- Use local copy instead of CDN -->
-<script src="js/zoom-video-sdk.min.js"></script>
-```
-
-```javascript
-// CDN exports as WebVideoSDK, NOT ZoomVideo
-const ZoomVideo = WebVideoSDK.default;
-```
+If the user wants a custom UI for a real Zoom meeting, route to [../../meeting-sdk/web/component-view/SKILL.md](../../meeting-sdk/web/component-view/SKILL.md).
+Use [../../probe-sdk/SKILL.md](../../probe-sdk/SKILL.md) as an optional browser/device/network readiness gate before `client.join(...)`.
 
 ## Quick Start
 
-```javascript
-import ZoomVideo from '@zoom/videosdk';
+### Installation
 
-// 1. Create client (singleton - returns same instance)
+```bash
+bun install @zoom/videosdk --save
+# or 
+npm install @zoom/videosdk --save
+```
+
+### Basic Session Setup
+
+```typescript
+import ZoomVideo from "@zoom/videosdk";
+
+// 1. Create client
 const client = ZoomVideo.createClient();
 
 // 2. Initialize SDK
-await client.init('en-US', 'Global', { patchJsMedia: true });
+await client.init("en-US", "Global", { patchJsMedia: true });
 
-// 3. Join session
-await client.join(topic, signature, userName, password);
+// 3. Join session (requires JWT token from your server)
+await client.join(sessionName, jwtToken, userName, sessionPassword);
 
-// 4. CRITICAL: Get stream AFTER join
+// 4. Get media stream for audio/video control
+const stream = client.getMediaStream();
+```
+
+## Core API Reference
+
+### ZoomVideo (Static Methods)
+
+| Method                             | Description                                              |
+| ---------------------------------- | -------------------------------------------------------- |
+| `createClient()`                   | Create VideoClient instance (singleton)                  |
+| `checkSystemRequirements()`        | Check browser compatibility → `{ audio, video, screen }` |
+| `checkFeatureRequirements()`       | Get supported/unsupported features list                  |
+| `getDevices(skipPermissionCheck?)` | Enumerate media devices                                  |
+| `createLocalAudioTrack(deviceId?)` | Create local audio track for preview                     |
+| `createLocalVideoTrack(deviceId?)` | Create local video track for preview                     |
+| `destroyClient()`                  | Destroy client instance                                  |
+| `preloadDependentAssets(path?)`    | Preload WebAssembly/Worker assets                        |
+
+### VideoClient Methods
+
+#### Session Management
+
+```typescript
+// Initialize before joining
+await client.init(language, dependentAssets, options?);
+
+// Join session
+await client.join(topic, token, userName, password?, idleTimeoutMins?);
+
+// Leave or end session
+await client.leave(end?); // end=true ends for all (host only)
+```
+
+#### User Management
+
+```typescript
+client.getCurrentUserInfo(): Participant;
+client.getAllUser(): Participant[];
+client.getUser(userId): Participant | undefined;
+client.getSessionHost(): Participant | undefined;
+
+// Host/Manager actions
+client.makeHost(userId);      // Transfer host
+client.makeManager(userId);   // Promote to manager
+client.revokeManager(userId); // Revoke manager
+client.removeUser(userId);    // Remove participant
+client.changeName(name, userId?);
+```
+
+#### Feature Clients
+
+```typescript
+client.getMediaStream(); // Audio/Video/Screen share
+client.getChatClient(); // In-session chat
+client.getCommandClient(); // Custom signaling
+client.getRecordingClient(); // Cloud recording
+client.getSubsessionClient(); // Breakout rooms
+client.getLiveTranscriptionClient(); // Captions
+client.getLiveStreamClient(); // RTMP streaming
+client.getWhiteboardClient(); // Whiteboard
+```
+
+### MediaStream (Audio/Video Control)
+
+#### Audio
+
+```typescript
 const stream = client.getMediaStream();
 
-// 5. Start media
-await stream.startVideo();
-await stream.startAudio();
-
-// 6. Attach video to DOM
-const videoElement = await stream.attachVideo(userId, VideoQuality.Video_360P);
-document.getElementById('video-container').appendChild(videoElement);
-```
-
-## SDK Lifecycle (CRITICAL ORDER)
-
-The SDK has a strict lifecycle. Violating it causes **silent failures**.
-
-```
-1. Create client:     client = ZoomVideo.createClient()
-2. Initialize:        await client.init('en-US', 'Global', options)
-3. Join session:      await client.join(topic, signature, userName, password)
-4. Get stream:        stream = client.getMediaStream()  ← ONLY AFTER JOIN
-5. Start media:       await stream.startVideo() / await stream.startAudio()
-```
-
-**Common Mistake:**
-
-```javascript
-// WRONG: Getting stream before joining
-const stream = client.getMediaStream();  // Returns undefined!
-await client.join(...);
-
-// CORRECT: Get stream after joining
-await client.join(...);
-const stream = client.getMediaStream();  // Works!
-```
-
-## Critical Gotchas and Best Practices
-
-### getMediaStream() ONLY Works After join()
-
-The #1 issue that causes video/audio to fail:
-
-```javascript
-// WRONG
-const stream = client.getMediaStream();  // undefined!
-await client.join(...);
-
-// CORRECT
-await client.join(...);
-const stream = client.getMediaStream();  // Works
-```
-
-### Use attachVideo() NOT renderVideo()
-
-`renderVideo()` is **deprecated**. Use `attachVideo()` which returns a VideoPlayer element:
-
-```javascript
-import { VideoQuality } from '@zoom/videosdk';
-
-// CORRECT: attachVideo returns element to append
-const videoElement = await stream.attachVideo(userId, VideoQuality.Video_360P);
-document.getElementById('video-container').appendChild(videoElement);
-
-// WRONG: renderVideo is deprecated
-await stream.renderVideo(canvas, userId, ...);  // Don't use!
-```
-
-### Video Rendering is Event-Driven (CRITICAL)
-
-You MUST listen for events to properly render participant videos:
-
-```javascript
-// When another participant's video state changes
-client.on('peer-video-state-change', async (payload) => {
-  const { action, userId } = payload;
-  
-  if (action === 'Start') {
-    // Participant turned on video - attach it
-    const element = await stream.attachVideo(userId, VideoQuality.Video_360P);
-    container.appendChild(element);
-  } else if (action === 'Stop') {
-    // Participant turned off video - detach it
-    await stream.detachVideo(userId);
-  }
+// Start audio (requires user gesture)
+await stream.startAudio({
+  mute?: boolean,
+  speakerOnly?: boolean,
+  backgroundNoiseSuppression?: boolean,
+  microphoneId?: string,
+  speakerId?: string,
 });
 
-// When participants join/leave
-client.on('user-added', (payload) => {
-  // New participant joined - check if their video is on
-  const users = client.getAllUser();
-  // Render videos for users with bVideoOn === true
-});
-
-client.on('user-removed', (payload) => {
-  // Participant left - clean up their video element
-  stream.detachVideo(payload[0].userId);
-});
-```
-
-### Peer Video on Mid-Session Join
-
-**Existing participants' videos won't auto-render when you join mid-session.**
-
-```javascript
-// After joining, render existing participants' videos
-const renderExistingVideos = async () => {
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  const users = client.getAllUser();
-  const currentUserId = client.getCurrentUserInfo().userId;
-  
-  for (const user of users) {
-    if (user.bVideoOn && user.userId !== currentUserId) {
-      const element = await stream.attachVideo(user.userId, VideoQuality.Video_360P);
-      document.getElementById(`video-${user.userId}`).appendChild(element);
-    }
-  }
-};
-```
-
-### CDN Race Condition with ES Modules
-
-When using `<script type="module">` with CDN, the SDK may not be loaded yet:
-
-```javascript
-function waitForSDK(timeout = 10000) {
-  return new Promise((resolve, reject) => {
-    if (typeof WebVideoSDK !== 'undefined') {
-      resolve();
-      return;
-    }
-    const start = Date.now();
-    const check = setInterval(() => {
-      if (typeof WebVideoSDK !== 'undefined') {
-        clearInterval(check);
-        resolve();
-      } else if (Date.now() - start > timeout) {
-        clearInterval(check);
-        reject(new Error('SDK failed to load'));
-      }
-    }, 100);
-  });
-}
-
-await waitForSDK();
-const ZoomVideo = WebVideoSDK.default;
-```
-
-### SharedArrayBuffer for HD Video
-
-For optimal performance and HD video, configure these headers on your server:
-
-```
-Cross-Origin-Opener-Policy: same-origin
-Cross-Origin-Embedder-Policy: require-corp
-```
-
-**Note:** As of v1.11.2, SharedArrayBuffer is elective (not strictly required).
-
-### Check HD Capability Before Enabling
-
-```javascript
-const stream = client.getMediaStream();
-
-// Check if 720p is supported
-const hdSupported = stream.isSupportHDVideo();
-
-// Get maximum video quality
-const maxQuality = stream.getVideoMaxQuality();
-// 0=90P, 1=180P, 2=360P, 3=720P, 4=1080P
-
-// Start video with HD
-if (hdSupported) {
-  await stream.startVideo({ hd: true });
-}
-```
-
-### Screen Share Rendering Mode Check
-
-```javascript
-const stream = client.getMediaStream();
-
-// Check which element type to use
-if (stream.isStartShareScreenWithVideoElement()) {
-  // Use video element
-  const video = document.getElementById('share-video');
-  await stream.startShareScreen(video as unknown as HTMLCanvasElement);
-} else {
-  // Use canvas element
-  const canvas = document.getElementById('share-canvas');
-  await stream.startShareScreen(canvas);
-}
-```
-
-## Key Features
-
-### Video Quality Enum
-
-```javascript
-import { VideoQuality } from '@zoom/videosdk';
-
-VideoQuality.Video_90P   // 0
-VideoQuality.Video_180P  // 1
-VideoQuality.Video_360P  // 2 (recommended for most cases)
-VideoQuality.Video_720P  // 3
-VideoQuality.Video_1080P // 4
-```
-
-### Virtual Backgrounds
-
-```javascript
-const stream = client.getMediaStream();
-
-// Always check support first
-if (stream.isSupportVirtualBackground()) {
-  // Blur background
-  await stream.updateVirtualBackgroundImage('blur');
-  
-  // Custom image background
-  await stream.updateVirtualBackgroundImage('https://example.com/bg.jpg');
-  
-  // Remove virtual background
-  await stream.updateVirtualBackgroundImage(undefined);
-}
-```
-
-### Video Processor (Custom Effects)
-
-The `VideoProcessor` class allows you to intercept and modify video frames:
-
-```javascript
-// video-processor-worker.js
-class MyVideoProcessor extends VideoProcessor {
-  processFrame(input, output) {
-    const ctx = output.getContext('2d');
-    ctx.drawImage(input, 0, 0);
-    
-    // Add overlay
-    ctx.fillStyle = 'white';
-    ctx.font = '24px Arial';
-    ctx.fillText('Live', 20, 40);
-    
-    return true;
-  }
-}
-```
-
-### WebRTC Mode
-
-Enable WebRTC mode for direct peer-to-peer streaming with HD video support:
-
-```javascript
-await client.init('en-US', 'Global', {
-  patchJsMedia: true,
-  webrtc: true  // Enable WebRTC mode
-});
-```
-
-## Feature Clients
-
-Access specialized clients from the VideoClient:
-
-| Client | Access Method | Purpose |
-|--------|---------------|---------|
-| **Stream** | `client.getMediaStream()` | Video, audio, screen share, devices |
-| **Chat** | `client.getChatClient()` | Send/receive messages |
-| **Command** | `client.getCommandClient()` | Custom commands (reactions, etc.) |
-| **Recording** | `client.getRecordingClient()` | Cloud recording control |
-| **Transcription** | `client.getLiveTranscriptionClient()` | Live captions |
-| **LiveStream** | `client.getLiveStreamClient()` | RTMP streaming |
-| **Subsession** | `client.getSubsessionClient()` | Breakout rooms |
-| **Whiteboard** | `client.getWhiteboardClient()` | Collaborative whiteboard |
-
-## Common Tasks
-
-### Start/Stop Video
-
-```javascript
-await stream.startVideo();
-await stream.stopVideo();
-```
-
-### Start/Stop Audio
-
-```javascript
-await stream.startAudio();
+// Control
 await stream.muteAudio();
 await stream.unmuteAudio();
-await stream.stopAudio();
+stream.stopAudio();
+
+// Device management
+stream.getMicList(): MediaDevice[];
+stream.getSpeakerList(): MediaDevice[];
+await stream.switchMicrophone(deviceId);
+await stream.switchSpeaker(deviceId);
 ```
 
-### Switch Devices
+#### Video
 
-```javascript
-// Get available devices
-const cameras = stream.getCameraList();
-const mics = stream.getMicList();
-const speakers = stream.getSpeakerList();
+```typescript
+// Start video (simple call, no options needed)
+await stream.startVideo();
 
-// Switch devices
-await stream.switchCamera(cameraId);
-await stream.switchMicrophone(micId);
-await stream.switchSpeaker(speakerId);
+// Or with options
+await stream.startVideo({
+  cameraId?: string,
+  hd?: boolean,           // 720p
+  fullHd?: boolean,       // 1080p
+  mirrored?: boolean,
+  virtualBackground?: { imageUrl: string | 'blur' | undefined, cropped?: boolean },
+});
+
+// CRITICAL: Attach video to DOM
+// 1. Container MUST be a <video-player-container> custom element
+// 2. attachVideo returns an element - append it to the container
+// 3. Do NOT pass container as third parameter
+const videoElement = await stream.attachVideo(userId, VideoQuality.Video_720P);
+container.appendChild(videoElement);
+
+// Stop video
+await stream.stopVideo();
+
+// Detach video (cleanup)
+stream.detachVideo(userId);
+
+// Device management
+stream.getCameraList(): MediaDevice[];
+await stream.switchCamera(deviceId);
 ```
 
-### Screen Sharing
+#### Screen Share
 
-```javascript
+```typescript
 // Start sharing
-await stream.startShareScreen(canvas);
+await stream.startShareScreen({
+  broadcastToSubsession: boolean,
+  optimizedForSharedVideo: boolean,
+  secondaryCameraId: string, // Share secondary camera
+});
 
 // Stop sharing
 await stream.stopShareScreen();
 
-// Receive share
-client.on('active-share-change', async (payload) => {
-  if (payload.state === 'Active') {
-    await stream.startShareView(canvas, payload.userId);
-  } else {
-    await stream.stopShareView();
-  }
+// View others' share
+await stream.startShareView(canvas, userId);
+stream.stopShareView();
+```
+
+### Events
+
+```typescript
+// Connection
+client.on("connection-change", (payload) => {
+  // payload.state: 'Connected' | 'Reconnecting' | 'Closed' | 'Fail'
+});
+
+// Users
+client.on("user-added", (participants: Participant[]) => {});
+client.on("user-updated", (participants: Participant[]) => {});
+client.on("user-removed", (participants: Participant[]) => {});
+
+// Audio
+client.on("current-audio-change", (payload) => {
+  // payload.action: 'join' | 'leave' | 'muted' | 'unmuted'
+});
+client.on("active-speaker", (payload) => {
+  // payload.activeSpeaker: { oderId: number, oderId?: number }[]
+});
+
+// Video
+client.on("video-active-change", (payload) => {
+  // payload.userId, payload.state: 'Active' | 'Inactive'
+});
+client.on("peer-video-state-change", (payload) => {
+  // payload.userId, payload.action: 'Start' | 'Stop'
+});
+
+// Screen Share
+client.on("active-share-change", (payload) => {
+  // payload.userId, payload.state: 'Active' | 'Inactive'
+});
+client.on("peer-share-state-change", (payload) => {
+  // payload.userId, payload.action: 'Start' | 'Stop'
+});
+
+// Chat
+client.on("chat-on-message", (payload) => {
+  // payload.message, payload.sender, payload.timestamp
+});
+
+// Device
+client.on("device-change", () => {
+  // Re-enumerate devices
 });
 ```
 
-### Chat
+## Framework-Specific Implementation Guides
 
-```javascript
-const chatClient = client.getChatClient();
+For complete implementation examples with full project setup, hooks/composables/services, and components:
 
-// Send to everyone
-await chatClient.send('Hello, everyone!');
+- **[references/react.md](references/react.md)** - React 19 + Vite 7 + TypeScript + shadcn/ui implementation
+- **[references/vue.md](references/vue.md)** - Vue 3 + Vite 7 + TypeScript + shadcn-vue implementation
+- **[references/angular.md](references/angular.md)** - Angular 21 + Standalone Components + Signals implementation
+- **[references/svelte.md](references/svelte.md)** - Svelte 5 + Runes + Vite 7 + TypeScript implementation
 
-// Send to specific user
-await chatClient.sendToUser(userId, 'Private message');
+### Quick Setup Requirements
 
-// Receive messages
-client.on('chat-on-message', (payload) => {
-  console.log(`${payload.sender.name}: ${payload.message}`);
-});
-```
+**All frameworks MUST configure:**
 
-### Recording (Host Only)
+1. **COOP/COEP Headers** (for SharedArrayBuffer support):
 
-```javascript
-const recordingClient = client.getRecordingClient();
-
-await recordingClient.startCloudRecording();
-await recordingClient.stopCloudRecording();
-
-client.on('recording-change', (payload) => {
-  console.log('Recording status:', payload.state);
-});
-```
-
-### Leave/End Session
-
-```javascript
-// Leave session (others stay)
-await client.leave();
-
-// End session for ALL participants (host only)
-await client.leave(true);
-```
-
-## Error Handling
-
-### Common Join Errors
-
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `Invalid signature` | JWT expired or malformed | Generate new signature |
-| `Session does not exist` | Host hasn't started yet | Show "waiting" message, retry |
-| `Permission denied` | User denied camera/mic | Request permission again |
-
-### Example Error Handler
-
-```javascript
-try {
-  await client.join(topic, signature, userName, password);
-} catch (error) {
-  if (error.reason?.includes('signature')) {
-    // Regenerate signature and retry
-  } else if (error.reason?.includes('Session')) {
-    // Show "Waiting for host..." and poll
-  } else if (error.reason?.includes('Permission')) {
-    // Guide user to enable permissions
-  }
-  console.error('Join failed:', error);
+```typescript
+// vite.config.ts
+server: {
+  headers: {
+    'Cross-Origin-Opener-Policy': 'same-origin',
+    'Cross-Origin-Embedder-Policy': 'require-corp',
+  },
 }
 ```
 
-## Browser Compatibility
+2. **TypeScript Custom Elements** (for video rendering):
 
-| Feature | Chrome | Firefox | Safari | Edge |
-|---------|--------|---------|--------|------|
-| Video | 80+ | 75+ | 14+ | 80+ |
-| Audio | 80+ | 75+ | 14+ | 80+ |
-| Screen Share | 80+ | 75+ | 15+ | 80+ |
-| Virtual BG | 80+ | 90+ | - | 80+ |
-
-**Safari Notes:**
-- Virtual background not supported
-- Screen sharing requires macOS 15+
-
-## CORS Errors (Telemetry)
-
-**CORS errors to `log-external-gateway.zoom.us` are harmless.**
-
-These are caused by COOP/COEP headers blocking telemetry requests. They don't affect SDK functionality.
-
-## Complete Documentation Library
-
-### Core Concepts
-- **[SDK Architecture Pattern](concepts/sdk-architecture-pattern.md)** - Universal 3-step pattern for ANY feature
-- **[Singleton Hierarchy](concepts/singleton-hierarchy.md)** - 4-level navigation guide
-
-### Complete Examples
-- **[Session Join Pattern](examples/session-join-pattern.md)** - JWT auth + session join with full code
-- **[Video Rendering](examples/video-rendering.md)** - attachVideo() patterns
-- **[Screen Share](examples/screen-share.md)** - Send and receive screen shares
-- **[Event Handling](examples/event-handling.md)** - Required events
-- **[Chat](examples/chat.md)** - In-session messaging
-- **[Recording](examples/recording.md)** - Cloud recording control
-- **[Transcription](examples/transcription.md)** - Live captions
-
-### Framework Integrations
-- **[React Hooks](examples/react-hooks.md)** - Official @zoom/videosdk-react library
-- **[Framework Integrations](examples/framework-integrations.md)** - Next.js, Vue/Nuxt patterns
-
-### Troubleshooting
-- **[Common Issues](troubleshooting/common-issues.md)** - Quick diagnostics & error codes
-
-### References
-- **[API Reference](references/web-reference.md)** - Complete method signatures
-- **[Events Reference](references/events-reference.md)** - All event types
-- **[SKILL.md](SKILL.md)** - Complete navigation guide
-
-## Official Sample Repositories
-
-| Type | Repository |
-|------|------------|
-| Web Sample | [videosdk-web-sample](https://github.com/zoom/videosdk-web-sample) |
-| React SDK | [videosdk-react](https://github.com/zoom/videosdk-react) |
-| Next.js | [videosdk-nextjs-quickstart](https://github.com/zoom/videosdk-nextjs-quickstart) |
-| Vue/Nuxt | [videosdk-vue-nuxt-quickstart](https://github.com/zoom/videosdk-vue-nuxt-quickstart) |
-| Auth Endpoint | [videosdk-auth-endpoint-sample](https://github.com/zoom/videosdk-auth-endpoint-sample) |
-| UI Toolkit | [videosdk-zoom-ui-toolkit-react-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-react-sample) |
-
-## Resources
-
-- **Official Docs**: https://developers.zoom.us/docs/video-sdk/web/
-- **API Reference**: https://marketplacefront.zoom.us/sdk/custom/web/modules.html
-- **Dev Forum**: https://devforum.zoom.us/
-- **GitHub Samples**: https://github.com/zoom/videosdk-web-sample
-
----
-
-**Need help?** Start with [SKILL.md](SKILL.md) for complete navigation.
-
-
-## Merged from video-sdk/web/SKILL.md
-
-# Zoom Video SDK Web - Complete Documentation Index
-
-## Quick Start Path
-
-**If you're new to the SDK, follow this order:**
-
-1. **Read the architecture pattern** → [concepts/sdk-architecture-pattern.md](concepts/sdk-architecture-pattern.md)
-   - Universal formula: Create Client → Init → Join → Get Stream → Use
-   - Once you understand this, you can implement any feature
-
-2. **Implement session join** → [examples/session-join-pattern.md](examples/session-join-pattern.md)
-   - Complete working JWT + session join code
-
-3. **Listen to events** → [examples/event-handling.md](examples/event-handling.md)
-   - **CRITICAL**: The SDK is event-driven, you must listen for events
-
-4. **Implement video** → [examples/video-rendering.md](examples/video-rendering.md)
-   - Use attachVideo(), NOT renderVideo()
-
-5. **Troubleshoot any issues** → [troubleshooting/common-issues.md](troubleshooting/common-issues.md)
-   - Quick diagnostic checklist
-   - Error code tables
-
----
-
-## Documentation Structure
-
-```
-video-sdk/web/
-├── SKILL.md                           # Main skill overview
-├── SKILL.md                           # This file - navigation guide
-│
-├── concepts/                          # Core architectural patterns
-│   ├── sdk-architecture-pattern.md   # Universal formula for ANY feature
-│   └── singleton-hierarchy.md        # 4-level navigation guide
-│
-├── examples/                          # Complete working code
-│   ├── session-join-pattern.md       # JWT auth + session join
-│   ├── video-rendering.md            # attachVideo() patterns
-│   ├── screen-share.md               # Send and receive screen shares
-│   ├── event-handling.md             # Required events
-│   ├── chat.md                       # Chat implementation
-│   ├── command-channel.md            # Command channel messaging
-│   ├── recording.md                  # Cloud recording control
-│   ├── transcription.md              # Live transcription/captions
-│   ├── react-hooks.md                # Official @zoom/videosdk-react library
-│   └── framework-integrations.md     # Next.js, Vue/Nuxt, ZFG patterns
-│
-├── troubleshooting/                   # Problem solving guides
-│   └── common-issues.md              # Quick diagnostic workflow
-│
-└── references/                        # Reference documentation
-    ├── web-reference.md              # API hierarchy, methods, error codes
-    └── events-reference.md           # All event types
+```typescript
+// src/types/zoom-elements.d.ts
+declare namespace JSX {
+  interface IntrinsicElements {
+    "video-player-container": React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLElement>,
+      HTMLElement
+    >;
+  }
+}
 ```
 
----
+### Core Implementation Pattern
 
-## By Use Case
+All implementations should follow this pattern:
 
-### I want to build a video app
-1. [SDK Architecture Pattern](concepts/sdk-architecture-pattern.md) - Understand the pattern
-2. [Session Join Pattern](examples/session-join-pattern.md) - Join sessions
-3. [Video Rendering](examples/video-rendering.md) - Display video
-4. [Event Handling](examples/event-handling.md) - Listen for video events
+1. **Client Management** - Singleton client with init/join/leave lifecycle
+2. **Media Stream** - Audio/video/screen share controls with state sync
+3. **Participants** - User list with video state change listeners
+4. **Video Rendering** - Use `video-player-container` + `attachVideo()`
+5. **Event Handling** - Connection, audio, video, chat events
+6. **Error Handling** - Map SDK error codes to user messages
 
-### I'm getting runtime errors
-1. [Common Issues](troubleshooting/common-issues.md) - Error code tables
-2. "getMediaStream() is undefined" → Call AFTER join() completes
+## JWT Token Requirements
 
-### I want to receive screen shares
-1. [Screen Share](examples/screen-share.md) - startShareView() patterns
-2. [Event Handling](examples/event-handling.md) - active-share-change event
+Generate JWT on your server using HMAC SHA256. Never expose SDK secret in client code.
 
-### I want to send screen shares
-1. [Screen Share](examples/screen-share.md) - startShareScreen() patterns
-2. Check isStartShareScreenWithVideoElement() for element type
+### Required Claims
 
-### I want to use chat
-1. [Chat](examples/chat.md) - Send/receive messages
-2. getChatClient() for ChatClient access
+```javascript
+{
+  app_key: 'YOUR_SDK_KEY',    // Video SDK key
+  tpc: 'session-name',        // Session name (max 200 chars), must match join() topic
+  role_type: 1,               // 1 = host/co-host, 0 = participant
+  version: 1,                 // Always set to 1
+  iat: Math.floor(Date.now() / 1000) - 30,  // Issued at (subtract 30s for clock skew)
+  exp: iat + 7200,            // Expiration: min 1800s, max 48 hours after iat
+}
+```
 
-### I want to record sessions
-1. [Recording](examples/recording.md) - Cloud recording (host only)
-2. getRecordingClient() for RecordingClient access
+### Optional Claims
 
-### I want to use live transcription
-1. [Transcription](examples/transcription.md) - Enable live captions
-2. getLiveTranscriptionClient() for LiveTranscriptionClient access
+| Claim                               | Description                                                |
+| ----------------------------------- | ---------------------------------------------------------- |
+| `user_key`                          | Unique user identifier (max 36 chars)                      |
+| `session_key`                       | Session identifier for cloud recording (max 36 chars)      |
+| `geo_regions`                       | Data center regions: `AU,BR,CA,DE,HK,IN,JP,CN,MX,NL,SG,US` |
+| `cloud_recording_option`            | `0` = combined video, `1` = separate files per user        |
+| `cloud_recording_election`          | `1` to record user's self-view                             |
+| `cloud_recording_transcript_option` | `0` = none, `1` = transcript, `2` = transcript + summary   |
+| `video_webrtc_mode`                 | `0` = disable, `1` = enable WebRTC video                   |
+| `audio_webrtc_mode`                 | `1` = enable WebRTC audio (Web only)                       |
+| `telemetry_tracking_id`             | For Web SDK telemetry tracking                             |
 
-### I want to use command channel
-1. [Command Channel](examples/command-channel.md) - Custom signaling between participants
-2. Must call getCommandClient() AFTER join()
+### Node.js(jsrsasign) Quick Start JWT Generator Service:
 
-### I want to implement a specific feature
-1. [SDK Architecture Pattern](concepts/sdk-architecture-pattern.md) - **START HERE!**
-2. [Singleton Hierarchy](concepts/singleton-hierarchy.md) - Navigate to the feature
-3. [API Reference](references/web-reference.md) - Method signatures
+```bash
+git clone https://github.com/zoom/videosdk-auth-endpoint-sample.git
 
-### I'm using React
-1. [React Hooks](examples/react-hooks.md) - Official @zoom/videosdk-react library
-2. Provides hooks: useSession, useSessionUsers, useVideoState, useAudioState
-3. Pre-built components: VideoPlayerComponent, ScreenSharePlayerComponent
+cd videosdk-auth-endpoint-sample
 
-### I'm using Next.js or Vue/Nuxt
-1. [Framework Integrations](examples/framework-integrations.md) - SSR considerations
-2. Server-side JWT generation patterns
-3. Client-side only SDK usage
+bun install
+# or 
+npm install
+# Rename .env.example to .env, edit the file contents to include your Zoom Video SDK key and secret, save the file contents, and close the file
+mv .env.example .env
+# Start the server
+# server code https://raw.githubusercontent.com/zoom/videosdk-auth-endpoint-sample/refs/heads/master/src/index.js
+bun run start
+# or
+npm run start
+```
 
----
+jsrsasign Example Code:
 
-## Most Critical Documents
+```javascript
+import { KJUR } from "jsrsasign";
 
-### 1. SDK Architecture Pattern (MASTER DOCUMENT)
-**[concepts/sdk-architecture-pattern.md](concepts/sdk-architecture-pattern.md)**
+const iat = Math.floor(Date.now() / 1000) - 30;
+const exp = iat + 60 * 60 * 2; // 2 hours
 
-The universal 5-step pattern:
-1. Create client
-2. Initialize SDK
-3. Join session
-4. Get stream
-5. Use features + listen to events
+const payload = {
+  app_key: process.env.ZOOM_SDK_KEY,
+  tpc: "session-name",
+  role_type: 1,
+  version: 1,
+  video_webrtc_mode: 1,
+  audio_webrtc_mode: 1,
+  iat,
+  exp,
+};
 
-### 2. Common Issues (MOST COMMON PROBLEMS)
-**[troubleshooting/common-issues.md](troubleshooting/common-issues.md)**
+const token = KJUR.jws.JWS.sign(
+  "HS256",
+  JSON.stringify({ alg: "HS256", typ: "JWT" }),
+  JSON.stringify(payload),
+  process.env.ZOOM_SDK_SECRET
+);
+```
 
-Common issues:
-- getMediaStream() returns undefined
-- Video not displaying
-- renderVideo() deprecated
+## Init Options
 
-### 3. Singleton Hierarchy (NAVIGATION MAP)
-**[concepts/singleton-hierarchy.md](concepts/singleton-hierarchy.md)**
+```typescript
+interface InitOptions {
+  webEndpoint?: string; // Custom endpoint
+  enforceMultipleVideos?: boolean | { disableRenderLimits?: boolean };
+  enforceVirtualBackground?: boolean;
+  stayAwake?: boolean; // Prevent screen dimming
+  leaveOnPageUnload?: boolean; // Quick leave on page close
+  patchJsMedia?: boolean; // Apply latest media fixes (recommended: true)
+  alternativeNameForVideoPlayer?: string;
+}
+```
 
-4-level deep navigation showing how to reach every feature.
+## Video Quality Enum
 
----
+```typescript
+enum VideoQuality {
+  Video_90P = 0,
+  Video_180P = 1,
+  Video_360P = 2,
+  Video_720P = 3,
+  Video_1080P = 4,
+}
+```
 
-## Key Learnings
+## Best Practices
 
-### Critical Discoveries:
+1. **Always check browser support** before initializing
+2. **Generate JWT on server** - never expose SDK secret in client
+3. **Handle connection events** for robust session management
+4. **Request user gesture** before starting audio (browser requirement)
+5. **Use `patchJsMedia: true`** for latest WebAssembly fixes
+6. **Set `leaveOnPageUnload: true`** for clean disconnection
+7. **Implement error handling** for all async operations
+8. **Clean up event listeners** on session end
 
-1. **getMediaStream() ONLY works after join()**
-   - The stream object is not available until session is joined
-   - See: [SDK Architecture Pattern](concepts/sdk-architecture-pattern.md)
+## Common Issues
 
-2. **Use attachVideo() NOT renderVideo()**
-   - renderVideo() is deprecated
-   - attachVideo() returns a VideoPlayer element to append to DOM
-   - See: [Video Rendering](examples/video-rendering.md)
+| Issue                               | Solution                                                                      |
+| ----------------------------------- | ----------------------------------------------------------------------------- |
+| Audio doesn't start                 | Requires user gesture (click/tap)                                             |
+| Video not rendering                 | Use `video-player-container` custom element and append `attachVideo()` result |
+| JWT invalid                         | Verify `tpc` matches session name                                             |
+| SharedArrayBuffer error             | **MUST** add COOP/COEP headers in vite.config.ts                              |
+| `OPERATION_TIMEOUT` on startVideo   | Check camera permissions and ensure COOP/COEP headers are set                 |
+| `INVALID_PARAMETERS` on attachVideo | Don't pass container as 3rd param - append the returned element instead       |
+| Self-video not showing              | Pass `currentUserVideoOn` prop to VideoGrid (participant.bVideoOn may lag)    |
+| Participants not updating           | Listen for `video-active-change` and `peer-video-state-change` events         |
+| "Waiting for participants" stuck    | Pass `isJoined` to `useParticipants` hook and listen for `connection-change`  |
 
-3. **The SDK is Event-Driven**
-   - You MUST listen for events to render participant videos
-   - key events: peer-video-state-change, user-added, user-removed
-   - See: [Event Handling](examples/event-handling.md)
+## Detailed Guides
 
-4. **Peer Videos on Mid-Session Join**
-   - Existing participants' videos won't auto-render
-   - Must manually iterate getAllUser() and attachVideo()
-   - See: [Video Rendering](examples/video-rendering.md)
+### Core Concepts (read these first — they apply to every feature)
 
-5. **CDN vs NPM**
-   - CDN exports as `WebVideoSDK.default`, not `ZoomVideo`
-   - Some networks/ad blockers may block `source.zoom.us` - allowlist or use a permitted fallback strategy
-   - See: [Session Join Pattern](examples/session-join-pattern.md)
+- [concepts/sdk-architecture-pattern.md](concepts/sdk-architecture-pattern.md) - The universal 5-step pattern (`createClient → init → join → getMediaStream → use`) that every feature follows
+- [concepts/singleton-hierarchy.md](concepts/singleton-hierarchy.md) - Service-locator navigation tree from `ZoomVideo` root to every sub-client (media, chat, recording, subsession, command, etc.)
 
-6. **SharedArrayBuffer for HD**
-   - Required for 720p/1080p video
-   - Need COOP/COEP headers on server
-   - Check with `stream.isSupportHDVideo()`
+### Feature References
 
-7. **Screen Share Element Type**
-   - Check `isStartShareScreenWithVideoElement()` for correct element type
-   - See: [Screen Share](examples/screen-share.md)
+- [references/sessions.md](references/sessions.md) - Session lifecycle, user roles, JWT token, connection events
+- [references/audio.md](references/audio.md) - Audio controls, devices, muting, dial-out, noise suppression
+- [references/video.md](references/video.md) - Video capture, rendering, virtual background, PTZ cameras
+- [references/screen-share.md](references/screen-share.md) - Screen sharing, annotation, tab audio, share privileges
+- [references/features.md](references/features.md) - Preview, recording, subsessions, live stream, command channel, transcription, PSTN, SIP, quality stats
+- [references/advanced.md](references/advanced.md) - Chat, custom processors, whiteboard
+- [references/browser-support.md](references/browser-support.md) - Browser compatibility, SharedArrayBuffer, CSP headers
+- [references/error-codes.md](references/error-codes.md) - Complete error code reference
+- [troubleshooting/common-issues.md](troubleshooting/common-issues.md) - Troubleshooting guide: symptoms → causes → fixes for the most common Video SDK bugs
 
-8. **Command Channel Setup Order**
-   - Must call getCommandClient() AFTER client.join()
-   - Register listeners AFTER join, not before
-   - Web uses getCommandClient() not getCmdChannel()
-   - See: [Command Channel](examples/command-channel.md)
+## Type Definitions Location
 
-9. **Command Channel is Session-Scoped**
-   - Does NOT span across different sessions
-   - Both sender and receiver must be in the same session
+All TypeScript definitions are in `@zoom/videosdk/dist/types`:
 
----
+- `index.d.ts` - Main exports
+- `zoomvideo.d.ts` - ZoomVideo namespace
+- `videoclient.d.ts` - VideoClient methods and events
+- `media.d.ts` - MediaStream, audio/video options
+- `common.d.ts` - Shared types (Participant, enums)
+- `chat.d.ts` - Chat client
+- `recording.d.ts` - Recording client
+- `subsession.d.ts` - Breakout rooms
 
-## Quick Reference
+## Resources Homepage
 
-### "getMediaStream() returns undefined"
-→ Call AFTER join() completes
+- Official Docs: https://developers.zoom.us/docs/video-sdk/web/
+- API Reference: https://marketplacefront.zoom.us/sdk/videosdk/web/
+- Sample App: https://github.com/zoom/videosdk-web-sample
+- Angular: https://developers.zoom.us/docs/video-sdk/web/frameworks/#using-angular
+- Requirejs: https://developers.zoom.us/docs/video-sdk/web/frameworks/#using-amd-mode-requirejs-or-named-modules
 
-### "Video not showing"
-→ [Video Rendering](examples/video-rendering.md) - Use attachVideo(), check events
+## Official Docs URLs
 
-### "renderVideo() doesn't work"
-→ [Video Rendering](examples/video-rendering.md) - Use attachVideo() instead
+```
+# Main Documentation
+https://developers.zoom.us/docs/video-sdk/web/get-started/
+https://developers.zoom.us/docs/video-sdk/web/sessions/
+https://developers.zoom.us/docs/video-sdk/web/event-handling/
 
-### "How do I implement [feature]?"
-→ [SDK Architecture Pattern](concepts/sdk-architecture-pattern.md)
+# Audio & Video
+https://developers.zoom.us/docs/video-sdk/web/video/
+https://developers.zoom.us/docs/video-sdk/web/audio/
+https://developers.zoom.us/docs/video-sdk/web/preview/
 
-### "How do I navigate to [client]?"
-→ [Singleton Hierarchy](concepts/singleton-hierarchy.md)
+# Screen Sharing
+https://developers.zoom.us/docs/video-sdk/web/share/
+https://developers.zoom.us/docs/video-sdk/web/share-annotation/
+https://developers.zoom.us/docs/video-sdk/web/share-browser-options/
 
-### "What error code means what?"
-→ [Common Issues](troubleshooting/common-issues.md)
+# Advanced Features
+https://developers.zoom.us/docs/video-sdk/web/recording/
+https://developers.zoom.us/docs/video-sdk/web/subsessions/
+https://developers.zoom.us/docs/video-sdk/web/live-stream/
+https://developers.zoom.us/docs/video-sdk/web/command-channel/
+https://developers.zoom.us/docs/video-sdk/web/transcription-translation/
+https://developers.zoom.us/docs/video-sdk/web/chat/
 
----
+# Phone Integration
+https://developers.zoom.us/docs/video-sdk/web/pstn/
+https://developers.zoom.us/docs/video-sdk/web/sip/
 
-## Document Version
+# Quality & Compatibility
+https://developers.zoom.us/docs/video-sdk/web/quality/
+https://developers.zoom.us/docs/video-sdk/web/browser-support/
+https://developers.zoom.us/docs/video-sdk/web/sharedarraybuffer/
+https://developers.zoom.us/docs/video-sdk/web/error-codes/
 
-Based on **Zoom Video SDK for Web v2.3.x**
+# Other
+https://developers.zoom.us/docs/video-sdk/web/virtual-background/
+https://developers.zoom.us/docs/video-sdk/web/frameworks/
+```
 
----
+## Repo-Local Appendices
 
-**Happy coding!**
+The documents above are primarily based on the incoming `zoom-videosdk-web` skill. The files below remain in this repo as complementary material for deeper examples, compatibility shims, and operational debugging.
 
-Remember: The [SDK Architecture Pattern](concepts/sdk-architecture-pattern.md) is your key to unlocking the entire SDK. Read it first!
+### Operational Docs
 
-## Operations
+- **[RUNBOOK.md](RUNBOOK.md)** - 5-minute preflight checks before deep debugging
+- **[MAINTENANCE.md](MAINTENANCE.md)** - upstream/source-maintenance notes for this imported skill
 
-- [RUNBOOK.md](RUNBOOK.md) - 5-minute preflight and debugging checklist.
+### Compatibility References
+
+- **[references/web.md](references/web.md)** - compatibility index for repo links that previously pointed to the monolithic web reference
+- **[references/web-reference.md](references/web-reference.md)** - repo-local extended API reference
+- **[references/events-reference.md](references/events-reference.md)** - repo-local event catalog and payload notes
+- **[troubleshooting/common-issues.md](troubleshooting/common-issues.md)** - canonical troubleshooting guide from the imported skill
+- **[references/common-issues.md](references/common-issues.md)** - compatibility pointer for upstream-style reference links
+
+### Complementary Examples
+
+- **[examples/session-join-pattern.md](examples/session-join-pattern.md)** - complete join flow example
+- **[examples/video-rendering.md](examples/video-rendering.md)** - repo-local rendering patterns
+- **[examples/event-handling.md](examples/event-handling.md)** - detailed event handling examples
+- **[examples/screen-share.md](examples/screen-share.md)** - screen sharing send/view patterns
+- **[examples/chat.md](examples/chat.md)** - in-session messaging examples
+- **[examples/command-channel.md](examples/command-channel.md)** - custom signaling examples
+- **[examples/recording.md](examples/recording.md)** - recording control examples
+- **[examples/transcription.md](examples/transcription.md)** - live transcription examples
+- **[examples/react-hooks.md](examples/react-hooks.md)** - `@zoom/videosdk-react` patterns
+- **[examples/framework-integrations.md](examples/framework-integrations.md)** - repo-local SSR and framework notes

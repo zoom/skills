@@ -397,7 +397,6 @@ for (const user of users) {
 ## Related Documentation
 
 - [SDK Architecture Pattern](sdk-architecture-pattern.md) - Universal 5-step pattern
-- [API Reference](../references/web-reference.md) - Complete method signatures
 - [SKILL.md](../SKILL.md) - Main skill overview
 
 ---

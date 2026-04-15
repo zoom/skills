@@ -314,9 +314,9 @@ try {
 
 ## Related Documentation
 
-- [Singleton Hierarchy](singleton-hierarchy.md) - 4-level navigation guide
-- [Video Rendering](../examples/video-rendering.md) - attachVideo() patterns
-- [Event Handling](../examples/event-handling.md) - Required events
+- [Hierarchy](singleton-hierarchy.md) - 4-level navigation guide
+- [SDK Architecture Pattern](sdk-architecture-pattern.md) - Universal 5-step pattern
+- [SKILL.md](../SKILL.md) - Main skill overview
 
 ---
 

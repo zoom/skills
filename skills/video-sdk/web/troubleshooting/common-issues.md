@@ -98,7 +98,7 @@ async function renderExistingParticipants() {
 ```bash
 # If your environment blocks `source.zoom.us`, you can mirror/self-host as a fallback
 # only if permitted and you can keep versions in sync with the SDK you target.
-curl "https://source.zoom.us/videosdk/zoom-video-2.3.12.min.js" -o public/js/zoom-video-sdk.min.js
+curl "https://source.zoom.us/videosdk/zoom-video-2.4.0.min.js" -o public/js/zoom-video-sdk.min.js
 ```
 
 ```html
@@ -408,7 +408,4 @@ video-player-container video {
 
 ## Related Documentation
 
-- [SDK Architecture Pattern](../concepts/sdk-architecture-pattern.md) - Lifecycle order
-- [Video Rendering](../examples/video-rendering.md) - attachVideo patterns
-- [Event Handling](../examples/event-handling.md) - Required events
 - [SKILL.md](../SKILL.md) - Quick reference
