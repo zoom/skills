@@ -125,6 +125,21 @@ export default defineConfig({
 });
 ```
 
+## index.css Imports
+
+When using shadcn with `tw-animate-css`, do **not** also add `@plugin "tailwindcss-animate"` — it is redundant and will cause duplicate animation utilities:
+
+```css
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+/* ❌ Remove this line — already covered by tw-animate-css above */
+/* @plugin "tailwindcss-animate"; */
+
+@custom-variant dark (&:is(.dark *));
+```
+
 ## CRITICAL: Custom Element CSS
 
 `<video-player-container>` and `<video-player>` are custom elements and default to `display: inline` with **zero size**. Without explicit CSS, `startVideo()` and `attachVideo()` succeed silently but no tile is visible (symptom: black area, no console error, camera permission granted, participant shows `bVideoOn=true`).
@@ -2038,6 +2053,20 @@ function App() {
 }
 
 export default App;
+```
+
+## main.tsx
+
+**CRITICAL: Remove React StrictMode.** The Zoom Video SDK uses a singleton (`ZoomVideo.createClient()`) that is torn down by `ZoomVideo.destroyClient()`. React StrictMode double-mounts every component in development, which triggers the cleanup in `useZoomClient`'s unmount effect and calls `destroyClient()` before the re-mount creates a fresh client. The SDK's internal state cannot survive this destroy/recreate cycle, causing silent failures when joining a session.
+
+```tsx
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+
+// CRITICAL: Do NOT wrap in <React.StrictMode> — the Zoom SDK singleton does not
+// survive StrictMode's double-mount/unmount cycle in development.
+createRoot(document.getElementById("root")!).render(<App />);
 ```
 
 ## Troubleshooting
