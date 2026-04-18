@@ -79,7 +79,6 @@ await client.init({
 
 // Join meeting
 await client.join({
-  sdkKey: SDK_KEY,
   signature: signature,
   meetingNumber: '123456789',
   password: 'password',
@@ -104,7 +103,6 @@ ZoomMtg.init({
   leaveUrl: 'https://your-app.com/meeting-ended',
   success: () => {
     ZoomMtg.join({
-      sdkKey: SDK_KEY,
       signature: signature,
       meetingNumber: '123456789',
       passWord: 'password',

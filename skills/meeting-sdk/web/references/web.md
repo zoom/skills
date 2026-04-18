@@ -46,12 +46,12 @@ npm install @zoom/meetingsdk
 ### Client View (CDN)
 
 ```html
-<script src="https://source.zoom.us/3.1.6/lib/vendor/react.min.js"></script>
-<script src="https://source.zoom.us/3.1.6/lib/vendor/react-dom.min.js"></script>
-<script src="https://source.zoom.us/3.1.6/lib/vendor/redux.min.js"></script>
-<script src="https://source.zoom.us/3.1.6/lib/vendor/redux-thunk.min.js"></script>
-<script src="https://source.zoom.us/3.1.6/lib/vendor/lodash.min.js"></script>
-<script src="https://source.zoom.us/3.1.6/zoom-meeting-3.1.6.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/lib/vendor/react.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/lib/vendor/react-dom.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/lib/vendor/redux.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/lib/vendor/redux-thunk.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/lib/vendor/lodash.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/zoom-meeting-6.0.0.min.js"></script>
 ```
 
 > **Note:** CDN provides `ZoomMtg` (Client View). For `ZoomMtgEmbedded` (Component View), use npm.
@@ -82,7 +82,6 @@ await client.init({
 });
 
 await client.join({
-  sdkKey: SDK_KEY,
   signature: signature,
   meetingNumber: meetingNumber,
   userName: 'User',
@@ -211,7 +210,6 @@ ZoomMtg.inMeetingServiceListener('onMeetingStatus', (data) => {
 ### Join Meeting
 ```javascript
 await client.join({
-  sdkKey: SDK_KEY,
   signature: signature,
   meetingNumber: meetingNumber,
   userName: 'User',

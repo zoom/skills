@@ -12,7 +12,6 @@ Tracking IDs allow you to identify users joining meetings from your application 
 
 ```javascript
 await client.join({
-  sdkKey: SDK_KEY,
   signature: signature,
   meetingNumber: meetingNumber,
   userName: 'User Name',
@@ -24,7 +23,6 @@ await client.join({
 
 ```javascript
 ZoomMtg.join({
-  sdkKey: SDK_KEY,
   signature: signature,
   meetingNumber: meetingNumber,
   userName: 'User Name',

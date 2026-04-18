@@ -47,12 +47,12 @@ Embed the full Zoom meeting experience into web, mobile, desktop, and headless i
 ## Quick Start (Web - Client View via CDN)
 
 ```html
-<script src="https://source.zoom.us/3.1.6/lib/vendor/react.min.js"></script>
-<script src="https://source.zoom.us/3.1.6/lib/vendor/react-dom.min.js"></script>
-<script src="https://source.zoom.us/3.1.6/lib/vendor/redux.min.js"></script>
-<script src="https://source.zoom.us/3.1.6/lib/vendor/redux-thunk.min.js"></script>
-<script src="https://source.zoom.us/3.1.6/lib/vendor/lodash.min.js"></script>
-<script src="https://source.zoom.us/3.1.6/zoom-meeting-3.1.6.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/lib/vendor/react.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/lib/vendor/react-dom.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/lib/vendor/redux.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/lib/vendor/redux-thunk.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/lib/vendor/lodash.min.js"></script>
+<script src="https://source.zoom.us/6.0.0/zoom-meeting-6.0.0.min.js"></script>
 
 <script>
 // CDN provides ZoomMtg (Client View - full page)

@@ -267,7 +267,6 @@ async function startMeeting() {
     // Join meeting (note: password lowercase!)
     await client.join({
       signature: signature,          // From your auth endpoint
-      sdkKey: SDK_KEY,
       meetingNumber: '1234567890',
       userName: 'User Name',
       password: 'meeting-password',  // Lowercase!

@@ -32,7 +32,6 @@ await client.init({
 
 // Join webinar (same as meeting)
 await client.join({
-  sdkKey: SDK_KEY,
   signature: signature,
   meetingNumber: webinarId,  // Webinar ID
   userName: 'Attendee Name',

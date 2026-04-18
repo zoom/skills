@@ -260,10 +260,10 @@ uitoolkit.hideAllComponents();
 ```
 
 ## CDN Usage (No Build Step)
-
+example version 2.4.0-1
 ```html
-<link rel="stylesheet" href="https://source.zoom.us/uitoolkit/2.3.5-1/videosdk-zoom-ui-toolkit.css" />
-<script src="https://source.zoom.us/uitoolkit/2.3.5-1/videosdk-zoom-ui-toolkit.min.umd.js"></script>
+<link rel="stylesheet" href="https://source.zoom.us/uitoolkit/{VERSION}/videosdk-ui-toolkit.css" />
+<script src="https://source.zoom.us/uitoolkit/{VERSION}/videosdk-ui-toolkit.min.umd.js"></script>
 
 <div id="sessionContainer"></div>
 

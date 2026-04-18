@@ -82,8 +82,8 @@ await stream.startAudio();
 > **WARNING: Ad blockers block `source.zoom.us`**. Self-host the SDK to avoid issues.
 
 ```bash
-# Download SDK locally
-curl "https://source.zoom.us/videosdk/zoom-video-1.12.0.min.js" -o js/zoom-video-sdk.min.js
+# Download SDK locally example VERSION=2.4.0
+curl "https://source.zoom.us/videosdk/zoom-video-{VERSION}.min.js" -o js/zoom-video-sdk.min.js
 ```
 
 ```html
