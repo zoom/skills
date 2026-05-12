@@ -17,6 +17,7 @@ export type SkillId =
   | 'zoom-rest-api'
   | 'zoom-mcp'
   | 'zoom-mcp/whiteboard'
+  | 'zoom-mcp/team-chat'
   | 'zoom-webhooks'
   | 'zoom-websockets'
   | 'zoom-meeting-sdk'
@@ -52,6 +53,7 @@ interface Signals {
   restApi: boolean;
   mcp: boolean;
   whiteboardMcp: boolean;
+  teamChatMcp: boolean;
   webhooks: boolean;
   websockets: boolean;
   zoomApps: boolean;
@@ -87,6 +89,7 @@ export function detectSignals(rawQuery: string): Signals {
     restApi: hasAny(q, ['rest api', 'api create meeting', 'api list meetings', '/v2/', 'list users', 's2s oauth', 'meeting endpoint']),
     mcp: hasAny(q, ['zoom mcp', 'mcp server', 'agentic retrieval', 'tools/list', 'tools/call', 'semantic meeting search', 'search zoom', 'zoom docs search', 'zoom chat search']),
     whiteboardMcp: hasAny(q, ['whiteboard mcp', 'zoom whiteboard mcp', 'list whiteboards', 'get a whiteboard', 'wb/db', 'whiteboard_id']),
+    teamChatMcp: hasAny(q, ['team chat mcp', 'zoom chat mcp', 'send zoom chat via mcp', 'edit zoom chat message mcp', 'zoom_chat_message_send', 'zoom_chat_channel_create']),
     webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
     websockets: hasAny(q, ['websocket', 'real-time events', 'persistent connection']),
     zoomApps: hasAny(q, ['zoom apps sdk', 'in-client app', 'layers api', 'collaborate mode']),
@@ -115,6 +118,7 @@ function pickPrimarySkill(s: Signals): SkillId {
   if (s.contactCenter) return 'contact-center';
   if (s.zoomApps) return 'zoom-apps-sdk';
   if (s.rtms) return 'zoom-rtms';
+  if (s.teamChatMcp) return 'zoom-mcp/team-chat';
   if (s.teamChat) return 'zoom-team-chat';
   if (s.phone) return 'phone';
   if (s.cobrowse) return 'zoom-cobrowse-sdk';
@@ -136,7 +140,7 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   if (primary === 'zoom-meeting-sdk-web-component-view') chain.add('zoom-meeting-sdk-web');
 
   // Auth chaining.
-  if (s.oauth || s.restApi || s.mcp || s.webhooks || s.websockets || s.phone || s.teamChat || s.virtualAgent) {
+  if (s.oauth || s.restApi || s.mcp || s.whiteboardMcp || s.teamChatMcp || s.webhooks || s.websockets || s.phone || s.teamChat || s.virtualAgent) {
     chain.add('zoom-oauth');
   }
 
@@ -152,6 +156,9 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   if (s.mcp && s.restApi) {
     chain.add('zoom-rest-api');
     chain.add('zoom-mcp');
+  }
+  if (s.teamChatMcp && s.teamChat) {
+    chain.add('zoom-team-chat');
   }
 
   // Avoid redundant primary in chain.

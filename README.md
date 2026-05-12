@@ -169,6 +169,7 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | Low-latency event notifications | zoom-websockets |
 | OAuth authentication setup | oauth |
 | AI-driven tool workflows over Zoom meetings, Team Chat, Docs, and recordings | zoom-mcp |
+| Write-capable Team Chat MCP workflows | zoom-mcp/team-chat |
 | Enterprise AI architecture (API core + AI tool layer) | zoom-rest-api + zoom-mcp |
 
 ## Architecture
@@ -196,6 +197,8 @@ zoom-general (HUB)
        ├── zoom-cobrowse-sdk
        ├── zoom-oauth
        └── zoom-mcp
+           ├── whiteboard
+           └── team-chat
 ```
 
 ## Directory Structure
@@ -233,6 +236,8 @@ repo/
 │   ├── cobrowse-sdk/
 │   ├── oauth/
 │   └── zoom-mcp/
+│       ├── whiteboard/
+│       └── team-chat/
 ```
 
 ## Resources

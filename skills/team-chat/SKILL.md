@@ -15,6 +15,11 @@ triggers:
 
 Build powerful messaging integrations and interactive chatbots for Zoom Team Chat. This skill covers **two distinct APIs** - make sure to choose the right one for your use case.
 
+For agent-driven MCP tooling that sends/edits messages or manages Team Chat channels through
+Zoom's hosted MCP server, use [../zoom-mcp/team-chat/SKILL.md](../zoom-mcp/team-chat/SKILL.md).
+Keep this skill as the default for deterministic REST API implementation, chatbot apps,
+webhooks, retry logic, and production backend control.
+
 ## Read This First (Critical)
 
 There are two different integration types and they are not interchangeable:

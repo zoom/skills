@@ -7,6 +7,10 @@
     "zoom-whiteboard-mcp": {
       "type": "http",
       "url": "https://mcp-us.zoom.us/mcp/whiteboard/streamable"
+    },
+    "zoom-team-chat-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/team_chat/streamable"
     }
   }
 }

@@ -96,7 +96,8 @@ repo/
 │   ├── cobrowse-sdk/
 │   ├── oauth/
 │   ├── zoom-mcp/
-│   │   └── whiteboard/
+│   │   ├── whiteboard/
+│   │   └── team-chat/
 │   └── ...
 └── tools/
 ```
@@ -155,6 +156,7 @@ Platform-heavy spokes (examples):
 | `oauth` | Auth flows and token models |
 | `zoom-mcp` | Zoom-hosted MCP server workflows for semantic meeting search, Team Chat/Docs search, meeting assets, recording resources, Docs creation, and Docs content export |
 | `zoom-mcp/whiteboard` | Whiteboard MCP endpoints, scopes, auth findings, ID mapping, and live Whiteboard tool workflows |
+| `zoom-mcp/team-chat` | Team Chat MCP endpoints, write/update scopes, message/channel/contact tools, and write-safety guardrails |
 
 ## Maintenance Notes
 

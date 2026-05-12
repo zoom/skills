@@ -31,7 +31,9 @@ Add the MCP-specific granular scopes required by the tools you want to use.
 | `docs:write:import` | `create_new_file_with_markdown` |
 | `docs:read:export` | `get_file_content` |
 
-Whiteboard MCP uses a separate scope set. See [../whiteboard/SKILL.md](../whiteboard/SKILL.md).
+Whiteboard MCP and Team Chat MCP use separate scope sets. See:
+- [../whiteboard/SKILL.md](../whiteboard/SKILL.md)
+- [../team-chat/SKILL.md](../team-chat/SKILL.md)
 
 ## Step 3: Authorize and Exchange for Tokens
 

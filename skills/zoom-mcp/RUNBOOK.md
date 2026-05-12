@@ -30,6 +30,7 @@ Minimum Zoom MCP scopes for this guide:
 - `docs:read:export` if you want Zoom Docs or My Notes Markdown content retrieval
 
 Whiteboard uses a separate scope set. See [whiteboard/SKILL.md](whiteboard/SKILL.md).
+Team Chat write/update tools use a separate scope set. See [team-chat/SKILL.md](team-chat/SKILL.md).
 
 **4. AI Companion features enabled?**
 

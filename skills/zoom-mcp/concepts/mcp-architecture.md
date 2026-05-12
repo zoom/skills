@@ -24,6 +24,16 @@ sources. Zoom exposes hosted MCP surfaces that clients can discover and call ove
 In this repo, Whiteboard MCP is handled by the child skill
 [../whiteboard/SKILL.md](../whiteboard/SKILL.md).
 
+### Team Chat MCP
+
+| Transport | URL |
+|-----------|-----|
+| Streamable HTTP (recommended) | `https://mcp.zoom.us/mcp/team_chat/streamable` |
+| SSE (fallback) | `https://mcp.zoom.us/mcp/team_chat/sse` |
+
+In this repo, write-capable Team Chat MCP is handled by the child skill
+[../team-chat/SKILL.md](../team-chat/SKILL.md).
+
 ## Discovery Model
 
 Do not hardcode tool counts in client logic.
@@ -75,6 +85,14 @@ Whiteboard MCP protected-resource metadata currently exposes:
 - `whiteboard:write:whiteboard`
 - `whiteboard:read:list_whiteboards`
 - `whiteboard:read:whiteboard`
+
+Team Chat MCP protected-resource metadata currently exposes:
+- `team_chat:write:user_message`
+- `team_chat:update:user_message`
+- `team_chat:write:contact_information`
+- `team_chat:write:user_channel`
+- `team_chat:update:user_channel`
+- `team_chat:write:members`
 
 ## Retrieval Model
 

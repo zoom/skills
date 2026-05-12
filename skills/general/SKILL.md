@@ -41,7 +41,8 @@ type SkillId =
   | 'zoom-oauth'
   | 'zoom-meeting-sdk-web-component-view'
   | 'zoom-video-sdk'
-  | 'zoom-mcp';
+  | 'zoom-mcp'
+  | 'zoom-mcp/team-chat';
 
 const hasAny = (q: string, words: string[]) => words.some((w) => q.includes(w));
 
@@ -54,11 +55,13 @@ function detectSignals(rawQuery: string) {
     webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
     oauth: hasAny(q, ['oauth', 'pkce', 'token refresh', 'account_credentials']),
     mcp: hasAny(q, ['zoom mcp', 'agentic retrieval', 'tools/list', 'semantic meeting search', 'search zoom', 'zoom docs search', 'zoom chat search']),
+    teamChatMcp: hasAny(q, ['team chat mcp', 'zoom chat mcp', 'send zoom chat via mcp', 'zoom_chat_message_send']),
   };
 }
 
 function pickPrimarySkill(s: ReturnType<typeof detectSignals>): SkillId {
   if (s.meetingCustomUi) return 'zoom-meeting-sdk-web-component-view';
+  if (s.teamChatMcp) return 'zoom-mcp/team-chat';
   if (s.mcp) return 'zoom-mcp';
   if (s.restApi) return 'zoom-rest-api';
   if (s.customVideo) return 'zoom-video-sdk';
@@ -106,6 +109,7 @@ For the full TypeScript implementation and handoff contract, use
 | Add pre-built UI components for Video SDK | **[zoom-ui-toolkit](../ui-toolkit/SKILL.md)** |
 | Implement OAuth authentication (all grant types) | **[zoom-oauth](../oauth/SKILL.md)** |
 | Build AI-driven tool workflows over Zoom meetings, Team Chat, Docs, My Notes, and recordings | **[zoom-mcp](../zoom-mcp/SKILL.md)** |
+| Send, edit, or administer Zoom Team Chat through MCP tools | **[zoom-mcp/team-chat](../zoom-mcp/team-chat/SKILL.md)** |
 | Build AI-driven Whiteboard workflows over Zoom Whiteboard MCP | **[zoom-mcp/whiteboard](../zoom-mcp/whiteboard/SKILL.md)** |
 | Build enterprise AI systems with stable API core + AI tool layer | **[zoom-rest-api](../rest-api/SKILL.md)** + **[zoom-mcp](../zoom-mcp/SKILL.md)** |
 

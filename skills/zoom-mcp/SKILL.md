@@ -6,7 +6,8 @@ description: |
   import/export over MCP. Use when the request is about Zoom tools/list or tools/call
   against Zoom's hosted MCP endpoints, AI Companion retrieval, recording-content access,
   Zoom chat/docs search, or Zoom Docs creation/content retrieval via MCP.
-  Route Whiteboard-specific MCP requests to zoom-mcp/whiteboard.
+  Route Whiteboard-specific MCP requests to zoom-mcp/whiteboard and write-capable
+  Team Chat MCP requests to zoom-mcp/team-chat.
 triggers:
   - "zoom mcp"
   - "zoom mcp server"
@@ -22,6 +23,8 @@ triggers:
   - "zoom docs via mcp"
   - "zoom docs content via mcp"
   - "zoom chat search mcp"
+  - "team chat mcp"
+  - "zoom team chat mcp"
   - "zoom transcript via mcp"
   - "meeting transcript via mcp"
 ---
@@ -51,6 +54,9 @@ Treat the raw tool names above as authoritative.
 
 Whiteboard-specific MCP work is split into the child skill
 [whiteboard/SKILL.md](whiteboard/SKILL.md).
+
+Write-capable Team Chat MCP work is split into the child skill
+[team-chat/SKILL.md](team-chat/SKILL.md).
 
 ## Quick Start
 
@@ -112,7 +118,14 @@ settings do not replace the required OAuth scopes.
 The Zoom MCP endpoint and the Whiteboard MCP endpoint are separate. Route Whiteboard-specific
 requests to [whiteboard/SKILL.md](whiteboard/SKILL.md).
 
-**5. Use REST for deterministic meeting CRUD**
+**5. Team Chat write tools are a separate MCP surface**
+
+The default Zoom MCP server includes read-only `search_zoom` for Team Chat and Docs search.
+The Team Chat MCP server is separate and exposes write/update tools for messages, contacts,
+channels, and channel members. Route write-capable Team Chat MCP requests to
+[team-chat/SKILL.md](team-chat/SKILL.md).
+
+**6. Use REST for deterministic meeting CRUD**
 
 The current Zoom MCP tool surface does not expose deterministic
 meeting create, update, or delete tools. If the user needs explicit meeting CRUD operations,
@@ -127,6 +140,9 @@ route to [../rest-api/SKILL.md](../rest-api/SKILL.md).
 
 Whiteboard child skill:
 - [whiteboard/SKILL.md](whiteboard/SKILL.md)
+
+Team Chat child skill:
+- [team-chat/SKILL.md](team-chat/SKILL.md)
 
 ## Search and Retrieval Model
 
@@ -230,6 +246,7 @@ Full error reference: [references/error-codes.md](references/error-codes.md)
 - [references/tools.md](references/tools.md) — Current Zoom MCP tool reference
 - [references/error-codes.md](references/error-codes.md) — MCP and Zoom API errors with fixes
 - [whiteboard/SKILL.md](whiteboard/SKILL.md) — Whiteboard MCP child skill
+- [team-chat/SKILL.md](team-chat/SKILL.md) — Team Chat MCP child skill
 
 ### Troubleshooting
 - [troubleshooting/common-errors.md](troubleshooting/common-errors.md) — Scope failures, endpoint mixups, search/recording issues
