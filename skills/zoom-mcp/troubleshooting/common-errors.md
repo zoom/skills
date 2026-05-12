@@ -36,6 +36,10 @@ for the tool you called.
 
 **Server-required scope:** `meeting:read:assets`
 
+### `search_zoom` fails on scope
+
+**Server-required scope:** `ai_companion:read:search`
+
 ### `recordings_list` fails on scope
 
 **Server-required scope:** `cloud_recording:read:list_user_recordings`
@@ -47,6 +51,10 @@ for the tool you called.
 ### `create_new_file_with_markdown` fails on scope
 
 **Required scope:** `docs:write:import`
+
+### `get_file_content` fails on scope
+
+**Required scope:** `docs:read:export`
 
 ## Search and Retrieval Issues
 
@@ -63,6 +71,27 @@ Common causes:
 - widen `from` and `to`
 - try shorter search terms
 - fall back to `recordings_list`
+
+### `search_zoom` returns no useful chat/docs results
+
+Common causes:
+- missing `ai_companion:read:search`
+- `search_entities` omitted or set to the wrong `entity_type`
+- local time references were not converted to ISO 8601 UTC
+- `doc_view` is too narrow, such as `notes` when the user wanted all Docs
+
+**Fixes:**
+- use `entity_type: "chat"` for Team Chat messages
+- use `entity_type: "zoom_doc"` for Zoom Docs and My Notes
+- use `doc_view: "notes"` only when the user asks for My Notes or meeting notes
+- widen or remove `from` and `to`
+
+### `get_file_content` cannot read a returned document
+
+Most often this means one of these:
+- missing `docs:read:export`
+- the wrong identifier was passed; use the returned `file_id`
+- user can see search metadata but lacks permission to export the file content
 
 ### Meeting assets retrieval fails even with a valid token
 
@@ -110,8 +139,7 @@ sent to the wrong MCP surface.
 ### `Call handle error` (`-32603`)
 
 **Cause:** The tool call was accepted at the protocol layer, but the server failed while
-handling the call. In this repo, this was reproduced by calling `recordings_list` without
-required arguments.
+handling the call.
 
 **Fix:**
 - re-check required parameters against the live schema from `tools/list`

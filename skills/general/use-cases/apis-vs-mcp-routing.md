@@ -25,6 +25,7 @@ Zoom APIs and Zoom MCP are complementary:
 |--------------|-------|
 | "Create meetings nightly and sync metrics to BI" | **zoom-rest-api** |
 | "Let my assistant search meeting content and fetch transcripts" | **zoom-mcp** |
+| "Let my assistant search Team Chat and Zoom Docs, then read the relevant note" | **zoom-mcp** |
 | "Automate meeting lifecycle, then let agents answer questions from summaries" | **zoom-rest-api + zoom-mcp** |
 
 ## Chaining Patterns
@@ -38,7 +39,7 @@ Zoom APIs and Zoom MCP are complementary:
 ### Pattern B: MCP-first AI tool workflows
 
 1. `zoom-oauth` for user OAuth token required by MCP server.
-2. `zoom-mcp` for semantic meeting search, summaries, recordings/transcripts, and tool invocation.
+2. `zoom-mcp` for semantic meeting search, Team Chat/Docs search, Docs content export, summaries, recordings/transcripts, and tool invocation.
 
 ### Pattern C: Hybrid enterprise AI architecture
 

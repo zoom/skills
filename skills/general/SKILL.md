@@ -53,7 +53,7 @@ function detectSignals(rawQuery: string) {
     restApi: hasAny(q, ['rest api', '/v2/', 'create meeting', 'list users', 's2s oauth']),
     webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
     oauth: hasAny(q, ['oauth', 'pkce', 'token refresh', 'account_credentials']),
-    mcp: hasAny(q, ['zoom mcp', 'agentic retrieval', 'tools/list', 'semantic meeting search']),
+    mcp: hasAny(q, ['zoom mcp', 'agentic retrieval', 'tools/list', 'semantic meeting search', 'search zoom', 'zoom docs search', 'zoom chat search']),
   };
 }
 
@@ -105,7 +105,7 @@ For the full TypeScript implementation and handoff contract, use
 | Run browser/device/network preflight diagnostics before join | **[probe-sdk](../probe-sdk/SKILL.md)** |
 | Add pre-built UI components for Video SDK | **[zoom-ui-toolkit](../ui-toolkit/SKILL.md)** |
 | Implement OAuth authentication (all grant types) | **[zoom-oauth](../oauth/SKILL.md)** |
-| Build AI-driven tool workflows (AI Companion/agents) over Zoom data | **[zoom-mcp](../zoom-mcp/SKILL.md)** |
+| Build AI-driven tool workflows over Zoom meetings, Team Chat, Docs, My Notes, and recordings | **[zoom-mcp](../zoom-mcp/SKILL.md)** |
 | Build AI-driven Whiteboard workflows over Zoom Whiteboard MCP | **[zoom-mcp/whiteboard](../zoom-mcp/whiteboard/SKILL.md)** |
 | Build enterprise AI systems with stable API core + AI tool layer | **[zoom-rest-api](../rest-api/SKILL.md)** + **[zoom-mcp](../zoom-mcp/SKILL.md)** |
 

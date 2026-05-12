@@ -17,10 +17,12 @@ behind a tool call.
 | Tool | Exact missing-scope error |
 |------|---------------------------|
 | `search_meetings` | `meeting:read:search` |
+| `search_zoom` | `ai_companion:read:search` |
 | `get_meeting_assets` | `meeting:read:assets` or `meeting:read:assets:admin` |
 | `recordings_list` | `cloud_recording:read:list_user_recordings` or admin/master variants |
 | `get_recording_resource` | `cloud_recording:read:content` |
 | `create_new_file_with_markdown` | `docs:write:import` worked with user OAuth; S2S runtime error surfaced `docs_import:write` aliasing |
+| `get_file_content` | `docs:read:export` |
 
 ## Recording and Transcript Failures
 
@@ -29,6 +31,7 @@ behind a tool call.
 | `get_recording_resource` fails on scope | Missing `cloud_recording:read:content` | Add the scope and mint a new token |
 | Recording search/list works but transcript-capable retrieval fails | Token has list scope but not content scope | Add `cloud_recording:read:content` |
 | Returned resource URL gives `401` | Bearer token not included on the follow-up fetch | Include the same bearer token on the direct request |
+| `get_file_content` fails on scope | Token can search Docs but cannot export content | Add `docs:read:export` and mint a new token |
 
 ## Upstream API Validation Errors
 

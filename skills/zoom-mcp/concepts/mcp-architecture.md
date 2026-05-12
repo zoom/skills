@@ -36,11 +36,13 @@ Use the MCP protocol `tools/list` response as the current source of truth for:
 
 ## Current Capability Shape
 
-The current Zoom MCP surface is centered on:
+The current default Zoom MCP surface exposes 7 tools centered on:
 - semantic meeting search
+- cross-Zoom search over Team Chat messages and Zoom Docs/My Notes
 - meeting asset retrieval
 - recording resource retrieval
 - Zoom Docs creation from Markdown
+- Zoom Docs/My Notes Markdown content export
 
 If the task requires deterministic meeting CRUD, use the REST API skill instead of assuming
 those operations exist on the current Zoom MCP surface.
@@ -62,6 +64,8 @@ for your app and scopes.
 The hosted MCP surfaces advertise supported scopes through OAuth protected-resource metadata.
 Zoom MCP protected-resource metadata currently exposes:
 - `docs:write:import`
+- `docs:read:export`
+- `ai_companion:read:search`
 - `meeting:read:assets`
 - `meeting:read:search`
 - `cloud_recording:read:content`
@@ -77,9 +81,14 @@ Whiteboard MCP protected-resource metadata currently exposes:
 `search_meetings` is not just a title filter. It is a semantic retrieval path over meeting
 content, recap-linked assets, and recording-linked artifacts.
 
+`search_zoom` is the cross-Zoom knowledge discovery path for Team Chat messages, Zoom Docs,
+and My Notes. Pair it with `get_file_content` when a returned Zoom Doc or My Notes file must
+be read as Markdown.
+
 Useful result families:
 - recap-oriented results with AI summaries and linked assets
 - recording-oriented results for post-meeting content retrieval
+- chat/docs-oriented results for collaboration search and document inspection
 
 When writing parsers, validate the live response shape from the server rather than relying on
 older example field names.

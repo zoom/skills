@@ -2,9 +2,10 @@
 name: zoom-mcp
 description: |
   Official Zoom MCP Server guidance for AI-agent access to semantic meeting search,
-  meeting assets, recording resources, and Zoom Docs creation over MCP. Use when the
-  request is about Zoom tools/list or tools/call against Zoom's hosted MCP endpoints,
-  AI Companion retrieval, recording-content access, or Zoom Docs creation via MCP.
+  Zoom-wide chat/docs search, meeting assets, recording resources, and Zoom Docs
+  import/export over MCP. Use when the request is about Zoom tools/list or tools/call
+  against Zoom's hosted MCP endpoints, AI Companion retrieval, recording-content access,
+  Zoom chat/docs search, or Zoom Docs creation/content retrieval via MCP.
   Route Whiteboard-specific MCP requests to zoom-mcp/whiteboard.
 triggers:
   - "zoom mcp"
@@ -19,6 +20,8 @@ triggers:
   - "zoom meeting assets mcp"
   - "zoom recording resource mcp"
   - "zoom docs via mcp"
+  - "zoom docs content via mcp"
+  - "zoom chat search mcp"
   - "zoom transcript via mcp"
   - "meeting transcript via mcp"
 ---
@@ -28,17 +31,20 @@ triggers:
 Zoom hosts an MCP server at `mcp-us.zoom.us` for AI-agent access to:
 
 - semantic meeting search
+- cross-Zoom search over Team Chat messages and Zoom Docs
 - meeting-linked asset retrieval
 - recording resource retrieval
-- Zoom Docs creation from Markdown
+- Zoom Docs creation from Markdown and Markdown content export
 
-Current tool names from the Zoom MCP server:
+Current default Zoom MCP server tool names verified by `tools/list`:
 
 - `create_new_file_with_markdown`
+- `get_file_content`
 - `get_meeting_assets`
-- `search_meetings`
 - `get_recording_resource`
 - `recordings_list`
+- `search_meetings`
+- `search_zoom`
 
 Some MCP clients namespace server tools in the UI, for example `zoom-mcp:recordings_list`.
 Treat the raw tool names above as authoritative.
@@ -57,15 +63,15 @@ claude mcp add --transport http zoom-mcp \
 ```
 
 **2. Verify discovery:**
-- Confirm the client can see `recordings_list`, `search_meetings`, `get_meeting_assets`,
-  `get_recording_resource`, and `create_new_file_with_markdown`.
+- Confirm the client can see 7 default Zoom MCP tools: `search_meetings`,
+  `create_new_file_with_markdown`, `search_zoom`, `get_meeting_assets`,
+  `get_recording_resource`, `get_file_content`, and `recordings_list`.
 - If the client exposes raw protocol inspection, `tools/list` is the authoritative discovery source.
 - The current catalog is documented in [references/tools.md](references/tools.md).
 
 **3. Run the first useful call:**
 ```text
 recordings_list
-  userId: "me"
   from: "2026-03-01"
   to: "2026-03-06"
   page_size: 10
@@ -89,9 +95,11 @@ The Zoom MCP scope set is not the same as the older broad REST scopes.
 The key scopes for this surface are:
 - `meeting:read:search`
 - `meeting:read:assets`
+- `ai_companion:read:search`
 - `cloud_recording:read:list_user_recordings`
 - `cloud_recording:read:content`
 - `docs:write:import` for Zoom Docs creation
+- `docs:read:export` for Zoom Docs/My Notes Markdown content export
 
 **3. AI Companion features are feature prerequisites, not scope substitutes**
 
@@ -130,6 +138,10 @@ Two result families matter most:
 - **Recap-oriented results**: AI summary, meeting-linked documents, recordings, and related assets
 - **Recording-oriented results**: cloud recording references and transcript-capable resources
 
+Use `search_zoom` instead of `search_meetings` when the task is cross-Zoom knowledge discovery
+over Team Chat messages, Zoom Docs, or My Notes. Use `get_file_content` after `search_zoom`
+when the user asks to inspect the Markdown content of a returned Zoom Doc or My Notes file.
+
 Use [examples/transcript-retrieval.md](examples/transcript-retrieval.md) for the main retrieval
 workflow.
 
@@ -138,10 +150,12 @@ workflow.
 | Tool | Key Parameters | Required Scope |
 |------|---------------|----------------|
 | `create_new_file_with_markdown` | `content`*, `file_name`, `parent_id` | `docs:write:import` |
+| `get_file_content` | `fileId`* | `docs:read:export` |
 | `get_meeting_assets` | `meetingId`* | `meeting:read:assets` |
-| `search_meetings` | `q`, `from`, `to`, `page_size`, `next_page_token` | `meeting:read:search` |
 | `get_recording_resource` | `meetingId`*, `types`, `clip_num`, `play_time`, `raw_passcode`, `encode_passcode` | `cloud_recording:read:content` |
-| `recordings_list` | `userId`*, `from`, `to`, `meeting_id`, `trash`, `trash_type`, `page_size`, `next_page_token` | `cloud_recording:read:list_user_recordings` |
+| `recordings_list` | `from`, `to`, `meeting_id`, `trash`, `trash_type`, `page_size`, `next_page_token` | `cloud_recording:read:list_user_recordings` |
+| `search_meetings` | `q`, `from`, `to`, `include_zoom_my_notes`, `page_size`, `next_page_token` | `meeting:read:search` |
+| `search_zoom` | `search_entities`*, `query`, `page_size` | `ai_companion:read:search` |
 
 \* Required parameter
 
@@ -162,7 +176,6 @@ search_meetings
 **List recordings, then retrieve recording resources:**
 ```text
 recordings_list
-  userId: "me"
   from: "2026-03-01"
   to: "2026-03-06"
 → choose a recording target
@@ -174,6 +187,19 @@ recordings_list
 create_new_file_with_markdown
   file_name: "Q4 Planning Notes"
   content: "# Decisions\n\n- ..."
+```
+
+**Search Zoom Chat or Docs, then read a returned file:**
+```text
+search_zoom
+  query: "Q4 planning decisions"
+  search_entities:
+    - entity_type: "zoom_doc"
+      filters:
+        doc_view: "notes"
+  page_size: 10
+→ choose a returned Zoom Doc file_id
+→ get_file_content  fileId: "FILE_ID"
 ```
 
 ## Error Reference
@@ -195,6 +221,7 @@ Full error reference: [references/error-codes.md](references/error-codes.md)
 
 ### Examples
 - [examples/transcript-retrieval.md](examples/transcript-retrieval.md) — Search/assets and recording-resource workflows
+- [examples/search-chat-docs.md](examples/search-chat-docs.md) — Cross-Zoom search over Team Chat, Zoom Docs, and My Notes
 - [examples/create-zoom-doc.md](examples/create-zoom-doc.md) — Verified Zoom Docs creation flow
 - [examples/search-and-act.md](examples/search-and-act.md) — Search, inspect assets, and hand off CRUD work to REST when needed
 - [examples/meeting-lifecycle.md](examples/meeting-lifecycle.md) — Why meeting CRUD belongs in REST, plus the MCP-to-REST handoff pattern

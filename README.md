@@ -147,7 +147,7 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | [zoom-ui-toolkit](skills/ui-toolkit/) | Pre-built UI components for Video SDK |
 | [zoom-cobrowse-sdk](skills/cobrowse-sdk/) | Collaborative browsing for support |
 | [zoom-oauth](skills/oauth/) | OAuth authentication (all 4 grant types) |
-| [zoom-mcp](skills/zoom-mcp/) | Zoom-hosted MCP server workflows for AI-agent tooling, meeting summaries, and transcript retrieval |
+| [zoom-mcp](skills/zoom-mcp/) | Zoom-hosted MCP server workflows for AI-agent tooling, meeting search, Team Chat/Docs search, Docs content, and transcript retrieval |
 
 ## Common Use Cases
 
@@ -168,7 +168,7 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | Pre-join/browser readiness diagnostics | probe-sdk + meeting-sdk or video-sdk |
 | Low-latency event notifications | zoom-websockets |
 | OAuth authentication setup | oauth |
-| AI-driven tool workflows over Zoom data | zoom-mcp |
+| AI-driven tool workflows over Zoom meetings, Team Chat, Docs, and recordings | zoom-mcp |
 | Enterprise AI architecture (API core + AI tool layer) | zoom-rest-api + zoom-mcp |
 
 ## Architecture

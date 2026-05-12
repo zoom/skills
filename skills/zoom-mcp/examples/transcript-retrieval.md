@@ -18,10 +18,12 @@ Use this path when the user starts from content, topic, or time range.
 ```text
 search_meetings
   q: "Q4 budget discussion"
-  from: "2026-03-01"
-  to: "2026-03-06"
+  from: "2026-03-01T00:00:00Z"
+  to: "2026-03-06T23:59:59Z"
   page_size: 20
 ```
+
+Convert the user's local time range to UTC before calling `search_meetings`.
 
 ### Step 2: Choose a meeting and retrieve assets
 
@@ -52,7 +54,6 @@ or recording lookup by user/date range.
 
 ```text
 recordings_list
-  userId: "me"
   from: "2026-03-01"
   to: "2026-03-06"
   page_size: 50

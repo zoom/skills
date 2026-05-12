@@ -25,9 +25,11 @@ Add the MCP-specific granular scopes required by the tools you want to use.
 |-------|------------|
 | `meeting:read:search` | `search_meetings` |
 | `meeting:read:assets` | `get_meeting_assets` |
+| `ai_companion:read:search` | `search_zoom` |
 | `cloud_recording:read:list_user_recordings` | `recordings_list` |
 | `cloud_recording:read:content` | `get_recording_resource` |
 | `docs:write:import` | `create_new_file_with_markdown` |
+| `docs:read:export` | `get_file_content` |
 
 Whiteboard MCP uses a separate scope set. See [../whiteboard/SKILL.md](../whiteboard/SKILL.md).
 
@@ -73,8 +75,9 @@ claude mcp add --transport http zoom-mcp \
 ```
 
 Verification:
-- confirm the client can see `recordings_list`, `search_meetings`, `get_meeting_assets`,
-  `get_recording_resource`, and `create_new_file_with_markdown`
+- confirm the client can see 7 default Zoom MCP tools: `search_meetings`,
+  `create_new_file_with_markdown`, `search_zoom`, `get_meeting_assets`,
+  `get_recording_resource`, `get_file_content`, and `recordings_list`
 - if your client exposes protocol inspection, use `tools/list` as the authority for the live catalog
 - run a simple tool such as `recordings_list` to verify the token has the correct MCP scopes
 

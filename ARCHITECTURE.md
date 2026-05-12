@@ -47,7 +47,7 @@ User request
 Common route outcomes:
 
 - API management flows -> `rest-api`
-- AI-driven meeting search, meeting-asset retrieval, recording-resource retrieval, and Zoom Docs workflows -> `zoom-mcp`
+- AI-driven meeting search, Team Chat/Docs search, meeting-asset retrieval, recording-resource retrieval, and Zoom Docs workflows -> `zoom-mcp`
 - Whiteboard-specific MCP workflows -> `zoom-mcp/whiteboard`
 - Enterprise AI systems requiring stable API core + AI tool layer -> `rest-api` + `zoom-mcp`
 - Event notifications -> `webhooks` or `websockets`
@@ -153,7 +153,7 @@ Platform-heavy spokes (examples):
 | `ui-toolkit` | Prebuilt Video SDK UI components |
 | `cobrowse-sdk` | Collaborative browsing support flows |
 | `oauth` | Auth flows and token models |
-| `zoom-mcp` | Zoom-hosted MCP server workflows for semantic meeting search, meeting assets, recording resources, and Zoom Docs creation |
+| `zoom-mcp` | Zoom-hosted MCP server workflows for semantic meeting search, Team Chat/Docs search, meeting assets, recording resources, Docs creation, and Docs content export |
 | `zoom-mcp/whiteboard` | Whiteboard MCP endpoints, scopes, auth findings, ID mapping, and live Whiteboard tool workflows |
 
 ## Maintenance Notes
