@@ -26,11 +26,13 @@ Official docs:
 - https://developers.zoom.us/docs/ai-services/scribe/
 - https://developers.zoom.us/docs/api/ai-services/
 - https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json
-- Quickstart sample: https://github.com/zoom/scribe-quickstart/
+- Quickstart sample: https://github.com/zoom/ai-services-quickstart/
 
 ## Routing Guardrail
 
 - If the user needs **uploaded or stored media transcribed into text**, route here first.
+- If the user needs **transcript text summarized**, route to [../summarizer/SKILL.md](../summarizer/SKILL.md).
+- If the user needs **plain text translated**, route to [../translator/SKILL.md](../translator/SKILL.md).
 - If the user needs **live meeting media** without file-based upload/batch jobs, route to [../rtms/SKILL.md](../rtms/SKILL.md).
 - If the user needs **Zoom REST API inventory** for AI Services paths, chain [../rest-api/SKILL.md](../rest-api/SKILL.md).
 - If the user needs webhook signature patterns or generic HMAC receiver hardening, optionally chain [../webhooks/SKILL.md](../webhooks/SKILL.md).
@@ -95,6 +97,7 @@ Official docs:
 | Batch | `GET` | `/aiservices/scribe/jobs/{jobId}` | Inspect job summary/state |
 | Batch | `DELETE` | `/aiservices/scribe/jobs/{jobId}` | Cancel queued/processing job |
 | Batch | `GET` | `/aiservices/scribe/jobs/{jobId}/files` | Inspect per-file results |
+| Batch | `GET` | `/aiservices/scribe/jobs/{jobId}/files/{fileId}` | Inspect one per-file result |
 
 ## High-Level Scenarios
 
@@ -107,6 +110,8 @@ Official docs:
 ## Chaining
 
 - Stored Zoom recordings -> [../rest-api/SKILL.md](../rest-api/SKILL.md) + `scribe`
+- Transcribe then summarize -> `scribe` + [../summarizer/SKILL.md](../summarizer/SKILL.md)
+- Transcribe then translate -> `scribe` + [../translator/SKILL.md](../translator/SKILL.md)
 - Webhook verification hardening -> [../webhooks/SKILL.md](../webhooks/SKILL.md)
 - Real-time live transcript/media -> [../rtms/SKILL.md](../rtms/SKILL.md)
 - Cross-product routing -> [../general/SKILL.md](../general/SKILL.md)

@@ -116,6 +116,8 @@ The **general** skill acts as a router and directs to the appropriate specialize
 | "Handle webhook events" | webhooks |
 | "Build a meeting bot" | zoom-meeting-sdk + rtms |
 | "Set up OAuth authentication" | oauth |
+| "Summarize this transcript" | summarizer |
+| "Translate this text" | translator |
 | "Build AI-agent meeting search tools" | zoom-mcp |
 
 ### 3. Skills chain automatically
@@ -137,6 +139,8 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | [zoom-video-sdk](skills/video-sdk/) | Custom video experiences (Web, React Native, Flutter, Linux headless bots) |
 | [zoom-apps-sdk](skills/zoom-apps-sdk/) | Apps that run inside Zoom client |
 | [scribe](skills/scribe/) | AI Services Scribe for uploaded-file and batch archive transcription |
+| [summarizer](skills/summarizer/) | AI Services Summarizer for transcript recaps, summaries, and action items |
+| [translator](skills/translator/) | AI Services Translator for plain-text and batch file translation |
 | [zoom-rtms](skills/rtms/) | Real-time Media Streams (live audio/video/transcripts) |
 | [zoom-team-chat](skills/team-chat/) | Team Chat APIs and integrations |
 | [virtual-agent](skills/virtual-agent/) | Virtual Agent web embeds, Android/iOS wrappers, and KB sync workflows |
@@ -160,6 +164,8 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | Auto-download recordings to S3/GCS | webhooks + zoom-rest-api |
 | Real-time AI processing | rtms |
 | Batch or on-demand media transcription | scribe |
+| Transcript summarization and action items | summarizer |
+| Text translation and localization | translator |
 | In-meeting collaborative apps | zoom-apps-sdk |
 | Team Chat integrations | zoom-team-chat |
 | Virtual Agent campaign/chat flows (web + mobile wrappers) | virtual-agent + contact-center |
@@ -186,6 +192,8 @@ zoom-general (HUB)
        ├── zoom-video-sdk
        ├── zoom-apps-sdk
        ├── scribe
+       ├── summarizer
+       ├── translator
        ├── zoom-rtms
        ├── zoom-team-chat
        ├── virtual-agent
@@ -225,6 +233,9 @@ repo/
 │   ├── meeting-sdk/
 │   ├── video-sdk/
 │   ├── zoom-apps-sdk/
+│   ├── scribe/
+│   ├── summarizer/
+│   ├── translator/
 │   ├── rtms/
 │   ├── team-chat/
 │   ├── contact-center/

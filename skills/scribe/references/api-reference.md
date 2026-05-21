@@ -15,6 +15,7 @@ Canonical sources:
 | GET | `/aiservices/scribe/jobs/{jobId}` | Get Batch Job Status | `getBatchJobStatus` |
 | DELETE | `/aiservices/scribe/jobs/{jobId}` | Cancel Batch Job | `cancelBatchJob` |
 | GET | `/aiservices/scribe/jobs/{jobId}/files` | List Batch Job Files | `listBatchJobFiles` |
+| GET | `/aiservices/scribe/jobs/{jobId}/files/{fileId}` | Get Batch Scribe Job File | `getBatchScribeJobFile` |
 
 ## Request Shapes
 
@@ -116,6 +117,20 @@ Query params:
 Response keys:
 - `files`
 - `next_page_token`
+
+### `GET /aiservices/scribe/jobs/{jobId}/files/{fileId}`
+
+Path params:
+- `jobId`
+- `fileId`
+
+Response keys:
+- `file_id`
+- `input_uri`
+- `output_uri`
+- `state`
+- `duration_sec`
+- `error`
 
 ## Current Limits and Constraints Observed in Sources
 

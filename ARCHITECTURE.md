@@ -55,6 +55,8 @@ Common route outcomes:
 - Custom video sessions -> `video-sdk`
 - In-client apps -> `zoom-apps-sdk`
 - Uploaded/stored media transcription -> `scribe`
+- Transcript summarization and action items -> `summarizer`
+- Plain-text and batch file translation -> `translator`
 - Live media streams -> `rtms`
 - Contact Center -> `contact-center`
 - Virtual Agent web/mobile chat and KB sync -> `virtual-agent`
@@ -85,6 +87,8 @@ repo/
 │   ├── video-sdk/
 │   ├── zoom-apps-sdk/
 │   ├── scribe/
+│   ├── summarizer/
+│   ├── translator/
 │   ├── rtms/
 │   ├── team-chat/
 │   ├── contact-center/
@@ -144,6 +148,8 @@ Platform-heavy spokes (examples):
 | `video-sdk` | Build custom video session experiences |
 | `zoom-apps-sdk` | Build apps inside Zoom client surfaces |
 | `scribe` | Zoom AI Services Scribe for synchronous and batch transcription of uploaded or stored media |
+| `summarizer` | Zoom AI Services Summarizer for transcript recaps, summaries, and action items |
+| `translator` | Zoom AI Services Translator for plain-text and batch file translation |
 | `rtms` | Real-time media streams |
 | `team-chat` | Team Chat integrations |
 | `contact-center` | Contact Center app/web/mobile integrations |

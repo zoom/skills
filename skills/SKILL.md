@@ -33,6 +33,8 @@ This repository contains skills for building with Zoom SDKs, APIs, MCP servers, 
 | **[zoom-video-sdk](video-sdk/SKILL.md)** | Custom video experiences (Web, React Native, Flutter, Android, iOS, macOS, Unity, Linux) |
 | **[zoom-apps-sdk](zoom-apps-sdk/SKILL.md)** | Apps that run inside the Zoom client |
 | **[scribe](scribe/SKILL.md)** | Zoom AI Services Scribe for synchronous and batch transcription of uploaded or stored media |
+| **[summarizer](summarizer/SKILL.md)** | Zoom AI Services Summarizer for transcript recaps, summaries, and action items |
+| **[translator](translator/SKILL.md)** | Zoom AI Services Translator for plain-text and batch file translation |
 | **[zoom-rtms](rtms/SKILL.md)** | Real-Time Media Streams (live audio/video/transcripts) |
 | **[zoom-team-chat](team-chat/SKILL.md)** | Team Chat messaging and channels |
 | **[virtual-agent](virtual-agent/SKILL.md)** | Virtual Agent web/mobile chat embeds and KB sync workflows |
@@ -90,6 +92,8 @@ Use `zoom-general` when:
 | Build an app inside Zoom client | **zoom-apps-sdk** |
 | Access live audio/video/transcripts | **zoom-rtms** |
 | Transcribe uploaded or stored media files into text | **scribe** |
+| Summarize transcript text into recaps, summaries, or action items | **summarizer** |
+| Translate plain text or stored text files | **translator** |
 | Build Team Chat integrations | **zoom-team-chat** |
 | Build Virtual Agent chat/campaign experiences | **virtual-agent** |
 | Build Contact Center integrations (apps/web/mobile) | **contact-center** |

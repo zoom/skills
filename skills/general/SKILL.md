@@ -39,6 +39,9 @@ type SkillId =
   | 'zoom-rest-api'
   | 'zoom-webhooks'
   | 'zoom-oauth'
+  | 'scribe'
+  | 'summarizer'
+  | 'translator'
   | 'zoom-meeting-sdk-web-component-view'
   | 'zoom-video-sdk'
   | 'zoom-mcp'
@@ -54,6 +57,9 @@ function detectSignals(rawQuery: string) {
     restApi: hasAny(q, ['rest api', '/v2/', 'create meeting', 'list users', 's2s oauth']),
     webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
     oauth: hasAny(q, ['oauth', 'pkce', 'token refresh', 'account_credentials']),
+    scribe: hasAny(q, ['scribe', 'transcribe file', 'transcribe recording', 'batch transcription']),
+    summarizer: hasAny(q, ['summarizer', 'summarize transcript', 'meeting recap api', 'action items']),
+    translator: hasAny(q, ['translator', 'translate text', 'batch translation', 'target_languages']),
     mcp: hasAny(q, ['zoom mcp', 'agentic retrieval', 'tools/list', 'semantic meeting search', 'search zoom', 'zoom docs search', 'zoom chat search']),
     teamChatMcp: hasAny(q, ['team chat mcp', 'zoom chat mcp', 'send zoom chat via mcp', 'zoom_chat_message_send']),
   };
@@ -63,6 +69,9 @@ function pickPrimarySkill(s: ReturnType<typeof detectSignals>): SkillId {
   if (s.meetingCustomUi) return 'zoom-meeting-sdk-web-component-view';
   if (s.teamChatMcp) return 'zoom-mcp/team-chat';
   if (s.mcp) return 'zoom-mcp';
+  if (s.summarizer) return 'summarizer';
+  if (s.translator) return 'translator';
+  if (s.scribe) return 'scribe';
   if (s.restApi) return 'zoom-rest-api';
   if (s.customVideo) return 'zoom-video-sdk';
   return 'zoom-general';
@@ -98,6 +107,8 @@ For the full TypeScript implementation and handoff contract, use
 | Build custom video experiences (Web, React Native, Flutter, Android, iOS, macOS, Unity, Linux) | **[zoom-video-sdk](../video-sdk/SKILL.md)** |
 | Build an app that runs inside Zoom client | **[zoom-apps-sdk](../zoom-apps-sdk/SKILL.md)** |
 | Transcribe uploaded or stored media with AI Services Scribe | **[scribe](../scribe/SKILL.md)** |
+| Summarize transcript text with AI Services Summarizer | **[summarizer](../summarizer/SKILL.md)** |
+| Translate plain text or text files with AI Services Translator | **[translator](../translator/SKILL.md)** |
 | Access live audio/video/transcripts from meetings | **[zoom-rtms](../rtms/SKILL.md)** |
 | Enable collaborative browsing for support | **[zoom-cobrowse-sdk](../cobrowse-sdk/SKILL.md)** |
 | Build Contact Center apps and channel integrations | **[contact-center](../contact-center/SKILL.md)** |
@@ -193,6 +204,7 @@ Both receive event notifications, but differ in approach:
 |----------|-------------|---------------|
 | [Meeting + Webhooks + OAuth Refresh](references/meeting-webhooks-oauth-refresh-orchestration.md) | Create a meeting, process real-time updates, and refresh OAuth tokens safely in one design | [zoom-rest-api](../rest-api/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) + [zoom-webhooks](../webhooks/SKILL.md) |
 | [Scribe Transcription Pipeline](use-cases/scribe-transcription-pipeline.md) | Transcribe uploaded files or S3 archives with AI Services Scribe using fast mode or batch jobs | [scribe](../scribe/SKILL.md) + optional [zoom-rest-api](../rest-api/SKILL.md) + optional [zoom-webhooks](../webhooks/SKILL.md) |
+| [AI Services Text Intelligence](use-cases/ai-services-text-intelligence.md) | Chain Scribe, Summarizer, and Translator for transcript summary and localization workflows | [scribe](../scribe/SKILL.md) + [summarizer](../summarizer/SKILL.md) + [translator](../translator/SKILL.md) |
 | [APIs vs MCP Routing](use-cases/apis-vs-mcp-routing.md) | Decide whether to route to deterministic Zoom APIs, AI-driven MCP, or a hybrid design | [zoom-rest-api](../rest-api/SKILL.md) and/or [zoom-mcp](../zoom-mcp/SKILL.md) |
 | [Custom Meeting UI (Web)](use-cases/custom-meeting-ui-web.md) | Build a custom video UI for a real Zoom meeting in a web app using Meeting SDK Component View | [zoom-meeting-sdk-web-component-view](../meeting-sdk/web/component-view/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [Meeting Automation](use-cases/meeting-automation.md) | Schedule, update, delete meetings programmatically | [zoom-rest-api](../rest-api/SKILL.md) |
@@ -223,6 +235,7 @@ Both receive event notifications, but differ in approach:
 - [APIs vs MCP Routing](use-cases/apis-vs-mcp-routing.md): choose API-only, MCP-only, or hybrid routing using official Zoom criteria.
 - [AI Companion Integration](use-cases/ai-companion-integration.md): connect Zoom AI Companion capabilities into your app workflow.
 - [AI Integration](use-cases/ai-integration.md): add summarization, transcription, or assistant logic using Zoom data surfaces.
+- [AI Services Text Intelligence](use-cases/ai-services-text-intelligence.md): use Scribe, Summarizer, and Translator together for transcript, summary, action item, and localization pipelines.
 - [Backend Automation (S2S OAuth)](use-cases/backend-automation-s2s-oauth.md): run server-side jobs with account-level OAuth credentials.
 - [Collaborative Apps](use-cases/collaborative-apps.md): build shared in-meeting app state and interactions.
 - [Contact Center Integration](use-cases/contact-center-integration.md): connect Zoom Contact Center signals into external systems.

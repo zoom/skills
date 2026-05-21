@@ -10,6 +10,9 @@ Integrate AI/ML capabilities with Zoom meetings using real-time media streams fo
 
 - **rtms** - Primary (real-time media access)
 - **zoom-meeting-sdk** (Linux) - For meeting bots
+- **scribe** - File or archive transcription after media capture/export
+- **summarizer** - Transcript recap, summary, and action item extraction
+- **translator** - Plain text and transcript translation
 
 ## AI Use Cases
 
@@ -17,7 +20,7 @@ Integrate AI/ML capabilities with Zoom meetings using real-time media streams fo
 |----------|-------|--------|
 | Transcription | Audio stream | Real-time text |
 | Sentiment | Audio/transcript | Mood indicators |
-| Summarization | Transcript | Meeting summary |
+| Summarization | Transcript | Meeting summary or action items |
 | Action items | Transcript | Task list |
 | Translation | Audio/transcript | Multi-language |
 
@@ -140,44 +143,17 @@ class SentimentTracker {
 
 ### Meeting Summarization
 
-```javascript
-// Generate summary after meeting ends
-async function generateMeetingSummary(fullTranscript) {
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4',
-    messages: [{
-      role: 'system',
-      content: `Summarize this meeting transcript. Include:
-        1. Key discussion points
-        2. Decisions made
-        3. Action items with owners
-        4. Follow-up needed`
-    }, {
-      role: 'user',
-      content: fullTranscript
-    }]
-  });
-  
-  return response.choices[0].message.content;
-}
+For Zoom-native transcript summarization, use [../../summarizer/SKILL.md](../../summarizer/SKILL.md):
 
-// Extract action items
-async function extractActionItems(transcript) {
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4',
-    messages: [{
-      role: 'system',
-      content: 'Extract action items as JSON array: [{task, owner, deadline}]'
-    }, {
-      role: 'user',
-      content: transcript
-    }],
-    response_format: { type: 'json_object' }
-  });
-  
-  return JSON.parse(response.choices[0].message.content);
-}
-```
+- fast mode: `POST /aiservices/summarizer/summarize`
+- tasks: `recap`, `summary`, `action_items`, `full_summary`
+- batch mode: summarize stored `.vtt`, `.srt`, or `.txt` transcript files
+
+For text localization, use [../../translator/SKILL.md](../../translator/SKILL.md):
+
+- fast mode: `POST /aiservices/translator/translate`
+- batch mode: translate stored text files
+- guardrail: one target language per request/job, with English as source or target
 
 ### Latency Considerations
 

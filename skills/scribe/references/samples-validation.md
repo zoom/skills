@@ -1,7 +1,7 @@
 # Samples Validation
 
 Validated against:
-- https://github.com/zoom/scribe-quickstart/
+- https://github.com/zoom/ai-services-quickstart/
 - official docs pages under `docs/ai-services/`
 - AI Services OpenAPI inventory at `api-hub/ai-services/methods/endpoints.json`
 - Zoom blog context:
@@ -11,6 +11,7 @@ Validated against:
 ## What the official quickstart confirms
 
 - Node/Express proxy architecture is a valid implementation model.
+- The current official quickstart covers Scribe, Summarizer, and Translator from one AI Services app.
 - Fast mode can be proxied as multipart upload handling on your server even though the docs show JSON examples.
 - Batch mode commonly injects AWS credentials into request payloads.
 - Webhook verification uses `x-zm-signature` + `x-zm-request-timestamp` with HMAC-SHA256 and `sha256=` prefix.
@@ -29,6 +30,7 @@ Validated against:
 
 ## Caveats from the sample
 
+- The README setup command still says to clone `zoom/scribe-quickstart.git`; the current repo name is `zoom/ai-services-quickstart.git`.
 - It assumes Node `>=24`, which is stricter than many deployment environments actually need. Verify your runtime before copying that constraint unchanged.
 - It uses environment-injected AWS credentials. Production pipelines may prefer pre-signed URLs or short-lived STS credentials only.
 - The sample is an app demo, not a complete production reference for job retry policy, durable queues, or transcript storage.

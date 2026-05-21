@@ -50,7 +50,7 @@ Expert guidance for building server-side integrations with the Zoom REST API. Th
 - **[Meetings](references/meetings.md)** - Meeting CRUD, types, settings
 - **[Users](references/users.md)** - User provisioning and management
 - **[Recordings](references/recordings.md)** - Cloud recording access and download
-- **[AI Services](references/ai-services.md)** - Scribe endpoint inventory and current AI Services path surface
+- **[AI Services](references/ai-services.md)** - Scribe, Summarizer, and Translator endpoint inventory and current AI Services path surface
 - **[GraphQL Queries](examples/graphql-queries.md)** - Alternative query API (beta)
 - **Integrated Index** - see the section below in this file
 
@@ -158,7 +158,7 @@ The `api_url` field in OAuth token responses indicates the user's region. Use re
 | **WebSockets** | Persistent event streaming without public endpoints |
 | **GraphQL (Beta)** | Single-endpoint flexible queries at `v3/graphql` |
 | **AI Companion** | Meeting summaries, transcripts, AI-generated content |
-| **AI Services / Scribe** | File and archive transcription via Build-platform JWT-authenticated endpoints |
+| **AI Services** | Scribe transcription, Summarizer transcript summaries, and Translator text translation via Build-platform JWT-authenticated endpoints |
 
 ## Prerequisites
 

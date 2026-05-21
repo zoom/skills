@@ -26,6 +26,9 @@ export type SkillId =
   | 'zoom-video-sdk'
   | 'zoom-video-sdk-web'
   | 'zoom-apps-sdk'
+  | 'scribe'
+  | 'summarizer'
+  | 'translator'
   | 'zoom-rtms'
   | 'zoom-team-chat'
   | 'contact-center'
@@ -57,6 +60,9 @@ interface Signals {
   webhooks: boolean;
   websockets: boolean;
   zoomApps: boolean;
+  scribe: boolean;
+  summarizer: boolean;
+  translator: boolean;
   oauth: boolean;
   rtms: boolean;
   teamChat: boolean;
@@ -93,6 +99,9 @@ export function detectSignals(rawQuery: string): Signals {
     webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
     websockets: hasAny(q, ['websocket', 'real-time events', 'persistent connection']),
     zoomApps: hasAny(q, ['zoom apps sdk', 'in-client app', 'layers api', 'collaborate mode']),
+    scribe: hasAny(q, ['scribe', 'transcribe file', 'transcribe recording', 'batch transcription', 'aiservices/scribe']),
+    summarizer: hasAny(q, ['summarizer', 'summarize transcript', 'meeting recap api', 'action items', 'aiservices/summarizer']),
+    translator: hasAny(q, ['translator', 'translate text', 'batch translation', 'target_languages', 'aiservices/translator']),
     oauth: hasAny(q, ['oauth', 'pkce', 'authorization code', 'account_credentials', 'token refresh']),
     rtms: hasAny(q, ['rtms', 'real-time media streams', 'live transcript stream', 'audio stream']),
     teamChat: hasAny(q, ['team chat', 'chatbot', 'chat card', 'chat message']),
@@ -118,6 +127,9 @@ function pickPrimarySkill(s: Signals): SkillId {
   if (s.contactCenter) return 'contact-center';
   if (s.zoomApps) return 'zoom-apps-sdk';
   if (s.rtms) return 'zoom-rtms';
+  if (s.summarizer) return 'summarizer';
+  if (s.translator) return 'translator';
+  if (s.scribe) return 'scribe';
   if (s.teamChatMcp) return 'zoom-mcp/team-chat';
   if (s.teamChat) return 'zoom-team-chat';
   if (s.phone) return 'phone';
@@ -150,6 +162,14 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   // Cross-surface chaining.
   if (primary === 'contact-center' && s.virtualAgent) chain.add('virtual-agent');
   if (primary === 'virtual-agent' && s.contactCenter) chain.add('contact-center');
+  if (primary === 'summarizer' && s.scribe) chain.add('scribe');
+  if (primary === 'translator' && s.scribe) chain.add('scribe');
+  if (primary === 'translator' && s.summarizer) chain.add('summarizer');
+  if (primary === 'summarizer' && s.translator) chain.add('translator');
+
+  if (s.scribe || s.summarizer || s.translator) {
+    chain.add('zoom-rest-api');
+  }
 
   // Event channels often pair with REST resource management.
   if (s.webhooks || s.websockets) chain.add('zoom-rest-api');

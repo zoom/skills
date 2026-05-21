@@ -14,11 +14,15 @@ Treat these as a portal/documentation naming drift issue and verify the current 
 Scribe sits under `AI Services`, but related Zoom products may point users toward:
 - RTMS for live meeting streams
 - Meeting SDK Linux bots for visible in-meeting capture
+- AI Services Summarizer for transcript recaps, summaries, and action items
+- AI Services Translator for text translation/localization
 - AI Companion / REST APIs for Zoom-generated summaries and transcripts
 - blog or marketing material that frames Scribe inside broader speech/insights workflows
 
 Keep the guardrail clear:
 - `scribe` = file/storage transcription service
+- `summarizer` = transcript summarization service
+- `translator` = plain-text translation service
 - `rtms` = live media stream ingestion
 - Meeting SDK Linux = participant bot capture / raw recording
 
@@ -36,7 +40,9 @@ These are valid architectural use cases, but they do not expand the current docu
 
 Implementation rule:
 - use `scribe` for transcript generation
-- use your own downstream pipeline for sentiment, classification, QA scoring, or summarization
+- use `summarizer` for transcript recap, summary, and action item workflows
+- use `translator` for text localization workflows
+- use your own downstream pipeline for sentiment, classification, or QA scoring
 - do not infer undocumented real-time or analytics endpoints from blog phrasing alone
 
 ## API Surface Drift Watchpoints

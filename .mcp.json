@@ -11,6 +11,14 @@
     "zoom-team-chat-mcp": {
       "type": "http",
       "url": "https://mcp.zoom.us/mcp/team_chat/streamable"
+    },
+    "zoom-docs-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/docs/streamable"
+    },
+    "zoom-revenue-accelerator-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/revenue_accelerator/streamable"
     }
   }
 }

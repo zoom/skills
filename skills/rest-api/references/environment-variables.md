@@ -9,6 +9,8 @@
 | `ZOOM_ACCOUNT_ID` | S2S OAuth mode | Account token grant | Zoom Marketplace -> Server-to-Server OAuth app credentials |
 | `ZOOM_REDIRECT_URI` | User OAuth mode | Authorization callback URL | Zoom Marketplace -> OAuth redirect/allow list |
 | `ZOOM_WEBHOOK_SECRET` | If receiving events | Signature validation for webhook events | Zoom Marketplace -> Event Subscriptions -> Secret Token |
+| `ZOOM_API_KEY` | AI Services only | Build-platform JWT issuer | Zoom Build Platform API keys area |
+| `ZOOM_API_SECRET` | AI Services only | Build-platform JWT signing secret | Zoom Build Platform API keys area |
 
 ## Runtime-only values
 
@@ -19,3 +21,4 @@
 
 - Use `ZOOM_ACCOUNT_ID` for server-to-server service integrations.
 - User-level integrations require authorization code flow and `ZOOM_REDIRECT_URI`.
+- AI Services endpoints under `/aiservices/*` use Build-platform JWT auth, not the standard REST OAuth token model.
