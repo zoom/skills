@@ -33,6 +33,32 @@ const mediaTypes = RTMSManager.MEDIA.AUDIO | RTMSManager.MEDIA.TRANSCRIPT;  // 9
 
 **Important**: Stereo support depends on the full content-type/codec matrix. `RTP + Opus`, `RAW + Opus`, and `RAW + PCM (L16)` support stereo; G.711 (PCMA) and G.722 are mono-only.
 
+### Startup Audio Buffering
+
+Set startup buffering on the signaling handshake, not in `media_params`.
+
+```javascript
+signalingWs.send(JSON.stringify({
+  msg_type: 1,
+  protocol_version: 1,
+  sequence: 1,
+  meeting_uuid: idValue,
+  rtms_stream_id: streamId,
+  signature,
+  buffer_data: false // Drop startup backlog; default true keeps up to 60s
+}));
+```
+
+Use `buffer_data: false` for live streaming, live AI, and other low-latency flows that should start from current audio and ignore the initial backlog. Use `buffer_data: true` or omit it when the app must receive audio captured while signaling and media sockets are being established. This flag only affects startup audio before signaling is established; it does not turn off buffering during later connection interruptions.
+
+To estimate startup buffered audio duration:
+
+```text
+buffer_duration = firstAudioPacketTimestamp - rtmsStartedEventTimestamp
+```
+
+Video is not startup-buffered the same way, so audio and video timestamps can be offset by the buffered audio duration. Account for this when muxing audio with video or screen share.
+
 ### Supported Audio Media Parameter Matrix
 
 When calling the RTMS media server, audio parameters must follow the supported matrix. Unsupported combinations are rejected with media-audio validation status codes.
@@ -106,6 +132,19 @@ RTMSManager.on('audio', ({ buffer, userName, timestamp }) => {
   // Send to transcription service, save to file, etc.
   transcriptionService.process(buffer);
 });
+```
+
+### Media Payload Length
+
+Audio, video, and screen share media data can include `content.length`, which is the original binary length before base64 encoding. Use it for validation, logging, and detecting partial payload handling:
+
+```javascript
+const content = msg.content;
+const encoded = typeof content === 'string' ? content : content.data;
+const buffer = Buffer.from(encoded, 'base64');
+const originalLength = content && typeof content === 'object' && content.length
+  ? content.length
+  : buffer.length;
 ```
 
 ## Video

@@ -219,10 +219,21 @@ signalingWs.on('open', () => {
     meeting_uuid: idValue,
     rtms_stream_id: payload.rtms_stream_id,
     signature: signature,
+    buffer_data: false,             // Use false for live streaming; true preserves startup audio
     media_type: 9                   // Audio(1) + Transcript(8)
   }));
 });
 ```
+
+### Audio Buffer Control
+
+The signaling handshake supports optional `buffer_data` for startup audio:
+
+- `buffer_data: true` or omitted: RTMS buffers and later delivers up to 60 seconds of audio captured after the `rtms_started` webhook while signaling and media sockets are being established.
+- `buffer_data: false`: RTMS drops that initial buffered audio and starts from live audio once the media socket is ready.
+- This only controls the startup buffer before the signaling connection is established. It does not disable buffering caused by later signaling or media socket interruptions.
+
+Use `true` for recording, compliance, and "do not miss the opening sentence" workflows. Use `false` for live streaming, low-latency live AI, or any pipeline where receiving a startup backlog is worse than missing the first few seconds.
 
 ### Step 3: Handle Signaling Response
 
@@ -312,26 +323,26 @@ mediaWs.on('message', (data) => {
   
   switch (msg.msg_type) {
     case 14:  // Audio
-      const audioBuffer = Buffer.from(msg.content, 'base64');
-      processAudio(audioBuffer, msg.user_name, msg.timestamp);
+      const audioContent = normalizeBinaryContent(msg.content);
+      processAudio(audioContent.buffer, audioContent.userName || msg.user_name, audioContent.timestamp || msg.timestamp, audioContent.length);
       break;
       
     case 15:  // Video
-      const videoBuffer = Buffer.from(msg.content, 'base64');
-      processVideo(videoBuffer, msg.user_name, msg.timestamp);
+      const videoContent = normalizeBinaryContent(msg.content);
+      processVideo(videoContent.buffer, videoContent.userName || msg.user_name, videoContent.timestamp || msg.timestamp, videoContent.length);
       break;
       
     case 16:  // Screen share
-      const shareBuffer = Buffer.from(msg.content, 'base64');
-      processScreenShare(shareBuffer, msg.user_name, msg.timestamp);
+      const shareContent = normalizeBinaryContent(msg.content);
+      processScreenShare(shareContent.buffer, shareContent.userName || msg.user_name, shareContent.timestamp || msg.timestamp, shareContent.length);
       break;
       
     case 17:  // Transcript
-      console.log(`${msg.user_name}: ${msg.content}`);
+      console.log(`${getContentUserName(msg.content, msg.user_name)}: ${getContentData(msg.content)}`);
       break;
       
     case 18:  // Chat
-      console.log(`[Chat] ${msg.user_name}: ${msg.content}`);
+      console.log(`[Chat] ${getContentUserName(msg.content, msg.user_name)}: ${getContentData(msg.content)}`);
       break;
       
     case 12:  // Keep alive
@@ -342,6 +353,27 @@ mediaWs.on('message', (data) => {
       break;
   }
 });
+
+function normalizeBinaryContent(content) {
+  const data = getContentData(content);
+  const buffer = Buffer.from(data, 'base64');
+
+  return {
+    buffer,
+    userName: getContentUserName(content),
+    timestamp: content && typeof content === 'object' ? content.timestamp : undefined,
+    // Newer audio/video/screen-share payloads include original byte length.
+    length: content && typeof content === 'object' && content.length ? content.length : buffer.length
+  };
+}
+
+function getContentData(content) {
+  return typeof content === 'string' ? content : content?.data;
+}
+
+function getContentUserName(content, fallback) {
+  return content && typeof content === 'object' && content.user_name ? content.user_name : fallback;
+}
 ```
 
 ### Step 6A: Track Available Participant Video Streams

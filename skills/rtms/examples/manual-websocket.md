@@ -122,6 +122,7 @@ function connectToSignaling(idValue, streamId, serverUrl) {
       rtms_stream_id: streamId,
       sequence: Math.floor(Math.random() * 1000000),
       signature: signature,
+      buffer_data: false,             // Use false for live streaming; true preserves startup audio
       media_type: 9                   // AUDIO(1) | TRANSCRIPT(8)
     }));
   });
@@ -327,8 +328,8 @@ function handleMediaMessage(msg, streamId) {
 // ============================================
 
 function handleAudioData(msg) {
-  const audioBuffer = Buffer.from(msg.content, 'base64');
-  console.log(`Audio: ${audioBuffer.length} bytes from ${msg.user_name || 'mixed'}`);
+  const media = normalizeMediaContent(msg.content);
+  console.log(`Audio: ${media.buffer.length}/${media.originalLength} bytes from ${media.userName || msg.user_name || 'mixed'}`);
   
   // Process audio:
   // - Send to transcription service
@@ -337,8 +338,8 @@ function handleAudioData(msg) {
 }
 
 function handleVideoData(msg) {
-  const videoBuffer = Buffer.from(msg.content, 'base64');
-  console.log(`Video: ${videoBuffer.length} bytes from ${msg.user_name}`);
+  const media = normalizeMediaContent(msg.content);
+  console.log(`Video: ${media.buffer.length}/${media.originalLength} bytes from ${media.userName || msg.user_name}`);
   
   // Process video:
   // - Decode H.264/JPG
@@ -347,18 +348,38 @@ function handleVideoData(msg) {
 }
 
 function handleShareData(msg) {
-  const shareBuffer = Buffer.from(msg.content, 'base64');
-  console.log(`Share: ${shareBuffer.length} bytes from ${msg.user_name}`);
+  const media = normalizeMediaContent(msg.content);
+  console.log(`Share: ${media.buffer.length}/${media.originalLength} bytes from ${media.userName || msg.user_name}`);
 }
 
 function handleTranscriptData(msg) {
-  console.log(`[${msg.user_name}]: ${msg.content}`);
+  console.log(`[${getContentUserName(msg.content, msg.user_name)}]: ${getContentData(msg.content)}`);
   
   // Save transcript, process with AI, etc.
 }
 
 function handleChatData(msg) {
-  console.log(`[Chat] ${msg.user_name}: ${msg.content}`);
+  console.log(`[Chat] ${getContentUserName(msg.content, msg.user_name)}: ${getContentData(msg.content)}`);
+}
+
+function normalizeMediaContent(content) {
+  const data = getContentData(content);
+  const buffer = Buffer.from(data, 'base64');
+
+  return {
+    buffer,
+    userName: getContentUserName(content),
+    timestamp: content && typeof content === 'object' ? content.timestamp : undefined,
+    originalLength: content && typeof content === 'object' && content.length ? content.length : buffer.length
+  };
+}
+
+function getContentData(content) {
+  return typeof content === 'string' ? content : content?.data;
+}
+
+function getContentUserName(content, fallback) {
+  return content && typeof content === 'object' && content.user_name ? content.user_name : fallback;
 }
 
 // ============================================
@@ -409,6 +430,8 @@ app.listen(PORT, () => {
 | 12 | KEEP_ALIVE_REQ | Server -> Client | Heartbeat ping |
 | 13 | KEEP_ALIVE_RESP | Client -> Server | Heartbeat pong |
 
+`SIGNALING_HAND_SHAKE_REQ` accepts optional `buffer_data`. For live streaming, set `false` to drop startup backlog and start from live audio. Omit it or set `true` only when you need up to 60 seconds of startup audio buffered while sockets are established.
+
 ### Media Messages
 
 | msg_type | Name | Direction | Description |
@@ -422,6 +445,8 @@ app.listen(PORT, () => {
 | 16 | MEDIA_DATA_SHARE | Server -> Client | Screen share data |
 | 17 | MEDIA_DATA_TRANSCRIPT | Server -> Client | Transcript data |
 | 18 | MEDIA_DATA_CHAT | Server -> Client | Chat message |
+
+Audio, video, and screen share messages may include `content.length`, the original binary byte length before base64 encoding. Log it against the decoded buffer length when debugging partial payload handling.
 
 ## Media Parameters
 
@@ -516,7 +541,9 @@ function closeStream(streamId) {
 | 8 | STATUS_DUPLICATE_SIGNAL_REQUEST | Duplicate signaling connection |
 | 16 | STATUS_DUPLICATE_MEDIA_DATA_CONNECTION | Duplicate media connection |
 | 40 | STATUS_INVALID_RTMS_SESSION_ID | Invalid RTMS session ID |
-| 43 | STATUS_INVALID_MEDIA_TRANSCRIPT_SROUCE_LANGUAGE | Invalid transcript source language |
+| 43 | STATUS_INVALID_MEDIA_TRANSCRIPT_SOURCE_LANGUAGE | Invalid transcript source language |
+| 44 | STATUS_DUPLICATE_VIDEO_SUBSCRIPTION | Duplicate individual video subscription |
+| 45 | STATUS_INTERNAL_EXCEPTION | Internal RTMS exception |
 
 See [Data Types](../references/data-types.md) for complete list.
 

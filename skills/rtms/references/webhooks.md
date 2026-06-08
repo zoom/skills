@@ -52,6 +52,12 @@ app.post('/webhook', (req, res) => {
 
 ## Events
 
+May 2026 payload additions:
+
+- `meeting.rtms_started` and `webinar.rtms_started` include `payload.account_id`, `payload.object.is_original_host`, and `payload.object.meeting_id`.
+- `webinar.rtms_started` also includes `payload.object.webinar_id`.
+- `session.rtms_started` includes `payload.account_id`.
+
 ### meeting.rtms_started
 
 Sent when RTMS stream is ready for a meeting.
@@ -65,6 +71,7 @@ Sent when RTMS stream is ready for a meeting.
       "meeting_id": "meeting_id",
       "meeting_uuid": "meeting_uuid",
       "host_id": "host_user_id",
+      "is_original_host": true,
       "rtms_stream_id": "stream_id",
       "server_urls": "wss://rtms-sjc1.zoom.us/...",
       "signature": "auth_signature"
@@ -101,8 +108,10 @@ Sent when RTMS stream is ready for a webinar.
     "account_id": "account_id",
     "object": {
       "meeting_id": "meeting_id",
+      "webinar_id": "webinar_id",
       "meeting_uuid": "meeting_uuid",
       "host_id": "host_user_id",
+      "is_original_host": true,
       "rtms_stream_id": "stream_id",
       "server_urls": "wss://rtms-sjc1.zoom.us/...",
       "signature": "auth_signature"
@@ -187,9 +196,13 @@ Subscribe to receive `SHARING_START` and `SHARING_STOP` events when participants
 
 | Field | Description |
 |-------|-------------|
+| `account_id` | Account identifier on start/stop payloads |
 | `rtms_stream_id` | Unique stream identifier |
 | `server_urls` | WebSocket signaling server URL |
 | `meeting_uuid` | Meeting unique identifier (needed for signature) |
+| `meeting_id` | Meeting number or ID included for meeting and webinar start events |
+| `webinar_id` | Webinar ID included for webinar start events |
+| `is_original_host` | Whether the operator is the original meeting/webinar host |
 | `signature` | Pre-computed auth signature (alternative to self-generating) |
 
 ## Server URL Geo-Routing

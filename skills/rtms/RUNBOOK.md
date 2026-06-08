@@ -46,6 +46,9 @@ Slow webhook responses can trigger retries and duplicate stream attempts.
 - Track one active connection per stream/session reference.
 - Handle heartbeat ping/pong per protocol.
 - Implement reconnection strategy explicitly.
+- Decide startup audio buffering in `SIGNALING_HAND_SHAKE_REQ`:
+  - `buffer_data: true` or omitted -> receive up to 60s of startup audio after media connects
+  - `buffer_data: false` -> use for live streaming; drop startup backlog and begin from live audio
 
 No heartbeat handling means unexpected disconnects.
 
@@ -80,4 +83,6 @@ Expected: healthy service JSON and correct active pipeline visibility.
 - **No media at all** -> lifecycle event not received or wrong webhook route.
 - **Duplicate streams** -> delayed webhook response or no active-session guard.
 - **Handshake/auth errors** -> wrong credential pair or wrong session ID field.
+- **First audio appears backfilled or delayed** -> `buffer_data` defaulted to `true`; set `false` for live-only startup.
+- **Missing first seconds of audio** -> `buffer_data: false` or slow connection setup; use default `true` when completeness matters.
 - **Frontend appears idle** -> backend bridge not connected, not an RTMS source issue.

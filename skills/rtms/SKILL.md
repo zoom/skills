@@ -99,13 +99,16 @@ RTMS is a data pipeline that gives your app access to live media from Zoom meeti
 | **Transcript** | JSON text | Meeting notes, search, compliance |
 | **Chat** | JSON text | Archive, sentiment analysis |
 
-### March 2026 Protocol Changes
+### Recent Protocol Changes
 
 - **Zoom Contact Center Voice support**: RTMS now covers Contact Center Voice audio and transcript scenarios.
 - **Transcript Language Identification control**: transcript media handshakes now support `src_language` and `enable_lid`. Default behavior is LID enabled. Set `enable_lid: false` to force a fixed language.
 - **Single individual video stream subscription**: RTMS can now stream one participant's camera feed at a time when `data_opt` is set to `VIDEO_SINGLE_INDIVIDUAL_STREAM`.
 - **Graceful client-initiated shutdown**: backends can send `STREAM_CLOSE_REQ` over the signaling socket and wait for `STREAM_CLOSE_RESP`.
 - **Media keep-alive tolerance increased**: media socket keep-alive timeout is now **65 seconds**, not 35.
+- **Audio buffer control in signaling handshake**: signaling handshakes now support optional `buffer_data`. Default is `true`, which delivers up to 60 seconds of initial audio buffered while signaling/media sockets are established. For live streaming pipelines, set `buffer_data: false` to drop the startup backlog and start from live audio once connected.
+- **Media payload length field**: audio, video, and screen share media data events can include `content.length`, the original binary length before base64 encoding.
+- **ZCC Voice enum update**: `CONFERENCE_PARTICIPANT_LEFT = 29` was added to `RTMS_ZCC_VOICE_EVENT_TYPE`.
 
 ### Two Approaches
 
@@ -200,6 +203,7 @@ function connectToRTMS(payload) {
       meeting_uuid: idValue,
       rtms_stream_id,
       signature,
+      buffer_data: false, // Use false for live streaming; true preserves startup audio
       media_type: 9  // AUDIO(1) | TRANSCRIPT(8)
     }));
   });
@@ -539,7 +543,13 @@ RTMS uses **two separate WebSocket connections**:
    - Combine with OR: Audio+Transcript = 1|8 = 9
    - See: [Media Types](references/media-types.md)
 
-6. **Screen Share is SEPARATE from Video**
+6. **Startup Audio Buffering is a Signaling Choice**
+   - `buffer_data` belongs in `SIGNALING_HAND_SHAKE_REQ`
+   - default `true` can replay up to 60s of startup audio
+   - set `false` for live streaming or live-only startup behavior
+   - See: [Connection](references/connection.md#signaling-handshake-request)
+
+7. **Screen Share is SEPARATE from Video**
    - Different msg_type (16 vs 15)
    - Different media flag (4 vs 2)
    - Must subscribe separately

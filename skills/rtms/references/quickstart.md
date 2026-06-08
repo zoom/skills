@@ -173,7 +173,7 @@ RTMS must be started for each meeting/webinar/session. Options:
 
 > **Webinar note**: Panelists have full audio/video streams. Attendee streams may not be available individually.
 
-> **March 2026 note**: transcript handshakes now support `src_language` plus `enable_lid`, media socket keep-alive tolerance is now about **65s**, and RTMS supports one selected participant camera stream at a time via `VIDEO_SINGLE_INDIVIDUAL_STREAM` + `VIDEO_SUBSCRIPTION_REQ`.
+> **Recent protocol note**: transcript handshakes support `src_language` plus `enable_lid`, media socket keep-alive tolerance is about **65s**, RTMS supports one selected participant camera stream at a time via `VIDEO_SINGLE_INDIVIDUAL_STREAM` + `VIDEO_SUBSCRIPTION_REQ`, and signaling handshakes support `buffer_data` for startup audio buffering control.
 
 ## Deployment with Reverse Proxy
 

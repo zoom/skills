@@ -78,6 +78,7 @@ Complete reference for all RTMS enums and constants.
 | 26 | CONFERENCE_PARTICIPANT_INVITED | Conference participant invited |
 | 27 | CONFERENCE_PARTICIPANT_REJECTED | Conference participant rejected |
 | 28 | CONFERENCE_PARTICIPANT_TIMEOUT | Conference participant timed out |
+| 29 | CONFERENCE_PARTICIPANT_LEFT | Conference participant left |
 
 ## Status Codes (RTMS_STATUS_CODE)
 
@@ -126,7 +127,9 @@ Complete reference for all RTMS enums and constants.
 | 40 | STATUS_INVALID_RTMS_SESSION_ID | Invalid RTMS session ID |
 | 41 | STATUS_INVALID_CLIENT_READY_ACK | Invalid client ready ack |
 | 42 | STATUS_INVALID_EVENT_SUBSCRIBE | Invalid event subscription payload |
-| 43 | STATUS_INVALID_MEDIA_TRANSCRIPT_SROUCE_LANGUAGE | Invalid transcript source language |
+| 43 | STATUS_INVALID_MEDIA_TRANSCRIPT_SOURCE_LANGUAGE | Invalid transcript source language |
+| 44 | STATUS_DUPLICATE_VIDEO_SUBSCRIPTION | Duplicate individual video subscription |
+| 45 | STATUS_INTERNAL_EXCEPTION | Internal RTMS exception |
 
 ## Media Data Types (MEDIA_DATA_TYPE)
 

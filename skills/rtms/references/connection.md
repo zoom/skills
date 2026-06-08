@@ -61,6 +61,30 @@ const idValue = payload.meeting_uuid || payload.session_id;
 | 12 | Keep Alive Request | Server → Client | Heartbeat ping |
 | 13 | Keep Alive Response | Client → Server | Heartbeat pong |
 
+## Signaling Handshake Request
+
+Send `SIGNALING_HAND_SHAKE_REQ` (`msg_type: 1`) to the `server_urls` value from the `*.rtms_started` webhook. The optional `buffer_data` field controls whether RTMS delivers startup audio that accumulated while your app was establishing signaling and media sockets.
+
+```javascript
+signalingWs.send(JSON.stringify({
+  msg_type: 1,
+  protocol_version: 1,
+  sequence: 1,
+  meeting_uuid: idValue,        // meeting_uuid for meetings/webinars, session_id for Video SDK
+  rtms_stream_id: streamId,
+  signature,
+  buffer_data: false            // Use false for live streaming; true preserves startup audio
+}));
+```
+
+`buffer_data` behavior:
+
+- `true` or omitted: RTMS buffers up to 60 seconds of initial audio after the `rtms_started` webhook and delivers it after media connection setup completes.
+- `false`: RTMS drops that initial startup buffer and begins with live audio once the media socket is ready.
+- Scope is limited to the initial buffer before signaling is established. It does not disable buffering during later signaling or media socket interruptions.
+
+Choose `true` when missing the opening audio is unacceptable. Choose `false` for live streaming or any low-latency live pipeline that should not receive backfilled audio.
+
 ## Media Message Types
 
 | msg_type | Media Type |
@@ -120,6 +144,10 @@ ws.on('close', () => {
   retryDelay = Math.min(retryDelay * 2, 30000);
 });
 ```
+
+### 4. Startup Audio Buffering Is Explicit
+
+`buffer_data` is part of the signaling handshake, not the media handshake. If omitted, it defaults to `true`, so the first media packets may include buffered startup audio. If your UX expects streaming/"now" audio only, set `buffer_data: false`.
 
 ## Transcript LID Control
 
@@ -271,8 +299,9 @@ async function connectRTMS(webhookPayload) {
       protocol_version: 1,
       client_id: process.env.ZOOM_CLIENT_ID,
       meeting_uuid: idValue,          // Works for both meeting_uuid and session_id
-      stream_id: rtms_stream_id,
+      rtms_stream_id: rtms_stream_id,
       signature: signature,
+      buffer_data: false,             // Use false for live streaming; true preserves startup audio
       media_type: 9  // AUDIO(1) | TRANSCRIPT(8)
     }));
   });

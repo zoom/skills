@@ -157,6 +157,36 @@ ws.on('message', (data) => {
    - `RAW_AUDIO + G711 (PCMA) + 8kHz + mono + 20ms`
    - `RAW_AUDIO + G722 + 16kHz + mono + 20ms`
 
+### Unexpected Startup Audio Backlog
+
+**Problem**: The first audio packets look delayed, old, or arrive as a short burst after media connection completes.
+
+**Cause**: `buffer_data` defaults to `true` in `SIGNALING_HAND_SHAKE_REQ`. RTMS can buffer up to 60 seconds of audio captured after the `rtms_started` webhook while your app establishes signaling and media sockets, then deliver it once ready.
+
+**Solution**:
+
+```javascript
+signalingWs.send(JSON.stringify({
+  msg_type: 1,
+  protocol_version: 1,
+  sequence: 1,
+  meeting_uuid: idValue,
+  rtms_stream_id: streamId,
+  signature,
+  buffer_data: false
+}));
+```
+
+Set `buffer_data: false` for live streaming or when live-only behavior is more important than completeness. Do not use it as a reconnect fix: it only drops initial buffer data before signaling is established. Later signaling or media socket interruptions can still buffer and replay audio after reconnection.
+
+### Missing First Seconds of Audio
+
+**Problem**: Transcripts or audio recordings start after the speaker already began talking.
+
+**Cause**: Startup audio was dropped with `buffer_data: false`, or connection setup exceeded the initial buffer window.
+
+**Solution**: Omit `buffer_data` or set it to `true` for workflows that must preserve the opening audio.
+
 ### Invalid Audio Media Params
 
 **Problem**: The handshake fails with audio validation status codes such as:
@@ -389,7 +419,9 @@ try {
 | 8 | STATUS_DUPLICATE_SIGNAL_REQUEST | Already connected (signaling) |
 | 16 | STATUS_DUPLICATE_MEDIA_DATA_CONNECTION | Already connected (media) |
 | 40 | STATUS_INVALID_RTMS_SESSION_ID | Invalid RTMS session ID |
-| 43 | STATUS_INVALID_MEDIA_TRANSCRIPT_SROUCE_LANGUAGE | Invalid transcript source language |
+| 43 | STATUS_INVALID_MEDIA_TRANSCRIPT_SOURCE_LANGUAGE | Invalid transcript source language |
+| 44 | STATUS_DUPLICATE_VIDEO_SUBSCRIPTION | Duplicate individual video subscription |
+| 45 | STATUS_INTERNAL_EXCEPTION | Internal RTMS exception |
 
 See [Data Types](../references/data-types.md) for complete list.
 
