@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zoom Plugin SDK for Windows"
+  short_description: "Build Windows Zoom Workplace companion apps"
+  default_prompt: "Use $zoom-plugin-sdk-windows to build a native Windows companion app that controls Zoom Workplace."

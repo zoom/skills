@@ -53,6 +53,7 @@ Common route outcomes:
 - Event notifications -> `webhooks` or `websockets`
 - Embedded meetings -> `meeting-sdk`
 - Custom video sessions -> `video-sdk`
+- Native desktop control of installed Zoom Workplace -> `plugin-sdk`
 - In-client apps -> `zoom-apps-sdk`
 - Uploaded/stored media transcription -> `scribe`
 - Transcript summarization and action items -> `summarizer`
@@ -85,6 +86,9 @@ repo/
 │   ├── websockets/
 │   ├── meeting-sdk/
 │   ├── video-sdk/
+│   ├── plugin-sdk/
+│   │   ├── macos/
+│   │   └── windows/
 │   ├── zoom-apps-sdk/
 │   ├── scribe/
 │   ├── summarizer/
@@ -110,6 +114,7 @@ Platform-heavy spokes (examples):
 
 - `meeting-sdk`: web, android, ios, macos, unreal, electron, react-native, linux, windows
 - `video-sdk`: web, android, ios, macos, unity, react-native, flutter, linux, windows
+- `plugin-sdk`: macos, windows
 - `contact-center`: common + android + ios + web
 - `virtual-agent`: common + android + ios + web (campaign/chat + WebView bridges)
 
@@ -146,6 +151,7 @@ Platform-heavy spokes (examples):
 | `websockets` | Persistent event streams |
 | `meeting-sdk` | Embed Zoom meetings in apps |
 | `video-sdk` | Build custom video session experiences |
+| `plugin-sdk` | Control installed Zoom Workplace from native macOS/Windows companion apps over IPC |
 | `zoom-apps-sdk` | Build apps inside Zoom client surfaces |
 | `scribe` | Zoom AI Services Scribe for synchronous and batch transcription of uploaded or stored media |
 | `summarizer` | Zoom AI Services Summarizer for transcript recaps, summaries, and action items |

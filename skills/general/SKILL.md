@@ -44,6 +44,7 @@ type SkillId =
   | 'translator'
   | 'zoom-meeting-sdk-web-component-view'
   | 'zoom-video-sdk'
+  | 'zoom-plugin-sdk'
   | 'zoom-mcp'
   | 'zoom-mcp/team-chat';
 
@@ -54,6 +55,7 @@ function detectSignals(rawQuery: string) {
   return {
     meetingCustomUi: hasAny(q, ['zoom meeting', 'custom ui', 'component view', 'embed meeting']),
     customVideo: hasAny(q, ['video sdk', 'custom video session', 'peer-video-state-change']),
+    pluginSdk: hasAny(q, ['plugin sdk', 'control zoom workplace', 'zoom workplace ipc', 'desktop companion']),
     restApi: hasAny(q, ['rest api', '/v2/', 'create meeting', 'list users', 's2s oauth']),
     webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
     oauth: hasAny(q, ['oauth', 'pkce', 'token refresh', 'account_credentials']),
@@ -67,6 +69,7 @@ function detectSignals(rawQuery: string) {
 
 function pickPrimarySkill(s: ReturnType<typeof detectSignals>): SkillId {
   if (s.meetingCustomUi) return 'zoom-meeting-sdk-web-component-view';
+  if (s.pluginSdk) return 'zoom-plugin-sdk';
   if (s.teamChatMcp) return 'zoom-mcp/team-chat';
   if (s.mcp) return 'zoom-mcp';
   if (s.summarizer) return 'summarizer';
@@ -79,7 +82,7 @@ function pickPrimarySkill(s: ReturnType<typeof detectSignals>): SkillId {
 
 function buildChain(primary: SkillId, s: ReturnType<typeof detectSignals>): SkillId[] {
   const chain = [primary];
-  if (s.oauth && !chain.includes('zoom-oauth')) chain.push('zoom-oauth');
+  if ((s.oauth || s.pluginSdk) && !chain.includes('zoom-oauth')) chain.push('zoom-oauth');
   if (s.webhooks && !chain.includes('zoom-webhooks')) chain.push('zoom-webhooks');
   return chain;
 }
@@ -91,6 +94,8 @@ Example:
   `zoom-rest-api -> zoom-oauth -> zoom-webhooks`
 - `Build a custom video UI for a Zoom meeting on web` ->
   `zoom-meeting-sdk-web-component-view`
+- `Control the installed Zoom Workplace client from a Windows desktop app` ->
+  `zoom-plugin-sdk -> zoom-plugin-sdk-windows -> zoom-oauth`
 
 For the full TypeScript implementation and handoff contract, use
 [references/routing-implementation.md](references/routing-implementation.md).
@@ -105,6 +110,7 @@ For the full TypeScript implementation and handoff contract, use
 | Receive event notifications (WebSocket, low-latency) | **[zoom-websockets](../websockets/SKILL.md)** |
 | Embed Zoom meetings in my app | **[zoom-meeting-sdk](../meeting-sdk/SKILL.md)** |
 | Build custom video experiences (Web, React Native, Flutter, Android, iOS, macOS, Unity, Linux) | **[zoom-video-sdk](../video-sdk/SKILL.md)** |
+| Control the installed Zoom Workplace client from a native macOS/Windows app | **[zoom-plugin-sdk](../plugin-sdk/SKILL.md)** |
 | Build an app that runs inside Zoom client | **[zoom-apps-sdk](../zoom-apps-sdk/SKILL.md)** |
 | Transcribe uploaded or stored media with AI Services Scribe | **[scribe](../scribe/SKILL.md)** |
 | Summarize transcript text with AI Services Summarizer | **[summarizer](../summarizer/SKILL.md)** |
@@ -143,12 +149,14 @@ Routing after answer:
 | Embed Zoom meeting in app UI | `zoom-meeting-sdk` | REST-only `join_url` flow |
 | Build custom web UI for a real Zoom meeting | `zoom-meeting-sdk-web-component-view` | `zoom-video-sdk` |
 | Build custom video UI/session app | `zoom-video-sdk` | Meeting SDK or REST meeting links |
+| Control installed Zoom Workplace from a native desktop companion | `zoom-plugin-sdk` | Meeting SDK embedding or Zoom Apps SDK |
 | Get browser join links / manage meeting resources | `zoom-rest-api` | Meeting SDK join implementation |
 
 Routing guardrails:
 - If user asks for SDK embed/join behavior, stay in SDK path.
 - If the prompt says **meeting** plus **custom UI/video/layout/embed**, prefer `zoom-meeting-sdk-web-component-view`.
 - Only use `zoom-video-sdk` when the user is building a custom session product rather than a Zoom meeting.
+- Use `zoom-plugin-sdk` when the native app controls a separately installed Zoom Workplace client over IPC.
 - Only use REST path for resource management, reporting, or link distribution unless user explicitly requests a mixed architecture.
 - For executable classification/chaining logic and error handling, see [references/routing-implementation.md](references/routing-implementation.md).
 
@@ -217,6 +225,7 @@ Both receive event notifications, but differ in approach:
 | [React Native Meeting Embed](use-cases/react-native-meeting-embed.md) | Embed meetings into iOS/Android React Native apps | [zoom-meeting-sdk-react-native](../meeting-sdk/react-native/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [Native Meeting SDK Multi-Platform Delivery](use-cases/native-meeting-sdk-multi-platform.md) | Align Android, iOS, macOS, and Unreal Meeting SDK implementations under one auth/version strategy | [zoom-meeting-sdk](../meeting-sdk/SKILL.md) + platform skills |
 | [Native Video SDK Multi-Platform Delivery](use-cases/native-video-sdk-multi-platform.md) | Align Android, iOS, macOS, and Unity Video SDK implementations under one auth/version strategy | [zoom-video-sdk](../video-sdk/SKILL.md) + platform skills |
+| [Native Zoom Workplace Companion](use-cases/native-zoom-workplace-companion.md) | Build macOS/Windows companion apps that control installed Zoom Workplace through Plugin SDK IPC | [zoom-plugin-sdk](../plugin-sdk/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [Electron Meeting Embed](use-cases/electron-meeting-embed.md) | Embed meetings into desktop Electron apps | [zoom-meeting-sdk-electron](../meeting-sdk/electron/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [Flutter Video Sessions](use-cases/flutter-video-sessions.md) | Build custom mobile video sessions in Flutter | [zoom-video-sdk-flutter](../video-sdk/flutter/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [React Native Video Sessions](use-cases/react-native-video-sessions.md) | Build custom mobile video sessions in React Native | [zoom-video-sdk-react-native](../video-sdk/react-native/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
@@ -262,6 +271,7 @@ Both receive event notifications, but differ in approach:
 - [Meeting Bots](use-cases/meeting-bots.md): build bots for meeting join, capture, and real-time analysis.
 - [Native Meeting SDK Multi-Platform Delivery](use-cases/native-meeting-sdk-multi-platform.md): standardize Android, iOS, macOS, and Unreal Meeting SDK delivery with shared auth and version controls.
 - [Native Video SDK Multi-Platform Delivery](use-cases/native-video-sdk-multi-platform.md): standardize Android, iOS, macOS, and Unity Video SDK delivery with shared auth and version controls.
+- [Native Zoom Workplace Companion](use-cases/native-zoom-workplace-companion.md): control installed Zoom Workplace from native macOS/Windows apps through Plugin SDK IPC.
 - [Meeting Details with Events](use-cases/meeting-details-with-events.md): combine REST retrieval with webhook event streams.
 - [Minutes Calculation](use-cases/minutes-calculation.md): compute usage and minute metrics across meetings/sessions.
 - [Prebuilt Video UI](use-cases/prebuilt-video-ui.md): use UI Toolkit for faster Video SDK-based UI delivery.

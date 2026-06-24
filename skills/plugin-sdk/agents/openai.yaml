@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zoom Plugin SDK"
+  short_description: "Control Zoom Workplace from native desktop apps"
+  default_prompt: "Use $zoom-plugin-sdk to design a native desktop integration that controls the installed Zoom Workplace client."

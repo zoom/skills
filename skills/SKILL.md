@@ -31,6 +31,7 @@ This repository contains skills for building with Zoom SDKs, APIs, MCP servers, 
 | **[zoom-websockets](websockets/SKILL.md)** | Real-time event notifications (WebSocket) |
 | **[zoom-meeting-sdk](meeting-sdk/SKILL.md)** | Embed Zoom meetings in your app (Web, React Native, Electron, Linux) |
 | **[zoom-video-sdk](video-sdk/SKILL.md)** | Custom video experiences (Web, React Native, Flutter, Android, iOS, macOS, Unity, Linux) |
+| **[zoom-plugin-sdk](plugin-sdk/SKILL.md)** | Native macOS/Windows companion apps that control the installed Zoom Workplace client over IPC |
 | **[zoom-apps-sdk](zoom-apps-sdk/SKILL.md)** | Apps that run inside the Zoom client |
 | **[scribe](scribe/SKILL.md)** | Zoom AI Services Scribe for synchronous and batch transcription of uploaded or stored media |
 | **[summarizer](summarizer/SKILL.md)** | Zoom AI Services Summarizer for transcript recaps, summaries, and action items |
@@ -89,6 +90,7 @@ Use `zoom-general` when:
 | Receive event notifications (WebSocket) | **zoom-websockets** |
 | Embed Zoom meetings in my app | **zoom-meeting-sdk** |
 | Build custom video experiences | **zoom-video-sdk** |
+| Control the installed Zoom Workplace client from a native desktop app | **zoom-plugin-sdk** |
 | Build an app inside Zoom client | **zoom-apps-sdk** |
 | Access live audio/video/transcripts | **zoom-rtms** |
 | Transcribe uploaded or stored media files into text | **scribe** |

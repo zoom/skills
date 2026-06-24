@@ -72,6 +72,7 @@ Recommended starting point for Roo Code or Kilo Code:
    - [skills/rest-api/SKILL.md](skills/rest-api/SKILL.md)
    - [skills/meeting-sdk/SKILL.md](skills/meeting-sdk/SKILL.md)
    - [skills/video-sdk/SKILL.md](skills/video-sdk/SKILL.md)
+   - [skills/plugin-sdk/SKILL.md](skills/plugin-sdk/SKILL.md)
    - [skills/zoom-mcp/SKILL.md](skills/zoom-mcp/SKILL.md)
 3. Add the Zoom MCP servers separately from [`.mcp.json`](.mcp.json) if your editor supports MCP.
 
@@ -113,6 +114,7 @@ The **general** skill acts as a router and directs to the appropriate specialize
 | "Create a meeting via API" | zoom-rest-api |
 | "Embed Zoom in my React app" | zoom-meeting-sdk |
 | "Build custom video UI" | zoom-video-sdk |
+| "Control Zoom Workplace from my desktop app" | zoom-plugin-sdk |
 | "Handle webhook events" | webhooks |
 | "Build a meeting bot" | zoom-meeting-sdk + rtms |
 | "Set up OAuth authentication" | oauth |
@@ -137,6 +139,7 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | [zoom-websockets](skills/websockets/) | Real-time WebSocket event connections |
 | [zoom-meeting-sdk](skills/meeting-sdk/) | Embed Zoom meetings (Web, React Native, Electron, Linux headless bots) |
 | [zoom-video-sdk](skills/video-sdk/) | Custom video experiences (Web, React Native, Flutter, Linux headless bots) |
+| [zoom-plugin-sdk](skills/plugin-sdk/) | Native macOS/Windows companion apps that control installed Zoom Workplace over IPC |
 | [zoom-apps-sdk](skills/zoom-apps-sdk/) | Apps that run inside Zoom client |
 | [scribe](skills/scribe/) | AI Services Scribe for uploaded-file and batch archive transcription |
 | [summarizer](skills/summarizer/) | AI Services Summarizer for transcript recaps, summaries, and action items |
@@ -161,6 +164,7 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | Build meeting bots (AI/transcription) | zoom-meeting-sdk + rtms |
 | Embed meetings in your app | zoom-meeting-sdk |
 | Custom video experiences | zoom-video-sdk |
+| Native desktop companion controls for Zoom Workplace | zoom-plugin-sdk + oauth |
 | Auto-download recordings to S3/GCS | webhooks + zoom-rest-api |
 | Real-time AI processing | rtms |
 | Batch or on-demand media transcription | scribe |
@@ -190,6 +194,7 @@ zoom-general (HUB)
        ├── zoom-websockets
        ├── zoom-meeting-sdk
        ├── zoom-video-sdk
+       ├── zoom-plugin-sdk
        ├── zoom-apps-sdk
        ├── scribe
        ├── summarizer
@@ -232,6 +237,9 @@ repo/
 │   ├── websockets/
 │   ├── meeting-sdk/
 │   ├── video-sdk/
+│   ├── plugin-sdk/
+│   │   ├── macos/
+│   │   └── windows/
 │   ├── zoom-apps-sdk/
 │   ├── scribe/
 │   ├── summarizer/

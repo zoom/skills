@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zoom Plugin SDK for macOS"
+  short_description: "Build macOS Zoom Workplace companion apps"
+  default_prompt: "Use $zoom-plugin-sdk-macos to build a Swift macOS companion app that controls Zoom Workplace."

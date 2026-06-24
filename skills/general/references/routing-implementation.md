@@ -25,6 +25,9 @@ export type SkillId =
   | 'zoom-meeting-sdk-web-component-view'
   | 'zoom-video-sdk'
   | 'zoom-video-sdk-web'
+  | 'zoom-plugin-sdk'
+  | 'zoom-plugin-sdk-macos'
+  | 'zoom-plugin-sdk-windows'
   | 'zoom-apps-sdk'
   | 'scribe'
   | 'summarizer'
@@ -53,6 +56,9 @@ interface Signals {
   meetingEmbed: boolean;
   meetingCustomUi: boolean;
   customVideo: boolean;
+  pluginSdk: boolean;
+  pluginMacos: boolean;
+  pluginWindows: boolean;
   restApi: boolean;
   mcp: boolean;
   whiteboardMcp: boolean;
@@ -92,6 +98,17 @@ export function detectSignals(rawQuery: string): Signals {
       'component view',
     ]),
     customVideo: hasAny(q, ['video sdk', 'custom video', 'attachvideo', 'peer-video-state-change']),
+    pluginSdk: hasAny(q, [
+      'plugin sdk',
+      'zoom workplace ipc',
+      'control zoom workplace',
+      'installed zoom client',
+      'desktop companion',
+      'zoomtoolsuite',
+      'zmtoolsuiteproxy',
+    ]),
+    pluginMacos: hasAny(q, ['plugin sdk macos', 'zoomtoolsuiteapi', 'zoomtoolsuite framework']),
+    pluginWindows: hasAny(q, ['plugin sdk windows', 'zmtoolsuiteproxy', 'ztoolsuiteipcproxy']),
     restApi: hasAny(q, ['rest api', 'api create meeting', 'api list meetings', '/v2/', 'list users', 's2s oauth', 'meeting endpoint']),
     mcp: hasAny(q, ['zoom mcp', 'mcp server', 'agentic retrieval', 'tools/list', 'tools/call', 'semantic meeting search', 'search zoom', 'zoom docs search', 'zoom chat search']),
     whiteboardMcp: hasAny(q, ['whiteboard mcp', 'zoom whiteboard mcp', 'list whiteboards', 'get a whiteboard', 'wb/db', 'whiteboard_id']),
@@ -117,6 +134,9 @@ export function detectSignals(rawQuery: string): Signals {
 
 function pickPrimarySkill(s: Signals): SkillId {
   // Hard guardrails: SDK embed/custom-video requests should not fall back to REST.
+  if (s.pluginMacos) return 'zoom-plugin-sdk-macos';
+  if (s.pluginWindows) return 'zoom-plugin-sdk-windows';
+  if (s.pluginSdk) return 'zoom-plugin-sdk';
   if (s.meetingCustomUi) return 'zoom-meeting-sdk-web-component-view';
   if (s.meetingEmbed && !s.customVideo) return 'zoom-meeting-sdk-web';
   if (s.meetingEmbed) return 'zoom-meeting-sdk';
@@ -152,7 +172,7 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   if (primary === 'zoom-meeting-sdk-web-component-view') chain.add('zoom-meeting-sdk-web');
 
   // Auth chaining.
-  if (s.oauth || s.restApi || s.mcp || s.whiteboardMcp || s.teamChatMcp || s.webhooks || s.websockets || s.phone || s.teamChat || s.virtualAgent) {
+  if (s.oauth || s.pluginSdk || s.pluginMacos || s.pluginWindows || s.restApi || s.mcp || s.whiteboardMcp || s.teamChatMcp || s.webhooks || s.websockets || s.phone || s.teamChat || s.virtualAgent) {
     chain.add('zoom-oauth');
   }
 
@@ -199,11 +219,17 @@ function validateDecision(primary: SkillId, s: Signals): string[] {
   if (s.customVideo && !['zoom-video-sdk', 'zoom-video-sdk-web'].includes(primary)) {
     warnings.push('custom video intent detected but primary skill is not zoom-video-sdk');
   }
+  if ((s.pluginSdk || s.pluginMacos || s.pluginWindows) && !['zoom-plugin-sdk', 'zoom-plugin-sdk-macos', 'zoom-plugin-sdk-windows'].includes(primary)) {
+    warnings.push('Plugin SDK intent detected but primary skill is not zoom-plugin-sdk');
+  }
   if (s.meetingCustomUi && s.customVideo) {
     warnings.push('meeting UI intent and custom video intent both detected; prefer Meeting SDK Component View unless the user explicitly wants a non-meeting session');
   }
   if (s.restApi && (s.meetingEmbed || s.customVideo)) {
     warnings.push('mixed SDK + REST intent; keep SDK as primary and use REST only for resource workflows');
+  }
+  if (s.pluginSdk && s.meetingEmbed) {
+    warnings.push('Plugin SDK and Meeting SDK signals both detected; ask whether the app controls installed Zoom Workplace or embeds the meeting');
   }
 
   return warnings;
@@ -226,6 +252,9 @@ export function routeComplexQuery(query: string): RouteDecision {
   const needsClarification: string[] = [];
   if (signals.mcp && signals.restApi) {
     needsClarification.push('Do you want deterministic REST API automation, AI-agent MCP tooling, or a hybrid of both?');
+  }
+  if (signals.pluginSdk && signals.meetingEmbed) {
+    needsClarification.push('Should the native app control installed Zoom Workplace over IPC, or embed Zoom meeting functionality inside the app?');
   }
   if (primarySkill === 'zoom-general') {
     needsClarification.push('Do you need SDK embed behavior, API resource automation, or event ingestion?');
