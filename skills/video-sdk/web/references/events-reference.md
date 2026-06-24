@@ -572,6 +572,67 @@ Fired when live stream status changes.
 client.on('live-stream-status', (status: LiveStreamStatus) => {});
 ```
 
+### broadcast-streaming-status
+
+Fired when host-side broadcast streaming changes state.
+
+```typescript
+client.on('broadcast-streaming-status', (payload) => {
+  const { status } = payload;
+  const { channelId } = client.getBroadcastStreamingClient().getBroadcastStreamingStatus();
+});
+```
+
+### incoming-live-stream-status
+
+Fired when an incoming RTMP stream's connection or publish state changes.
+
+```typescript
+client.on('incoming-live-stream-status', (payload) => {
+  const { isRTMPConnected, isStreamPushed, streamId } = payload;
+});
+```
+
+The 2.4.5 sample accesses the incoming-live-stream client through `any`; verify this event and client against the installed package declarations.
+
+---
+
+## RTMS Events
+
+### real-time-media-streams-status-change
+
+Fired when RTMS starts, pauses, stops, or fails.
+
+```typescript
+client.on('real-time-media-streams-status-change', (status: RealTimeMediaStreamsStatus) => {
+  // Drive controls from this enum value.
+});
+```
+
+---
+
+## Voice Translator Events
+
+### voice-translator-started
+
+Fired when translated voice begins for a language.
+
+```typescript
+client.on('voice-translator-started', (payload) => {
+  const { language } = payload;
+});
+```
+
+### voice-translator-unsupported-language-pair
+
+Fired when a speaker/listener language combination is unsupported.
+
+```typescript
+client.on('voice-translator-unsupported-language-pair', (payload) => {
+  const { displayName, speakingLanguage, listeningLanguage } = payload;
+});
+```
+
 ---
 
 ## Far End Camera Control Events
@@ -671,6 +732,16 @@ client.on('peer-whiteboard-state-change', (payload: {
 }) => {});
 ```
 
+### passively-stop-whiteboard
+
+Fired when the active whiteboard is stopped by another action or policy.
+
+```typescript
+client.on('passively-stop-whiteboard', (payload: {
+  reason: string;
+}) => {});
+```
+
 ---
 
 ## Event Categories Quick Reference
@@ -685,6 +756,10 @@ client.on('peer-whiteboard-state-change', (payload: {
 | **Chat** | `chat-on-message`, `chat-privilege-change`, `chat-file-*-progress` |
 | **Recording** | `recording-change`, `individual-recording-change` |
 | **Transcription** | `caption-message`, `caption-status`, `caption-enable` |
+| **Streaming** | `live-stream-status`, `broadcast-streaming-status`, `incoming-live-stream-status` |
+| **RTMS** | `real-time-media-streams-status-change` |
+| **Voice translation** | `voice-translator-started`, `voice-translator-unsupported-language-pair` |
+| **Whiteboard** | `whiteboard-status-change`, `peer-whiteboard-state-change`, `passively-stop-whiteboard` |
 | **Device** | `device-change`, `device-permission-change` |
 | **Network** | `network-quality-change`, `*-statistic-data-change` |
 

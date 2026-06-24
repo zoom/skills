@@ -2,6 +2,25 @@
 
 **Source**: https://marketplacefront.zoom.us/sdk/custom/linux/
 
+## SDK-Bundled API Documentation (2.5.10)
+
+The Linux 2.5.10 package includes an API-routing skill at:
+
+`Docs/videosdk/skills/zm-videosdk-linux-api/SKILL.md`
+
+Start at `Docs/videosdk/index.md`. Read the relevant `*-API.md` for lifecycle and edge cases, then verify signatures and structured examples in the paired `*-API.json`. The ARM64 and x86_64 documentation sets are identical in this release. Packaged `h/` headers remain authoritative.
+
+High-value modules include:
+
+- Core lifecycle and callbacks
+- Audio/video/share helpers and raw-data senders
+- Broadcast streaming controller and viewer
+- Network/proxy and password handling
+- Recording, live streaming, live transcription, phone, CRC, and subsessions
+- Audio/video/share settings and annotation
+
+The package excludes APIs guarded out for Linux. In 2.5.10, `getRealTimeMediaStreamsHelper()` is compiled out and `IZoomVideoSDK` has no whiteboard getter. Incoming live streams are exposed. Multi-camera callbacks remain in the delegate, but do not imply that every Windows multi-camera control is available. Verify control APIs against the selected package's `h/` headers.
+
 ## Complete Class List
 
 ### Core SDK
@@ -60,7 +79,6 @@
 | `IZoomVideoSDKPhoneHelper` | Phone dial-out |
 | `IZoomVideoSDKCmdChannel` | Command channel |
 | `IZoomVideoSDKCRCHelper` | CRC helper |
-| `IZoomVideoSDKWhiteboardHelper` | Whiteboard |
 | `IZoomVideoSDKAnnotationHelper` | Annotations |
 | `IZoomVideoSDKNetworkConnectionHelper` | Network connection |
 | `IZoomVideoSDKSubSessionHelper` | Subsession helper |
@@ -82,7 +100,6 @@
 | `IZoomVideoSDKCameraDevice` | Camera device |
 | `IZoomVideoSDKMicDevice` | Microphone device |
 | `IZoomVideoSDKSpeakerDevice` | Speaker device |
-| `IVirtualBackgroundItem` | Virtual background item |
 
 ### Streaming
 
@@ -372,7 +389,6 @@ public:
     virtual IZoomVideoSDKPhoneHelper* getPhoneHelper() = 0;
     virtual IZoomVideoSDKLiveTranscriptionHelper* getLiveTranscriptionHelper() = 0;
     virtual IZoomVideoSDKCRCHelper* getCRCHelper() = 0;
-    virtual IZoomVideoSDKWhiteboardHelper* getWhiteboardHelper() = 0;
     virtual IZoomVideoSDKSubSessionHelper* getSubSessionHelper() = 0;
     virtual IZoomVideoSDKIncomingLiveStreamHelper* getIncomingLiveStreamHelper() = 0;
     

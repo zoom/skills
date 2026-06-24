@@ -2,9 +2,10 @@
 
 ## Package evidence
 
-- SDK package: `zoom-video-sdk-macos-2.5.0.zip`
-- Internal version file: `v2.5.0 (75746)`
+- SDK package: `zoom-video-sdk-macos-2.5.10.zip`
+- Internal version file: `v2.5.10 (81200)`
 - Changelog link is external to package contents.
+- Package includes paired Markdown/JSON API docs and `Docs/skills/zm-videosdk-macos-api/SKILL.md`.
 
 ## Compatibility notes
 

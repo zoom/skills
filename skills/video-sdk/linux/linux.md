@@ -23,8 +23,9 @@ The Zoom Video SDK for Linux is a C++ library that provides:
 - **Chat & Commands**: In-session messaging and command channels
 - **Live Transcription**: Real-time speech-to-text
 - **Subsessions**: Breakout room support
-- **Whiteboard**: Collaborative whiteboard features
 - **Annotations**: Screen share annotations
+
+Video SDK 2.5.10 Linux compiles out RTMS and does not expose a whiteboard getter from `IZoomVideoSDK`. Incoming live streams are available. Verify other platform-sensitive controls against the packaged `h/` headers before adapting Windows examples.
 
 ## Project Structure
 

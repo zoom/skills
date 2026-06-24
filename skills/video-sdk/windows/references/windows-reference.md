@@ -4,6 +4,25 @@
 
 ---
 
+## SDK-Bundled API Documentation (2.5.10)
+
+The Windows 2.5.10 package includes an API-routing skill at:
+
+`Sample-Libs/<arch>/Docs/skills/zm-videosdk-windows-api/SKILL.md`
+
+Start at `Sample-Libs/<arch>/Docs/index.md`. Read the relevant `*-API.md` for lifecycle and edge cases, then verify signatures, examples, and asynchronous metadata in the paired `*-API.json`. The x86, x64, and ARM64 documentation sets are identical in this release, but packaged headers for the target architecture remain authoritative.
+
+High-value modules include:
+
+- Core: `zoom_video_sdk_api`, `zoom_video_sdk_interface`, `zoom_video_sdk_delegate_interface`, `zoom_video_sdk_def`
+- RTMS: `zoom_video_sdk_rtms_helper_interface`
+- Broadcast: `zoom_video_sdk_broadcast_streaming_controller_interface`, `zoom_video_sdk_broadcast_streaming_viewer_interface`
+- Network and auth: `zoom_video_sdk_network_connection_helper_interface`, `zoom_video_sdk_password_handler_interface`
+- Collaboration: `zoom_video_sdk_whiteboard_helper_interface`, `zoom_video_sdk_subsession_interface`, `zoom_video_sdk_annotation_helper_interface`
+- Settings and consent: audio, video, share settings, recording helper, and cloud-record handler modules
+
+For asynchronous APIs, a success return commonly means request acceptance. Drive state from the matching delegate callback and re-check role-dependent capabilities after role changes.
+
 ## API Hierarchy (5 Levels Deep)
 
 Understanding the SDK requires navigating from the singleton entry point through 5 levels of objects. Start from `IZoomVideoSDK` and follow return types.

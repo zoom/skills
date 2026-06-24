@@ -27,13 +27,17 @@ Level 1: SDK Singleton
             ├─ IZoomVideoSDKCmdChannel (getCmdChannel)
             ├─ IZoomVideoSDKPhoneHelper (getPhoneHelper)
             ├─ IZoomVideoSDKCRCHelper (getCRCHelper)
-            ├─ IZoomVideoSDKWhiteboardHelper (getWhiteboardHelper)
+            ├─ IZoomVideoSDKIncomingLiveStreamHelper (getIncomingLiveStreamHelper)
+            ├─ IZoomVideoSDKBroadcastStreamingController (getBroadcastStreamingController)
+            ├─ IZoomVideoSDKBroadcastStreamingViewer (getBroadcastStreamingViewer)
             ├─ IZoomVideoSDKSubSessionHelper (getSubSessionHelper)
             └─ Settings Helpers
                 ├─ IZoomVideoSDKAudioSettingHelper (getAudioSettingHelper)
                 ├─ IZoomVideoSDKVideoSettingHelper (getVideoSettingHelper)
                 └─ IZoomVideoSDKShareSettingHelper (getShareSettingHelper)
 ```
+
+> Linux capability guardrail: Video SDK 2.5.10 Linux does not expose a whiteboard getter from `IZoomVideoSDK`, and RTMS is compiled out. Do not copy the Windows helper hierarchy without checking the packaged Linux headers.
 
 ---
 

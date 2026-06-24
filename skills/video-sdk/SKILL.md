@@ -1,7 +1,7 @@
 ---
 name: zoom-video-sdk
 description: |
-  Zoom Video SDK for building custom video experiences (not Zoom meetings) on web, React Native, Flutter, Android, iOS, macOS, Unity, and Linux platforms. 
+  Zoom Video SDK for building custom video experiences (not Zoom meetings) on web, React Native, Flutter, Android, iOS, macOS, Windows, Unity, and Linux platforms.
   Use when you want full control over the video UI and experience.
 triggers:
   - "custom video"
@@ -29,6 +29,43 @@ Build custom video experiences powered by Zoom's infrastructure.
 - If the user asks for custom real-time video app behavior (topic/session join, custom rendering, attach/detach), route to Video SDK.
 - Do not switch to REST meeting endpoints for Video SDK join flows.
 - Video SDK does not use Meeting IDs, `join_url`, or Meeting SDK join payload fields (`meetingNumber`, `passWord`).
+- After confirming Video SDK, select one platform child skill before generating implementation code.
+
+## Platform Router
+
+| User context | Primary child skill |
+|--------------|---------------------|
+| Browser, JavaScript, TypeScript, React, Vue, Angular, Svelte | [web/SKILL.md](web/SKILL.md) |
+| React Native mobile wrapper | [react-native/SKILL.md](react-native/SKILL.md) |
+| Flutter mobile wrapper | [flutter/SKILL.md](flutter/SKILL.md) |
+| Native Android, Java, Kotlin, AAR | [android/SKILL.md](android/SKILL.md) |
+| Native iOS, Objective-C, Swift, XCFramework | [ios/SKILL.md](ios/SKILL.md) |
+| Native macOS, Objective-C, Swift, Cocoa | [macos/SKILL.md](macos/SKILL.md) |
+| Windows native, C++, Win32, C++/CLI | [windows/SKILL.md](windows/SKILL.md) |
+| Linux native, C++, headless bot, Docker, Qt/GTK | [linux/SKILL.md](linux/SKILL.md) |
+| Unity wrapper or scene integration | [unity/SKILL.md](unity/SKILL.md) |
+
+Do not answer from this root's Web quick start when the user selected another platform.
+
+## Chaining Order
+
+Use this order so workflow guidance and version-specific APIs remain distinct:
+
+1. Read this root skill to confirm Video SDK rather than Meeting SDK.
+2. Read the selected platform `SKILL.md` for architecture, lifecycle, implementation patterns, and troubleshooting.
+3. If the downloaded SDK package contains a bundled API skill, read that skill and its relevant Markdown/JSON pair to verify exact signatures, enums, callbacks, threading, and role requirements.
+4. Cross-check generated API documentation against package headers, TypeScript source, or exported wrapper APIs.
+5. Load only the cross-product skill required by the feature using the table below.
+6. Return to the platform runbook for validation and troubleshooting.
+
+| Cross-product need | Chain to |
+|--------------------|----------|
+| Session JWT contract | [references/authorization.md](references/authorization.md) and [references/token-contract-test-spec.md](references/token-contract-test-spec.md) |
+| Browser/device/network preflight | [probe-sdk](../probe-sdk/SKILL.md) |
+| RTMS signaling, media sockets, protocol, and backend processing | [zoom-rtms](../rtms/SKILL.md) |
+| OAuth or REST administration outside the in-session SDK | [zoom-oauth](../oauth/SKILL.md) |
+
+For React Native, Flutter, and Unity, never invent wrapper APIs from native Android/iOS/Windows documentation. Use native documentation only to understand behavior after confirming the wrapper exports the feature.
 
 ## Meeting SDK vs Video SDK
 
@@ -52,13 +89,28 @@ Video SDK gives you **full control over the UI**:
 
 - Zoom Video SDK credentials from Marketplace
 - SDK Key and Secret
-- Web development environment
+- A development environment for the selected platform
 
-> **Need help with OAuth or signatures?** See the **[zoom-oauth](../oauth/SKILL.md)** skill for authentication flows.
+> **Need a Video SDK session JWT?** Start with **[authorization](references/authorization.md)**. Use **[zoom-oauth](../oauth/SKILL.md)** only for OAuth or REST API flows outside the session join contract.
 
 > **Need pre-join diagnostics on web?** Use **[probe-sdk](../probe-sdk/SKILL.md)** before Video SDK `join()` to reduce first-minute failures.
 
 > **Start troubleshooting fast:** Use the **[5-Minute Runbook](RUNBOOK.md)** before deep debugging.
+
+## SDK-Bundled API Skills
+
+Video SDK 2.5.10 packages include version-matched API skills and paired Markdown/JSON documentation for several native platforms. Keep the platform skill in this repository as the workflow entry point, then use the SDK-bundled skill to verify exact signatures, enums, callback timing, role requirements, and object lifetime.
+
+| Platform | SDK-bundled skill |
+|----------|-------------------|
+| Android | `Docs/skills/zm-videosdk-android-api/SKILL.md` |
+| iOS | `Sample-Libs/Docs/zm-videosdk-ios-api/SKILL.md` |
+| macOS | `Docs/skills/zm-videosdk-macos-api/SKILL.md` |
+| Windows | `Sample-Libs/<arch>/Docs/skills/zm-videosdk-windows-api/SKILL.md` |
+| Linux | `Docs/videosdk/skills/zm-videosdk-linux-api/SKILL.md` |
+| React Native | `docs/ai-docs/skills/zm-videosdk-react-native-api/SKILL.md` |
+
+Flutter, Unity, and Web packages in this review do not include an equivalent bundled `SKILL.md`. The Web 2.4.5 archive is a React/Vite sample application; use [web/references/sample-app-2.4.5.md](web/references/sample-app-2.4.5.md) for its implementation map. Do not infer platform parity from another package; verify against that platform's exported API.
 
 ## Quick Start (Web)
 
@@ -82,7 +134,7 @@ await stream.startAudio();
 > **WARNING: Ad blockers block `source.zoom.us`**. Self-host the SDK to avoid issues.
 
 ```bash
-# Download SDK locally example VERSION=2.4.0
+# Download SDK locally example VERSION=2.4.5
 curl "https://source.zoom.us/videosdk/zoom-video-{VERSION}.min.js" -o js/zoom-video-sdk.min.js
 ```
 

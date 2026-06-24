@@ -180,16 +180,20 @@ Level 0: Global Module
         │   │   └── getSubsessionList()           → Subsession[]
         │   │
         │   ├── getWhiteboardClient()     → WhiteboardClient
-        │   │   ├── startWhiteboard(options?)     → ExecutedResult
-        │   │   └── stopWhiteboard()              → ExecutedResult
+        │   │   ├── startWhiteboardScreen(container) → ExecutedResult
+        │   │   ├── stopWhiteboardScreen()          → ExecutedResult
+        │   │   ├── startWhiteboardView(container, userId) → ExecutedResult
+        │   │   └── stopWhiteboardView()             → ExecutedResult
         │   │
         │   ├── getBroadcastStreamingClient() → BroadcastStreamingClient
         │   │   ├── startBroadcast()              → ExecutedResult
         │   │   └── stopBroadcast()               → ExecutedResult
         │   │
         │   ├── getRealTimeMediaStreamsClient() → RealTimeMediaStreamsClient
-        │   │   ├── startRealTimeMediaStream()    → ExecutedResult
-        │   │   └── stopRealTimeMediaStream()     → ExecutedResult
+        │   │   ├── startRealTimeMediaStreams()   → ExecutedResult
+        │   │   ├── pauseRealTimeMediaStreams()   → ExecutedResult
+        │   │   ├── resumeRealTimeMediaStreams()  → ExecutedResult
+        │   │   └── stopRealTimeMediaStreams()    → ExecutedResult
         │   │
         │   └── getLoggerClient(options?) → LoggerClient
         │       ├── log(...)                      → void

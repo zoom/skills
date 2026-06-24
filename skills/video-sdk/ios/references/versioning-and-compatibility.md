@@ -2,9 +2,10 @@
 
 ## Package evidence
 
-- SDK package: `zoom-video-sdk-iOS-2.5.0.zip`
-- Internal version file: `v2.5.0(33006)`
+- SDK package: `zoom-video-sdk-iOS-2.5.10.zip`
+- Internal version file: `v2.5.10(35913)`
 - Changelog is externally hosted via developer support portal.
+- API documentation and its bundled skill are under `Sample-Libs/Docs/`.
 
 ## Compatibility notes
 
@@ -15,4 +16,4 @@
 ## Contradictions or drift to watch
 
 - Changelog content is not bundled in package; release details are external.
-- Copyright footer differs across packages (iOS bundle includes 2025).
+- The bundled skill assumes `Docs/` is at the selected SDK root; in this archive the correct root is `Sample-Libs/Docs/`.

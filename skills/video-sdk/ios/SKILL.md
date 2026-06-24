@@ -27,6 +27,16 @@ Use this skill when building custom iOS video session experiences.
 8. [references/versioning-and-compatibility.md](references/versioning-and-compatibility.md)
 9. [troubleshooting/common-issues.md](troubleshooting/common-issues.md)
 
+## SDK-Bundled API Skill
+
+Video SDK iOS 2.5.10 includes `Sample-Libs/Docs/zm-videosdk-ios-api/SKILL.md` and paired `Sample-Libs/Docs/*-API.md` / `Sample-Libs/Docs/*-API.json` references.
+
+- Use this repository skill for architecture, implementation workflow, scenarios, and troubleshooting.
+- Resolve the bundled documentation root as `Sample-Libs/Docs`, not the archive root assumed by the unadapted bundled instructions.
+- Use the bundled docs for exact Objective-C signatures, delegate completion, role checks, state machines, and object lifetime; use the packaged headers as final authority.
+- For RTMS signaling, media sockets, protocol messages, and backend processing after the native helper starts the stream, chain to [zoom-rtms](../../rtms/SKILL.md).
+- See [references/ios-reference-map.md](references/ios-reference-map.md) for high-value modules and sample locations.
+
 ## Key Sources
 
 - Docs: https://developers.zoom.us/docs/video-sdk/ios/

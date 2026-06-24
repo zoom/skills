@@ -18,6 +18,17 @@ Expert guidance for developing with the Zoom Video SDK on Linux. Build headless 
 **API Reference**: https://marketplacefront.zoom.us/sdk/custom/linux/
 **Sample Repository**: https://github.com/zoom/videosdk-linux-raw-recording-sample
 
+## SDK-Bundled API Skill
+
+Video SDK Linux 2.5.10 includes `Docs/videosdk/skills/zm-videosdk-linux-api/SKILL.md` with paired `Docs/videosdk/*-API.md` / `Docs/videosdk/*-API.json` references.
+
+- ARM64 and x86_64 contain identical API documentation in this package.
+- Keep this repository skill as the implementation and troubleshooting entry point.
+- Use the bundled skill and `Docs/videosdk/index.md` to verify Linux-specific signatures, callback completion, role checks, threading, and object lifetime.
+- Prefer the packaged `h/` headers when generated documentation conflicts.
+- Do not import Windows-only assumptions. In 2.5.10, RTMS is compiled out on Linux and the main SDK interface does not expose a whiteboard getter. Some Windows-only controls, including virtual-background and parts of multi-camera control, are also absent even though related types or mandatory delegate callbacks may remain in shared headers.
+- See [references/linux-reference.md](references/linux-reference.md) for the selected 2.5.10 module map.
+
 ## Quick Links
 
 **New to Video SDK? Follow this path:**

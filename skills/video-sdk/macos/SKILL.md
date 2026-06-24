@@ -27,6 +27,16 @@ Use this skill when building custom macOS desktop video session apps.
 8. [references/versioning-and-compatibility.md](references/versioning-and-compatibility.md)
 9. [troubleshooting/common-issues.md](troubleshooting/common-issues.md)
 
+## SDK-Bundled API Skill
+
+Video SDK macOS 2.5.10 includes `Docs/skills/zm-videosdk-macos-api/SKILL.md` and paired `Docs/*-API.md` / `Docs/*-API.json` references.
+
+- Use this repository skill for architecture, implementation workflow, scenarios, and troubleshooting.
+- Use the bundled skill and `Docs/index.md` to verify Objective-C signatures, asynchronous completion, role requirements, callback threading, and object lifetime.
+- Prefer packaged headers over generated documentation if they conflict.
+- For RTMS signaling, media sockets, protocol messages, and backend processing after `ZMVideoSDKRTMSHelper` starts the stream, chain to [zoom-rtms](../../rtms/SKILL.md).
+- See [references/macos-reference-map.md](references/macos-reference-map.md) for high-value modules.
+
 ## Key Sources
 
 - Docs: https://developers.zoom.us/docs/video-sdk/macos/

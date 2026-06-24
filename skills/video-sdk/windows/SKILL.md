@@ -17,6 +17,17 @@ Expert guidance for developing with the Zoom Video SDK on Windows. This SDK enab
 **API Reference**: https://marketplacefront.zoom.us/sdk/custom/windows/
 **Sample Repository**: https://github.com/zoom/videosdk-windows-rawdata-sample
 
+## SDK-Bundled API Skill
+
+Video SDK Windows 2.5.10 includes `Sample-Libs/<arch>/Docs/skills/zm-videosdk-windows-api/SKILL.md` with paired `Docs/*-API.md` / `Docs/*-API.json` references.
+
+- The x86, x64, and ARM64 documentation sets are identical in this package; use the set matching the application architecture.
+- Keep this repository skill as the implementation and troubleshooting entry point.
+- Use the bundled skill and `Docs/index.md` to verify exact signatures, callback completion, role checks, threading, and handler lifetime.
+- Prefer the packaged headers for the selected architecture if generated docs conflict.
+- For RTMS signaling, media sockets, protocol messages, and backend processing after `IZoomVideoSDKRTMSHelper` starts the stream, chain to [zoom-rtms](../../rtms/SKILL.md).
+- See [references/windows-reference.md](references/windows-reference.md) for the selected 2.5.10 module map.
+
 ## Quick Links
 
 **New to Video SDK? Follow this path:**

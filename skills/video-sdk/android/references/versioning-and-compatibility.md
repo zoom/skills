@@ -2,9 +2,9 @@
 
 ## Package evidence
 
-- SDK package: `zoom-video-sdk-android-2.5.0.zip`
-- Internal version: `v2.5.0 (37500)`
-- Package includes `mobilertc.aar` and sample modules.
+- SDK package: `zoom-video-sdk-android-2.5.10.zip`
+- Internal version: `v2.5.10 (40300)`
+- Package includes `mobilertc.aar`, optional feature AARs, samples, and `Docs/` API documentation.
 
 ## Compatibility notes
 

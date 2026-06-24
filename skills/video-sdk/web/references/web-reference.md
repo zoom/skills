@@ -114,6 +114,8 @@ interface InitOptions {
 | `getWhiteboardClient()` | `WhiteboardClient` | Get whiteboard client |
 | `getBroadcastStreamingClient()` | `BroadcastStreamingClient` | Get broadcast client |
 | `getRealTimeMediaStreamsClient()` | `RealTimeMediaStreamsClient` | Get RTMS client |
+| `getVoiceTranslatorClient()` | `VoiceTranslatorClient` | Get voice translation client |
+| `getIncomingLiveStreamClient()` | `IncomingLiveStreamClient` | Get incoming RTMP client; verify against installed types |
 | `getLoggerClient(options?)` | `LoggerClient` | Get logger client |
 
 ### Participant Interface

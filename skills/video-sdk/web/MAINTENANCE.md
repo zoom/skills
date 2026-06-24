@@ -136,7 +136,7 @@ Content...
 
 ### Update Checklist
 
-- [ ] Update `SKILL.md` version number (v2.4.0 → vX.X.X)
+- [ ] Update `SKILL.md` version number (v2.4.5 → vX.X.X)
 - [ ] Check `ZoomVideo` static method changes
 - [ ] Check `VideoClient` method changes
 - [ ] Check `MediaStream` method changes
@@ -178,6 +178,13 @@ Please update skills/video-sdk/web/[FILE].md:
 ```
 
 ## Version History
+
+### v1.1.0 (2026-06-24)
+
+- Reviewed the `react-video-sdk-demo` 2.4.5 sample.
+- Updated the target SDK version to 2.4.5.
+- Added sample-backed routing for RTMS, incoming RTMP, broadcast streaming, whiteboard, voice translation, custom processors, video masks, and chat file transfer.
+- Corrected RTMS and whiteboard method names.
 
 ### v1.0.0 (2024-12-16)
 

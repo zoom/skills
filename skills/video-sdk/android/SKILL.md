@@ -26,6 +26,16 @@ Use this skill when building Android apps with custom real-time video sessions.
 8. [references/versioning-and-compatibility.md](references/versioning-and-compatibility.md)
 9. [troubleshooting/common-issues.md](troubleshooting/common-issues.md)
 
+## SDK-Bundled API Skill
+
+Video SDK Android 2.5.10 includes `Docs/skills/zm-videosdk-android-api/SKILL.md` and paired `Docs/*-API.md` / `Docs/*-API.json` references.
+
+- Use this repository skill for architecture, implementation workflow, scenarios, and troubleshooting.
+- Use the bundled skill and `Docs/index.md` for exact 2.5.10 signatures, enums, callback timing, threading, role checks, and callback-object lifetime.
+- Treat package headers and exported Java APIs as authoritative if generated documentation conflicts with code.
+- For RTMS signaling, media sockets, protocol messages, and backend processing after `ZoomVideoSDKRTMSHelper` starts the stream, chain to [zoom-rtms](../../rtms/SKILL.md).
+- See [references/android-reference-map.md](references/android-reference-map.md) for the high-value modules and corrected archive-relative paths.
+
 ## Key Sources
 
 - Docs: https://developers.zoom.us/docs/video-sdk/android/

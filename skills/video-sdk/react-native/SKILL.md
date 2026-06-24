@@ -40,6 +40,16 @@ Use this skill for React Native apps that need fully custom video session experi
 - [Official Sources](references/official-sources.md)
 - [Deprecated and Contradictions](troubleshooting/deprecated-and-contradictions.md)
 
+## SDK-Bundled API Skill
+
+Video SDK React Native 2.5.10 includes `docs/ai-docs/skills/zm-videosdk-react-native-api/SKILL.md`, paired `docs/ai-docs/*-API.md` / `*-API.json` files, TypeScript source under `src/`, and a working app under `example/`.
+
+- Keep this repository skill as the workflow and troubleshooting entry point.
+- Use `docs/ai-docs/index.md`, then the relevant JSON and Markdown pair, for exact wrapper signatures, event payloads, Promise behavior, and platform support.
+- Cross-check `src/` before generating code. Do not invent a JavaScript API merely because the native Android or iOS SDK exposes it.
+- Ignore the bundled skill's stale 2.5.7 native fallback paths; this package and its local source are 2.5.10.
+- See [Module Map](references/module-map.md) for high-value modules.
+
 ## Related Skills
 
 - [zoom-video-sdk](../SKILL.md)

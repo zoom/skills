@@ -114,23 +114,37 @@ const whiteboard = client.getWhiteboardClient();
 // Check if can start
 const canStart = whiteboard.canStartWhiteboard();
 
-// Start whiteboard
-await whiteboard.startWhiteboard();
+// Start presenting into an HTML container
+await whiteboard.startWhiteboardScreen(container);
 ```
 
 ### Stop Whiteboard
 
 ```typescript
-await whiteboard.stopWhiteboard();
+await whiteboard.stopWhiteboardScreen();
+```
+
+### View Another User's Whiteboard
+
+```typescript
+client.on('peer-whiteboard-state-change', async ({ action, userId }) => {
+  if (action === 'Start') {
+    await whiteboard.startWhiteboardView(container, userId);
+  } else {
+    await whiteboard.stopWhiteboardView();
+  }
+});
+
+// Presenter only: export before stopping if the contents must be preserved.
+await whiteboard.exportWhiteboard('pdf');
 ```
 
 ### Whiteboard Events
 
 ```typescript
 // Status change
-client.on('whiteboard-status-change', (payload) => {
-  const { status, oderId } = payload;
-  // status: 'Active' | 'Inactive'
+client.on('whiteboard-status-change', (status) => {
+  // WhiteboardStatus.Closed | Pending | InProgress
 });
 
 // Peer whiteboard state
@@ -199,8 +213,9 @@ processor.port.onmessage = (event) => {
   console.log('From processor:', event.data);
 };
 
-// Destroy processor
-await stream.destroyProcessor(processor);
+// Activate/deactivate the processor
+await stream.addProcessor(processor);
+await stream.removeProcessor(processor);
 ```
 
 ### Audio Processor
@@ -341,17 +356,25 @@ const rtms = client.getRealTimeMediaStreamsClient();
 ### Start RTMS
 
 ```typescript
+if (!rtms.isSupportRealTimeMediaStreams()) {
+  throw new Error('RTMS is not supported for this session/account');
+}
+
 await rtms.startRealTimeMediaStreams();
+await rtms.pauseRealTimeMediaStreams();
+await rtms.resumeRealTimeMediaStreams();
+await rtms.stopRealTimeMediaStreams();
 ```
 
 ### Events
 
 ```typescript
-client.on('real-time-media-streams-status-change', (payload) => {
-  const { status } = payload;
-  // Handle status changes
+client.on('real-time-media-streams-status-change', (status) => {
+  // RealTimeMediaStreamsStatus enum
 });
 ```
+
+The Web client controls RTMS lifecycle only. For webhook validation, signaling/media sockets, handshake messages, and backend media processing, chain to [zoom-rtms](../../../rtms/SKILL.md).
 
 ---
 

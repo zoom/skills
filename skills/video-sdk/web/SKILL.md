@@ -1,6 +1,6 @@
 ---
 name: video-sdk/web
-description: Guidance for building browser-based sessions with Zoom Video SDK for Web (@zoom/videosdk v2.4.0) in React, Vue, Angular, Svelte, or vanilla TypeScript. Use for joining/leaving sessions, audio/video capture and rendering, gallery or active-speaker views, virtual backgrounds, screen sharing, chat/command channel, recording, subsessions, live streaming, PSTN/SIP dial-out, PTZ, stats, WebAssembly/SharedArrayBuffer, CSP/COOP/COEP, JWT session tokens, and SDK error debugging. Prefer over generic WebRTC advice whenever @zoom/videosdk is involved.
+description: Guidance for building browser-based sessions with Zoom Video SDK for Web (@zoom/videosdk v2.4.5) in React, Vue, Angular, Svelte, or vanilla TypeScript. Use for session lifecycle, audio/video rendering, screen sharing, chat/file transfer, recording, subsessions, live and broadcast streaming, incoming RTMP, RTMS controls, whiteboard, voice translation, custom processors, video masks, PTZ, stats, WebAssembly/SharedArrayBuffer, CSP/COOP/COEP, JWT session tokens, and SDK error debugging. Prefer over generic WebRTC advice whenever @zoom/videosdk is involved.
 triggers:
   - "video sdk web"
   - "custom video web"
@@ -13,13 +13,22 @@ triggers:
   - "video rendering"
 ---
 
-# Zoom Video SDK Web (v2.4.0)
+# Zoom Video SDK Web (v2.4.5)
 
 Expert guidance for building video sessions with Zoom Video SDK for Web.
 
 This skill is for **custom video sessions**, not embedded Zoom meetings.
 If the user wants a custom UI for a real Zoom meeting, route to [../../meeting-sdk/web/component-view/SKILL.md](../../meeting-sdk/web/component-view/SKILL.md).
 Use [../../probe-sdk/SKILL.md](../../probe-sdk/SKILL.md) as an optional browser/device/network readiness gate before `client.join(...)`.
+
+## SDK Sample Package
+
+The reviewed `zoom-video-sdk-web-2.4.5.zip` archive is the `react-video-sdk-demo` sample application, not the `@zoom/videosdk` library distribution. It contains no bundled `SKILL.md` or paired API-reference files.
+
+- Use this skill as the primary workflow and API-routing guide.
+- Use [references/sample-app-2.4.5.md](references/sample-app-2.4.5.md) for source-backed implementation patterns from the sample.
+- Treat installed `@zoom/videosdk` TypeScript declarations and official API documentation as authoritative when the sample and types disagree.
+- Never ship the sample's client-side SDK Secret/JWT generator. Generate Video SDK JWTs on a backend.
 
 ## Quick Start
 
@@ -106,6 +115,10 @@ client.getSubsessionClient(); // Breakout rooms
 client.getLiveTranscriptionClient(); // Captions
 client.getLiveStreamClient(); // RTMP streaming
 client.getWhiteboardClient(); // Whiteboard
+client.getBroadcastStreamingClient(); // Host-side broadcast control
+client.getRealTimeMediaStreamsClient(); // RTMS lifecycle control
+client.getVoiceTranslatorClient(); // Voice translation
+client.getIncomingLiveStreamClient(); // Incoming RTMP; verify against installed types
 ```
 
 ### MediaStream (Audio/Video Control)
@@ -428,6 +441,7 @@ enum VideoQuality {
 - [references/screen-share.md](references/screen-share.md) - Screen sharing, annotation, tab audio, share privileges
 - [references/features.md](references/features.md) - Preview, recording, subsessions, live stream, command channel, transcription, PSTN, SIP, quality stats
 - [references/advanced.md](references/advanced.md) - Chat, custom processors, whiteboard
+- [references/sample-app-2.4.5.md](references/sample-app-2.4.5.md) - Reviewed React/Vite sample map: RTMS, incoming RTMP, broadcast viewing, whiteboard, voice translation, processors, and video masks
 - [references/browser-support.md](references/browser-support.md) - Browser compatibility, SharedArrayBuffer, CSP headers
 - [references/error-codes.md](references/error-codes.md) - Complete error code reference
 - [troubleshooting/common-issues.md](troubleshooting/common-issues.md) - Troubleshooting guide: symptoms → causes → fixes for the most common Video SDK bugs
@@ -444,6 +458,9 @@ All TypeScript definitions are in `@zoom/videosdk/dist/types`:
 - `chat.d.ts` - Chat client
 - `recording.d.ts` - Recording client
 - `subsession.d.ts` - Breakout rooms
+- `broadcast-streaming.d.ts` - Broadcast host/viewer APIs
+- `real-time-media-streams.d.ts` - RTMS lifecycle client
+- `event-callback.d.ts` - Event names and payloads
 
 ## Resources Homepage
 
