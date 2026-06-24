@@ -18,6 +18,10 @@ Do not use this architecture for headless bots, custom media rendering, or a mee
 4. Optional [REST API](../../rest-api/SKILL.md) for meeting creation or lookup
 5. Optional [Webhooks](../../webhooks/SKILL.md) for backend lifecycle processing
 
+Capability checkpoint: read [Plugin SDK Capabilities](../../plugin-sdk/capabilities.md) before promising that the official Zoom Workplace client can perform a requested operation.
+
+Ambiguity checkpoint: read [Plugin SDK FAQ](../../plugin-sdk/faq.md) when comparing this architecture with Meeting SDK for Windows or macOS.
+
 ## Architecture
 
 ```text
@@ -43,10 +47,11 @@ Native desktop app
 6. Submit start/join through the Plugin SDK.
 7. Wait for the in-meeting state.
 8. Resolve the current meeting instance, user, and role.
-9. Enable only controls supported by the current state, role, meeting type, host policy, and client version.
-10. Confirm every mutation using its completion and relevant state callback.
-11. Disable controls on disconnect/reconnect and reconcile state after recovery.
-12. Uninitialize on application shutdown.
+9. Check the capability inventory and platform API map for the requested control.
+10. Enable only controls supported by the current state, role, meeting type, host policy, and client version.
+11. Confirm every mutation using its completion and relevant state callback.
+12. Disable controls on disconnect/reconnect and reconcile state after recovery.
+13. Uninitialize on application shutdown.
 
 ## Share a Known Application Window
 
@@ -72,7 +77,11 @@ Windows exposes `StartAppShare(void* appID, ...)`; macOS exposes `startAppShare`
 
 ## Platform References
 
+- [Plugin SDK capabilities](../../plugin-sdk/capabilities.md)
+- [Plugin SDK FAQ](../../plugin-sdk/faq.md)
+- [macOS capabilities](../../plugin-sdk/macos/capabilities.md)
 - [macOS lifecycle](../../plugin-sdk/macos/references/lifecycle-and-integration.md)
 - [macOS API map](../../plugin-sdk/macos/references/package-and-api-map.md)
+- [Windows capabilities](../../plugin-sdk/windows/capabilities.md)
 - [Windows lifecycle](../../plugin-sdk/windows/references/lifecycle-and-integration.md)
 - [Windows API map](../../plugin-sdk/windows/references/package-and-api-map.md)

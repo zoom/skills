@@ -46,6 +46,7 @@ export type SkillId =
 export interface RouteDecision {
   primarySkill: SkillId;
   chainedSkills: SkillId[];
+  resourceHints: string[];
   confidence: number;
   rationale: string[];
   needsClarification: string[];
@@ -207,6 +208,28 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   return [...chain];
 }
 
+function buildResourceHints(primary: SkillId, s: Signals): string[] {
+  const hints: string[] = [];
+
+  if (primary === 'zoom-plugin-sdk' || primary === 'zoom-plugin-sdk-macos' || primary === 'zoom-plugin-sdk-windows' || s.pluginSdk || s.pluginMacos || s.pluginWindows) {
+    hints.push('plugin-sdk/faq.md');
+    hints.push('plugin-sdk/capabilities.md');
+  }
+  if ((s.pluginSdk || s.pluginMacos || s.pluginWindows) && s.meetingEmbed) {
+    hints.push('meeting-sdk/SKILL.md');
+  }
+  if (primary === 'zoom-plugin-sdk-macos' || s.pluginMacos) {
+    hints.push('plugin-sdk/macos/capabilities.md');
+    hints.push('plugin-sdk/macos/references/package-and-api-map.md');
+  }
+  if (primary === 'zoom-plugin-sdk-windows' || s.pluginWindows) {
+    hints.push('plugin-sdk/windows/capabilities.md');
+    hints.push('plugin-sdk/windows/references/package-and-api-map.md');
+  }
+
+  return hints;
+}
+
 function validateDecision(primary: SkillId, s: Signals): string[] {
   const warnings: string[] = [];
 
@@ -247,6 +270,7 @@ export function routeComplexQuery(query: string): RouteDecision {
   const signals = detectSignals(query);
   const primarySkill = pickPrimarySkill(signals);
   const chainedSkills = buildChain(primarySkill, signals);
+  const resourceHints = buildResourceHints(primarySkill, signals);
   const warnings = validateDecision(primarySkill, signals);
 
   const needsClarification: string[] = [];
@@ -264,11 +288,13 @@ export function routeComplexQuery(query: string): RouteDecision {
     `primary=${primarySkill}`,
     `signals=${JSON.stringify(signals)}`,
     `chained=${chainedSkills.join(',') || 'none'}`,
+    `resources=${resourceHints.join(',') || 'none'}`,
   ];
 
   return {
     primarySkill,
     chainedSkills,
+    resourceHints,
     confidence: confidenceFromSignals(signals),
     rationale,
     needsClarification,
@@ -281,18 +307,23 @@ export function routeComplexQuery(query: string): RouteDecision {
 
 ```json
 {
-  "primarySkill": "zoom-meeting-sdk",
-  "chainedSkills": ["zoom-oauth", "zoom-rest-api", "zoom-webhooks"],
+  "primarySkill": "zoom-plugin-sdk-windows",
+  "chainedSkills": ["zoom-oauth"],
+  "resourceHints": [
+    "plugin-sdk/capabilities.md",
+    "plugin-sdk/faq.md",
+    "plugin-sdk/windows/capabilities.md",
+    "plugin-sdk/windows/references/package-and-api-map.md"
+  ],
   "confidence": 0.9,
   "rationale": [
-    "primary=zoom-meeting-sdk",
-    "signals={\"meetingEmbed\":true,\"restApi\":true,\"webhooks\":true,...}",
-    "chained=zoom-oauth,zoom-rest-api,zoom-webhooks"
+    "primary=zoom-plugin-sdk-windows",
+    "signals={\"pluginSdk\":true,\"pluginWindows\":true,\"oauth\":true,...}",
+    "chained=zoom-oauth",
+    "resources=plugin-sdk/faq.md,plugin-sdk/capabilities.md,plugin-sdk/windows/capabilities.md,plugin-sdk/windows/references/package-and-api-map.md"
   ],
   "needsClarification": [],
-  "warnings": [
-    "mixed SDK + REST intent; keep SDK as primary and use REST only for resource workflows"
-  ]
+  "warnings": []
 }
 ```
 

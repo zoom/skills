@@ -63,6 +63,10 @@ The 7.1.0 packages expose platform-equivalent toolkits for:
 
 Feature availability still depends on client version, meeting type, account settings, role, and host policy. Call capability checks where the SDK provides them.
 
+Read [Capabilities](capabilities.md) for a grouped inventory of what Plugin SDK can get or do through the official Zoom Workplace client.
+
+Read [FAQ](faq.md) when comparing Plugin SDK with Meeting SDK for Windows or macOS.
+
 ## Skill Chaining
 
 | Need | Chain to |
@@ -71,6 +75,7 @@ Feature availability still depends on client version, meeting type, account sett
 | Create or manage meetings before local client control | [zoom-rest-api](../rest-api/SKILL.md) |
 | React to server-side lifecycle events when the desktop app is offline | [zoom-webhooks](../webhooks/SKILL.md) |
 | Embed a meeting instead of controlling Zoom Workplace | [zoom-meeting-sdk](../meeting-sdk/SKILL.md) |
+| Compare official-client control versus embedded Meeting SDK | [FAQ](faq.md) |
 
 Use [Native Zoom Workplace Companion](../general/use-cases/native-zoom-workplace-companion.md) for the complete cross-platform workflow.
 

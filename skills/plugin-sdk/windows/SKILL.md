@@ -11,9 +11,10 @@ Use native C++ to control Zoom Workplace from a separate Windows desktop applica
 
 1. Read [Lifecycle and Integration](references/lifecycle-and-integration.md).
 2. Use [Package and API Map](references/package-and-api-map.md) to locate the authoritative interface and sample dialog for a feature.
-3. Build the bundled `PSDKTest` sample in the matching architecture.
-4. Implement auth, IPC, and meeting-state callbacks before feature controls.
-5. Use [Common Issues](troubleshooting/common-issues.md) for build, runtime DLL, listener, permission, and compatibility failures.
+3. Use [Capabilities](capabilities.md) to check whether the official client can do the requested operation.
+4. Build the bundled `PSDKTest` sample in the matching architecture.
+5. Implement auth, IPC, and meeting-state callbacks before feature controls.
+6. Use [Common Issues](troubleshooting/common-issues.md) for build, runtime DLL, listener, permission, and compatibility failures.
 
 ## Baseline Requirements
 

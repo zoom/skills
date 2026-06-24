@@ -97,6 +97,8 @@ Example:
 - `Control the installed Zoom Workplace client from a Windows desktop app` ->
   `zoom-plugin-sdk -> zoom-plugin-sdk-windows -> zoom-oauth`
 
+For Plugin SDK chains, check [Plugin SDK capabilities](../plugin-sdk/capabilities.md) before implementation and read [Plugin SDK FAQ](../plugin-sdk/faq.md) when the prompt could also mean Meeting SDK for Windows or macOS.
+
 For the full TypeScript implementation and handoff contract, use
 [references/routing-implementation.md](references/routing-implementation.md).
 
@@ -157,6 +159,8 @@ Routing guardrails:
 - If the prompt says **meeting** plus **custom UI/video/layout/embed**, prefer `zoom-meeting-sdk-web-component-view`.
 - Only use `zoom-video-sdk` when the user is building a custom session product rather than a Zoom meeting.
 - Use `zoom-plugin-sdk` when the native app controls a separately installed Zoom Workplace client over IPC.
+- For `zoom-plugin-sdk` routes, read [Plugin SDK capabilities](../plugin-sdk/capabilities.md) before claiming an operation is supported.
+- If Plugin SDK and native Meeting SDK both match, read [Plugin SDK FAQ](../plugin-sdk/faq.md) and ask whether the app controls installed Zoom Workplace or embeds meeting functionality.
 - Only use REST path for resource management, reporting, or link distribution unless user explicitly requests a mixed architecture.
 - For executable classification/chaining logic and error handling, see [references/routing-implementation.md](references/routing-implementation.md).
 

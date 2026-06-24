@@ -11,10 +11,11 @@ Use Swift or Objective-C to control Zoom Workplace from a separate native macOS 
 
 1. Read [Lifecycle and Integration](references/lifecycle-and-integration.md).
 2. Use [Package and API Map](references/package-and-api-map.md) to locate the authoritative header and sample for a feature.
-3. Implement the smallest auth and IPC connection baseline.
-4. Add start/join and meeting-state handling.
-5. Add one feature toolkit at a time.
-6. Use [Common Issues](troubleshooting/common-issues.md) when callbacks, linking, permissions, or client compatibility fail.
+3. Use [Capabilities](capabilities.md) to check whether the official client can do the requested operation.
+4. Implement the smallest auth and IPC connection baseline.
+5. Add start/join and meeting-state handling.
+6. Add one feature toolkit at a time.
+7. Use [Common Issues](troubleshooting/common-issues.md) when callbacks, linking, permissions, or client compatibility fail.
 
 ## Baseline Requirements
 
