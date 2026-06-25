@@ -402,8 +402,8 @@ See **[../general/use-cases/video-sdk-bring-your-own-storage.md](../general/use-
 | Web | [videosdk-web-sample](https://github.com/zoom/videosdk-web-sample) | 137 |
 | Web NPM | [videosdk-web](https://github.com/zoom/videosdk-web) | 56 |
 | Auth | [videosdk-auth-endpoint-sample](https://github.com/zoom/videosdk-auth-endpoint-sample) | 23 |
-| UI Toolkit Web | [videosdk-zoom-ui-toolkit-web](https://github.com/zoom/videosdk-zoom-ui-toolkit-web) | 17 |
-| UI Toolkit React | [videosdk-zoom-ui-toolkit-react-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-react-sample) | 17 |
+| UI Toolkit Web | [videosdk-ui-toolkit-web](https://github.com/zoom/videosdk-ui-toolkit-web) | 17 |
+| UI Toolkit React | [videosdk-ui-toolkit-react-sample](https://github.com/zoom/videosdk-ui-toolkit-react-sample) | 17 |
 | Next.js | [videosdk-nextjs-quickstart](https://github.com/zoom/videosdk-nextjs-quickstart) | 16 |
 | Telehealth | [VideoSDK-Web-Telehealth](https://github.com/zoom/VideoSDK-Web-Telehealth) | 11 |
 | Linux | [videosdk-linux-raw-recording-sample](https://github.com/zoom/videosdk-linux-raw-recording-sample) | - |

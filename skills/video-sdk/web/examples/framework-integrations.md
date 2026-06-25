@@ -394,7 +394,7 @@ client.init('en-US', 'https://source.zoomgov.com/videosdk/1.11.0/lib', {
 | Next.js (App) | [videosdk-nextjs-quickstart](https://github.com/zoom/videosdk-nextjs-quickstart) | app-router |
 | Next.js (Pages) | [videosdk-nextjs-quickstart](https://github.com/zoom/videosdk-nextjs-quickstart) | pages-router |
 | Vue/Nuxt | [videosdk-vue-nuxt-quickstart](https://github.com/zoom/videosdk-vue-nuxt-quickstart) | main |
-| UI Toolkit (React) | [videosdk-zoom-ui-toolkit-react-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-react-sample) | main |
+| UI Toolkit (React) | [videosdk-ui-toolkit-react-sample](https://github.com/zoom/videosdk-ui-toolkit-react-sample) | main |
 | Auth Endpoint | [videosdk-auth-endpoint-sample](https://github.com/zoom/videosdk-auth-endpoint-sample) | main |
 
 ---

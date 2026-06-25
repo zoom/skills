@@ -66,8 +66,8 @@ You need to add video conferencing to your web application quickly without build
 ### 1. Install UI Toolkit
 
 ```bash
-npm install @zoom/videosdk-zoom-ui-toolkit
-npm install react@18 react-dom@18  # Required peer dependency
+npm install @zoom/videosdk-ui-toolkit
+npm install react@18 react-dom@18  # Required by current UI Toolkit peer deps
 ```
 
 ### 2. Server-Side JWT Generation (Required)
@@ -121,12 +121,12 @@ export default function VideoSession({ sessionName, userName }) {
       const { signature } = await response.json();
 
       // Import UI Toolkit
-      const uitoolkitModule = await import('@zoom/videosdk-zoom-ui-toolkit');
+      const uitoolkitModule = await import('@zoom/videosdk-ui-toolkit');
       const uitoolkit = uitoolkitModule.default;
       uitoolkitRef.current = uitoolkit;
       
-      // @ts-ignore
-      await import('@zoom/videosdk-ui-toolkit/dist/videosdk-zoom-ui-toolkit.css');
+      // In TypeScript apps, add a global `declare module "*.css";` if needed.
+      await import('@zoom/videosdk-ui-toolkit/dist/videosdk-ui-toolkit.css');
 
       if (!mounted || !containerRef.current) return;
 
@@ -146,7 +146,7 @@ export default function VideoSession({ sessionName, userName }) {
       };
 
       // Join session
-      uitoolkit.joinSession(containerRef.current, config);
+      await uitoolkit.joinSession(containerRef.current, config);
       
       uitoolkit.onSessionJoined(() => console.log('Joined'));
       uitoolkit.onSessionClosed(() => console.log('Closed'));
@@ -157,8 +157,10 @@ export default function VideoSession({ sessionName, userName }) {
     return () => {
       mounted = false;
       if (uitoolkitRef.current && containerRef.current) {
-        uitoolkitRef.current.closeSession(containerRef.current);
-        uitoolkitRef.current.destroy();
+        void uitoolkitRef.current
+          .closeSession(containerRef.current)
+          .then(() => uitoolkitRef.current.destroy())
+          .catch(() => {});
       }
     };
   }, [sessionName, userName]);
@@ -176,11 +178,14 @@ That's it! You now have a fully functional video conferencing UI.
 | **Video Grid** | Gallery and speaker views with automatic switching |
 | **Audio Controls** | Mute/unmute, device selection, background noise suppression |
 | **Video Controls** | Camera on/off, device selection, virtual backgrounds |
-| **Screen Share** | Share screen/window with annotation support |
+| **Screen Share** | Share screen/window using browser sharing controls |
 | **Chat** | In-session messaging with emoji support |
-| **Participants** | User list with host controls (mute, remove, etc.) |
+| **Participants** | User list and participant visibility |
 | **Settings** | Device management, quality statistics, theme selection |
-| **Reactions** | Emoji reactions and raised hand |
+| **Preview** | Pre-join device and background selection |
+| **Captions** | In-session caption/translation UI when entitled |
+| **Subsessions** | Subsession/breakout-room entry points |
+| **Troubleshooting** | Probe SDK-backed troubleshooting panel |
 
 ## Customization Options
 
@@ -205,10 +210,24 @@ const config = {
     },
     recording: { enable: false },     // Requires paid plan
     caption: { enable: false },       // Requires paid plan
+    phone: { enable: false },         // Requires paid plan
+    invite: {
+      enable: true,
+      inviteLink: 'https://your-app.example/session/test'
+    },
     theme: {
       enable: true,
       defaultTheme: 'dark'            // 'light' | 'dark' | 'blue' | 'green'
-    }
+    },
+    viewMode: {
+      enable: true,
+      defaultViewMode: 'gallery',
+      viewModes: ['speaker', 'gallery']
+    },
+    troubleshoot: { enable: true },
+    feedback: { enable: true },
+    footer: { enable: true },
+    header: { enable: true }
   }
 };
 ```
@@ -290,18 +309,19 @@ If you need more customization than UI Toolkit provides:
 ## Common Gotchas
 
 1. **React 18 Required**: UI Toolkit needs React 18 specifically (not 17 or 19)
-2. **CSS Import**: Must import `videosdk-zoom-ui-toolkit.css` or UI will be unstyled
+2. **CSS Import**: Must import `videosdk-ui-toolkit.css` or UI will be unstyled
 3. **Cleanup Required**: Always call `destroy()` on unmount to prevent memory leaks
 4. **JWT Security**: NEVER put SDK secret in frontend - always use server endpoint
+5. **Chrome/WebRTC Floor**: Use UI Toolkit `2.3.15-1` or newer; current verified latest is `2.4.5-1`
 
 ## Resources
 
 - **Skill**: [zoom-ui-toolkit](../../ui-toolkit/SKILL.md)
 - **Live Demo**: https://sdk.zoom.com/videosdk-uitoolkit
 - **Official Docs**: https://developers.zoom.us/docs/video-sdk/web/ui-toolkit/
-- **NPM Package**: https://www.npmjs.com/package/@zoom/videosdk-zoom-ui-toolkit
+- **NPM Package**: https://www.npmjs.com/package/@zoom/videosdk-ui-toolkit
 - **Sample Apps**:
-  - React: https://github.com/zoom/videosdk-zoom-ui-toolkit-react-sample
-  - Vue.js: https://github.com/zoom/videosdk-zoom-ui-toolkit-vuejs-sample
-  - Angular: https://github.com/zoom/videosdk-zoom-ui-toolkit-angular-sample
-  - JavaScript: https://github.com/zoom/videosdk-zoom-ui-toolkit-javascript-sample
+  - React: https://github.com/zoom/videosdk-ui-toolkit-react-sample
+  - Vue.js: https://github.com/zoom/videosdk-ui-toolkit-vuejs-sample
+  - Angular: https://github.com/zoom/videosdk-ui-toolkit-angular-sample
+  - JavaScript: https://github.com/zoom/videosdk-ui-toolkit-javascript-sample

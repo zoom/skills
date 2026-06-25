@@ -1,14 +1,6 @@
 ---
-name: ui-toolkit/web
-description: "Zoom Video SDK UI Toolkit - Pre-built React-based video conferencing UI for web applications. Instant video sessions with minimal code - composite UI or individual components."
-triggers:
-  - "ui toolkit"
-  - "zoom ui"
-  - "prebuilt video ui"
-  - "video conferencing ui"
-  - "zoom video ui toolkit"
-  - "uitoolkit"
-  - "ready-made zoom ui"
+name: ui-toolkit-web
+description: "Zoom Video SDK UI Toolkit for Web. Use when building prebuilt or low-code Zoom Video SDK browser UI with @zoom/videosdk-ui-toolkit, composite UI, individual components, session lifecycle, React/Vue/Angular/Next.js/vanilla integration, featuresOptions, JWT auth, CSS/CDN install, troubleshooting, or deciding between UI Toolkit and raw Video SDK."
 ---
 
 # Zoom Video SDK UI Toolkit
@@ -17,7 +9,7 @@ Pre-built video conferencing UI powered by Zoom Video SDK. Drop-in solution for 
 
 **Official Documentation**: https://developers.zoom.us/docs/video-sdk/web/ui-toolkit/
 **API Reference**: https://marketplacefront.zoom.us/sdk/uitoolkit/web/
-**NPM Package**: https://www.npmjs.com/package/@zoom/videosdk-zoom-ui-toolkit
+**NPM Package**: https://www.npmjs.com/package/@zoom/videosdk-ui-toolkit
 **Live Demo**: https://sdk.zoom.com/videosdk-uitoolkit
 
 ## Quick Links
@@ -62,19 +54,23 @@ The Zoom Video SDK UI Toolkit is a **pre-built video UI library** that renders c
 ## Installation
 
 ```bash
-npm install @zoom/videosdk-zoom-ui-toolkit jsrsasign
+npm install @zoom/videosdk-ui-toolkit jsrsasign
 npm install -D @types/jsrsasign
 ```
 
-**Note**: React support depends on the UI Toolkit version. Check the package peer dependencies for your installed version (React 18 is commonly required).
+**Current package**: `@zoom/videosdk-ui-toolkit@2.4.5-1` is the latest npm release verified on 2026-06-25. Check npm before pinning.
+
+**Peer dependencies for 2.4.5-1**: `@zoom/videosdk@^2.4.5`, React 18, React DOM 18, `@reduxjs/toolkit@^2`, `react-redux@^9`, and `react-draggable@^4`.
+
+**Upgrade guardrail**: Use `2.3.15-1` or newer for WebRTC video because Zoom flags that version floor for future Chrome compatibility.
 
 ## Quick Start
 
 ### Basic Usage (Vanilla JS)
 
 ```javascript
-import uitoolkit from "@zoom/videosdk-zoom-ui-toolkit";
-import "@zoom/videosdk-ui-toolkit/dist/videosdk-zoom-ui-toolkit.css";
+import uitoolkit from "@zoom/videosdk-ui-toolkit";
+import "@zoom/videosdk-ui-toolkit/dist/videosdk-ui-toolkit.css";
 
 const container = document.getElementById("sessionContainer");
 
@@ -83,18 +79,30 @@ const config = {
   sessionName: "my-session",
   userName: "John Doe",
   sessionPasscode: "",
-  features: ["video", "audio", "share", "chat", "users", "settings"],
+  featuresOptions: {
+    video: { enable: true },
+    audio: { enable: true },
+    share: { enable: true },
+    chat: { enable: true, enableEmoji: true },
+    users: { enable: true },
+    settings: { enable: true },
+    leave: { enable: true },
+  },
 };
 
-uitoolkit.joinSession(container, config);
+async function startSession() {
+  await uitoolkit.joinSession(container, config);
 
-uitoolkit.onSessionJoined(() => {
-  console.log("Session joined");
-});
+  uitoolkit.onSessionJoined(() => {
+    console.log("Session joined");
+  });
 
-uitoolkit.onSessionClosed(() => {
-  console.log("Session closed");
-});
+  uitoolkit.onSessionClosed(() => {
+    console.log("Session closed");
+  });
+}
+
+void startSession();
 ```
 
 ### Next.js / React Integration
@@ -112,14 +120,14 @@ export default function VideoSession({ jwt, sessionName, userName }) {
     let isMounted = true;
 
     const init = async () => {
-      const uitoolkitModule = await import('@zoom/videosdk-zoom-ui-toolkit');
+      const uitoolkitModule = await import('@zoom/videosdk-ui-toolkit');
       const uitoolkit = uitoolkitModule.default;
       uitoolkitRef.current = uitoolkit;
       
       // If TypeScript complains about CSS imports, configure your app to allow them
       // (for example via a global `declare module \"*.css\";`), or import the CSS from
       // a global entrypoint (Next.js layout/_app) instead of inlining here.
-      await import('@zoom/videosdk-ui-toolkit/dist/videosdk-zoom-ui-toolkit.css');
+      await import('@zoom/videosdk-ui-toolkit/dist/videosdk-ui-toolkit.css');
 
       if (!isMounted || !containerRef.current) return;
 
@@ -128,10 +136,18 @@ export default function VideoSession({ jwt, sessionName, userName }) {
         sessionName: sessionName,
         userName: userName,
         sessionPasscode: '',
-        features: ['video', 'audio', 'share', 'chat', 'users', 'settings'],
+        featuresOptions: {
+          video: { enable: true },
+          audio: { enable: true },
+          share: { enable: true },
+          chat: { enable: true, enableEmoji: true },
+          users: { enable: true },
+          settings: { enable: true },
+          leave: { enable: true },
+        },
       };
 
-      uitoolkit.joinSession(containerRef.current, config);
+      await uitoolkit.joinSession(containerRef.current, config);
       uitoolkit.onSessionJoined(() => console.log('Joined'));
       uitoolkit.onSessionClosed(() => console.log('Closed'));
     };
@@ -141,9 +157,10 @@ export default function VideoSession({ jwt, sessionName, userName }) {
     return () => {
       isMounted = false;
       if (uitoolkitRef.current && containerRef.current) {
-        try {
-          uitoolkitRef.current.closeSession(containerRef.current);
-        } catch (e) {}
+        void uitoolkitRef.current
+          .closeSession(containerRef.current)
+          .then(() => uitoolkitRef.current.destroy())
+          .catch(() => {});
       }
     };
   }, [jwt, sessionName, userName]);
@@ -156,15 +173,50 @@ export default function VideoSession({ jwt, sessionName, userName }) {
 
 | Feature | Description |
 |---------|-------------|
+| `preview` | Pre-join device, microphone, speaker, name, and background flow |
 | `video` | Enable video layout and send/receive video |
-| `audio` | Show audio button, send/receive audio |
-| `share` | Screen sharing |
-| `chat` | In-session messaging |
+| `audio` | Audio toolbar controls, device handling, noise suppression options |
+| `secondaryAudio` | Enable secondary audio support |
+| `share` | Screen sharing controls |
+| `chat` | In-session chat, including emoji option |
 | `users` | Participant list |
-| `settings` | Device selection, virtual background |
-| `preview` | Pre-join camera/mic preview |
-| `recording` | Cloud recording (paid plan) |
+| `settings` | Device configuration, virtual background, quality statistics |
+| `recording` | Cloud recording button; paid plan required |
+| `phone` | Join-by-phone options; paid plan required |
+| `invite` | Invite link/options |
+| `theme` | Theme picker and default theme |
+| `viewMode` | View-mode switcher and defaults |
+| `feedback` | End-of-session experience feedback |
+| `troubleshoot` | Troubleshooting tab powered by Zoom Probe SDK |
+| `caption` | In-session translation/caption UI; paid plan required |
+| `playback` | Media file playback options |
+| `subsession` | Subsession/breakout-room button |
 | `leave` | Leave/end session button |
+| `virtualBackground` | Built-in and custom virtual background options |
+| `footer` | Footer button area |
+| `header` | Session header area |
+| `screenshot` | Video/share screenshot feature toggles |
+
+Use `featuresOptions` for new code. The older top-level `features`, `options`, and `virtualBackground` fields are deprecated in the current TypeScript definitions.
+
+The GitHub source also exposes advanced feature options that are not all listed in the README feature table. Treat these as source-validated advanced surfaces and verify against the installed package types before shipping:
+
+| Advanced option | Use |
+|-----------------|-----|
+| `video.ptz` | Enable PTZ camera support for PTZ-capable cameras |
+| `audio.muteEntry` | Join session audio muted |
+| `share.controls` | Enable supported browser display-media controls |
+| `share.displaySurface` | Enable supported browser surface selection hints |
+| `share.hideShareAudioOption` | Hide share-computer-audio option where supported |
+| `share.optimizedForSharedVideo` | Prefer frame rate for shared video content |
+| `livestream` | Live stream UI support |
+| `crc` | Room system / CRC invite support |
+| `whiteboard` | Whiteboard UI, export, and viewer-export flags |
+| `rawData` | Source-level raw data configuration surface |
+| `realTimeMediaStreams` | Source-level RTMS configuration surface |
+| `cameraShare` | Source-level camera share entry point |
+
+If TypeScript does not expose one of these options in the installed package, prefer the typed README/d.ts surface for production code or gate the source-only field behind a version check and local type augmentation.
 
 ## Troubleshooting
 
@@ -232,8 +284,13 @@ export async function POST(request: NextRequest) {
 ### Core Methods
 
 ```javascript
-uitoolkit.joinSession(container, config);
-uitoolkit.closeSession(container);
+uitoolkit.openPreview(container, config, { onClickJoin });
+uitoolkit.closePreview(container);
+await uitoolkit.joinSession(container, config);
+await uitoolkit.leaveSession();
+await uitoolkit.closeSession(container);
+await uitoolkit.destroy();
+const migrated = uitoolkit.migrateConfig(oldConfig);
 ```
 
 ### Event Listeners
@@ -241,8 +298,16 @@ uitoolkit.closeSession(container);
 ```javascript
 uitoolkit.onSessionJoined(callback);
 uitoolkit.onSessionClosed(callback);
+uitoolkit.onSessionDestroyed(callback);
+uitoolkit.onViewTypeChange(callback);
+uitoolkit.onLanguageChange(callback);
+uitoolkit.on("user-added", callback);
 uitoolkit.offSessionJoined(callback);
 uitoolkit.offSessionClosed(callback);
+uitoolkit.offSessionDestroyed(callback);
+uitoolkit.offViewTypeChange(callback);
+uitoolkit.offLanguageChange(callback);
+uitoolkit.off("user-added", callback);
 ```
 
 ### Component Methods
@@ -259,8 +324,48 @@ uitoolkit.hideSettingsComponent(container);
 uitoolkit.hideAllComponents();
 ```
 
+The repo source/runtime bundle also includes broadcast viewer helpers:
+
+```javascript
+uitoolkit.showBroadcastViewerComponent(container, options);
+uitoolkit.hideBroadcastViewerComponent(container);
+```
+
+These may not be present in every published `.d.ts`; verify the installed package before relying on TypeScript autocomplete.
+
+### Utility and Advanced Methods
+
+```javascript
+uitoolkit.getSessionInfo();
+uitoolkit.getCurrentUserInfo();
+uitoolkit.getAllUser();
+uitoolkit.getClient(); // available when debug mode is true
+uitoolkit.version();
+uitoolkit.changeViewType("gallery");
+uitoolkit.mirrorVideo(true);
+uitoolkit.isSupportCustomLayout();
+uitoolkit.subscribeAudioStatisticData({ encode: true, decode: true });
+uitoolkit.subscribeVideoStatisticData({ encode: true, decode: true, detailed: true });
+uitoolkit.subscribeShareStatisticData({ encode: true, decode: true });
+uitoolkit.i18n.setLanguage("en-US");
+uitoolkit.i18n.setLanguageList(["en-US", "zh-CN"]);
+uitoolkit.i18n.getLanguage();
+uitoolkit.i18n.getLanguageList();
+uitoolkit.i18n.hasLanguageResources("ja-JP");
+uitoolkit.ptz.isBrowserSupported();
+uitoolkit.ptz.getCapability();
+uitoolkit.ptz.getFarEndCapability(userId);
+uitoolkit.ptz.requestControl(userId);
+uitoolkit.ptz.approveControl(userId);
+uitoolkit.ptz.declineControl(userId);
+uitoolkit.ptz.giveUpControl(userId);
+uitoolkit.ptz.control({ cmd: 1, userId, range: 50 });
+```
+
 ## CDN Usage (No Build Step)
-example version 2.4.0-1
+
+Example version: `2.4.5-1`. Replace `{VERSION}` with the package version you have validated.
+
 ```html
 <link rel="stylesheet" href="https://source.zoom.us/uitoolkit/{VERSION}/videosdk-ui-toolkit.css" />
 <script src="https://source.zoom.us/uitoolkit/{VERSION}/videosdk-ui-toolkit.min.umd.js"></script>
@@ -274,7 +379,12 @@ example version 2.4.0-1
     videoSDKJWT: 'your_jwt',
     sessionName: 'my-session',
     userName: 'User',
-    features: ['video', 'audio', 'chat']
+    featuresOptions: {
+      video: { enable: true },
+      audio: { enable: true },
+      chat: { enable: true, enableEmoji: true },
+      leave: { enable: true }
+    }
   });
 </script>
 ```
@@ -323,7 +433,7 @@ fetch('/your-app-path/api/token', { ... })
 
 ## Resources
 
-- **GitHub**: https://github.com/zoom/videosdk-zoom-ui-toolkit-web
+- **GitHub**: https://github.com/zoom/videosdk-ui-toolkit-web
 - **UI Toolkit Docs**: https://developers.zoom.us/docs/video-sdk/web/ui-toolkit/
 - **Auth Endpoint Sample**: https://github.com/zoom/videosdk-auth-endpoint-sample
 - **Marketplace**: https://marketplace.zoom.us/
@@ -467,17 +577,17 @@ See: **[troubleshooting/common-issues.md](troubleshooting/common-issues.md)**
 
 | Framework | Repository | Key Features |
 |-----------|------------|--------------|
-| React | [videosdk-zoom-ui-toolkit-react-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-react-sample) | Hooks, TypeScript |
-| Vue.js | [videosdk-zoom-ui-toolkit-vuejs-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-vuejs-sample) | Composition API |
-| Angular | [videosdk-zoom-ui-toolkit-angular-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-angular-sample) | Services, Guards |
-| JavaScript | [videosdk-zoom-ui-toolkit-javascript-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-javascript-sample) | Vanilla JS |
+| React | [videosdk-ui-toolkit-react-sample](https://github.com/zoom/videosdk-ui-toolkit-react-sample) | Hooks, TypeScript |
+| Vue.js | [videosdk-ui-toolkit-vuejs-sample](https://github.com/zoom/videosdk-ui-toolkit-vuejs-sample) | Composition API |
+| Angular | [videosdk-ui-toolkit-angular-sample](https://github.com/zoom/videosdk-ui-toolkit-angular-sample) | Services, Guards |
+| JavaScript | [videosdk-ui-toolkit-javascript-sample](https://github.com/zoom/videosdk-ui-toolkit-javascript-sample) | Vanilla JS |
 | Auth Endpoint | [videosdk-auth-endpoint-sample](https://github.com/zoom/videosdk-auth-endpoint-sample) | Node.js JWT |
 
 ## 🌐 External Resources
 
 - **Official Documentation**: https://developers.zoom.us/docs/video-sdk/web/ui-toolkit/
 - **API Reference**: https://marketplacefront.zoom.us/sdk/uitoolkit/web/
-- **NPM Package**: https://www.npmjs.com/package/@zoom/videosdk-zoom-ui-toolkit
+- **NPM Package**: https://www.npmjs.com/package/@zoom/videosdk-ui-toolkit
 - **Marketplace**: https://marketplace.zoom.us/
 - **Developer Forum**: https://devforum.zoom.us/
 - **Live Demo**: https://sdk.zoom.com/videosdk-uitoolkit
@@ -511,8 +621,8 @@ See: **[troubleshooting/common-issues.md](troubleshooting/common-issues.md)**
 ### Minimal Working Example
 
 ```javascript
-import uitoolkit from "@zoom/videosdk-zoom-ui-toolkit";
-import "@zoom/videosdk-ui-toolkit/dist/videosdk-zoom-ui-toolkit.css";
+import uitoolkit from "@zoom/videosdk-ui-toolkit";
+import "@zoom/videosdk-ui-toolkit/dist/videosdk-ui-toolkit.css";
 
 const config = {
   videoSDKJWT: "YOUR_JWT",

@@ -20,6 +20,8 @@ Use this before deep debugging. It catches the most common UI Toolkit failures q
 
 ## 3) Confirm Framework Constraints
 
+- Confirm the installed package is `@zoom/videosdk-ui-toolkit`, not obsolete `@zoom/videosdk-zoom-ui-toolkit` examples.
+- Use `2.3.15-1` or newer for WebRTC video; `2.4.5-1` is the latest npm release verified on 2026-06-25.
 - Validate your installed package peer dependencies (React version mismatch is common).
 - In SSR frameworks, load toolkit client-side and clean up on unmount.
 

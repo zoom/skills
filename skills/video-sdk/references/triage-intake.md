@@ -10,7 +10,7 @@ Use this when someone asks “Video SDK isn’t working” without enough contex
 
 - Platform: `web` | `react-native` | `flutter` | `ios` | `android` | `windows` | `linux`
 - UI approach:
-  - **UI Toolkit** (`@zoom/videosdk-zoom-ui-toolkit`)
+  - **UI Toolkit** (`@zoom/videosdk-ui-toolkit`)
   - **Custom UI** (direct SDK APIs)
 
 ## 2) Session Basics (Copy/Paste)

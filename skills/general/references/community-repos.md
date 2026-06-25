@@ -30,16 +30,16 @@ Curated list of official repositories from Zoom for development. Organized by pr
 | [videosdk-web-sample](https://github.com/zoom/videosdk-web-sample) | 137 | Web Video SDK sample |
 | [videosdk-web](https://github.com/zoom/videosdk-web) | 56 | NPM package for custom video |
 | [videosdk-auth-endpoint-sample](https://github.com/zoom/videosdk-auth-endpoint-sample) | 23 | Generate Video SDK JWT signatures |
-| [videosdk-zoom-ui-toolkit-web](https://github.com/zoom/videosdk-zoom-ui-toolkit-web) | 17 | Prebuilt video chat UI |
-| [videosdk-zoom-ui-toolkit-react-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-react-sample) | 17 | UI Toolkit in React |
+| [videosdk-ui-toolkit-web](https://github.com/zoom/videosdk-ui-toolkit-web) | 17 | Prebuilt video chat UI |
+| [videosdk-ui-toolkit-react-sample](https://github.com/zoom/videosdk-ui-toolkit-react-sample) | 17 | UI Toolkit in React |
 | [videosdk-nextjs-quickstart](https://github.com/zoom/videosdk-nextjs-quickstart) | 16 | Next.js integration |
-| [videosdk-zoom-ui-toolkit-javascript-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-javascript-sample) | 11 | UI Toolkit in vanilla JS |
+| [videosdk-ui-toolkit-javascript-sample](https://github.com/zoom/videosdk-ui-toolkit-javascript-sample) | 11 | UI Toolkit in vanilla JS |
 | [VideoSDK-Web-Telehealth](https://github.com/zoom/VideoSDK-Web-Telehealth) | 11 | Telehealth starter kit |
 | [videosdk-workshop](https://github.com/zoom/videosdk-workshop) | 9 | Workshop project |
 | [videosdk-s3-cloud-recordings](https://github.com/zoom/videosdk-s3-cloud-recordings) | 8 | Auto-upload recordings to S3 |
 | [videosdk-web-helloworld](https://github.com/zoom/videosdk-web-helloworld) | 4 | Minimal hello world |
-| [videosdk-zoom-ui-toolkit-angular-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-angular-sample) | 4 | UI Toolkit in Angular |
-| [videosdk-zoom-ui-toolkit-vuejs-sample](https://github.com/zoom/videosdk-zoom-ui-toolkit-vuejs-sample) | 3 | UI Toolkit in Vue.js |
+| [videosdk-ui-toolkit-angular-sample](https://github.com/zoom/videosdk-ui-toolkit-angular-sample) | 4 | UI Toolkit in Angular |
+| [videosdk-ui-toolkit-vuejs-sample](https://github.com/zoom/videosdk-ui-toolkit-vuejs-sample) | 3 | UI Toolkit in Vue.js |
 | [videosdk-vue-nuxt-quickstart](https://github.com/zoom/videosdk-vue-nuxt-quickstart) | 1 | Vue/Nuxt quickstart |
 | [videosdk-electron-sample](https://github.com/zoom/videosdk-electron-sample) | 1 | Electron sample |
 | [videosdk-linux-raw-recording-sample](https://github.com/zoom/videosdk-linux-raw-recording-sample) | - | Linux headless raw data capture |

@@ -2,15 +2,20 @@
 
 ## Auth or IPC Never Becomes Ready
 
+If the auth callback reports a verify-user failure, first suspect a user mismatch: the OAuth access token was issued for a different user than the user currently signed in to Zoom Workplace.
+
 Check:
 
 1. Zoom Workplace is installed and running.
 2. The signed-in Workplace user matches the user who authorized the OAuth token.
 3. The token includes `plugin_sdk:read:connection_meta`.
 4. The token is not expired or revoked.
-5. `domain` is `https://zoom.us` unless the deployment requires another documented domain.
-6. The listener is retained and implements `onAuthResult` and `onIPCConnectStatusChanged`.
-7. The app handles `.connectTimeout` and `.disconnected` with visible diagnostics.
+5. The OAuth redirect URL used for authorization matches the token exchange `redirect_uri`.
+6. `domain` is `https://zoom.us` unless the deployment requires another documented domain.
+7. The listener is retained and implements `onAuthResult` and `onIPCConnectStatusChanged`.
+8. The app handles `.connectTimeout` and `.disconnected` with visible diagnostics.
+
+To verify the mismatch, decode or introspect the OAuth token owner, check the signed-in Zoom Workplace profile, then sign out or reauthorize so both users match.
 
 ## Framework or Runtime Load Failure
 

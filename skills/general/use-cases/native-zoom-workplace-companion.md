@@ -30,7 +30,11 @@ Trusted backend (optional)
   -> support OAuth code exchange/refresh when required
 
 Native desktop app
-  -> user OAuth with PKCE
+  -> generate PKCE code verifier/challenge
+  -> user OAuth authorization
+  -> redirect URL receives authorization code
+  -> token exchange sends code verifier
+  -> token exchange returns access token
   -> Plugin SDK initialization
   -> local IPC
   -> installed Zoom Workplace
@@ -40,18 +44,22 @@ Native desktop app
 ## Implementation Flow
 
 1. Enable Plugin SDK on a Marketplace General app.
-2. Authorize the local user with `plugin_sdk:read:connection_meta`.
-3. Initialize the platform SDK and retain the event listener.
-4. Wait for auth success and IPC connected.
-5. If necessary, ask a backend to create or retrieve the meeting.
-6. Submit start/join through the Plugin SDK.
-7. Wait for the in-meeting state.
-8. Resolve the current meeting instance, user, and role.
-9. Check the capability inventory and platform API map for the requested control.
-10. Enable only controls supported by the current state, role, meeting type, host policy, and client version.
-11. Confirm every mutation using its completion and relevant state callback.
-12. Disable controls on disconnect/reconnect and reconcile state after recovery.
-13. Uninitialize on application shutdown.
+2. Configure a Marketplace redirect URL.
+3. Generate PKCE `code_verifier` and `code_challenge`.
+4. Authorize the local user with `plugin_sdk:read:connection_meta`.
+5. Receive the authorization code on the redirect URL.
+6. Exchange the code for an access token with the same `redirect_uri` and original `code_verifier`.
+7. Initialize the platform SDK and retain the event listener.
+8. Wait for auth success and IPC connected.
+9. If necessary, ask a backend to create or retrieve the meeting.
+10. Submit start/join through the Plugin SDK.
+11. Wait for the in-meeting state.
+12. Resolve the current meeting instance, user, and role.
+13. Check the capability inventory and platform API map for the requested control.
+14. Enable only controls supported by the current state, role, meeting type, host policy, and client version.
+15. Confirm every mutation using its completion and relevant state callback.
+16. Disable controls on disconnect/reconnect and reconcile state after recovery.
+17. Uninitialize on application shutdown.
 
 ## Share a Known Application Window
 
@@ -72,6 +80,7 @@ Windows exposes `StartAppShare(void* appID, ...)`; macOS exposes `startAppShare`
 - Display auth, IPC, meeting, and feature-operation states separately.
 - Expect token expiry, user sign-out, client restart, policy changes, and meeting role changes.
 - Never infer success from an immediate Boolean submission result.
+- Use the same redirect URL for authorization and token exchange.
 - Do not store refresh tokens in plaintext.
 - Do not ship confidential OAuth client secrets in desktop binaries.
 

@@ -85,7 +85,21 @@ Use a user OAuth token containing:
 plugin_sdk:read:connection_meta
 ```
 
-Use Authorization Code with PKCE for distributed desktop apps. Do not ship a confidential OAuth client secret in the binary. If the app registration requires a secret, perform code exchange and refresh on a trusted backend.
+Obtain the token through the OAuth authorization-code redirect flow. Prefer PKCE for native desktop apps:
+
+1. Register a redirect URL in the Marketplace app.
+2. Generate a high-entropy `code_verifier` and store it only for the current auth attempt.
+3. Derive `code_challenge = BASE64URL(SHA256(code_verifier))`.
+4. Start authorization with that redirect URL, required scopes, `code_challenge`, and `code_challenge_method=S256`.
+5. Receive `code` on the redirect URL callback.
+6. Exchange the code at `https://zoom.us/oauth/token` with `grant_type=authorization_code`.
+7. Send the same `redirect_uri` value used in the authorization request.
+8. Send the original `code_verifier`.
+9. Use the returned `access_token` in `ZMToolSuiteProxyAuthContext`.
+
+Do not ship a confidential OAuth client secret in the binary. If the app registration requires a secret, perform code exchange and refresh on a trusted backend.
+
+The redirect URL must match the Marketplace app and token request exactly. A mismatch can prevent token exchange or produce a token that cannot verify the intended Workplace user.
 
 Chain to [Zoom OAuth](../../../oauth/SKILL.md).
 

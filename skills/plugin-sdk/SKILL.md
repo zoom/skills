@@ -41,14 +41,30 @@ The application does not render or transport meeting media itself. It sends supp
 
 1. Create a General app in Zoom App Marketplace.
 2. Enable **Plugin SDK** under **Features > Access**.
-3. Request user authorization with `plugin_sdk:read:connection_meta` plus scopes needed by any REST API calls.
+3. Configure an OAuth redirect URL and request user authorization with `plugin_sdk:read:connection_meta` plus scopes needed by any REST API calls.
 4. Install and sign the platform SDK libraries with the application.
 5. Register and retain the platform event listener.
-6. Initialize the Plugin SDK with the OAuth access token and `https://zoom.us` domain.
-7. Wait for successful authentication and an IPC connected event.
-8. Start or join a meeting, then wait for the in-meeting status before using meeting toolkits.
-9. Treat immediate Boolean returns as request-submission results and completion callbacks as operation results.
-10. Uninitialize the SDK during orderly application shutdown.
+6. Receive the authorization `code` at the redirect URL and exchange it for an access token.
+7. Initialize the Plugin SDK with the OAuth access token and `https://zoom.us` domain.
+8. Wait for successful authentication and an IPC connected event.
+9. Start or join a meeting, then wait for the in-meeting status before using meeting toolkits.
+10. Treat immediate Boolean returns as request-submission results and completion callbacks as operation results.
+11. Uninitialize the SDK during orderly application shutdown.
+
+## OAuth Token Exchange
+
+For Plugin SDK, do not invent or manually paste an access token. Use the OAuth authorization-code flow. For native desktop apps, prefer Authorization Code with PKCE:
+
+1. Register the redirect URL in the Marketplace app.
+2. Generate a high-entropy `code_verifier` and store it only for the current auth attempt.
+3. Derive `code_challenge = BASE64URL(SHA256(code_verifier))`.
+4. Send the user to Zoom's OAuth authorize URL with `code_challenge` and `code_challenge_method=S256`.
+5. Receive `?code=...` on the redirect URL.
+6. POST the code to `https://zoom.us/oauth/token`.
+7. Include `grant_type=authorization_code`, the same `redirect_uri`, the authorization code, and `code_verifier`.
+8. Use the returned `access_token` when initializing Plugin SDK.
+
+If the app registration requires a confidential client secret, perform token exchange and refresh on a trusted backend instead of shipping the secret in the desktop app. The `redirect_uri` in the token exchange must exactly match the redirect URL used during authorization and configured for the Marketplace app. Do not persist tokens in plaintext files; use secure OS storage or backend-managed storage.
 
 ## Feature Surface
 

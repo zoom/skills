@@ -23,13 +23,18 @@ Check:
 
 ## Auth or IPC Never Becomes Ready
 
+If `OnAuthResult` reports `eResult: verify user failed`, first suspect a user mismatch: the OAuth access token was issued for a different user than the user currently signed in to Zoom Workplace.
+
 1. Confirm Zoom Workplace is installed and running.
 2. Confirm the Workplace user matches the OAuth-authorized user.
 3. Confirm `plugin_sdk:read:connection_meta`.
 4. Confirm the token is current.
-5. Keep the listener alive.
-6. Log both `OnAuthResult` and `OnIPCConnectStatusChanged`, including `errorMessage`.
-7. Handle `IPC_STATUS_CONNECT_TIMEOUT` and `IPC_STATUS_DISCONNECTED`.
+5. Confirm the OAuth redirect URL used for authorization matches the token exchange `redirect_uri`.
+6. Keep the listener alive.
+7. Log both `OnAuthResult` and `OnIPCConnectStatusChanged`, including `errorMessage`.
+8. Handle `IPC_STATUS_CONNECT_TIMEOUT` and `IPC_STATUS_DISCONNECTED`.
+
+To verify the mismatch, decode or introspect the OAuth token owner, check the signed-in Zoom Workplace profile, then sign out or reauthorize so both users match.
 
 ## API Returns `false`
 
