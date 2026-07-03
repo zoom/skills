@@ -15,6 +15,11 @@ triggers:
   - "web meeting sdk"
   - "javascript meeting"
   - "sharedarraybuffer"
+  - "cross origin isolated"
+  - "crossOriginIsolated"
+  - "COOP COEP"
+  - "JOIN_MEETING_FAILED 4004"
+  - "RWC ping"
 ---
 
 # Zoom Meeting SDK (Web)
@@ -82,7 +87,7 @@ Common failure points:
 - missing backend signature endpoint
 - wrong password field (`password` here, not `passWord`)
 - missing OBF/ZAK requirements for meetings outside the app account
-- missing SharedArrayBuffer headers when higher-end meeting features are expected
+- missing cross-origin isolation (SharedArrayBuffer) when HD/gallery is expected or join fails with RWC abort / 4004 symptoms
 
 ## Hard Routing Rule
 
@@ -101,7 +106,7 @@ For the direct custom-meeting-UI path, start with
 
 1. **Choose Your View** - [Client View vs Component View](#client-view-vs-component-view) - Understand the key architectural differences
 2. **Quick Start** - [Client View](#quick-start-client-view) or [Component View](#quick-start-component-view) - Get a working meeting in minutes
-3. **SharedArrayBuffer** - [concepts/sharedarraybuffer.md](concepts/sharedarraybuffer.md) - Required for HD video, gallery view, virtual backgrounds
+3. **Cross-origin isolation / SharedArrayBuffer** - [concepts/sharedarraybuffer.md](concepts/sharedarraybuffer.md) - Required for HD video, gallery view, virtual backgrounds; also a first check for RWC abort / 4004 join failures
 4. **Optional preflight diagnostics** - [../../probe-sdk/SKILL.md](../../probe-sdk/SKILL.md) - Validate browser/device/network before join
 
 **Building a Custom Integration?**
@@ -114,7 +119,8 @@ For the direct custom-meeting-UI path, start with
 
 **Having issues?**
 - Join errors → Check signature generation and password spelling (`passWord` vs `password`)
-- HD video not working → Enable SharedArrayBuffer headers
+- `JOIN_MEETING_FAILED` 4004/50004, aborted RWC `/wc/ping`, or `Gallery View Not Supported` → Check cross-origin isolation first: run `window.crossOriginIsolated`, then see [troubleshooting/common-issues.md](troubleshooting/common-issues.md)
+- HD video not working → Enable cross-origin isolation / SharedArrayBuffer headers
 - Hosted sample looks unstyled or logs `webpack-dev-server` / localhost websocket errors → See [troubleshooting/common-issues.md](troubleshooting/common-issues.md)
 - Complete navigation → [SKILL.md](SKILL.md)
 
@@ -631,13 +637,24 @@ client.leaveMeeting();
 client.endMeeting();
 ```
 
-## SharedArrayBuffer (CRITICAL for HD)
+## Cross-Origin Isolation / SharedArrayBuffer (Critical for HD and Some Join Paths)
 
 SharedArrayBuffer enables advanced features:
 - 720p/1080p video
 - Gallery view
 - Virtual backgrounds
 - Background noise suppression
+
+When a browser console shows `JOIN_MEETING_FAILED` with error code `4004`/log code `50004`,
+aborted RWC `/wc/ping` requests, or repeated `Gallery View Not Supported` warnings, verify
+cross-origin isolation before chasing signatures or Zoom network endpoints:
+
+```javascript
+console.log('Cross-origin isolated:', window.crossOriginIsolated);
+```
+
+If this logs `false`, add COOP/COEP headers or use the `coi-serviceworker` fallback described in
+[troubleshooting/common-issues.md](troubleshooting/common-issues.md).
 
 ### Enable with HTTP Headers
 
@@ -702,8 +719,9 @@ export default defineConfig({
 | Issue | Solution |
 |-------|----------|
 | **Join fails with signature error** | Verify signature generation, check sdkKey format |
+| **Join fails with 4004/50004, aborted RWC ping, or Gallery View warning** | Verify `window.crossOriginIsolated`; add COOP/COEP headers or `coi-serviceworker`; see [troubleshooting/common-issues.md](troubleshooting/common-issues.md) |
 | **"passWord" typo** | Client View uses `passWord` (capital W), Component View uses `password` |
-| **No HD video** | Enable SharedArrayBuffer headers, check browser support |
+| **No HD video** | Enable cross-origin isolation / SharedArrayBuffer headers, check browser support |
 | **Callbacks not firing** | Ensure `inMeetingServiceListener` called after init success |
 | **Virtual background not working** | Requires SharedArrayBuffer + Chrome/Edge |
 | **Screen share fails on Safari** | Safari 17+ with macOS 14+ required for client view |
@@ -1106,7 +1124,8 @@ Quick navigation guide for all Web SDK documentation.
    - Client View: `passWord` (capital W)
    - Component View: `password` (lowercase)
 
-2. **SharedArrayBuffer required for HD features**
+2. **Cross-origin isolation / SharedArrayBuffer is a first join diagnostic**
+   - If `JOIN_MEETING_FAILED` 4004/50004, aborted RWC `/wc/ping`, or gallery/SAB warnings appear, check `window.crossOriginIsolated` first
    - 720p/1080p video
    - Gallery view (25 videos)
    - Virtual backgrounds
