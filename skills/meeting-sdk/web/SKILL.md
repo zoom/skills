@@ -115,6 +115,7 @@ For the direct custom-meeting-UI path, start with
 **Having issues?**
 - Join errors → Check signature generation and password spelling (`passWord` vs `password`)
 - HD video not working → Enable SharedArrayBuffer headers
+- Hosted sample looks unstyled or logs `webpack-dev-server` / localhost websocket errors → See [troubleshooting/common-issues.md](troubleshooting/common-issues.md)
 - Complete navigation → [SKILL.md](SKILL.md)
 
 ## Prerequisites

@@ -67,6 +67,61 @@ ZoomMtg.i18n.onLoad(() => {
 });
 ```
 
+## Deployment Issues
+
+### Hosted sample is unstyled, black, or still using webpack dev server
+
+**Symptoms**:
+- Browser console shows `WebSocket connection to ws://127.0.0.1:<port>/ws failed`
+- Console logs `[webpack-dev-server] Trying to reconnect`, `react refresh`, or `hot module replacement`
+- Component View throws `require is not defined` from a Meeting SDK UMD bundle
+- The sample toolbar looks unstyled after an SDK upgrade
+- The Client View launch page shows a black area before joining
+
+**Cause**: The public hostname is serving a development server (`npm start`, `react-scripts start`, or
+`webpack-dev-server`) instead of built static assets. The Web SDK sample launch pages also use
+Bootstrap-style classes, and `source.zoom.us/{VERSION}/css/bootstrap.css` / `react-select.css` may
+not be available for the current SDK version. Client View can inject `#zmmtg-root` on the launch
+page when `ZoomMtg.prepareWebSDK()` runs.
+
+**Diagnostics**:
+```bash
+# PM2 should not point at npm start or a dev server for a public hostname.
+pm2 describe APP_NAME | grep -E 'script path|script args|exec cwd|node env'
+
+# Built public assets should not contain HMR/dev-server code.
+rg 'webpack-dev-server|WebSocketClient|react refresh|127\.0\.0\.1|sockjs|hot module replacement' \
+  build dist static
+
+# Confirm the public page has SharedArrayBuffer isolation headers when HD features are expected.
+curl -sI https://your-host.example/ | grep -Ei 'cross-origin-(opener|embedder|resource)-policy'
+```
+
+**Fix**:
+1. Build React/Vue/Angular/Component View samples with their production build command (`npm run build`
+   or framework equivalent) and serve the generated `build/` or `dist/` folder with nginx or a small
+   static server. Do not expose `webpack-dev-server` or CRA dev server publicly.
+2. For the Meeting SDK Web Local Client View sample, emit real `static/index.min.js` and
+   `static/meeting.min.js` bundles with a production webpack config. Use `mode: 'production'`,
+   `devtool: false`, `output.path: path.resolve(__dirname, 'static')`, and `filename:
+   '[name].min.js'`. On small VMs, set `optimization: { minimize: false }` if minification is killed
+   by memory pressure; this still removes the dev server/HMR code.
+3. Serve Meeting SDK pages with:
+   ```http
+   Cross-Origin-Opener-Policy: same-origin
+   Cross-Origin-Embedder-Policy: require-corp
+   Cross-Origin-Resource-Policy: cross-origin
+   ```
+4. Use `Cache-Control: no-cache` for un-hashed HTML/CSS/JS filenames such as `index.min.js`.
+5. If the sample toolbar is unstyled, add or restore local sample CSS for `.navbar`, `.form-control`,
+   `.btn`, and `.sdk-select`; do not assume Zoom CDN CSS files exist for every SDK version.
+6. On Client View launch pages only, hide the injected meeting root until the user opens the meeting:
+   ```css
+   body > #zmmtg-root {
+     display: none !important;
+   }
+   ```
+
 ## Authentication Issues
 
 ### "Signature is invalid" (Error 3712)
