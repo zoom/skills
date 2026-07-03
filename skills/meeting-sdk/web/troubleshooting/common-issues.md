@@ -106,16 +106,22 @@ curl -sI https://your-host.example/ | grep -Ei 'cross-origin-(opener|embedder|re
    `devtool: false`, `output.path: path.resolve(__dirname, 'static')`, and `filename:
    '[name].min.js'`. On small VMs, set `optimization: { minimize: false }` if minification is killed
    by memory pressure; this still removes the dev server/HMR code.
-3. Serve Meeting SDK pages with:
+3. For Component View CRA/webpack builds, do not use `module.noParse` to silence SDK UMD build
+   errors unless you verify the browser bundle. It can leave raw CommonJS `require(...)` calls in the
+   output and cause `require is not defined`. If that happens, load
+   `@zoom/meetingsdk/dist/zoom-meeting-embedded-ES5.min.js` as a browser script and use
+   `window.ZoomMtgEmbedded`, or use another bundler configuration that fully transforms the SDK
+   bundle.
+4. Serve Meeting SDK pages with:
    ```http
    Cross-Origin-Opener-Policy: same-origin
    Cross-Origin-Embedder-Policy: require-corp
    Cross-Origin-Resource-Policy: cross-origin
    ```
-4. Use `Cache-Control: no-cache` for un-hashed HTML/CSS/JS filenames such as `index.min.js`.
-5. If the sample toolbar is unstyled, add or restore local sample CSS for `.navbar`, `.form-control`,
+5. Use `Cache-Control: no-cache` for un-hashed HTML/CSS/JS filenames such as `index.min.js`.
+6. If the sample toolbar is unstyled, add or restore local sample CSS for `.navbar`, `.form-control`,
    `.btn`, and `.sdk-select`; do not assume Zoom CDN CSS files exist for every SDK version.
-6. On Client View launch pages only, hide the injected meeting root until the user opens the meeting:
+7. On Client View launch pages only, hide the injected meeting root until the user opens the meeting:
    ```css
    body > #zmmtg-root {
      display: none !important;
