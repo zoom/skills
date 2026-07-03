@@ -95,6 +95,10 @@ rg 'webpack-dev-server|WebSocketClient|react refresh|127\.0\.0\.1|sockjs|hot mod
 
 # Confirm the public page has SharedArrayBuffer isolation headers when HD features are expected.
 curl -sI https://your-host.example/ | grep -Ei 'cross-origin-(opener|embedder|resource)-policy'
+
+# Confirm the browser actually became isolated after service workers/reloads.
+# Run this in DevTools on the public URL:
+window.crossOriginIsolated
 ```
 
 **Fix**:
@@ -118,6 +122,9 @@ curl -sI https://your-host.example/ | grep -Ei 'cross-origin-(opener|embedder|re
    Cross-Origin-Embedder-Policy: require-corp
    Cross-Origin-Resource-Policy: cross-origin
    ```
+   If nginx/proxy headers cannot be changed or reloaded immediately, place `coi-serviceworker.js` at
+   the published site root, load it from the HTML template before the app bundle, rebuild, and verify
+   the first visit reloads into `window.crossOriginIsolated === true`.
 5. Use `Cache-Control: no-cache` for un-hashed HTML/CSS/JS filenames such as `index.min.js`.
 6. If the sample toolbar is unstyled, add or restore local sample CSS for `.navbar`, `.form-control`,
    `.btn`, and `.sdk-select`; do not assume Zoom CDN CSS files exist for every SDK version.
@@ -127,6 +134,24 @@ curl -sI https://your-host.example/ | grep -Ei 'cross-origin-(opener|embedder|re
      display: none !important;
    }
    ```
+
+### Angular Client View join times out with 4004 / 50004
+
+**Symptom**: Angular Client View loads `jsmedia`, preview appears, then join fails with
+`JOIN_MEETING_FAILED`, `errorCode: 4004`, `logCode: 50004`, while RWC `/wc/ping` requests abort with
+`signal is aborted without reason`. React or PureJS samples using the same meeting/signature may join.
+
+**Checks**:
+1. Confirm the Angular URL is isolated in the browser with `window.crossOriginIsolated === true`.
+2. If the stack mentions Zone or `ZoneAwarePromise`, test without Angular Zone wrapping the SDK.
+3. If the stack mentions `Promise.withResolvers`, ensure the runtime `Promise` object has that method.
+
+**Fix**:
+- Prefer loading the Client View SDK as browser-global scripts in `index.html` for Angular samples
+  instead of bundling `@zoom/meetingsdk` into the Angular app bundle.
+- Bootstrap the Angular sample with noop zone when the page is only a thin SDK launcher:
+  `platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })`.
+- If needed, add a small `Promise.withResolvers` polyfill before calling `ZoomMtg.init()`.
 
 ## Authentication Issues
 
