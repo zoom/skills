@@ -152,32 +152,57 @@ await renderExistingParticipants();
 The SDK does not automatically subscribe/render every participant for custom UIs. Treat `client.getAllUser()` as the source of truth and reconcile the DOM after join and after participant/video events. This covers both users who were already in the session and users who join or toggle video later.
 
 ```javascript
-const renderedUsers = new Set();
+const renderedUsers = new Map();
+const renderingUsers = new Map();
 
 async function reconcileVideoTiles() {
   const users = client.getAllUser();
   const selfId = client.getCurrentUserInfo().userId;
-  const usersWithVideo = new Set(
+  const usersWithVideo = new Map(
     users
       .filter((user) => user.userId !== selfId && user.bVideoOn)
-      .map((user) => user.userId)
+      .map((user) => [user.userId, user])
   );
 
-  for (const userId of renderedUsers) {
+  for (const [userId, element] of renderedUsers) {
     if (!usersWithVideo.has(userId)) {
-      const detached = await stream.detachVideo(userId);
+      const detached = await stream.detachVideo(userId, element);
       const elements = Array.isArray(detached) ? detached : [detached];
       elements.filter(Boolean).forEach((element) => element.remove());
       renderedUsers.delete(userId);
     }
   }
 
-  for (const userId of usersWithVideo) {
-    if (!renderedUsers.has(userId)) {
-      const player = await stream.attachVideo(userId, VideoQuality.Video_360P);
-      player.setAttribute('data-user-id', String(userId));
-      document.querySelector('video-player-container').appendChild(player);
-      renderedUsers.add(userId);
+  for (const [userId, user] of usersWithVideo) {
+    if (!renderedUsers.has(userId) && !renderingUsers.has(userId)) {
+      const renderPromise = (async () => {
+        if (renderedUsers.has(userId)) return;
+
+        const player = await stream.attachVideo(userId, VideoQuality.Video_360P);
+
+        const stillWanted = client.getAllUser().some((latestUser) =>
+          latestUser.userId === userId &&
+          latestUser.userId !== client.getCurrentUserInfo().userId &&
+          latestUser.bVideoOn
+        );
+        if (!stillWanted || renderedUsers.has(userId)) {
+          await stream.detachVideo(userId, player).catch(console.warn);
+          player.remove();
+          return;
+        }
+
+        player.setAttribute('data-user-id', String(userId));
+        player.setAttribute('data-user-name', user.displayName || String(userId));
+        document.querySelector('video-player-container').appendChild(player);
+        renderedUsers.set(userId, player);
+      })();
+
+      renderingUsers.set(userId, renderPromise);
+      renderPromise.finally(() => {
+        if (renderingUsers.get(userId) === renderPromise) {
+          renderingUsers.delete(userId);
+        }
+      });
     }
   }
 }
@@ -191,6 +216,13 @@ client.on('user-updated', reconcileVideoTiles);
 client.on('user-removed', reconcileVideoTiles);
 client.on('peer-video-state-change', reconcileVideoTiles);
 ```
+
+For 1:M galleries with a dedicated local preview, keep self rendering separate from remote rendering:
+
+- Render the local camera in a dedicated self container after `stream.startVideo()` by attaching `client.getCurrentUserInfo().userId` there.
+- Exclude `client.getCurrentUserInfo().userId` from the remote participant gallery. Rendering self again as a remote tile creates duplicate local video.
+- Track both rendered users and in-flight `attachVideo()` promises by `userId`. Initial join reconciliation, delayed reconciliation, and SDK events can overlap; without an in-flight guard, the same remote user can be appended twice.
+- Detach with the specific returned `video-player` element when available: `stream.detachVideo(userId, element)`.
 
 ## Quality Selection Strategy
 

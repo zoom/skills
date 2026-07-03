@@ -103,6 +103,51 @@ console.table({
 });
 ```
 
+### 2B. Duplicate Self or Remote Video Tiles
+
+**Symptom**: Starting camera shows two copies of your own video, or another participant appears twice in a 1:M gallery.
+
+**Causes**:
+1. The local user is attached once for self preview and again as a remote gallery participant.
+2. Multiple reconcile paths overlap, such as initial join reconciliation, delayed `setTimeout` reconciliation, and `peer-video-state-change`; each path calls `attachVideo()` before the first call stores the rendered element.
+
+**Fix**:
+- If the UI has a dedicated local preview, attach `client.getCurrentUserInfo().userId` only in that self container.
+- Exclude `client.getCurrentUserInfo().userId` from the remote gallery filter.
+- Track in-flight `attachVideo()` promises by `userId` in addition to rendered elements, and skip or await duplicates.
+- When detaching, pass the specific returned element when available: `stream.detachVideo(userId, element)`.
+
+```javascript
+const renderedUsers = new Map();
+const renderingUsers = new Map();
+
+async function renderRemoteUserOnce(user) {
+  const selfId = client.getCurrentUserInfo().userId;
+  if (user.userId === selfId || !user.bVideoOn) return;
+  if (renderedUsers.has(user.userId)) return;
+  if (renderingUsers.has(user.userId)) return renderingUsers.get(user.userId);
+
+  const promise = (async () => {
+    const player = await stream.attachVideo(user.userId, VideoQuality.Video_360P);
+    const stillWanted = client.getAllUser().some((latestUser) =>
+      latestUser.userId === user.userId &&
+      latestUser.userId !== client.getCurrentUserInfo().userId &&
+      latestUser.bVideoOn
+    );
+    if (!stillWanted || renderedUsers.has(user.userId)) {
+      await stream.detachVideo(user.userId, player).catch(console.warn);
+      player.remove();
+      return;
+    }
+    container.appendChild(player);
+    renderedUsers.set(user.userId, player);
+  })();
+
+  renderingUsers.set(user.userId, promise);
+  return promise.finally(() => renderingUsers.delete(user.userId));
+}
+```
+
 ### 3. Other Participants' Video Not Showing on Mid-Session Join
 
 **Symptom**: Join mid-session, only your video shows, not others'
