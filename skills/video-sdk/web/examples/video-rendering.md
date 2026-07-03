@@ -21,6 +21,38 @@ VideoQuality.Video_1080P // 4 - Full HD (requires webrtc mode)
 
 ## Basic Video Rendering
 
+### DOM Surface Rule for `attachVideo()`
+
+`attachVideo()` returns a SDK-managed `video-player` custom element. Make that returned element the visible tile surface.
+
+When migrating from older `renderVideo(canvas, ...)` layouts, remove the old canvas, avatar, name label, and absolute-positioned tile overlay from the video area. Do not fix black or hidden video with `z-index`, transparent backgrounds, or pointer-event changes; that usually leaves a competing DOM layer over the SDK video.
+
+Use a normal-flow `video-player-container` grid and append only returned `video-player` elements:
+
+```css
+video-player-container {
+  width: 100%;
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 10px;
+}
+
+video-player-container:has(> :nth-child(2)) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+video-player-container:has(> :nth-child(5)) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+video-player {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  display: block;
+}
+```
+
 ### Start and Render Own Video
 
 ```javascript
@@ -113,6 +145,51 @@ async function renderExistingParticipants() {
 // Call after joining and starting your own video
 await startOwnVideo();
 await renderExistingParticipants();
+```
+
+## Participant Media Reconciliation
+
+The SDK does not automatically subscribe/render every participant for custom UIs. Treat `client.getAllUser()` as the source of truth and reconcile the DOM after join and after participant/video events. This covers both users who were already in the session and users who join or toggle video later.
+
+```javascript
+const renderedUsers = new Set();
+
+async function reconcileVideoTiles() {
+  const users = client.getAllUser();
+  const selfId = client.getCurrentUserInfo().userId;
+  const usersWithVideo = new Set(
+    users
+      .filter((user) => user.userId !== selfId && user.bVideoOn)
+      .map((user) => user.userId)
+  );
+
+  for (const userId of renderedUsers) {
+    if (!usersWithVideo.has(userId)) {
+      const detached = await stream.detachVideo(userId);
+      const elements = Array.isArray(detached) ? detached : [detached];
+      elements.filter(Boolean).forEach((element) => element.remove());
+      renderedUsers.delete(userId);
+    }
+  }
+
+  for (const userId of usersWithVideo) {
+    if (!renderedUsers.has(userId)) {
+      const player = await stream.attachVideo(userId, VideoQuality.Video_360P);
+      player.setAttribute('data-user-id', String(userId));
+      document.querySelector('video-player-container').appendChild(player);
+      renderedUsers.add(userId);
+    }
+  }
+}
+
+await reconcileVideoTiles();
+setTimeout(reconcileVideoTiles, 1000);
+setTimeout(reconcileVideoTiles, 3000);
+
+client.on('user-added', reconcileVideoTiles);
+client.on('user-updated', reconcileVideoTiles);
+client.on('user-removed', reconcileVideoTiles);
+client.on('peer-video-state-change', reconcileVideoTiles);
 ```
 
 ## Quality Selection Strategy
@@ -233,6 +310,58 @@ await stream.stopVideo();
 // Detach to clean up
 const currentUser = client.getCurrentUserInfo();
 await stream.detachVideo(currentUser.userId);
+```
+
+## React MediaStream Pattern
+
+This is the direct `MediaStream` sample pattern. It follows the official React sample's attachment model without switching to the `@zoom/videosdk-react` wrapper package.
+
+```tsx
+function MediaStreamVideoGrid({ client, stream }) {
+  const containerRef = React.useRef<HTMLElement | null>(null);
+  const [users, setUsers] = React.useState(() => client.getAllUser());
+
+  React.useEffect(() => {
+    const refresh = () => setUsers(client.getAllUser());
+    refresh();
+    client.on('user-added', refresh);
+    client.on('user-removed', refresh);
+    client.on('user-updated', refresh);
+    client.on('peer-video-state-change', refresh);
+    client.on('video-capturing-change', refresh);
+    return () => {
+      client.off('user-added', refresh);
+      client.off('user-removed', refresh);
+      client.off('user-updated', refresh);
+      client.off('peer-video-state-change', refresh);
+      client.off('video-capturing-change', refresh);
+    };
+  }, [client]);
+
+  React.useEffect(() => {
+    const container = containerRef.current;
+    if (!container || !stream) return;
+
+    users.forEach(async (user) => {
+      const selector = `video-player[data-user-id="${user.userId}"]`;
+
+      if (user.bVideoOn && !container.querySelector(selector)) {
+        const player = await stream.attachVideo(user.userId, VideoQuality.Video_360P);
+        player.setAttribute('data-user-id', String(user.userId));
+        container.appendChild(player);
+      }
+
+      if (!user.bVideoOn && container.querySelector(selector)) {
+        const detached = await stream.detachVideo(user.userId);
+        const players = Array.isArray(detached) ? detached : [detached];
+        players.filter(Boolean).forEach((player) => player.remove());
+        container.querySelectorAll(selector).forEach((player) => player.remove());
+      }
+    });
+  }, [stream, users]);
+
+  return React.createElement('video-player-container', { ref: containerRef });
+}
 ```
 
 ## Complete React Component
@@ -372,7 +501,7 @@ async function safeAttachVideo(userId, quality) {
 
 1. **Use `attachVideo()`, NOT `renderVideo()`** - `renderVideo()` is deprecated
 2. **Listen to `peer-video-state-change`** - Required for remote video
-3. **Handle mid-session join** - Manually render existing participants
+3. **Handle mid-session join** - Manually reconcile `client.getAllUser()` and `bVideoOn`
 4. **Detach before re-attaching** - When changing quality
 5. **Check device capabilities** - `getMaxRenderableVideos()`, `isSupportMultipleVideos()`
 6. **Enable WebRTC for HD** - Required for 720P/1080P

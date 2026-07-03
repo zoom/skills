@@ -263,6 +263,8 @@ client.on('caption-enable', (isEnabled) => {
 
 ## Device Events
 
+Device events only tell you the available hardware changed. Custom UIs must build the selector controls, refresh them from the MediaStream device APIs, and call the switch APIs when users pick a device.
+
 ```javascript
 // Device plugged in or removed
 client.on('device-change', () => {
@@ -280,6 +282,12 @@ client.on('device-permission-change', (payload) => {
   // state: 'granted' | 'denied' | 'prompt'
   console.log(`${name} permission: ${state}`);
 });
+
+async function switchSelectedDevices({ microphoneId, speakerId, cameraId }) {
+  if (microphoneId) await stream.switchMicrophone(microphoneId);
+  if (speakerId) await stream.switchSpeaker(speakerId);
+  if (cameraId) await stream.switchCamera(cameraId);
+}
 ```
 
 ## Network Quality Events
@@ -299,7 +307,12 @@ client.on('network-quality-change', (payload) => {
 
 ## Statistics Events
 
+Statistics events are emitted after you subscribe to them. Custom UIs should provide a stats panel and unsubscribe when the panel is hidden or the session ends.
+
 ```javascript
+await stream.subscribeAudioStatisticData({ encode: true, decode: true });
+await stream.subscribeVideoStatisticData({ encode: true, decode: true });
+
 // Video statistics
 client.on('video-statistic-data-change', (payload) => {
   const { data, type } = payload;

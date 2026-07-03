@@ -298,6 +298,17 @@ All implementations should follow this pattern:
 5. **Event Handling** - Connection, audio, video, chat events
 6. **Error Handling** - Map SDK error codes to user messages
 
+### Custom UI Responsibility
+
+The Video SDK Web package provides media/session APIs, not a complete meeting toolbar. In custom or PureJS samples, implement these controls explicitly:
+
+- Device selectors: populate `stream.getMicList()`, `stream.getSpeakerList()`, and `stream.getCameraList()` after permissions are available; refresh on `device-change` and `device-permission-change`; switch with `switchMicrophone`, `switchSpeaker`, and `switchCamera`.
+- Camera effects: check `stream.isSupportVirtualBackground()` before offering blur; apply blur with `startVideo({ virtualBackground: { imageUrl: 'blur' } })` or `stream.updateVirtualBackgroundImage('blur')`.
+- Statistics: subscribe with `subscribeAudioStatisticData`, `subscribeVideoStatisticData`, and `subscribeShareStatisticData`; render `audio-statistic-data-change`, `video-statistic-data-change`, and `share-statistic-data-change` payloads or poll `get*StatisticData()`.
+- Participant media reconciliation: after join and after `user-added`, `user-updated`, `user-removed`, and `peer-video-state-change`, call `client.getAllUser()` and render/detach users based on `bVideoOn`. Do not rely on events alone for users who were already in the session.
+- Screen share reconciliation: after join and on `active-share-change`, `peer-share-state-change`, `share-content-change`, and `passively-stop-share`, check `stream.getActiveShareUserId()` / `stream.getShareUserList()` and attach or detach share views yourself.
+- Recording/captions: wire toolbar buttons to `client.getRecordingClient()` and `client.getLiveTranscriptionClient()`; handle host/account privilege failures and update UI from `recording-change`, `caption-message`, `caption-enable`, and `caption-host-disable`.
+
 ## JWT Token Requirements
 
 Generate JWT on your server using HMAC SHA256. Never expose SDK secret in client code.
@@ -418,6 +429,9 @@ enum VideoQuality {
 | ----------------------------------- | ----------------------------------------------------------------------------- |
 | Audio doesn't start                 | Requires user gesture (click/tap)                                             |
 | Video not rendering                 | Use `video-player-container` custom element and append `attachVideo()` result |
+| Video briefly appears then goes black/hidden | Remove old canvas/avatar/name overlays; the returned `video-player` must be the visible tile |
+| Late join misses remote video/share | Reconcile `getAllUser()`, `getShareUserList()`, and active share state after join and media events |
+| Device/blur/stats controls missing  | Build toolbar controls manually with MediaStream device, virtual background, and statistic APIs |
 | JWT invalid                         | Verify `tpc` matches session name                                             |
 | SharedArrayBuffer error             | **MUST** add COOP/COEP headers in vite.config.ts                              |
 | `OPERATION_TIMEOUT` on startVideo   | Check camera permissions and ensure COOP/COEP headers are set                 |

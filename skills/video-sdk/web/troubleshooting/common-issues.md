@@ -7,9 +7,12 @@ When something isn't working, run through this checklist:
 1. **SDK Lifecycle**: Did you follow `createClient() → init() → join() → getMediaStream()`?
 2. **Stream Timing**: Did you call `getMediaStream()` AFTER `join()` completed?
 3. **Event Listeners**: Are you listening for `peer-video-state-change`?
-4. **attachVideo vs renderVideo**: Are you using `attachVideo()` (not deprecated `renderVideo()`)?
-5. **Browser Permissions**: Did the user grant camera/microphone access?
-6. **Browser Compatibility**: Is the browser supported (Chrome 80+, Firefox 75+, Safari 14+)?
+4. **Initial State**: After joining, did you reconcile `client.getAllUser()`, active video, and active screen share state?
+5. **attachVideo vs renderVideo**: Are you using `attachVideo()` (not deprecated `renderVideo()`)?
+6. **DOM Surface**: Is the returned `video-player` blocked by an old canvas/avatar/name overlay?
+7. **Custom Controls**: Did you manually implement device selectors, blur, stats, recording, captions, and share controls?
+8. **Browser Permissions**: Did the user grant camera/microphone access?
+9. **Browser Compatibility**: Is the browser supported (Chrome 80+, Firefox 75+, Safari 14+)?
 
 ---
 
@@ -40,6 +43,7 @@ const stream = client.getMediaStream();  // Works!
 1. Not listening to `peer-video-state-change` event
 2. Using deprecated `renderVideo()` instead of `attachVideo()`
 3. Not appending returned element to DOM
+4. A legacy canvas/avatar/name overlay is covering the SDK's `video-player`
 
 **Solution**:
 ```javascript
@@ -57,6 +61,45 @@ client.on('peer-video-state-change', async (payload) => {
   } else {
     await stream.detachVideo(payload.userId);
   }
+});
+```
+
+### 2A. Video Appears Briefly, Then Is Blocked by Name/Avatar Layer
+
+**Symptom**: You can briefly see remote or self video after starting/showing video, then it becomes black or only a few pixels remain visible. Browser inspection shows elements such as `.avatar`, `.avatar-list`, `.center-name`, `.video-canvas`, or old tile wrappers over/around the returned `video-player`.
+
+**Cause**: A layout migrated from `renderVideo(canvas, ...)` still renders the old placeholder/name layer. With `attachVideo()`, the SDK returns a `video-player` custom element that should be the visible tile itself.
+
+**Fix**:
+- Render a normal-flow `video-player-container`.
+- Append only SDK-returned `video-player` children for video tiles.
+- Remove old canvas/avatar/name overlays from the video path.
+- Do not use `z-index`, transparency, or `pointer-events` as the fix; the competing layer should not exist.
+
+```css
+video-player-container {
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 10px;
+}
+
+video-player-container:has(> :nth-child(2)) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+video-player {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  display: block;
+}
+```
+
+**DOM check**:
+```javascript
+console.table({
+  players: document.querySelectorAll('video-player').length,
+  legacyOverlays: document.querySelectorAll('.avatar,.avatar-list,.center-name,.video-canvas,.self-video').length
 });
 ```
 
@@ -82,6 +125,48 @@ async function renderExistingParticipants() {
     }
   }
 }
+```
+
+### 3A. Custom Toolbar Controls Missing or Do Nothing
+
+**Symptom**: The app joins a session, but users cannot select microphone/camera/speaker, toggle blur, view audio/video statistics, start/stop recording, enable captions, or share screen.
+
+**Cause**: Video SDK Web is a custom UI SDK. It does not provide a full toolbar unless you use a prebuilt wrapper/toolkit. PureJS/React/Vue/Angular apps must wire each control to the relevant client or `MediaStream` API.
+
+**Fix**:
+- Device selectors: populate from `stream.getMicList()`, `stream.getSpeakerList()`, and `stream.getCameraList()`; refresh on `device-change` and `device-permission-change`.
+- Device switching: call `stream.switchMicrophone(deviceId)`, `stream.switchSpeaker(deviceId)`, and `stream.switchCamera(deviceId)`.
+- Blur: check `stream.isSupportVirtualBackground()` and call `stream.updateVirtualBackgroundImage('blur')`, or pass `{ virtualBackground: { imageUrl: 'blur' } }` to `startVideo`.
+- Statistics: call `subscribeAudioStatisticData`, `subscribeVideoStatisticData`, and optionally `subscribeShareStatisticData`; render the corresponding `*-statistic-data-change` events.
+- Recording/captions: use `client.getRecordingClient()` and `client.getLiveTranscriptionClient()` and handle host/account privilege failures.
+
+### 3B. Screen Share Not Shown When Joining Late
+
+**Symptom**: Participant joins after another user has already started sharing, but no share view appears.
+
+**Cause**: The app only listens for future `active-share-change` events and never checks current share state.
+
+**Fix**:
+```javascript
+async function reconcileShare() {
+  const selfId = client.getCurrentUserInfo().userId;
+  const userId =
+    stream.getActiveShareUserId() ||
+    stream.getShareUserList().find((user) => user.userId !== selfId)?.userId ||
+    client.getAllUser().find((user) => user.userId !== selfId && user.sharerOn)?.userId ||
+    0;
+
+  if (userId) {
+    const element = await stream.attachShareView(userId);
+    document.getElementById('share-container').replaceChildren(element);
+  }
+}
+
+await reconcileShare();
+client.on('active-share-change', reconcileShare);
+client.on('peer-share-state-change', reconcileShare);
+client.on('share-content-change', reconcileShare);
+client.on('user-updated', reconcileShare);
 ```
 
 ### 4. "ZoomVideo is not defined" or "WebVideoSDK is not defined"

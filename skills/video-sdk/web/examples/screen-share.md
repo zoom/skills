@@ -94,6 +94,48 @@ client.on('active-share-change', async (payload) => {
 });
 ```
 
+### Receiving Already-Active Shares
+
+If you join after a participant has already started sharing, you may not receive a new `active-share-change` event. Reconcile the current share state after join and after share-related events.
+
+```javascript
+let renderedShareUserId = 0;
+
+async function reconcileShareView() {
+  const selfId = client.getCurrentUserInfo().userId;
+  const nextShareUserId =
+    stream.getActiveShareUserId() ||
+    stream.getShareUserList().find((user) => user.userId !== selfId)?.userId ||
+    client.getAllUser().find((user) => user.userId !== selfId && user.sharerOn)?.userId ||
+    0;
+
+  const container = document.getElementById('share-container');
+  if (nextShareUserId === renderedShareUserId) return;
+
+  if (nextShareUserId) {
+    if (renderedShareUserId) await stream.detachShareView(renderedShareUserId);
+    const element = await stream.attachShareView(nextShareUserId);
+    container.replaceChildren(element);
+    container.hidden = false;
+    renderedShareUserId = nextShareUserId;
+  } else {
+    if (renderedShareUserId) await stream.detachShareView(renderedShareUserId);
+    container.replaceChildren();
+    container.hidden = true;
+    renderedShareUserId = 0;
+  }
+}
+
+await reconcileShareView();
+setTimeout(reconcileShareView, 1000);
+
+client.on('active-share-change', reconcileShareView);
+client.on('peer-share-state-change', reconcileShareView);
+client.on('share-content-change', reconcileShareView);
+client.on('passively-stop-share', reconcileShareView);
+client.on('user-updated', reconcileShareView);
+```
+
 ## Complete Example
 
 ```javascript
@@ -110,6 +152,8 @@ class ScreenShareManager {
   init() {
     this.stream = this.client.getMediaStream();
     this.setupEventListeners();
+    this.reconcileCurrentShare();
+    setTimeout(() => this.reconcileCurrentShare(), 1000);
   }
 
   setupEventListeners() {
@@ -128,8 +172,14 @@ class ScreenShareManager {
     });
 
     // When share content changes (e.g., user switches windows)
-    this.client.on('share-content-change', (payload) => {
+    this.client.on('share-content-change', async (payload) => {
       console.log('Share content changed for user:', payload.userId);
+      await this.reconcileCurrentShare();
+    });
+
+    this.client.on('peer-share-state-change', async (payload) => {
+      console.log('Peer share state changed:', payload.action, payload.userId);
+      await this.reconcileCurrentShare();
     });
 
     // When share dimension changes
@@ -139,9 +189,10 @@ class ScreenShareManager {
     });
 
     // When you're forced to stop sharing
-    this.client.on('passively-stop-share', (payload) => {
+    this.client.on('passively-stop-share', async (payload) => {
       console.log('Forced to stop sharing. Reason:', payload);
       this.isSharing = false;
+      await this.reconcileCurrentShare();
     });
 
     // Share privilege changes
@@ -194,13 +245,40 @@ class ScreenShareManager {
     const container = document.getElementById('share-view-container');
     
     try {
+      if (this.activeShareUserId === userId && container.children.length > 0) {
+        return;
+      }
+
+      if (this.activeShareUserId && this.activeShareUserId !== userId) {
+        await this.stream.detachShareView(this.activeShareUserId);
+      }
+
       // Use attachShareView for VideoPlayer-based rendering (SDK 2.2.10+)
       const element = await this.stream.attachShareView(userId);
       container.innerHTML = '';
       container.appendChild(element);
       container.style.display = 'block';
+      this.activeShareUserId = userId;
     } catch (error) {
       console.error('Failed to render share view:', error);
+    }
+  }
+
+  async reconcileCurrentShare() {
+    const selfId = this.client.getCurrentUserInfo().userId;
+    const userId =
+      this.stream.getActiveShareUserId() ||
+      this.stream.getShareUserList().find((user) => user.userId !== selfId)?.userId ||
+      this.client.getAllUser().find((user) => user.userId !== selfId && user.sharerOn)?.userId ||
+      0;
+
+    if (userId) {
+      if (this.activeShareUserId === userId) {
+        return;
+      }
+      await this.renderReceivedShare(userId);
+    } else {
+      await this.stopRenderingShare();
     }
   }
 
