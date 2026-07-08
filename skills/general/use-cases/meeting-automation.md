@@ -16,7 +16,7 @@ If your primary goal is AI-agent tool invocation (for example, natural-language 
 
 ## Prerequisites
 
-- Server-to-Server OAuth or OAuth app
+- Server-to-Server OAuth or General App with appropriate user/admin scopes
 - `meeting:write` scope
 
 ## Quick Start

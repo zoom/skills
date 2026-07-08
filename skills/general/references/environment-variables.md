@@ -6,10 +6,10 @@ Use this file as a normalization map. Product-specific details are maintained in
 
 | Variable | Typical products | Where to find |
 | --- | --- | --- |
-| `ZOOM_CLIENT_ID` | OAuth, REST API, Team Chat, WebSockets, RTMS (OAuth mode), Contact Center APIs | Zoom Marketplace -> your app -> App Credentials |
-| `ZOOM_CLIENT_SECRET` | OAuth, REST API, Team Chat, WebSockets, RTMS (OAuth mode), Contact Center APIs | Zoom Marketplace -> your app -> App Credentials |
+| `ZOOM_CLIENT_ID` | General App OAuth/client credentials, S2S OAuth, REST API, Team Chat, WebSockets, RTMS (OAuth mode), Contact Center APIs | Zoom Marketplace -> your app -> App Credentials |
+| `ZOOM_CLIENT_SECRET` | General App OAuth/client credentials, S2S OAuth, REST API, Team Chat, WebSockets, RTMS (OAuth mode), Contact Center APIs | Zoom Marketplace -> your app -> App Credentials |
 | `ZOOM_ACCOUNT_ID` | Server-to-Server OAuth flows | Zoom Marketplace -> Server-to-Server OAuth app credentials |
-| `ZOOM_REDIRECT_URI` | User-level OAuth apps | Zoom Marketplace -> OAuth redirect/allow list |
+| `ZOOM_REDIRECT_URI` | General App authorization-code flows | Zoom Marketplace -> General App -> OAuth redirect/allow list |
 | `ZOOM_WEBHOOK_SECRET` / `WEBHOOK_SECRET_TOKEN` | Webhooks and event validation | Zoom Marketplace -> Event Subscriptions -> Secret Token |
 | `ZOOM_SDK_KEY` / `ZOOM_SDK_SECRET` | Meeting SDK or SDK-based products | Zoom Marketplace -> SDK app credentials |
 | `ZOOM_VIDEO_SDK_KEY` / `ZOOM_VIDEO_SDK_SECRET` | Video SDK and UI Toolkit | Zoom Marketplace -> Video SDK app credentials |

@@ -163,16 +163,16 @@ async function apiCallWithRetry(url, options) {
 }
 ```
 
-**Cause:** Using `userId` with User OAuth app (should use `me`).
+**Cause:** Using `userId` with a General App user-level scoped token (should use `me`).
 
 **Solution:**
 ```javascript
-// WRONG (User OAuth app)
+// WRONG (General App user-level scoped token)
 fetch('https://api.zoom.us/v2/users/user@example.com', {
   headers: { 'Authorization': `Bearer ${userToken}` }
 });
 
-// CORRECT (User OAuth app)
+// CORRECT (General App user-level scoped token)
 fetch('https://api.zoom.us/v2/users/me', {
   headers: { 'Authorization': `Bearer ${userToken}` }
 });

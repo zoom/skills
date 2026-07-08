@@ -241,6 +241,23 @@ const region = hostname.split('-')[1].replace(/[0-9]/g, '');  // sjc
    - `webinar.rtms_stopped` (if using webinars)
 7. Click **Done** then **Save**
 
+Manifest API caveat: live Marketplace tests on 2026-07-08 showed current
+`POST /marketplace/apps/manifest/validate` rejecting meeting/webinar RTMS event names
+such as `meeting.rtms_started`, `meeting.rtms_stopped`, `meeting.rtms_interrupted`,
+`webinar.rtms_started`, `webinar.rtms_stopped`, `webinar.rtms_interrupted`,
+`rtms.concurrency_limited`, and `rtms.concurrency_near_limit`, even though existing
+saved RTMS apps can export manifests containing those event names. `POST /marketplace/apps`
+also rejected those event names in a create request, but `PUT /marketplace/apps/{appId}/manifest`
+against an existing draft General App returned HTTP `200` and `GET /manifest` showed the
+RTMS event names persisted. This appears to be manifest-validator/create API drift, not a
+runtime event-name change. Prefer the Marketplace UI or event-subscription API for RTMS
+event setup. If using manifest automation, create a valid baseline app first, then update
+and immediately export the manifest to confirm persistence.
+
+The same validation probe accepted Contact Center Voice RTMS event names:
+`contact_center.voice_rtms_started`, `contact_center.voice_rtms_stopped`, and
+`contact_center.voice_rtms_interrupted`.
+
 ### In Zoom Marketplace (Video SDK App)
 
 1. Go to your Video SDK app settings

@@ -241,6 +241,7 @@ Combine types with bitwise OR:
 | **Audio params must match the support matrix** | Do not mix arbitrary `content_type`, `codec`, `sample_rate`, `channel`, and `send_rate`. The media server rejects unsupported combinations |
 | **Single participant video only** | `VIDEO_SINGLE_INDIVIDUAL_STREAM` supports one participant at a time. A new `VIDEO_SUBSCRIPTION_REQ` overrides the previous selection |
 | **Graceful close is explicit now** | Use `STREAM_CLOSE_REQ` / `STREAM_CLOSE_RESP` when your backend wants to terminate the stream cleanly |
+| **RTMS manifest validation can drift** | Create-time validation can reject RTMS event names that `PUT /manifest` persists on an existing draft app. Confirm with `GET /manifest` after updates |
 
 ## Environment Variables
 

@@ -13,13 +13,13 @@ Endpoint split to remember:
 | Backend automation on **your own account** | S2S OAuth | `account_credentials` |
 | SaaS app for **other Zoom users** | User OAuth | `authorization_code` |
 | Device without browser (TV, kiosk, IoT) | Device Flow | `urn:ietf:params:oauth:grant-type:device_code` |
-| **Team Chat bot only** | Chatbot | `client_credentials` |
+| **App-owned token: Team Chat bot or selected Marketplace app APIs** | Client Authorization | `client_credentials` |
 
 ## Two-Legged vs Three-Legged
 
 | Type | User Involved? | Zoom Flows |
 |------|----------------|------------|
-| **Two-legged** | No (app acts on its own) | S2S OAuth, Chatbot |
+| **Two-legged** | No (app acts on its own) | S2S OAuth, Client Authorization |
 | **Three-legged** | Yes (user authorizes app) | User OAuth, Device Flow |
 
 ---
@@ -418,12 +418,13 @@ const pollForToken = async (device_code, interval) => {
 
 ---
 
-## 4. Client Authorization (Chatbot)
+## 4. Client Authorization (App-Owned Access Tokens)
 
 **When to use:**
-- Building a Team Chat bot ONLY
-- App needs `imchat:bot` scope
-- Simpler than S2S OAuth
+- Building a Team Chat bot that needs `imchat:bot`
+- Calling selected Marketplace app-management APIs that require an app-owned access token
+- Managing Marketplace event subscriptions with scopes such as `marketplace:write:event_subscription`, `marketplace:read:list_event_subscriptions`, `marketplace:update:event_subscription`, or `marketplace:delete:event_subscription`
+- Creating app-owned Marketplace WebSocket connections with `marketplace:write:websocket_connection`
 
 **Grant type:** `client_credentials`
 
@@ -435,11 +436,15 @@ const pollForToken = async (device_code, interval) => {
 - Client ID
 - Client Secret
 
+**Important:** This is not Server-to-Server OAuth. Do not include `account_id`.
+S2S OAuth uses `grant_type=account_credentials`; app-owned client authorization uses
+`grant_type=client_credentials`.
+
 ### Flow Diagram
 
 ```
 ┌──────────────┐                                    ┌──────────────┐
-│ Chatbot App  │                                    │  Zoom OAuth  │
+│ Client App   │                                    │  Zoom OAuth  │
 │  (Backend)   │                                    │    Server    │
 └──────┬───────┘                                    └──────┬───────┘
        │                                                   │
@@ -451,7 +456,7 @@ const pollForToken = async (device_code, interval) => {
        │  { access_token, expires_in, scope }              │
        │<──────────────────────────────────────────────────│
        │                                                   │
-       │  Chatbot API Requests with Bearer token           │
+       │  App-owned API requests with Bearer token         │
        │  (valid for 1 hour)                               │
        │                                                   │
 ```
@@ -459,7 +464,7 @@ const pollForToken = async (device_code, interval) => {
 ### Implementation
 
 ```javascript
-const getChatbotToken = async () => {
+const getAppOwnedToken = async () => {
   const response = await axios.post(
     'https://zoom.us/oauth/token',
     qs.stringify({
@@ -482,15 +487,15 @@ const getChatbotToken = async () => {
 ### Key Points
 
 ✅ **Simplest flow:** Just request token with credentials
-✅ **Chatbot-specific:** Limited to Team Chat bot operations
+✅ **App-owned:** Used for Team Chat bot and selected Marketplace app APIs
 ⚠️ **No refresh token:** Request new token when expired
-⚠️ **Scope limited:** Primarily `imchat:bot` scope
+⚠️ **Scope limited:** Only scopes supported for app-owned access tokens, such as `imchat:bot` and selected `marketplace:*` scopes
 
 ---
 
 ## Comparison Table
 
-| Feature | S2S OAuth | User OAuth | Device Flow | Chatbot |
+| Feature | S2S OAuth | User OAuth | Device Flow | Client Authorization |
 |---------|-----------|------------|-------------|---------|
 | **Grant Type** | `account_credentials` | `authorization_code` | `device_code` | `client_credentials` |
 | **User Interaction** | No | Yes (browser) | Yes (separate device) | No |
@@ -499,9 +504,9 @@ const getChatbotToken = async () => {
 | **Redirect URI** | ❌ Not needed | ✅ Required | ❌ Not needed | ❌ Not needed |
 | **PKCE Support** | ❌ N/A | ✅ Optional | ❌ N/A | ❌ N/A |
 | **State Parameter** | ❌ N/A | ✅ Recommended | ❌ N/A | ❌ N/A |
-| **Account Access** | Account-wide | Per-user | Per-user | Account-wide |
+| **Account Access** | Account-wide | Per-user | Per-user | App-owned |
 | **Token Storage** | Redis (ephemeral) | Database (persistent) | Database (persistent) | Redis (ephemeral) |
-| **Use Case** | Backend automation | SaaS apps | TV/kiosk apps | Chat bots |
+| **Use Case** | Backend automation | SaaS apps | TV/kiosk apps | Chat bots and selected Marketplace app APIs |
 
 ---
 

@@ -8,28 +8,31 @@ Scopes are permissions requested during OAuth authorization. Request only the sc
 
 ## IMPORTANT: Scope Types
 
-**Different OAuth types have different scopes available:**
+**Different current app types and General App scope levels have different scopes available:**
 
-| OAuth Type | Scope Suffix | Access Level | Example |
-|------------|--------------|--------------|---------|
-| **User OAuth** | (none) | Current user's data only | `meeting:read` |
-| **Admin OAuth** | `:admin` | All users in account | `meeting:read:admin` |
-| **Server-to-Server (S2S)** | `:admin` | All users in account (no user consent) | `meeting:read:admin` |
+| App / scope mode | Scope Suffix | Access Level | Example |
+|------------------|--------------|--------------|---------|
+| **General App, user-level scoped** | Usually no `:admin` suffix | Current user's data only | `meeting:read` |
+| **General App, admin/account-level scoped** | Commonly `:admin` | Account resources granted by admin authorization | `meeting:read:admin` |
+| **Server-to-Server OAuth** | Commonly `:admin` | Own account automation, no user consent | `meeting:read:admin` |
+| **General App, app-owned client credentials** | Endpoint-specific app scopes | App-owned capabilities, not user-owned data | `marketplace:write:event_subscription` |
 
 ### Key Differences
 
-- **User scopes** (`meeting:read`): Access only the authenticated user's data
-- **Admin scopes** (`meeting:read:admin`): Access data for ALL users in the account
-- **S2S OAuth**: Uses admin-level scopes but doesn't require user login - intended for backend integrations
+- **User-level General App scopes** (`meeting:read`): Access only the authenticated user's data.
+- **Admin/account-level General App scopes** (`meeting:read:admin`): Access account resources granted by admin authorization.
+- **S2S OAuth**: Uses account-level scopes without user login, intended for backend integrations on your own account.
+- **App-owned General App scopes**: Use `grant_type=client_credentials` with the General App Client ID and Client Secret when the endpoint requires it.
 
 ### Choosing the Right Scope Type
 
 | Use Case | OAuth Type | Scope Example |
 |----------|------------|---------------|
-| User manages their own meetings | User OAuth | `meeting:write` |
-| Admin dashboard for all users | Admin OAuth | `meeting:read:admin` |
+| User manages their own meetings | General App, user-level scoped | `meeting:write` |
+| Admin dashboard for all users | General App, admin/account-level scoped | `meeting:read:admin` |
 | Backend automation (no user login) | Server-to-Server | `meeting:write:admin` |
 | Bot that creates meetings for users | Server-to-Server | `meeting:write:admin` |
+| App configures its own Marketplace event subscriptions | General App, app-owned client credentials | `marketplace:write:event_subscription` |
 
 ## Common Scopes
 

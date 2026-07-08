@@ -12,6 +12,7 @@ All Zoom REST API requests require OAuth 2.0 authentication. This guide covers a
 | **Authorization Code** | User-facing web apps | User consent flow | 1 hour (refresh: 15 years) |
 | **Authorization Code + PKCE** | SPAs, mobile apps | User consent flow | 1 hour (refresh: 15 years) |
 | **Device Code** | TV/IoT devices, CLI tools | User enters code on separate device | 1 hour (refresh: 15 years) |
+| **Client Credentials** | App-owned tokens for Team Chat bots and selected Marketplace app APIs | None | 1 hour |
 | ~~**JWT**~~ | ~~Legacy~~ | ~~None~~ | **DEPRECATED** — migrate to S2S OAuth |
 
 ## Server-to-Server OAuth (Recommended for Backend)
@@ -175,6 +176,30 @@ class ZoomS2SAuth:
         return response.json() if response.content else None
 ```
 
+## Client Credentials for App-Owned Marketplace Scopes
+
+Some Marketplace APIs require an app-owned access token from
+`grant_type=client_credentials`. Do not use the Server-to-Server
+`account_credentials` grant for these scopes.
+
+Common app-owned Marketplace scopes include:
+
+| Scope | Typical use |
+|-------|-------------|
+| `marketplace:write:event_subscription` | Create app event subscriptions |
+| `marketplace:read:list_event_subscriptions` | List app event subscriptions |
+| `marketplace:update:event_subscription` | Update or subscribe event subscriptions |
+| `marketplace:delete:event_subscription` | Delete or unsubscribe event subscriptions |
+| `marketplace:write:websocket_connection` | Create app-owned WebSocket connections |
+
+Token request:
+
+```bash
+curl -X POST "https://zoom.us/oauth/token?grant_type=client_credentials" \
+  -H "Authorization: Basic $(printf '%s:%s' "$ZOOM_CLIENT_ID" "$ZOOM_CLIENT_SECRET" | base64)" \
+  -H "Content-Type: application/x-www-form-urlencoded"
+```
+
 ## User OAuth (Authorization Code)
 
 For apps that act on behalf of individual Zoom users.
@@ -211,13 +236,14 @@ curl -X POST "https://zoom.us/oauth/token" \
 
 ### Important: `me` Keyword
 
-User OAuth apps **must** use `me` instead of `userId` in API paths:
+General App user-level scoped authorization-code tokens **must** use `me` instead of
+another `userId` in current-user API paths:
 
 ```bash
-# CORRECT for user OAuth
+# CORRECT for General App user-level scoped token
 GET /v2/users/me/meetings
 
-# WRONG for user OAuth — will return "Invalid access token"
+# WRONG for General App user-level scoped token — will return "Invalid access token"
 GET /v2/users/abc123/meetings
 ```
 

@@ -17,7 +17,7 @@ This is a checklist of the most common forum questions for **Zoom REST API** int
 ## “Invalid access token” / “does not contain scopes”
 
 Common causes to cover:
-- wrong OAuth app type for the use case
+- wrong app type or General App scope level for the use case
 - token from the wrong account/app
 - scopes not granted or not activated
 - using `me` incorrectly (User OAuth vs S2S OAuth rules)
@@ -53,4 +53,3 @@ Common asks:
 Answer pattern:
 - use webhooks to trigger downloads
 - follow redirects and keep auth headers
-

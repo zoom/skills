@@ -121,7 +121,7 @@ scope=meeting:read user:write:admin meeting:write:invite_links:admin
 
 ## Requesting Scopes
 
-### During App Creation (S2S OAuth, Chatbot)
+### During App Creation (S2S OAuth or General App client credentials)
 
 Scopes are configured in Zoom Marketplace:
 1. Go to your app in https://marketplace.zoom.us
@@ -178,8 +178,8 @@ await axios.post('https://api.zoom.us/v2/users/me/meetings', {...}, {
 ```
 
 **Solution:**
-1. Add required scope in Zoom Marketplace (S2S/Chatbot)
-2. OR request scope in authorization URL (User/Device)
+1. Add required scope in Zoom Marketplace (S2S or General App app-owned/client-credentials scopes)
+2. OR request scope in authorization URL (General App authorization-code or Device flow)
 3. Re-authorize user to grant new scopes
 
 ## Checking Token Scopes
@@ -191,7 +191,7 @@ await axios.post('https://api.zoom.us/v2/users/me/meetings', {...}, {
 const { access_token, scope } = tokenResponse.data;
 console.log('Scopes:', scope); // "meeting:read user:read recording:write"
 
-// User OAuth: scopes returned during token exchange
+// General App authorization-code flow: scopes returned during token exchange
 const { access_token, scope } = tokenResponse.data;
 console.log('Granted scopes:', scope.split(' ')); // ['meeting:read', 'user:read', ...]
 ```

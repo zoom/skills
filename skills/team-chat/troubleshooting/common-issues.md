@@ -333,6 +333,17 @@ async function retryWithBackoff(fn, maxRetries = 3) {
 3. Configure Home URL and Domain Allow List
 4. Save changes
 
+### "development_message_url is required when team_chat_subscription is enabled"
+
+**Cause**: The General App manifest enables Team Chat subscription but omits or blanks
+`features.team_chat_subscription.slash_command.development_message_url`.
+
+**Solution**:
+1. Add a development slash command message URL that points to your chatbot/webhook handler.
+2. Keep `production_message_url` blank only for development-only manifests.
+3. Use `features.products: ["ZOOM_CHAT"]` for Team Chat/chatbot manifests.
+4. Use object entries for `features.domain_allow_list`, for example `{ "domain": "example.com" }`.
+
 ### "Users can't install the app"
 
 **Cause**: App not in Local Test or not published

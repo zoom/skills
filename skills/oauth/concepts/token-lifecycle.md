@@ -13,7 +13,7 @@ Understanding how Zoom OAuth tokens are created, expire, refresh, and revoke is 
 ### Refresh Token
 - **Purpose:** Obtain new access tokens without user re-authorization
 - **Lifetime:** Varies by flow/account/app configuration; ~90 days is common for some user-based flows (treat as changeable behavior)
-- **Availability:** S2S OAuth and Chatbot do NOT have refresh tokens
+- **Availability:** S2S OAuth and Client Authorization (`client_credentials`) do NOT have refresh tokens
 - **Rotation:** Each refresh returns a NEW refresh token (old one becomes invalid)
 
 ### Authorization Code
@@ -31,11 +31,11 @@ Understanding how Zoom OAuth tokens are created, expire, refresh, and revoke is 
 | **S2S OAuth** | 1 hour | None | Request new token before expiration |
 | **User OAuth** | 1 hour | ~90 days (commonly) | Use refresh token to get new access token |
 | **Device Flow** | 1 hour | ~90 days (commonly) | Use refresh token to get new access token |
-| **Chatbot** | 1 hour | None | Request new token before expiration |
+| **Client Authorization (`client_credentials`)** | 1 hour | None | Request new token before expiration |
 
 ---
 
-## S2S OAuth & Chatbot Token Lifecycle
+## S2S OAuth & Client Authorization Token Lifecycle
 
 ### Timeline
 

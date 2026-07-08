@@ -29,7 +29,8 @@ User Browser → Your SaaS App → Zoom OAuth → Zoom APIs
 ### 1. OAuth Setup (oauth)
 
 **Configure app in Zoom Marketplace:**
-- App Type: OAuth
+- App Type: General App
+- Scope level: user-level scoped, unless the SaaS requires an admin install for account-wide resources
 - Redirect URL: `https://yourapp.com/oauth/callback`
 - Required scopes: `meeting:write`, `meeting:read`, `user:read`
 

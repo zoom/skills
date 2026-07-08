@@ -1,27 +1,64 @@
 # App Types
 
-Choose the right Zoom app type for your integration.
+Choose the right current Zoom Marketplace app type for your integration.
 
 ## Overview
 
-Zoom Marketplace has 3 app types:
+Zoom Marketplace currently has 3 primary app types:
 
 | App Type | Use Case |
 |----------|----------|
-| **General App** | Flexible - configure surfaces, embeds, OAuth, webhooks |
-| **Server-to-Server OAuth** | Backend automation, no user authorization |
-| **Webhook Only** | Receive events only, no API access |
+| **General App** | User-installed or admin-installed app with OAuth, embeds, surfaces, webhooks, Zoom Apps, chatbot, or app-owned client credentials |
+| **Server-to-Server OAuth** | Internal backend automation against your own account without user authorization |
+| **Webhook-only App** | Receive events only, with no OAuth API access |
+
+Legacy app types such as OAuth, Chatbot, and Zoom Apps are now represented inside the
+**General App** build flow. When older docs or forum answers say "OAuth app", map that
+to **General App with OAuth enabled**.
 
 ## General App
 
-The modular app type. Pick what you need:
+The modular app type. Use it when the app acts on behalf of a user or account,
+needs install/authorization, uses Zoom client surfaces, or combines multiple features.
 
-### OAuth Type (choose one)
+### Scope Level
 
-| Type | Scopes | Authorization |
-|------|--------|---------------|
-| **Admin** | Admin scopes (`*:admin`) | Entire account OR specific users |
-| **User** | User scopes | Only themselves (self-service) |
+General Apps can be configured with either user-level or admin/account-level scopes:
+
+| General App scope level | Scopes | Token context | Typical use |
+|-------------------------|--------|---------------|-------------|
+| **User-level scoped** | User scopes, usually no `:admin` suffix | Acts as the installing user | Self-service SaaS, user meeting/calendar/chat integrations |
+| **Admin/account-level scoped** | Admin scopes, commonly `*:admin` granular scopes | Acts with account-level admin authorization | Enterprise installs, account dashboards, managing users across the account |
+
+Implementation rules:
+- User-level General App tokens usually target the current user and commonly use `me` in user paths.
+- Admin/account-level General App tokens can access account resources allowed by the granted admin scopes.
+- Scope changes require reauthorization for existing installations before tokens include the new scopes.
+- Some app-owned operations, such as selected Marketplace event-subscription and WebSocket scopes, use `grant_type=client_credentials` from a General App rather than user authorization.
+
+Marketplace API manifest values:
+- User-level General App manifests use `oauth_information.usage: "USER_OPERATION"`.
+- Admin/account-level General App manifests use `oauth_information.usage: "ADMIN_MANAGEMENT"`.
+- `oauth_information.scopes` must match the usage mode; user mode rejects admin scopes and admin mode rejects user scopes.
+- App-owned Marketplace scopes are not placed in `oauth_information.scopes`; use General App `client_credentials` when the endpoint requires app-owned access.
+- For exact create/get/delete response shapes and live quirks, see [Marketplace App Management](../../rest-api/references/marketplace-apps.md).
+- For observed manifest archetypes across Meeting SDK, RTMS, ZCC/Phone, Team Chat, Admin OAuth, Chatbot, webhook-heavy, and MCP connector apps, see [Existing App Manifest Archetypes](../../rest-api/references/marketplace-apps.md#existing-app-manifest-archetypes-observed).
+- Manifest export is not universal: draft General apps with granular scopes export cleanly, but S2S/private OAuth-style and older/non-granular apps can fail export. See [Export caveats](../../rest-api/references/marketplace-apps.md#manifest-export-caveats).
+
+### App-Owned Client Credentials
+
+When an endpoint requires app-owned scopes, use the **Client ID** and **Client Secret**
+from the General App's **App Credentials** page to request a `client_credentials` token.
+
+```bash
+curl -X POST "https://zoom.us/oauth/token?grant_type=client_credentials" \
+  -H "Authorization: Basic $(printf '%s:%s' "$ZOOM_CLIENT_ID" "$ZOOM_CLIENT_SECRET" | base64)" \
+  -H "Content-Type: application/x-www-form-urlencoded"
+```
+
+Use this token only for scopes/endpoints that explicitly require app-owned access,
+such as selected Marketplace event-subscription and WebSocket operations. Do not add
+`account_id`; that belongs to Server-to-Server OAuth.
 
 ### Surfaces (product contexts)
 
@@ -67,6 +104,9 @@ Define which API methods the app can call. Scopes are:
 
 General App can also include:
 - **Zoom Apps** - Apps that run inside Zoom client
+- **Chatbot** - Team Chat bot capabilities
+- **Webhooks** - Event subscriptions alongside OAuth/API access
+- **WebSockets** - App-owned event streaming where supported
 
 ## Server-to-Server OAuth
 
@@ -76,8 +116,10 @@ Backend automation without user authorization.
 - Access your account's data
 - Can include webhooks and zoom-websockets
 - Best for: automation, reporting, integrations
+- Marketplace API creation for S2S apps is expected around 2026-07-12; before that
+  rollout, create S2S apps through Marketplace UI and use API testing only for General Apps.
 
-## Webhook Only
+## Webhook-only App
 
 Event notifications only.
 
@@ -85,19 +127,22 @@ Event notifications only.
 - No OAuth tokens needed
 - Best for: event logging, triggering external workflows
 
-Use this when you ONLY need events. Otherwise, add webhooks to General App or S2S.
+Use this when you only need events. Otherwise, add webhooks to a General App or S2S app.
 
 ## Decision Guide
 
 | Need | App Type |
 |------|----------|
 | Call APIs for your account (backend) | Server-to-Server OAuth |
-| Call APIs on behalf of users | General App (Admin or User OAuth) |
+| Call APIs on behalf of a user | General App with user-level scopes |
+| Call APIs across an account after admin install | General App with admin/account-level scopes |
 | Embed Zoom meetings | General App + Meeting SDK embed |
 | Embed Contact Center | General App + Contact Center SDK embed |
 | Embed Phone | General App + Phone SDK embed |
 | Build in-client app | General App + Zoom Apps |
-| Receive events only | Webhook Only |
+| Build a Team Chat bot | General App + Chatbot capability |
+| Manage app-owned Marketplace event subscriptions | General App + `client_credentials` app-owned token |
+| Receive events only | Webhook-only App |
 | Receive events + call APIs | General App or S2S (with webhooks) |
 
 ## Resources

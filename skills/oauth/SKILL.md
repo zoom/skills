@@ -50,7 +50,7 @@ Quick navigation:
 | **Account Authorization** | Server-to-Server | `account_credentials` | Client Credentials Grant, M2M, Two-legged OAuth |
 | **User Authorization** | General | `authorization_code` | Authorization Code Grant, Three-legged OAuth |
 | **Device Authorization** | General | `urn:ietf:params:oauth:grant-type:device_code` | Device Authorization Grant (RFC 8628) |
-| **Client Authorization** | General | `client_credentials` | Client Credentials Grant (chatbot-scoped) |
+| **Client Authorization** | General | `client_credentials` | App-owned access token for chatbots and selected Marketplace app scopes |
 
 ### Industry Terminology
 
@@ -75,7 +75,7 @@ Quick navigation:
                     │                    │                    │
                     ▼                    ▼                    ▼
           ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-          │  Backend        │  │  App for other  │  │  Chatbot only   │
+          │  Backend        │  │  App for other  │  │  App-owned API  │
           │  automation     │  │  users/accounts │  │  (Team Chat)    │
           │  (your account) │  │                 │  │                 │
           └────────┬────────┘  └────────┬────────┘  └────────┬────────┘
@@ -83,7 +83,7 @@ Quick navigation:
                    ▼                    │                    ▼
           ┌─────────────────┐           │           ┌─────────────────┐
           │    ACCOUNT      │           │           │     CLIENT      │
-          │   (S2S OAuth)   │           │           │   (Chatbot)     │
+          │   (S2S OAuth)   │           │           │  (app-owned)    │
           └─────────────────┘           │           └─────────────────┘
                                         │
                                         ▼
@@ -315,9 +315,21 @@ Same as User Authorization. If refresh token expires, restart device flow from S
 
 ---
 
-## Client Authorization (Chatbot)
+## Client Authorization (App-Owned Access Tokens)
 
-For chatbot message operations only.
+For app-owned operations that do not act on behalf of a specific user. Historically this was
+most commonly used for Team Chat bot operations, but selected Marketplace app-management scopes
+also require this grant.
+
+Use `client_credentials` for:
+- Team Chat bot operations such as `imchat:bot`
+- Marketplace app-owned scopes such as `marketplace:write:event_subscription`
+- Marketplace event subscription management scopes such as `marketplace:read:list_event_subscriptions`, `marketplace:update:event_subscription`, and `marketplace:delete:event_subscription`
+- Marketplace WebSocket connection scope `marketplace:write:websocket_connection`
+
+Do not confuse this with Server-to-Server OAuth. S2S uses `grant_type=account_credentials`
+plus `account_id`; app-owned client authorization uses `grant_type=client_credentials`
+without `account_id`.
 
 ### Request Token
 
@@ -335,7 +347,7 @@ Authorization: Basic {Base64(ClientID:ClientSecret)}
   "access_token": "eyJ...",
   "token_type": "bearer",
   "expires_in": 3600,
-  "scope": "imchat:bot",
+  "scope": "imchat:bot marketplace:write:event_subscription",
   "api_url": "https://api.zoom.us"
 }
 ```
@@ -602,7 +614,7 @@ See `references/oauth-errors.md` for complete error list.
 | Account (S2S) | `account_credentials` | 1 hour | Request new token |
 | User | `authorization_code` | 1 hour | Use refresh_token (90 day expiry) |
 | Device | `urn:ietf:params:oauth:grant-type:device_code` | 1 hour | Use refresh_token (90 day expiry) |
-| Client (Chatbot) | `client_credentials` | 1 hour | Request new token |
+| Client (app-owned) | `client_credentials` | 1 hour | Request new token |
 
 ---
 
@@ -632,7 +644,7 @@ _This section was migrated from `SKILL.md`._
 1. **Run preflight checks first** → [RUNBOOK.md](RUNBOOK.md)
 
 2. **Choose your OAuth flow** → [concepts/oauth-flows.md](concepts/oauth-flows.md)
-   - 4 flows: S2S (backend), User (SaaS), Device (no browser), Chatbot
+   - 4 token flows: S2S account credentials, General App authorization code, Device, and General App client credentials
    - Decision matrix: Which flow fits your use case?
 
 3. **Understand token lifecycle** → [concepts/token-lifecycle.md](concepts/token-lifecycle.md)
@@ -666,7 +678,7 @@ oauth/
 ├── SKILL.md                           # This file - navigation guide
 │
 ├── concepts/                          # Core OAuth concepts
-│   ├── oauth-flows.md                # 4 flows: S2S, User, Device, Chatbot
+│   ├── oauth-flows.md                # 4 flows: S2S, authorization code, device, client credentials
 │   ├── token-lifecycle.md            # Expiration, refresh, revocation
 │   ├── pkce.md                       # PKCE security for public clients
 │   ├── scopes-architecture.md        # Classic vs Granular scopes
@@ -718,10 +730,10 @@ oauth/
 2. [Device Flow Example](examples/device-flow.md) - Complete polling implementation
 3. [Common Errors](troubleshooting/common-errors.md) - Device-specific errors
 
-### I'm building a Team Chat bot
-1. [OAuth Flows](concepts/oauth-flows.md#client-authorization-chatbot) - Chatbot flow explained
+### I'm building a Team Chat bot or app-owned Marketplace integration
+1. [OAuth Flows](concepts/oauth-flows.md#client-authorization-app-owned-access-tokens) - Client authorization flow explained
 2. [S2S OAuth Basic](examples/s2s-oauth-basic.md) - Similar pattern, different grant type
-3. [Scopes Architecture](concepts/scopes-architecture.md) - Chatbot-specific scopes
+3. [Scopes Architecture](concepts/scopes-architecture.md) - Scope architecture and levels
 
 ### I'm getting redirect URI errors (4709)
 1. [Redirect URI Issues](troubleshooting/redirect-uri-issues.md) - **START HERE!**
@@ -772,7 +784,7 @@ Understand which of the 4 flows to use:
 - **S2S OAuth**: Backend automation (your account)
 - **User OAuth**: SaaS apps (users authorize you)
 - **Device Flow**: Devices without browsers
-- **Chatbot**: Team Chat bots only
+- **Client Authorization**: Team Chat bots and selected app-owned Marketplace scopes
 
 ### 2. Token Lifecycle (MOST COMMON ISSUE)
 **[concepts/token-lifecycle.md](concepts/token-lifecycle.md)**

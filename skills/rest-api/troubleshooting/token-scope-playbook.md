@@ -11,17 +11,21 @@ This covers the most common REST API forum failures:
 - `"does not contain scopes"`
 - `"Access token is expired"`
 
-## Step 1: Identify the OAuth App Type
+## Step 1: Identify the Current App Type and Token Mode
 
 - **Server-to-Server OAuth**: backend automation, no user consent screen
-- **User OAuth (authorization_code / PKCE)**: per-user actions, user consent
+- **General App, user-level scoped authorization-code token**: per-user actions, user consent
+- **General App, admin/account-level scoped authorization-code token**: account-level actions after admin authorization
+- **General App, app-owned client-credentials token**: selected app-owned scopes such as Marketplace event subscriptions
+- **Webhook-only App**: event receiver only, no OAuth API token access
 
-Wrong app type is the #1 cause of “token works for endpoint A but not endpoint B”.
+Wrong app type or token mode is the #1 cause of “token works for endpoint A but not endpoint B”.
 
 ## Step 2: Verify `me` Keyword Rules
 
-- User OAuth: use `users/me/...`
+- General App user-level token: use `users/me/...`
 - S2S OAuth: do **not** use `me` (use a real userId/email where required)
+- General App app-owned client-credentials token: do not use for user-owned paths unless the endpoint explicitly supports it
 
 If they get `1001 user does not exist` or “invalid access token” on `users/{id}` calls, this is often the reason.
 
@@ -35,7 +39,7 @@ If the error says missing scopes, you must:
 ## Step 4: Token Expiry and Refresh
 
 - S2S OAuth access tokens expire quickly; refresh on the server and cache with a buffer.
-- User OAuth: refresh tokens and retry on `code=201` “Access token is expired.”
+- General App authorization-code flow: refresh tokens and retry on `code=201` “Access token is expired.”
 
 ## Step 5: Confirm the Token’s Account/App
 
@@ -45,4 +49,3 @@ Ask for:
 - the app type
 - the account id (human-readable)
 - the exact endpoint being called
-

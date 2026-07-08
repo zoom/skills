@@ -164,7 +164,7 @@ The `api_url` field in OAuth token responses indicates the user's region. Use re
 
 - Zoom account (Free tier has API access with lower rate limits)
 - App registered on [Zoom App Marketplace](https://marketplace.zoom.us/)
-- OAuth credentials (Server-to-Server OAuth or User OAuth)
+- OAuth credentials (Server-to-Server OAuth or General App OAuth/client credentials)
 - Appropriate scopes for target endpoints
 
 > **Need help with authentication?** See the **[zoom-oauth](../oauth/SKILL.md)** skill for complete OAuth flow implementation.
@@ -185,9 +185,9 @@ const token = await getServerToServerToken(accountId, clientId, clientSecret);
 
 ### ⚠️ The `me` Keyword Rules
 
-- **User-level OAuth apps**: MUST use `me` instead of `userId` (otherwise: invalid token error)
+- **General App user-level scoped tokens**: MUST use `me` instead of `userId` for current-user endpoints (otherwise: invalid token error)
 - **Server-to-Server OAuth apps**: MUST NOT use `me` — provide the actual `userId` or email
-- **Account-level OAuth apps**: Can use either `me` or `userId`
+- **General App admin/account-level scoped tokens**: Can use `me` or an allowed `userId`, depending on the endpoint and granted scopes
 
 ### ⚠️ Meeting ID vs UUID — Double Encoding
 
@@ -321,7 +321,7 @@ This skill includes comprehensive guides organized by category:
 |------|------------|
 | OAuth Sample | [oauth-sample-app](https://github.com/zoom/oauth-sample-app) |
 | S2S OAuth Starter | [server-to-server-oauth-starter-api](https://github.com/zoom/server-to-server-oauth-starter-api) |
-| User OAuth | [user-level-oauth-starter](https://github.com/zoom/user-level-oauth-starter) |
+| General App user OAuth | [user-level-oauth-starter](https://github.com/zoom/user-level-oauth-starter) |
 | S2S Token | [server-to-server-oauth-token](https://github.com/zoom/server-to-server-oauth-token) |
 | Rivet Library | [rivet-javascript](https://github.com/zoom/rivet-javascript) |
 | WebSocket Sample | [websocket-js-sample](https://github.com/zoom/websocket-js-sample) |
@@ -359,7 +359,7 @@ _This section was migrated from `SKILL.md`._
 
 3. **Set up authentication** → [concepts/authentication-flows.md](concepts/authentication-flows.md)
    - Server-to-Server OAuth (backend automation)
-   - User OAuth with PKCE (user-facing apps)
+   - General App OAuth with PKCE when needed (user-facing or admin-installed apps)
    - Cross-reference: [zoom-oauth](../oauth/SKILL.md)
 
 4. **Create your first meeting** → [examples/meeting-lifecycle.md](examples/meeting-lifecycle.md)
@@ -516,7 +516,7 @@ Complete CRUD with webhook integration — the pattern most developers need firs
    - See: [Authentication Flows](concepts/authentication-flows.md)
 
 2. **`me` keyword behaves differently by app type**
-   - User OAuth: MUST use `me`
+   - General App user-level tokens: MUST use `me`
    - S2S OAuth: MUST NOT use `me`
    - See: [API Architecture](concepts/api-architecture.md)
 
@@ -556,7 +556,7 @@ Complete CRUD with webhook integration — the pattern most developers need firs
 → [Rate Limiting Strategy](concepts/rate-limiting-strategy.md) - Check headers for reset time
 
 ### "Invalid token" when using userId
-→ [API Architecture](concepts/api-architecture.md) - User OAuth apps must use `me`
+→ [API Architecture](concepts/api-architecture.md) - General App user-level tokens must use `me`
 
 ### "How do I paginate results?"
 → [Common Issues](troubleshooting/common-issues.md) - Use `next_page_token`

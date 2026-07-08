@@ -8,13 +8,15 @@ Zoom supports multiple authentication methods depending on your use case:
 
 | Method | Use Case |
 |--------|----------|
-| **OAuth 2.0** | User-authorized access (on behalf of user) |
+| **General App OAuth 2.0** | User-level or admin/account-level authorization through a General App |
+| **General App client credentials** | App-owned access for selected scopes such as Team Chat bot and Marketplace app operations |
 | **Server-to-Server OAuth** | Server-side automation (no user interaction) |
 | **SDK JWT** | Meeting SDK and Video SDK authentication |
 
-## OAuth 2.0
+## General App OAuth 2.0
 
-For apps that act on behalf of users.
+For General Apps that act on behalf of an installing user or an admin-authorized account.
+General Apps can be user-level scoped or admin/account-level scoped.
 
 ### Flow
 
@@ -61,6 +63,19 @@ curl -X POST "https://zoom.us/oauth/token?grant_type=account_credentials&account
   "expires_in": 3600
 }
 ```
+
+## General App Client Credentials
+
+For selected app-owned scopes, use the General App Client ID and Client Secret
+from **App Credentials** to request a token without `account_id`.
+
+```bash
+curl -X POST "https://zoom.us/oauth/token?grant_type=client_credentials" \
+  -H "Authorization: Basic {base64(clientId:clientSecret)}"
+```
+
+Use this only when the endpoint requires app-owned scopes, such as selected
+Marketplace event-subscription or WebSocket operations.
 
 ## SDK JWT Signatures
 

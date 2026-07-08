@@ -90,16 +90,17 @@ async function getZoomClient(accountId, clientId, clientSecret) {
 
 The `me` keyword substitutes for `userId` or `accountId` in API paths. Its behavior varies by app type:
 
-| App Type | `me` Behavior | When to Use |
-|----------|---------------|-------------|
-| **User-level OAuth** | Resolves to the authenticated user | **MUST use** — providing `userId` causes invalid token error |
+| App / token mode | `me` Behavior | When to Use |
+|------------------|---------------|-------------|
+| **General App, user-level scoped authorization-code token** | Resolves to the authenticated user | **MUST use** for current-user calls — providing another `userId` causes invalid token errors |
 | **Server-to-Server OAuth** | Not supported | **MUST NOT use** — provide actual `userId` or email |
-| **Account-level OAuth** | Resolves to the user who installed the app | Can use either `me` or `userId` |
+| **General App, admin/account-level scoped authorization-code token** | Resolves to the installing/admin user when supported | Can use either `me` or an allowed `userId`, depending on the endpoint and granted scopes |
+| **General App, app-owned client-credentials token** | Not a user token | Do not use for user-owned resource paths unless the endpoint explicitly supports app-owned access |
 
 ### Examples
 
 ```bash
-# User OAuth app — MUST use me
+# General App user-level token — MUST use me
 GET /v2/users/me
 GET /v2/users/me/meetings
 

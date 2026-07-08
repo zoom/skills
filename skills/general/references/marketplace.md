@@ -31,6 +31,17 @@ The [Zoom App Marketplace](https://marketplace.zoom.us/) is where you create, co
 | **Feature** | Enable Meeting SDK, Video SDK, Webhooks |
 | **Activation** | Make app installable |
 
+## Manifest Export and Archetypes
+
+Use [Marketplace App Management](../../rest-api/references/marketplace-apps.md) for
+manifest API behavior, export caveats, and observed archetypes.
+
+Key cross-product rules:
+- Draft General apps with granular scopes export cleanly.
+- Server-to-Server OAuth/private OAuth-style apps do not export as General App manifests.
+- Older or non-granular General apps may fail export with `You can only export manifest with app support granular scope now`.
+- Use the [Existing App Manifest Archetypes](../../rest-api/references/marketplace-apps.md#existing-app-manifest-archetypes-observed) table when cloning or designing Meeting SDK, RTMS, ZCC/Phone, Team Chat, Admin OAuth, Chatbot, webhook-heavy, or MCP connector configurations.
+
 ## SDK Downloads
 
 **Important:** Meeting SDK and Video SDK must be downloaded from Marketplace after signing in. They are not available on public package managers (except Web SDKs via npm).
@@ -41,10 +52,12 @@ The [Zoom App Marketplace](https://marketplace.zoom.us/) is where you create, co
 
 ## Credentials
 
-### OAuth Apps
+### General Apps
 
 - **Client ID** - Public identifier
 - **Client Secret** - Keep secret, server-side only
+- Use these same credentials to request `client_credentials` tokens when a
+  General App endpoint requires app-owned scopes.
 
 ### SDK Apps
 

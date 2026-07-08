@@ -160,7 +160,7 @@ https://zoom.us/oauth/authorize?response_type=code&client_id={clientId}&redirect
 | Parameter | Description |
 |-----------|-------------|
 | `response_type` | Always `code` |
-| `client_id` | Your OAuth app client ID |
+| `client_id` | Your General App client ID |
 | `redirect_uri` | Must match registered URI |
 | `state` | Random string for CSRF protection |
 

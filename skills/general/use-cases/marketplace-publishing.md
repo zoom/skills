@@ -16,13 +16,20 @@ This guide covers building multi-tenant applications for the Zoom Marketplace, h
 
 ## App Types for Marketplace
 
-| App Type | Visibility | Use Case |
-|----------|-----------|----------|
-| **Account-level (Private)** | Your org only | Internal tools |
-| **User-managed (Public)** | Individual users | User-facing apps |
-| **Admin-managed (Public)** | Org admins install | Enterprise tools |
+| Current app type | Visibility | Use Case |
+|------------------|-----------|----------|
+| **General App, user-level scoped** | Public or private | User-facing apps where each user authorizes their own data |
+| **General App, admin/account-level scoped** | Public or private | Enterprise installs where an admin authorizes account-level scopes |
+| **Server-to-Server OAuth** | Internal account automation | Backend jobs for your own Zoom account |
+| **Webhook-only App** | Public or private event receiver | Event-only integrations with no API token access |
 
-For Marketplace publishing, you'll create **Public** apps.
+For Marketplace publishing, most ISV apps are **General Apps**. Choose user-level or
+admin/account-level scopes based on who authorizes the app and what resources the app needs.
+
+Before cloning or generating manifests, review:
+- [Marketplace App Management](../../rest-api/references/marketplace-apps.md) for live create/update/export quirks.
+- [Existing App Manifest Archetypes](../../rest-api/references/marketplace-apps.md#existing-app-manifest-archetypes-observed) for Meeting SDK, RTMS, ZCC/Phone, Team Chat, Admin OAuth, Chatbot, webhook-heavy, and MCP connector examples.
+- [Manifest export caveats](../../rest-api/references/marketplace-apps.md#manifest-export-caveats) because draft General apps with granular scopes export cleanly, while S2S/private OAuth-style and older/non-granular apps may not export.
 
 ---
 

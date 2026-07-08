@@ -56,6 +56,11 @@ Choose how your app is managed:
 
 **Important**: App management type affects available features and scopes. If you change it later, reconfirm your selected features and scopes.
 
+Manifest/API note: exported working chatbot manifests have used `oauth_information.usage:
+"ADMIN_MANAGEMENT"`, `features.products: ["ZOOM_CHAT"]`, and scope `imchat:bot`. Live
+manifest validation rejected `imchat:bot` under `USER_OPERATION`, so use Admin-managed
+for bot-identity chatbot manifests unless you have a verified user-managed chatbot case.
+
 ### 2.3 App Credentials (Auto-generated)
 
 The build flow automatically generates:
@@ -265,6 +270,8 @@ To share your app with other users on your account:
 | OAuth redirect error | Redirect URL not in allow list | Add full redirect URL to OAuth allow lists |
 | Scopes not appearing | Wrong app type | Verify you created General App (OAuth), not S2S |
 | App can't be added | Missing required configuration | Complete all steps in Basic Info and Features |
+| Manifest validation fails for Team Chat subscription | Missing slash command development URL | Set `features.team_chat_subscription.slash_command.development_message_url` when `team_chat_subscription.enable` is `true` |
+| Cloned chatbot manifest fails on slash command | Command name already used in account | Rename `features.team_chat_subscription.slash_command.command` before validation/update |
 
 ## Verification Checklist
 
@@ -276,6 +283,7 @@ Before proceeding to development, verify:
 - [ ] Added URLs to OAuth allow lists
 - [ ] Enabled Team Chat in Surface tab (for chatbots)
 - [ ] Configured Team Chat Subscription (for chatbots)
+- [ ] Set slash command development message URL for enabled Team Chat subscriptions
 - [ ] Added all required scopes
 - [ ] Obtained all required credentials
 - [ ] Created .env file with credentials

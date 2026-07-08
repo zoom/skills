@@ -21,8 +21,9 @@ This is the most common failure mode across Zoom REST API integrations and SDK b
 
 Ask:
 
-- Which app type: **Server-to-Server OAuth**, **General App (User OAuth)**, **Chatbot**, **Meeting SDK**, **Video SDK**?
-- Which token: user OAuth access token, S2S OAuth access token, bot token, SDK JWT?
+- Which app type: **General App**, **Server-to-Server OAuth**, **Webhook-only App**, **Meeting SDK**, or **Video SDK**?
+- If General App: is it **user-level scoped**, **admin/account-level scoped**, or using **app-owned client credentials**?
+- Which token: General App authorization-code access token, General App client-credentials token, S2S OAuth access token, or SDK JWT?
 
 Rule of thumb:
 
@@ -60,7 +61,7 @@ If you add scopes after users already installed/authorized:
 ## Common Fix Patterns
 
 - Add missing scopes, then reauthorize users (User OAuth).
-- Ensure you are using the correct grant (S2S for backend automation across an account; User OAuth when acting on behalf of users).
+- Ensure you are using the correct grant: S2S `account_credentials` for backend automation across your account, General App authorization code when acting on behalf of users/admin installs, or General App `client_credentials` for app-owned scopes.
 - Validate that the endpoint actually supports your app type (some endpoints are not usable with some token types).
 
 ## Links
@@ -68,4 +69,3 @@ If you add scopes after users already installed/authorized:
 - `../references/authorization-patterns.md`
 - `../../rest-api/troubleshooting/token-scope-playbook.md`
 - `../../oauth/SKILL.md`
-
