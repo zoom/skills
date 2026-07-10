@@ -64,6 +64,7 @@ Platform skills:
 ## Chaining
 
 - Contact Center app/web/mobile patterns: [../contact-center/SKILL.md](../contact-center/SKILL.md)
+- Marketplace app creation and scenario selection: [../rest-api/references/marketplace-app-templates.md](../rest-api/references/marketplace-app-templates.md)
 - OAuth app setup and tokens: [../oauth/SKILL.md](../oauth/SKILL.md)
 - API workflows for KB automation: [../rest-api/SKILL.md](../rest-api/SKILL.md)
 - Event-driven backend follow-up: [../webhooks/SKILL.md](../webhooks/SKILL.md)

@@ -1,0 +1,63 @@
+{
+  "app_type": "general",
+  "app_name": "Meeting Webhook Application",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Meeting Webhook Application",
+      "description": "Receives meeting lifecycle webhooks."
+    },
+    "oauth_information": {
+      "usage": "ADMIN_MANAGEMENT",
+      "development_redirect_uri": "https://events.example.com/oauth/callback",
+      "production_redirect_uri": "https://events.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://events.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "meeting:read:meeting:admin",
+          "optional": false
+        }
+      ],
+      "scope_description": "Read meetings associated with received lifecycle events.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": [
+        "ZOOM_MEETING"
+      ],
+      "development_home_uri": "https://events.example.com/",
+      "production_home_uri": "https://events.example.com/",
+      "domain_allow_list": [
+        {
+          "domain": "events.example.com",
+          "explanation": "Hosts OAuth and webhook endpoints."
+        }
+      ],
+      "event_subscription": {
+        "enable": true,
+        "events": [
+          {
+            "subscription_id": "meeting-lifecycle",
+            "subscription_name": "Meeting lifecycle",
+            "event_usage": "EVENT_FOR_ADMIN",
+            "event_types": [
+              "meeting.started",
+              "meeting.ended"
+            ],
+            "development_webhook_url": "https://events.example.com/zoom/webhooks",
+            "production_webhook_url": "https://events.example.com/zoom/webhooks",
+            "development_event_custom_header": null,
+            "production_event_custom_header": null
+          }
+        ]
+      }
+    }
+  }
+}

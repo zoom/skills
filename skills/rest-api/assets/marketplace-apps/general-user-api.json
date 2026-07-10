@@ -1,0 +1,35 @@
+{
+  "app_type": "general",
+  "app_name": "User API Application",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "User API Application",
+      "description": "Calls Zoom APIs for the authorizing user."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://app.example.com/oauth/callback",
+      "production_redirect_uri": "https://app.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://app.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "user:read:email",
+          "optional": false
+        }
+      ],
+      "scope_description": "Read the authorizing user's email address.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": []
+    }
+  }
+}

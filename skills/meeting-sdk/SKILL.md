@@ -38,6 +38,12 @@ Embed the full Zoom meeting experience into web, mobile, desktop, and headless i
 - SDK Key and Secret from Marketplace
 - Platform-specific development environment (Web, Android, iOS, macOS, Unreal, Electron, Linux, or Windows)
 
+> **Need to create the SDK app first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) for app creation,
+> manifest validation, app-type quirks, and credential response shapes before generating
+> Meeting SDK signatures. Start from the
+> [Meeting SDK create template](../rest-api/assets/marketplace-apps/create-meeting-sdk.json).
+
 > **Need help with OAuth or signatures?** See the **[zoom-oauth](../oauth/SKILL.md)** skill for authentication flows.
 
 > **Need pre-join diagnostics on web?** Use **[probe-sdk](../probe-sdk/SKILL.md)** before Meeting SDK init/join to gate low-readiness devices/networks.

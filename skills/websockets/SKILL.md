@@ -40,11 +40,22 @@ Receive real-time event notifications from Zoom via persistent WebSocket connect
 
 ## Prerequisites
 
-- Server-to-Server OAuth app in [Zoom Marketplace](https://marketplace.zoom.us/)
-- Account ID, Client ID, and Client Secret
+- Server-to-Server OAuth app or admin-managed General App in [Zoom Marketplace](https://marketplace.zoom.us/)
+- Client ID and Client Secret; S2S also requires the Account ID
 - WebSocket subscription with events enabled
 
+> **Need to create/configure the app first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) for app creation,
+> manifest validation, app-owned WebSocket/event subscription scopes, and the `WEB_SOCKET`
+> subscription enum before connecting. Start from the
+> [General admin](../rest-api/assets/marketplace-apps/general-admin-websocket.json) or
+> [S2S](../rest-api/assets/marketplace-apps/create-s2s-websocket.json) WebSocket base, then
+> select the WebSocket delivery method under Features > Access.
+
 > **Need help with S2S OAuth?** See the **[zoom-oauth](../oauth/SKILL.md)** skill for complete authentication flows.
+
+For a General App WebSocket subscription, use the app-owned token flow documented for that app.
+Do not copy the S2S `account_credentials` example below into a General App implementation.
 
 > **Start troubleshooting fast:** Use the **[5-Minute Runbook](RUNBOOK.md)** before deep debugging.
 

@@ -1,0 +1,45 @@
+{
+  "app_type": "general",
+  "app_name": "Account API Application",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Account API Application",
+      "description": "Calls Zoom APIs across an authorized account."
+    },
+    "oauth_information": {
+      "usage": "ADMIN_MANAGEMENT",
+      "development_redirect_uri": "https://admin.example.com/oauth/callback",
+      "production_redirect_uri": "https://admin.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://admin.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "meeting:read:meeting:admin",
+          "optional": false
+        }
+      ],
+      "scope_description": "Read meetings across the authorized account.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": [
+        "ZOOM_MEETING"
+      ],
+      "development_home_uri": "https://admin.example.com/",
+      "production_home_uri": "https://admin.example.com/",
+      "domain_allow_list": [
+        {
+          "domain": "admin.example.com",
+          "explanation": "Hosts the account administration application."
+        }
+      ]
+    }
+  }
+}

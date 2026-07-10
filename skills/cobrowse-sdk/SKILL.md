@@ -134,6 +134,11 @@ If a demo only has one generic "session" user, it is incomplete for real cobrows
 
 **Note**: Cobrowse SDK is a **feature of Video SDK** (not a separate product).
 
+> **Need to create the Video SDK app first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) for app creation,
+> manifest validation, Video SDK credential shape, and app-type quirks before generating
+> Cobrowse JWTs.
+
 ### Credentials Overview
 
 You'll receive **4 credentials** from Zoom Marketplace → Video SDK App → Cobrowse tab:

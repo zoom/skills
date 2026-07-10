@@ -70,6 +70,11 @@ Start here:
 6. Persist tokens/state for OAuth workloads and enforce signature verification.
 7. Monitor module-specific failures and rotate secrets/version with changelog cadence.
 
+> **Need to create the Zoom app(s) first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) to create or
+> validate the required General, S2S, webhook/event, or Video SDK app credentials before
+> wiring Rivet modules.
+
 ## High-Level Scenarios
 
 - Team Chat slash-command bot + Team Chat data API enrichment.

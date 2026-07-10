@@ -291,13 +291,13 @@ The same validation probe accepted Contact Center Voice RTMS event names:
 
 | Product | Start Event | Stop Event | Payload ID | App Type |
 |---------|-------------|------------|------------|----------|
-| **Zoom Meetings** | `meeting.rtms_started` | `meeting.rtms_stopped` | `meeting_uuid` | General App |
-| **Zoom Webinars** | `webinar.rtms_started` | `webinar.rtms_stopped` | `meeting_uuid` (not webinar_uuid!) | General App |
+| **Zoom Meetings** | `meeting.rtms_started` | `meeting.rtms_stopped` | `meeting_uuid` | User-managed General App |
+| **Zoom Webinars** | `webinar.rtms_started` | `webinar.rtms_stopped` | `meeting_uuid` (not webinar_uuid!) | User-managed General App |
 | **Zoom Video SDK** | `session.rtms_started` | `session.rtms_stopped` | `session_id` | Video SDK App |
-| Zoom Contact Center | `contactcenter.rtms_*` | `contactcenter.rtms_*` | See Zoom docs | Contact Center App |
+| Zoom Contact Center Voice | `contact_center.voice_rtms_started` | `contact_center.voice_rtms_stopped` | See Zoom docs | General user/admin or S2S, based on scopes |
 | Zoom Phone | `phone.rtms_*` | `phone.rtms_*` | See Zoom docs | General App |
 
-> **Key differences**: Meetings and webinars use a General App with OAuth credentials. Video SDK uses a Video SDK App with SDK Key/Secret. Once connected, the WebSocket protocol is identical across all products.
+> **Key differences**: Meetings and webinars require a user-managed General App. Contact Center Voice can use General or S2S according to scope and control needs. Video SDK uses a Video SDK App with SDK Key/Secret. Once connected, the WebSocket protocol is identical across all products.
 
 ## Resources
 

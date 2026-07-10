@@ -64,6 +64,11 @@ npm install -D @types/jsrsasign
 
 **Upgrade guardrail**: Use `2.3.15-1` or newer for WebRTC video because Zoom flags that version floor for future Chrome compatibility.
 
+> **Need Video SDK credentials first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) for creating or
+> validating the Video SDK Marketplace app and credential shape, then return here to generate
+> the UI Toolkit `videoSDKJWT`.
+
 ## Quick Start
 
 ### Basic Usage (Vanilla JS)

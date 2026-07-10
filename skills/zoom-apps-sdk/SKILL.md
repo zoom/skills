@@ -89,6 +89,12 @@ The Zoom Apps SDK (`@zoom/appssdk`) provides JavaScript APIs for web apps runnin
 - ngrok or HTTPS tunnel for local development
 - Node.js 18+ (for the backend server)
 
+> **Need to create/configure the Zoom App first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) for General App
+> manifest validation, product/surface fields, domain allow-list object shape, Zoom Apps
+> scopes, app-owned credentials, and Marketplace review quirks. Start from the
+> [Zoom App template](../rest-api/assets/marketplace-apps/zoom-app.json).
+
 ## Quick Start
 
 ### Option A: NPM (Recommended for frameworks)

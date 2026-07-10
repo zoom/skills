@@ -1,0 +1,55 @@
+{
+  "app_type": "general",
+  "app_name": "Team Chat MCP Connector",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Team Chat MCP Connector",
+      "description": "Authorizes an MCP client to send and edit messages and manage Team Chat channels."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "production_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://mcp-client.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "team_chat:write:user_message",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:update:user_message",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:write:contact_information",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:write:user_channel",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:update:user_channel",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:write:members",
+          "optional": false
+        }
+      ],
+      "scope_description": "Use the write-capable Team Chat MCP tools for the authorizing user.",
+      "enable_private_pkce_client": true,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": []
+    }
+  }
+}

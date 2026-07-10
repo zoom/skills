@@ -58,6 +58,14 @@ Whiteboard-specific MCP work is split into the child skill
 Write-capable Team Chat MCP work is split into the child skill
 [team-chat/SKILL.md](team-chat/SKILL.md).
 
+> **Need the OAuth app/scopes first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) to create or
+> validate the General App, select user/admin scopes for MCP tools, and understand credential
+> response shapes before minting the bearer token passed to the MCP server. Start from the
+> [default Zoom MCP template](../rest-api/assets/marketplace-apps/zoom-mcp-default.json), or
+> select the dedicated Team Chat or Whiteboard template from the
+> [Marketplace template selector](../rest-api/references/marketplace-app-templates.md).
+
 ## Quick Start
 
 **1. Add to an MCP client (Claude Code example):**

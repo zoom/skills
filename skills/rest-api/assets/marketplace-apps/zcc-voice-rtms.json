@@ -1,0 +1,68 @@
+{
+  "app_type": "general",
+  "app_name": "Contact Center Voice RTMS",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Contact Center Voice RTMS",
+      "description": "Receives Contact Center Voice RTMS lifecycle events."
+    },
+    "oauth_information": {
+      "usage": "ADMIN_MANAGEMENT",
+      "development_redirect_uri": "https://rtms.example.com/oauth/callback",
+      "production_redirect_uri": "https://rtms.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://rtms.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "contact_center:read:zcc_voice_audio",
+          "optional": false
+        },
+        {
+          "scope": "contact_center:update:engagement_rtms_app_status:admin",
+          "optional": false
+        }
+      ],
+      "scope_description": "Receive Contact Center Voice audio and control engagement RTMS status.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": [
+        "ZOOM_CONTACT_CENTER"
+      ],
+      "development_home_uri": "https://rtms.example.com/",
+      "production_home_uri": "https://rtms.example.com/",
+      "domain_allow_list": [
+        {
+          "domain": "rtms.example.com",
+          "explanation": "Hosts OAuth, RTMS, and webhook endpoints."
+        }
+      ],
+      "event_subscription": {
+        "enable": true,
+        "events": [
+          {
+            "subscription_id": "zcc-voice-rtms",
+            "subscription_name": "Contact Center Voice RTMS",
+            "event_usage": "EVENT_FOR_ADMIN",
+            "event_types": [
+              "contact_center.voice_rtms_started",
+              "contact_center.voice_rtms_stopped",
+              "contact_center.voice_rtms_interrupted"
+            ],
+            "development_webhook_url": "https://rtms.example.com/zoom/webhooks",
+            "production_webhook_url": "https://rtms.example.com/zoom/webhooks",
+            "development_event_custom_header": null,
+            "production_event_custom_header": null
+          }
+        ]
+      }
+    }
+  }
+}

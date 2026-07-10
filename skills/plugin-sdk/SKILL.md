@@ -51,6 +51,12 @@ The application does not render or transport meeting media itself. It sends supp
 10. Treat immediate Boolean returns as request-submission results and completion callbacks as operation results.
 11. Uninitialize the SDK during orderly application shutdown.
 
+> **Need to create/configure the General App first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) for manifest
+> validation, `plugin_sdk` feature shape, PKCE/public-client settings, redirect URL rules,
+> and credential response shapes before wiring Plugin SDK auth. Start from the
+> [Plugin SDK template](../rest-api/assets/marketplace-apps/plugin-sdk.json).
+
 ## OAuth Token Exchange
 
 For Plugin SDK, do not invent or manually paste an access token. Use the OAuth authorization-code flow. For native desktop apps, prefer Authorization Code with PKCE:
@@ -87,6 +93,7 @@ Read [FAQ](faq.md) when comparing Plugin SDK with Meeting SDK for Windows or mac
 
 | Need | Chain to |
 |---|---|
+| Create/select Marketplace app, validate manifest, or inspect credential shapes | [Marketplace app management](../rest-api/references/marketplace-apps.md) |
 | User OAuth, PKCE, token refresh, and scopes | [zoom-oauth](../oauth/SKILL.md) |
 | Create or manage meetings before local client control | [zoom-rest-api](../rest-api/SKILL.md) |
 | React to server-side lifecycle events when the desktop app is offline | [zoom-webhooks](../webhooks/SKILL.md) |

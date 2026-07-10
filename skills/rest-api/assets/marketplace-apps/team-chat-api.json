@@ -1,0 +1,48 @@
+{
+  "app_type": "general",
+  "app_name": "Team Chat API Application",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Team Chat API Application",
+      "description": "Sends Team Chat messages for an authorized user."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://chat.example.com/oauth/callback",
+      "production_redirect_uri": "https://chat.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://chat.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "team_chat:write:user_message",
+          "optional": false
+        }
+      ],
+      "scope_description": "Send Team Chat messages for the authorizing user.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": [
+        "ZOOM_CHAT"
+      ],
+      "development_home_uri": "https://chat.example.com/",
+      "production_home_uri": "https://chat.example.com/",
+      "domain_allow_list": [
+        {
+          "domain": "chat.example.com",
+          "explanation": "Hosts the Team Chat integration."
+        }
+      ],
+      "team_chat_subscription": {
+        "enable": false
+      }
+    }
+  }
+}

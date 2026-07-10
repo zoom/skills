@@ -1,0 +1,63 @@
+{
+  "app_type": "general",
+  "app_name": "User Meeting Webhook Application",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "User Meeting Webhook Application",
+      "description": "Receives meeting lifecycle webhooks for the authorizing user."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://user-events.example.com/oauth/callback",
+      "production_redirect_uri": "https://user-events.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://user-events.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "meeting:read:meeting",
+          "optional": false
+        }
+      ],
+      "scope_description": "Read meetings associated with user-level lifecycle events.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": [
+        "ZOOM_MEETING"
+      ],
+      "development_home_uri": "https://user-events.example.com/",
+      "production_home_uri": "https://user-events.example.com/",
+      "domain_allow_list": [
+        {
+          "domain": "user-events.example.com",
+          "explanation": "Hosts OAuth and user webhook endpoints."
+        }
+      ],
+      "event_subscription": {
+        "enable": true,
+        "events": [
+          {
+            "subscription_id": "user-meeting-lifecycle",
+            "subscription_name": "User meeting lifecycle",
+            "event_usage": "EVENT_FOR_USER",
+            "event_types": [
+              "meeting.started",
+              "meeting.ended"
+            ],
+            "development_webhook_url": "https://user-events.example.com/zoom/webhooks",
+            "production_webhook_url": "https://user-events.example.com/zoom/webhooks",
+            "development_event_custom_header": null,
+            "production_event_custom_header": null
+          }
+        ]
+      }
+    }
+  }
+}

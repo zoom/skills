@@ -1,0 +1,12 @@
+{
+  "app_type": "s2s_oauth",
+  "app_name": "S2S Contact Center Voice RTMS",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "active": false,
+  "scopes": [
+    "contact_center:read:zcc_voice_audio",
+    "contact_center:update:engagement_rtms_app_status:admin"
+  ]
+}

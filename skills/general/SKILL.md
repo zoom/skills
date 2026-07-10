@@ -309,6 +309,11 @@ Both receive event notifications, but differ in approach:
 2. App created in [Zoom App Marketplace](https://marketplace.zoom.us/)
 3. OAuth credentials (Client ID and Secret)
 
+> **Need to create the Marketplace app first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) for API-driven
+> app creation, manifest validation, app-type quirks, and credential response shapes before
+> continuing with product-specific skills.
+
 ## References
 
 - [Known Limitations & Quirks](references/known-limitations.md)
@@ -327,6 +332,7 @@ Both receive event notifications, but differ in approach:
 - **[references/app-types.md](references/app-types.md)** - Decision guide for app types
 - **[references/scopes.md](references/scopes.md)** - OAuth scopes reference
 - **[references/marketplace.md](references/marketplace.md)** - Marketplace portal navigation
+- **[../rest-api/references/marketplace-apps.md](../rest-api/references/marketplace-apps.md)** - API-driven Marketplace app creation, manifest validation, app-owned scopes, and app credential shapes
 - **[references/query-routing-playbook.md](references/query-routing-playbook.md)** - Route complex queries to the right specialized skills
 - **[references/interview-answer-routing.md](references/interview-answer-routing.md)** - Short interview-ready answer pattern for zoom-general routing
 - **[references/routing-implementation.md](references/routing-implementation.md)** - Concrete TypeScript query classification and skill handoff contract

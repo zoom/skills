@@ -78,10 +78,10 @@ Use RTMS for media/data plane, and use frontend frameworks/Zoom Apps for present
 
 | Product | Webhook Event | Payload ID | App Type |
 |---------|--------------|------------|----------|
-| **Meetings** | `meeting.rtms_started` / `meeting.rtms_stopped` | `meeting_uuid` | General App |
-| **Webinars** | `webinar.rtms_started` / `webinar.rtms_stopped` | `meeting_uuid` (same!) | General App |
+| **Meetings** | `meeting.rtms_started` / `meeting.rtms_stopped` | `meeting_uuid` | User-managed General App |
+| **Webinars** | `webinar.rtms_started` / `webinar.rtms_stopped` | `meeting_uuid` (same!) | User-managed General App |
 | **Video SDK** | `session.rtms_started` / `session.rtms_stopped` | `session_id` | Video SDK App |
-| **Zoom Contact Center Voice** | Product-specific RTMS/ZCC Voice events | Product-specific stream/session identifiers | Contact Center / approved RTMS integration |
+| **Zoom Contact Center Voice** | `contact_center.voice_rtms_started` / `contact_center.voice_rtms_stopped` | Product-specific stream/session identifiers | General user/admin or S2S, based on scopes |
 
 Once connected, the core signaling/media socket model is shared across products. Meetings, webinars, and Video SDK sessions use the familiar start/stop webhooks. Zoom Contact Center Voice adds its own RTMS/ZCC Voice event family and should be treated as the same transport model with product-specific event payloads.
 
@@ -121,9 +121,17 @@ RTMS is a data pipeline that gives your app access to live media from Zoom meeti
 
 - **Node.js 20.3.0+** (24 LTS recommended) for JavaScript SDK
 - **Python 3.10+** for Python SDK
-- Zoom General App (for meetings/webinars) or Video SDK App (for Video SDK) with RTMS feature enabled
+- User-managed General App (meetings/webinars), General or S2S app (Contact Center Voice), or Video SDK App (Video SDK) with RTMS enabled
 - Webhook endpoint for RTMS events
 - Server to receive WebSocket streams
+
+> **Need to create/configure the Marketplace app first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) before RTMS
+> implementation. It documents General App manifests, event subscription API behavior,
+> app-owned `client_credentials`, and RTMS event validation drift. Use the user-managed
+> [Meeting/Webinar RTMS template](../rest-api/assets/marketplace-apps/general-user-meeting-webinar-rtms.json),
+> or the General App or S2S Contact Center Voice templates in the
+> [template selector](../rest-api/references/marketplace-app-templates.md).
 
 > **Need RTMS access?** Post in [Zoom Developer Forum](https://devforum.zoom.us/) requesting RTMS access with your use case.
 

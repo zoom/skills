@@ -22,6 +22,14 @@ Receive real-time event notifications from Zoom services.
 - HTTPS endpoint to receive webhooks
 - Webhook secret token for verification
 
+> **Need to create/configure the app first?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) for General App
+> manifest validation, event subscription API setup, webhook vs WebSocket subscription
+> behavior, and app-owned `client_credentials` scopes. Start from the
+> [user-managed General App](../rest-api/assets/marketplace-apps/general-user-webhooks.json),
+> [admin-managed General App](../rest-api/assets/marketplace-apps/meeting-webhooks.json), or
+> [S2S](../rest-api/assets/marketplace-apps/create-s2s-webhooks.json) webhook template.
+
 > **Need help with authentication?** See the **[zoom-oauth](../oauth/SKILL.md)** skill for OAuth setup.
 
 ## Quick Start

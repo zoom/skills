@@ -167,6 +167,11 @@ The `api_url` field in OAuth token responses indicates the user's region. Use re
 - OAuth credentials (Server-to-Server OAuth or General App OAuth/client credentials)
 - Appropriate scopes for target endpoints
 
+> **Need to create or validate the app first?** Use
+> [Marketplace app management](references/marketplace-apps.md) before implementing REST calls.
+> It covers General App manifests, S2S rollout quirks, app-owned `client_credentials` scopes,
+> event subscription setup, and credential response shapes.
+
 > **Need help with authentication?** See the **[zoom-oauth](../oauth/SKILL.md)** skill for complete OAuth flow implementation.
 
 ## Critical Gotchas and Best Practices
@@ -299,6 +304,7 @@ This skill includes comprehensive guides organized by category:
 - **[references/video-management.md](references/video-management.md)** - Video management APIs
 - **[references/video-sdk-api.md](references/video-sdk-api.md)** - Video SDK REST APIs
 - **[references/marketplace-apps.md](references/marketplace-apps.md)** - Marketplace app management
+- **[references/marketplace-app-templates.md](references/marketplace-app-templates.md)** - Select and customize POST-ready Marketplace app templates by scenario
 - **[references/commerce.md](references/commerce.md)** - Commerce and billing APIs
 - **[references/contact-center.md](references/contact-center.md)** - Contact Center APIs
 - **[references/quality-management.md](references/quality-management.md)** - Quality management APIs

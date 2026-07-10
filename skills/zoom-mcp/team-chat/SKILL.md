@@ -39,6 +39,8 @@ The repo MCP bundle registers this as `zoom-team-chat-mcp` in [../../../.mcp.jso
 ## Authentication
 
 - OAuth bearer tokens are passed through the MCP `Authorization` header.
+- Start app registration from the
+  [Team Chat MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-team-chat.json).
 - The protected-resource metadata endpoint is `https://mcp.zoom.us/.well-known/oauth-protected-resource/mcp_team_chat`.
 - The server is scoped to the caller's account and subject to Team Chat policy restrictions.
 - End-to-end encrypted, archived, retention-restricted, or policy-blocked chats may not be accessible or mutable through this surface.

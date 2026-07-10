@@ -209,7 +209,13 @@ Official schema sources:
 - Display information: https://developers.zoom.us/docs/build-flow/manifests/schema/display-information/
 - OAuth information: https://developers.zoom.us/docs/build-flow/manifests/schema/oauth-information/
 - Features: https://developers.zoom.us/docs/build-flow/manifests/schema/features/
+- Marketplace app APIs: https://developers.zoom.us/docs/api/marketplace/
+- Marketplace master app APIs: https://developers.zoom.us/docs/api/marketplace/ma/
 - Marketplace API inventory: https://developers.zoom.us/api-hub/marketplace/methods/endpoints.json
+
+For reusable request bodies, use [Marketplace App Templates](marketplace-app-templates.md).
+Select the closest scenario, replace every `example.com` value, reduce scopes to the exact
+operations required, validate General App manifests, and then create the app.
 
 ### General App Create/Get/Manifest/Update/Delete Shapes
 
@@ -407,6 +413,8 @@ Read-only exports of existing apps on 2026-07-08 surfaced these useful shape pat
 | Admin OAuth / account-scoped API app | `usage: "ADMIN_MANAGEMENT"`, admin granular scopes, often `products: []` or a product-specific surface, admin install required | [OAuth](../../oauth/SKILL.md) and [app types](../../general/references/app-types.md) |
 | Chatbot app | `usage: "ADMIN_MANAGEMENT"`, `products: ["ZOOM_CHAT"]`, scope `imchat:bot`, `team_chat_subscription.enable: true`, slash command development message URL present, production message URL may be blank | [Team Chat chatbot](../../team-chat/SKILL.md) |
 | Webhook-heavy app | `event_subscription.enable: true` can appear even when `products: []`; event entries use `event_usage` such as `EVENT_FOR_USER` or `EVENT_FOR_ADMIN`; large event lists may not round-trip through validation unchanged | [Webhooks](../../webhooks/SKILL.md) and this Marketplace reference |
+| WebSocket event app | Account-level only; use S2S or admin-managed General App, then select WebSocket delivery in Features > Access because the public manifest schema does not expose a reliable one-shot field | [WebSockets](../../websockets/SKILL.md) |
+| Plugin SDK companion | `usage: "USER_OPERATION"`, scope `plugin_sdk:read:connection_meta`, PKCE for native clients, and `plugin_sdk.enable: true`; the OAuth user must match the user signed in to Zoom Workplace | [Plugin SDK](../../plugin-sdk/SKILL.md) |
 | Claude MCP Connector / MCP API app | `usage: "USER_OPERATION"`, `products: []` or omitted, no Team Chat subscription, scopes for AI Companion search, docs import/export, meeting assets/search, recordings, or Team Chat MCP workflows | [Zoom MCP](../../zoom-mcp/SKILL.md) and [REST API](../SKILL.md) |
 
 Do not infer app behavior from `app_type` alone. Existing apps returned both `OAuthApp` and
@@ -498,14 +506,22 @@ live behavior is nuanced:
 - `app_type: "webhook_only"` with the same valid manifest was accepted, but `GET /marketplace/apps/{appId}` reported `app_type: "OAuthApp"` and OAuth scopes. Do not treat this as proof that the API created a true Webhook-only App.
 - `app_type: "webhook"` behaved similarly in live probing.
 
-For Server-to-Server OAuth creation:
+For Server-to-Server OAuth creation, the current Marketplace API description lists
+`app_type: "s2s_oauth"` on both create surfaces, but live routing on 2026-07-10 required the
+account-scoped endpoint:
 
-- S2S Marketplace app creation through API is expected to be released around
-  2026-07-12. Until that rollout is live, treat failures from the account-scoped
-  creation endpoint as current-release behavior, not proof that the future API
-  contract is unsupported.
-- `POST /v2/marketplace/apps` returns a message directing callers to `/v2/accounts/{accountId}/marketplace/apps`.
-- `POST /v2/accounts/{accountId}/marketplace/apps` can require `marketplace:write:app:master`; if the token is not accepted for that master scope, Zoom returns:
+- `POST /v2/marketplace/apps` returned HTTP `404`, Zoom code `1500`, directing the caller to
+  `/v2/accounts/{accountId}/marketplace/apps` for Meeting SDK or S2S OAuth app creation.
+- `POST /v2/accounts/{accountId}/marketplace/apps` requires
+  `marketplace:write:app:master` and is account-owner/master-scope sensitive.
+- Set `active: true` only when `scopes` contains at least one valid scope. Use
+  `active: false` to create an inactive draft.
+- Do not send a General App `manifest` for `s2s_oauth`; send top-level `scopes`.
+- Successful responses can include generated development and production credentials.
+  Capture them once and never log or commit client secrets.
+
+A live authorization probe on 2026-07-10 reached the account-scoped endpoint, but the supplied
+tokens lacked its required master scope:
 
 ```json
 {
@@ -514,8 +530,9 @@ For Server-to-Server OAuth creation:
 }
 ```
 
-Treat S2S app creation as account-owner/master-scope sensitive and test it separately from
-General App creation after the S2S API rollout is available.
+No app was created in the probes. Use the account-scoped route and a token containing
+`marketplace:write:app:master`; do not rely on the broader operation description for the regular
+create endpoint until runtime behavior changes.
 
 ## Coverage
 

@@ -111,7 +111,15 @@ If you choose the wrong type early, auth/scopes/endpoints all mismatch and imple
 2. Click **Develop** → **Build App**
 3. Select **General App** (OAuth)
 
-> ⚠️ **Do NOT use Server-to-Server OAuth** - S2S apps don't have the Chatbot/Team Chat feature. Only General App (OAuth) supports chatbots.
+> ⚠️ **Do NOT use Server-to-Server OAuth for a chatbot.** S2S apps cannot enable the
+> Team Chat chatbot/subscription feature. S2S can still call supported Team Chat admin REST APIs.
+
+> **Need to create the General App by API or manifest?** Use
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) first. It covers
+> Team Chat manifest requirements such as `imchat:bot`, `team_chat_subscription`,
+> `slash_command.development_message_url`, shortcut `action_types`, and app-owned
+> `client_credentials` scopes. Select the user, admin, S2S, or chatbot variant from the
+> [Marketplace template selector](../rest-api/references/marketplace-app-templates.md).
 
 ### Required Credentials
 

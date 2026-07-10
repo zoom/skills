@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | `ZOOM_CLIENT_ID` | OAuth mode | RTMS subscription/auth (Meetings/Webinars mode) | Zoom Marketplace -> OAuth app credentials |
 | `ZOOM_CLIENT_SECRET` | OAuth mode | RTMS subscription/auth (Meetings/Webinars mode) | Zoom Marketplace -> OAuth app credentials |
-| `ZOOM_ACCOUNT_ID` | S2S OAuth mode | Account-level RTMS token grants | Zoom Marketplace -> Server-to-Server OAuth app credentials |
+| `ZOOM_ACCOUNT_ID` | S2S Contact Center Voice RTMS mode | Account-level token grants; not for Meeting/Webinar RTMS | Zoom Marketplace -> Server-to-Server OAuth app credentials |
 | `ZOOM_VIDEO_SDK_KEY` | Video SDK RTMS mode | RTMS with Video SDK sessions | Zoom Marketplace -> Video SDK app credentials |
 | `ZOOM_VIDEO_SDK_SECRET` | Video SDK RTMS mode | Video SDK session auth/signing | Zoom Marketplace -> Video SDK app credentials |
 | `ZOOM_SECRET_TOKEN` or `WEBHOOK_SECRET_TOKEN` | Yes when validating events | Event signature verification | Zoom Marketplace -> Event Subscriptions -> Secret Token |

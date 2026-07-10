@@ -1,0 +1,59 @@
+{
+  "app_type": "general",
+  "app_name": "Zoom MCP Connector",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Zoom MCP Connector",
+      "description": "Authorizes an MCP client to use Zoom search, meeting assets, recordings, and Docs tools."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "production_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://mcp-client.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "meeting:read:search",
+          "optional": false
+        },
+        {
+          "scope": "meeting:read:assets",
+          "optional": false
+        },
+        {
+          "scope": "ai_companion:read:search",
+          "optional": false
+        },
+        {
+          "scope": "cloud_recording:read:list_user_recordings",
+          "optional": false
+        },
+        {
+          "scope": "cloud_recording:read:content",
+          "optional": false
+        },
+        {
+          "scope": "docs:write:import",
+          "optional": false
+        },
+        {
+          "scope": "docs:read:export",
+          "optional": false
+        }
+      ],
+      "scope_description": "Use the seven default Zoom MCP tools for the authorizing user.",
+      "enable_private_pkce_client": true,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": []
+    }
+  }
+}

@@ -56,6 +56,13 @@ This repository contains skills for building with Zoom SDKs, APIs, MCP servers, 
 2. **Cross-product or general task?** → Check [zoom-general](general/SKILL.md) for generic use cases
 3. **Each folder has a `SKILL.md`** → Start there for that product's overview
 
+**Marketplace prerequisite:** Many product skills need a Zoom Marketplace app before
+their credentials, scopes, webhooks, or SDK keys exist. When a task starts with app
+creation, app type selection, manifest validation, scopes, event subscriptions, or
+credential retrieval, route first to
+[Marketplace app management](rest-api/references/marketplace-apps.md), then return to
+the product skill.
+
 ## Skill Discovery (Integrated)
 
 This repo uses progressive discovery:

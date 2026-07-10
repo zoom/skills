@@ -1,0 +1,45 @@
+{
+  "app_type": "general",
+  "app_name": "Zoom Phone API Application",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Zoom Phone API Application",
+      "description": "Reads Zoom Phone call history for an account."
+    },
+    "oauth_information": {
+      "usage": "ADMIN_MANAGEMENT",
+      "development_redirect_uri": "https://phone.example.com/oauth/callback",
+      "production_redirect_uri": "https://phone.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://phone.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "phone:read:call_log:admin",
+          "optional": false
+        }
+      ],
+      "scope_description": "Read Zoom Phone call log details for the account.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": [
+        "ZOOM_PHONE"
+      ],
+      "development_home_uri": "https://phone.example.com/",
+      "production_home_uri": "https://phone.example.com/",
+      "domain_allow_list": [
+        {
+          "domain": "phone.example.com",
+          "explanation": "Hosts the Zoom Phone integration."
+        }
+      ]
+    }
+  }
+}
