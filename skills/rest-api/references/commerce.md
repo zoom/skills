@@ -18,8 +18,8 @@ Authoritative endpoint inventory for Commerce. This file mirrors the official Zo
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 33 |
-| Path templates | 31 |
+| Endpoint operations | 34 |
+| Path templates | 32 |
 | Tags | 8 |
 
 ## Tag Index
@@ -31,7 +31,7 @@ Authoritative endpoint inventory for Commerce. This file mirrors the official Zo
 | Deal Registration | 5 |
 | Order | 4 |
 | Platform | 3 |
-| Product Catalog | 3 |
+| Product Catalog | 4 |
 | Quote | 6 |
 | Subscription | 5 |
 
@@ -87,6 +87,7 @@ Authoritative endpoint inventory for Commerce. This file mirrors the official Zo
 |--------|----------|---------|-------------|
 | POST | `/commerce/catalog` | Gets Zoom Product Catalog for a Zoom Partner | `getOffers` |
 | GET | `/commerce/catalog/{offerId}` | Gets the details for a Zoom product or offer. | `getOfferDetail` |
+| POST | `/commerce/catalogvalidator` | Validate offer compatibility and dependencies | `validateOffers` |
 | GET | `/commerce/pricebooks` | Gets the pricebook in a downloadable file | `downloadPricebook` |
 
 ### Quote
@@ -97,7 +98,7 @@ Authoritative endpoint inventory for Commerce. This file mirrors the official Zo
 | POST | `/commerce/quote/preview` | Preview delta quote metrics and subscriptions in a quote | `createQuotePreview` |
 | GET | `/commerce/quotes` | Gets all quotes for a Zoom partner | `getAllQuotes` |
 | GET | `/commerce/quotes/{quoteReferenceId}` | Get quote details by quote reference ID | `getQuoteDetails` |
-| PATCH | `/commerce/quotes/{quoteReferenceId}` | Update a subscription quote for a Zoom partner | `updateQuote` |
+| PATCH | `/commerce/quotes/{quoteReferenceId}` | Update a subscription quote for a Zoom Partner | `updateQuote` |
 | PATCH | `/commerce/quotes/{quoteReferenceId}/fulfillment` | Submits a subscription quote for provisioning | `provisionQuote` |
 
 ### Subscription

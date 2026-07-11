@@ -14,6 +14,11 @@ triggers:
 
 Expert guidance for developing with the Zoom Video SDK on Linux. Build headless bots, raw media capture/injection applications, and custom UI integrations with Qt/GTK.
 
+> **Version boundary:** The current public release is `2.6.0` (verified 2026-07-10), while this
+> skill's detailed API inventory is from `2.5.10`. Version `2.6.0` removes annotation interfaces
+> and the XMPP command channel and changes external video/callback APIs. Read
+> [the upgrade reference](../references/native-2.6.0-upgrade.md) before upgrading.
+
 **Official Documentation**: https://developers.zoom.us/docs/video-sdk/linux/
 **API Reference**: https://marketplacefront.zoom.us/sdk/custom/linux/
 **Sample Repository**: https://github.com/zoom/videosdk-linux-raw-recording-sample

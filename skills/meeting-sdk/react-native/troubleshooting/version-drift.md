@@ -3,7 +3,8 @@
 Because wrapper and native SDKs evolve:
 
 - Reconfirm option names on each wrapper upgrade.
-- Treat returned numeric meeting codes as versioned behavior.
+- `7.0.5` changed `joinMeeting` and `startMeeting` from `Promise<number>` to
+  `Promise<MobileRTCMeetError>`. Audit numeric comparisons when upgrading.
 - Re-test both join and host-start flows after SDK bump.
 - Validate platform-specific flags (Android/iOS) separately.
 - Reconfirm React Native framework compatibility window and Expo support status.

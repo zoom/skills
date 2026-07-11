@@ -7,14 +7,15 @@ Quick diagnostic checklist before using the Zoom MCP server.
 **1. MCP server registered?**
 ```bash
 claude mcp list
-# Should show: zoom-mcp -> https://mcp-us.zoom.us/mcp/zoom/streamable
+# Should show: zoom-mcp -> https://mcp.zoom.us/mcp/zoom/streamable
 ```
 If missing, re-add it using [concepts/oauth-setup.md](concepts/oauth-setup.md).
 
 **2. Tool discovery working?**
-- Confirm the client can see 7 default Zoom MCP tools: `search_meetings`,
+- Confirm the client can see 9 default Zoom MCP tools: `search_meetings`,
   `create_new_file_with_markdown`, `search_zoom`, `get_meeting_assets`,
-  `get_recording_resource`, `get_file_content`, and `recordings_list`.
+  `get_recording_resource`, `get_file_content`, `recordings_list`,
+  `hub_create_file_from_content`, and `hub_get_file_content`.
 - If your client exposes raw protocol inspection, verify `tools/list` succeeds.
 - Compare the visible tools with [references/tools.md](references/tools.md).
 
@@ -28,9 +29,13 @@ Minimum Zoom MCP scopes for this guide:
 - `cloud_recording:read:content`
 - `docs:write:import` if you want Zoom Docs creation
 - `docs:read:export` if you want Zoom Docs or My Notes Markdown content retrieval
+- `hub:write:content` if you want Hub file creation
+- `hub:read:content` if you want Hub file content retrieval
 
 Whiteboard uses a separate scope set. See [whiteboard/SKILL.md](whiteboard/SKILL.md).
-Team Chat write/update tools use a separate scope set. See [team-chat/SKILL.md](team-chat/SKILL.md).
+Team Chat tools use a separate scope set. See [team-chat/SKILL.md](team-chat/SKILL.md).
+Meetings, Docs, Tasks, and Revenue Accelerator also have dedicated server guidance linked from
+[SKILL.md](SKILL.md).
 
 **4. AI Companion features enabled?**
 

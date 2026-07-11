@@ -1,7 +1,7 @@
 # Authentication and Identifiers — Whiteboard MCP
 
-Guidance for `https://mcp-us.zoom.us/mcp/whiteboard/streamable` and
-`https://mcp-us.zoom.us/mcp/whiteboard/sse`.
+Guidance for `https://mcp.zoom.us/mcp/whiteboard/streamable` and
+`https://mcp.zoom.us/mcp/whiteboard/sse`.
 
 ## Authentication Behavior
 

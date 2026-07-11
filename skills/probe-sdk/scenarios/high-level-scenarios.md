@@ -29,3 +29,16 @@
 - During outage/performance alerts, run Probe tests from affected geos.
 - Distinguish local device failures from Zoom/service-zone path issues.
 - Route incident response based on network and protocol-specific findings.
+
+## 6) Camera Capture Evidence Bundle
+
+- Obtain explicit consent before recording camera content.
+- Call `startCameraDump()` in Chrome/Chromium and retain the returned session.
+- Stop manually or allow the configured duration to elapse, then download the offline bundle.
+- Apply sensitive-evidence retention and transfer controls outside Probe SDK.
+
+## 7) Screen-Share Readiness Check
+
+- Call `diagnoseScreenShare()` from HTTPS before a Meeting SDK or Video SDK share flow.
+- Distinguish user cancellation, permission denial, static environment failure, and black capture.
+- Release the captured display stream immediately after frame sampling.

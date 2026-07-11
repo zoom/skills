@@ -18,9 +18,9 @@ Authoritative endpoint inventory for Tasks. This file mirrors the official Zoom 
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 14 |
-| Path templates | 8 |
-| Tags | 4 |
+| Endpoint operations | 17 |
+| Path templates | 11 |
+| Tags | 6 |
 
 ## Tag Index
 
@@ -29,6 +29,8 @@ Authoritative endpoint inventory for Tasks. This file mirrors the official Zoom 
 | Assignee | 3 |
 | Collaborator | 3 |
 | Comment | 3 |
+| File | 1 |
+| Import | 2 |
 | Tasks | 5 |
 
 ## Endpoints by Tag
@@ -54,8 +56,21 @@ Authoritative endpoint inventory for Tasks. This file mirrors the official Zoom 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/tasks/items/{taskId}/comments` | Get a task's comments | `GetAV1TasksComment` |
-| POST | `/tasks/items/{taskId}/comments` | Add a comment to task | `addComment` |
+| POST | `/tasks/items/{taskId}/comments` | Add a comment to a task | `addComment` |
 | DELETE | `/tasks/items/{taskId}/comments/{commentId}` | Delete a task's comment | `DeleteTaskComment` |
+
+### File
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/tasks/files` | Upload a file in tasks | `Uploadfilefortasksimport` |
+
+### Import
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/tasks/imports` | Submit a task import job | `submitTasksImportJob` |
+| GET | `/tasks/imports/{importId}` | Get import job status | `getTasksImportJob` |
 
 ### Tasks
 
@@ -63,6 +78,6 @@ Authoritative endpoint inventory for Tasks. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/tasks/items` | List tasks | `getMyTasks` |
 | POST | `/tasks/items` | Create a new task | `createTask` |
-| DELETE | `/tasks/items/{taskId}` | Delete a task | `deleteTask` |
 | GET | `/tasks/items/{taskId}` | Get task details | `getTaskDetail` |
+| DELETE | `/tasks/items/{taskId}` | Delete a task | `deleteTask` |
 | PATCH | `/tasks/items/{taskId}` | Update task fields | `updateTask` |

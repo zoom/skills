@@ -18,6 +18,8 @@ From global/class reference surfaces:
 - `requestMediaDevices`
 - `diagnoseAudio`
 - `diagnoseVideo`
+- `diagnoseScreenShare`
+- `startCameraDump`
 - `startToDiagnose`
 - `stopToDiagnose`
 - `stopToDiagnoseVideo`
@@ -25,6 +27,16 @@ From global/class reference surfaces:
 - `reportBasicInfo`
 - `reportFeatures`
 - `cleanup`
+
+## Evidence-Capture Guardrails
+
+- `diagnoseScreenShare` performs environment, permission-capture, and black-frame checks. It
+  requires HTTPS and is not supported on mobile browsers.
+- `startCameraDump` is Chrome/Chromium-only because it requires `MediaStreamTrackProcessor`.
+- Obtain explicit user consent before camera dump because the bundle includes recorded camera
+  content. Stop the session before calling `downloadBundle()`.
+- Treat `.probe.tar` and `.probe.tar.gz` as sensitive diagnostic evidence. Probe SDK does not
+  upload them; the application or user controls transfer and retention.
 
 ## Key Enums/Constants
 
@@ -41,3 +53,4 @@ From global/class reference surfaces:
 - Changelog: https://developers.zoom.us/changelog/probe-sdk/
 - npm package: https://www.npmjs.com/package/@zoom/probesdk
 - sample source: https://github.com/zoom/probesdk-web
+- Verified package baseline: `1.0.4` on 2026-07-10

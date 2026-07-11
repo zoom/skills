@@ -2,8 +2,8 @@
 name: zoom-mcp/whiteboard
 description: |
   Zoom Whiteboard MCP server guidance. Use for Whiteboard MCP auth, endpoints, ID mapping,
-  and tool workflows such as list_whiteboards and get_a_whiteboard. Prefer this child
-  skill when the request is specifically about Whiteboard MCP rather than general Zoom MCP.
+  and tool workflows for creating, reading, listing, and sharing Whiteboards. Prefer this
+  child skill when the request is specifically about Whiteboard MCP rather than general Zoom MCP.
 triggers:
   - "whiteboard mcp"
   - "zoom whiteboard mcp"
@@ -23,8 +23,8 @@ Dedicated guidance for Zoom's Whiteboard MCP server.
 
 | Transport | URL |
 |-----------|-----|
-| Streamable HTTP (recommended) | `https://mcp-us.zoom.us/mcp/whiteboard/streamable` |
-| SSE (fallback) | `https://mcp-us.zoom.us/mcp/whiteboard/sse` |
+| Streamable HTTP (recommended) | `https://mcp.zoom.us/mcp/whiteboard/streamable` |
+| SSE (fallback) | `https://mcp.zoom.us/mcp/whiteboard/sse` |
 
 ## Authentication
 
@@ -47,6 +47,10 @@ Whiteboard MCP read scopes:
 
 Write-capable Whiteboard metadata advertised by the gateway:
 - `whiteboard:write:whiteboard`
+- `whiteboard:write:collaborator`
+- `whiteboard:delete:collaborator`
+- `whiteboard:update:collaborator`
+- `whiteboard:read:list_collaborators`
 
 ## Whiteboard ID Mapping
 
@@ -70,12 +74,18 @@ The current Whiteboard MCP tool surface is:
 - `create_a_whiteboard`
 - `get_a_whiteboard`
 - `create_a_whiteboard_by_script`
-- `update_a_whiteboard_metadata`
 - `create_a_whiteboard_for_meeting_summary`
 - `create_a_whiteboard_for_strategy_analysis`
+- `add_a_whiteboard_collaborator`
+- `delete_a_whiteboard_collaborator`
+- `get_a_whiteboard_collaborator`
+- `update_a_whiteboard_collaborator`
 
 Some MCP clients namespace server tools in the UI. Treat the raw tool names above as
 authoritative.
+
+Older catalogs included `update_a_whiteboard_metadata`; it is not in the current official tool
+catalog. Re-run `tools/list` before attempting metadata updates.
 
 Reference: [references/tools.md](references/tools.md)
 
@@ -87,8 +97,12 @@ Reference: [references/tools.md](references/tools.md)
 
 ## Chaining
 
+- Marketplace app creation: [Whiteboard MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-whiteboard.json)
+  via [Marketplace app management](../../rest-api/references/marketplace-apps.md)
+- Token acquisition: create the app first, then use
+  [OAuth guidance](../concepts/oauth-setup.md) to authorize the user and mint the bearer token
+  supplied to this MCP endpoint
 - Parent MCP skill: [../SKILL.md](../SKILL.md)
-- OAuth guidance: [../concepts/oauth-setup.md](../concepts/oauth-setup.md)
 - General routing: [../../general/SKILL.md](../../general/SKILL.md)
 
 ## References

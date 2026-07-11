@@ -5,12 +5,19 @@
 Use the repository-standard workflow:
 - [../../general/references/sdk-upgrade-workflow.md](../../general/references/sdk-upgrade-workflow.md)
 
+Current verified npm release: `@zoom/probesdk@1.0.4` (2026-07-10).
+
+Release `1.0.4` also fixes inconsistent network-bandwidth units. Re-baseline thresholds and
+telemetry dashboards if they were calibrated against an earlier package.
+
 ## Compatibility Risks
 
 - Renderer option naming drift (`type` vs `rendererType`) across docs/examples.
 - Report object field naming drift (`basicInfo` vs `basicInfoEntries`, `supportedFeatures` vs `featureEntries`).
 - Browser support table age vs current browser versions.
 - Runtime JS/WASM URL override mismatches.
+- Chrome-only camera-dump support and browser API availability.
+- Screen-share diagnostics requiring secure context and explicit picker interaction.
 
 ## Safe Upgrade Checklist
 

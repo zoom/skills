@@ -47,7 +47,7 @@ Root cause:
 
 Fix:
 
-- Pin/install published package version (example `@zoom/react-native-videosdk@2.4.5`).
+- Pin/install a published package version (current verified example `@zoom/react-native-videosdk@2.5.10`).
 - Reinstall node modules and restart Metro.
 
 ## Android SDK/adb not detected by RN CLI

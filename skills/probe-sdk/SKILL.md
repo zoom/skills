@@ -1,6 +1,6 @@
 ---
 name: probe-sdk
-description: "Zoom Probe SDK for web diagnostics. Use to test media device permissions, audio/video diagnostics, network quality probing, and compatibility reporting before users join meetings or sessions."
+description: "Zoom Probe SDK for web diagnostics. Use to test media permissions, audio/video/screen-share diagnostics, network quality, compatibility reporting, and consented offline camera-dump evidence before users join meetings or sessions."
 triggers:
   - "probe sdk"
   - "zoom probe"
@@ -11,11 +11,15 @@ triggers:
   - "diagnose audio video"
   - "browser compatibility diagnostics"
   - "diagnostic report"
+  - "camera dump"
+  - "screen share diagnostic"
 ---
 
 # Zoom Probe SDK
 
 Implementation guidance for Zoom Probe SDK (web) to run preflight diagnostics on user devices and network before meeting/session workflows.
+
+Current npm package verified on 2026-07-10: `@zoom/probesdk@1.0.4`.
 
 Official docs:
 - https://developers.zoom.us/docs/probe-sdk/
@@ -51,7 +55,7 @@ Start here:
 
 1. Initialize `Prober` / `Reporter`.
 2. Request media permissions and enumerate devices.
-3. Run targeted diagnostics (`diagnoseAudio`, `diagnoseVideo`).
+3. Run targeted diagnostics (`diagnoseAudio`, `diagnoseVideo`, `diagnoseScreenShare`).
 4. Run comprehensive network diagnostic (`startToDiagnose`) and stream stats to UI.
 5. Produce final report and apply readiness gates.
 6. Stop/cleanup (`stopToDiagnose`, `stopToDiagnoseVideo`, `releaseMediaStream`, `cleanup`).
@@ -62,6 +66,9 @@ Start here:
 - Support workflow that captures structured report for customer troubleshooting.
 - Device certification flow for kiosk or controlled endpoint environments.
 - Browser capability gating for advanced media features.
+- Consented Chrome/Chromium camera evidence capture with `startCameraDump()` for black-frame or
+  flicker investigations. The SDK creates an offline `.probe.tar` or `.probe.tar.gz`; it does
+  not upload the bundle.
 
 See [scenarios/high-level-scenarios.md](scenarios/high-level-scenarios.md) for details.
 

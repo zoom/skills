@@ -13,6 +13,10 @@ triggers:
 
 # Zoom Contact Center SDK - Android
 
+**Current public changelog release:** `5.6.0` (verified 2026-07-10). It changes real-time audio
+translation logic to improve live interpretation. Do not hardcode assumptions about translation
+behavior across SDK versions.
+
 Official docs:
 - https://developers.zoom.us/docs/contact-center/android/
 - https://marketplacefront.zoom.us/sdk/contact/android/index.html

@@ -18,8 +18,8 @@ Authoritative endpoint inventory for Scheduler. This file mirrors the official Z
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 21 |
-| Path templates | 13 |
+| Endpoint operations | 23 |
+| Path templates | 15 |
 | Tags | 9 |
 
 ## Tag Index
@@ -28,8 +28,8 @@ Authoritative endpoint inventory for Scheduler. This file mirrors the official Z
 |-----|------------|
 | analytics | 1 |
 | availability | 5 |
-| Routing Forms | 1 |
-| scheduled events | 5 |
+| Routing Forms | 2 |
+| scheduled events | 6 |
 | schedules | 5 |
 | scheduling links | 1 |
 | shares | 1 |
@@ -50,8 +50,8 @@ Authoritative endpoint inventory for Scheduler. This file mirrors the official Z
 |--------|----------|---------|-------------|
 | GET | `/scheduler/availability` | List availability | `list_availability` |
 | POST | `/scheduler/availability` | Insert availability | `insert_availability` |
-| DELETE | `/scheduler/availability/{availabilityId}` | Delete availability | `delete_availability` |
 | GET | `/scheduler/availability/{availabilityId}` | Get availability | `get_availability` |
+| DELETE | `/scheduler/availability/{availabilityId}` | Delete availability | `delete_availability` |
 | PATCH | `/scheduler/availability/{availabilityId}` | Patch availability | `patch_availability` |
 
 ### Routing Forms
@@ -59,14 +59,16 @@ Authoritative endpoint inventory for Scheduler. This file mirrors the official Z
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/scheduler/routing/forms/{formId}/response/{responseId}` | get routing response | `Getroutingresponse` |
+| GET | `/scheduler/routing/responses` | list account routing response | `list_account_routing_response` |
 
 ### scheduled events
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
+| POST | `/scheduler/attendee` | Create a booking for a schedule slot | `create_booking` |
 | GET | `/scheduler/events` | List scheduled events | `list_scheduled_events` |
-| DELETE | `/scheduler/events/{eventId}` | Delete scheduled events | `delete_scheduled_events` |
 | GET | `/scheduler/events/{eventId}` | Get scheduled events | `get_scheduled_events` |
+| DELETE | `/scheduler/events/{eventId}` | Delete scheduled events | `delete_scheduled_events` |
 | PATCH | `/scheduler/events/{eventId}` | Patch scheduled events | `patch_scheduled_events` |
 | GET | `/scheduler/events/{eventId}/attendees/{attendeeId}` | Get scheduled event attendee | `get_scheduled_event_attendee` |
 
@@ -76,8 +78,8 @@ Authoritative endpoint inventory for Scheduler. This file mirrors the official Z
 |--------|----------|---------|-------------|
 | GET | `/scheduler/schedules` | List schedules | `list_schedules` |
 | POST | `/scheduler/schedules` | Insert schedules | `insert_schedule` |
-| DELETE | `/scheduler/schedules/{scheduleId}` | Delete schedules | `delete_schedules` |
 | GET | `/scheduler/schedules/{scheduleId}` | Get schedules | `get_schedule` |
+| DELETE | `/scheduler/schedules/{scheduleId}` | Delete schedules | `delete_schedules` |
 | PATCH | `/scheduler/schedules/{scheduleId}` | Patch schedules | `patch_schedule` |
 
 ### scheduling links

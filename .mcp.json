@@ -2,15 +2,15 @@
   "mcpServers": {
     "zoom-mcp": {
       "type": "http",
-      "url": "https://mcp-us.zoom.us/mcp/zoom/streamable"
+      "url": "https://mcp.zoom.us/mcp/zoom/streamable"
     },
     "zoom-whiteboard-mcp": {
       "type": "http",
-      "url": "https://mcp-us.zoom.us/mcp/whiteboard/streamable"
+      "url": "https://mcp.zoom.us/mcp/whiteboard/streamable"
     },
     "zoom-team-chat-mcp": {
       "type": "http",
-      "url": "https://mcp.zoom.us/mcp/team_chat/streamable"
+      "url": "https://mcp.zoom.us/mcp/chat/streamable"
     },
     "zoom-docs-mcp": {
       "type": "http",
@@ -19,6 +19,14 @@
     "zoom-revenue-accelerator-mcp": {
       "type": "http",
       "url": "https://mcp.zoom.us/mcp/revenue_accelerator/streamable"
+    },
+    "zoom-meetings-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/meeting/streamable"
+    },
+    "zoom-tasks-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/tasks/streamable"
     }
   }
 }

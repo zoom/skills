@@ -11,14 +11,15 @@ Use this as a high-signal checklist of what developers repeatedly ask about the 
 - Platform: **Web** vs **Android/iOS** vs **Windows/macOS** vs **Linux headless**
 - Web integration: **Client View (CDN + `ZoomMtg`)** vs **Component View (npm + `ZoomMtgEmbedded`)**
 - Join type: **join** as participant vs **start** as host
-- Auth inputs you have: `sdkKey`, `sdkSecret` (server only), `meetingNumber`, `role`, `zak` (if starting as host), `passcode`
+- Auth inputs you have: Meeting SDK Client ID, Client Secret (server only), `meetingNumber`,
+  `role`, `zak` (if starting as host), and passcode
 - Exact error: full error code/message + SDK version
 
 ## Signatures (Most Common Root Cause)
 
-- **Generate signature server-side only** (never expose SDK Secret in browser/mobile client code).
+- **Generate signature server-side only** (never expose Client Secret in browser/mobile client code).
 - Use the right payload fields:
-  - `sdkKey`, `mn` (meeting number), `role`, `iat`, `exp`, `tokenExp`
+  - `appKey` (Client ID), `mn` (meeting number), `role`, `iat`, `exp`, `tokenExp`
 - Typical mistakes:
   - Wrong meeting number format (non-digits; strip formatting)
   - `exp` too long/short, or client/server clock skew
@@ -97,4 +98,3 @@ Checklist:
 - Reduce subscribed video streams / lower quality where supported
 - Ensure you’re not rendering unnecessary DOM/video elements (Component View)
 - Confirm the device/browser constraints (some behavior is expected)
-

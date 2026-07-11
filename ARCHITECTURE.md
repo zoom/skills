@@ -47,8 +47,13 @@ User request
 Common route outcomes:
 
 - API management flows -> `rest-api`
-- AI-driven meeting search, Team Chat/Docs search, meeting-asset retrieval, recording-resource retrieval, and Zoom Docs workflows -> `zoom-mcp`
+- General AI-driven Zoom search, meeting assets, recording resources, Docs, and Hub content -> `zoom-mcp`
 - Whiteboard-specific MCP workflows -> `zoom-mcp/whiteboard`
+- Team Chat MCP workflows -> `zoom-mcp/team-chat`
+- Meeting search/assets/recordings through dedicated MCP -> `zoom-mcp/meetings`
+- Zoom Docs creation/retrieval through dedicated MCP -> `zoom-mcp/docs`
+- Task management through MCP -> `zoom-mcp/tasks`
+- Revenue Accelerator intelligence through MCP -> `zoom-mcp/revenue-accelerator`
 - Enterprise AI systems requiring stable API core + AI tool layer -> `rest-api` + `zoom-mcp`
 - Event notifications -> `webhooks` or `websockets`
 - Embedded meetings -> `meeting-sdk`
@@ -105,7 +110,11 @@ repo/
 │   ├── oauth/
 │   ├── zoom-mcp/
 │   │   ├── whiteboard/
-│   │   └── team-chat/
+│   │   ├── team-chat/
+│   │   ├── meetings/
+│   │   ├── docs/
+│   │   ├── tasks/
+│   │   └── revenue-accelerator/
 │   └── ...
 └── tools/
 ```
@@ -166,9 +175,13 @@ Platform-heavy spokes (examples):
 | `ui-toolkit` | Prebuilt Video SDK UI components |
 | `cobrowse-sdk` | Collaborative browsing support flows |
 | `oauth` | Auth flows and token models |
-| `zoom-mcp` | Zoom-hosted MCP server workflows for semantic meeting search, Team Chat/Docs search, meeting assets, recording resources, Docs creation, and Docs content export |
+| `zoom-mcp` | Parent routing and the default 9-tool Zoom MCP server |
 | `zoom-mcp/whiteboard` | Whiteboard MCP endpoints, scopes, auth findings, ID mapping, and live Whiteboard tool workflows |
-| `zoom-mcp/team-chat` | Team Chat MCP endpoints, write/update scopes, message/channel/contact tools, and write-safety guardrails |
+| `zoom-mcp/team-chat` | Team Chat read/search/write tools for messages, files, contacts, sessions, and channels |
+| `zoom-mcp/meetings` | Meeting search, assets, recordings, and recording resources |
+| `zoom-mcp/docs` | Zoom Docs Markdown creation and retrieval |
+| `zoom-mcp/tasks` | Tasks, comments, assignees, collaborators, and task steps |
+| `zoom-mcp/revenue-accelerator` | ZRA conversations, transcripts, analyses, deals, customers, and coaching data |
 
 ## Maintenance Notes
 

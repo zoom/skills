@@ -23,6 +23,8 @@ behind a tool call.
 | `get_recording_resource` | `cloud_recording:read:content` |
 | `create_new_file_with_markdown` | `docs:write:import` worked with user OAuth; S2S runtime error surfaced `docs_import:write` aliasing |
 | `get_file_content` | `docs:read:export` |
+| `hub_create_file_from_content` | `hub:write:content` |
+| `hub_get_file_content` | `hub:read:content` |
 
 ## Recording and Transcript Failures
 
@@ -44,13 +46,15 @@ Common downstream validation response:
 |------|-------------|-------|-----|
 | `create_new_file_with_markdown` | `Upstream API returned error status code: 400 ... "message":"invalid param"` | Invalid parameter value such as a bogus `parent_id` | Fix the argument value and retry |
 
-## Whiteboard Server Split
+## Product Server Split
 
-The Zoom MCP server (`mcp-us.zoom.us/mcp/zoom/streamable`) and the Whiteboard MCP server
-(`mcp-us.zoom.us/mcp/whiteboard/streamable`) are separate surfaces.
+The default, Whiteboard, Team Chat, Meetings, Docs, Tasks, and Revenue Accelerator MCP servers
+are separate surfaces. A valid tool name can still fail with `-32602` when sent to the wrong one.
 
 Use the Whiteboard child skill for Whiteboard-specific auth, scopes, and identifier mapping:
 - [../whiteboard/SKILL.md](../whiteboard/SKILL.md)
+
+Use the product child links in [../SKILL.md](../SKILL.md) to select the correct endpoint.
 
 ## Debugging Checklist
 

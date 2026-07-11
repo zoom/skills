@@ -42,9 +42,49 @@
         {
           "scope": "team_chat:write:members",
           "optional": false
+        },
+        {
+          "scope": "team_chat:read:channel",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:update:channel_member_role",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:read:list_members",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:read:list_user_channels",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:read:list_contacts",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:read:list_user_files",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:read:list_user_messages",
+          "optional": false
+        },
+        {
+          "scope": "team_chat:read:list_user_sessions",
+          "optional": false
+        },
+        {
+          "scope": "chat_channel:read",
+          "optional": false
+        },
+        {
+          "scope": "chat_channel:write",
+          "optional": false
         }
       ],
-      "scope_description": "Use the write-capable Team Chat MCP tools for the authorizing user.",
+      "scope_description": "Use the current Team Chat MCP read and write tools for the authorizing user.",
       "enable_private_pkce_client": true,
       "enable_public_pkce_client": false
     },

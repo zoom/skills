@@ -24,6 +24,22 @@ triggers:
 
 Build custom video experiences powered by Zoom's infrastructure.
 
+## Current Release Snapshot
+
+Verified from the public changelog and package registries on 2026-07-10:
+
+| Platform family | Current release |
+|-----------------|-----------------|
+| Android, iOS, Linux, macOS, Windows | `2.6.0` |
+| React Native | `2.5.10` |
+| Flutter | `2.5.10` |
+| Web | `2.4.5` |
+| Unity wrapper | `0.0.2` |
+
+Native `2.6.0` contains breaking changes. Read
+[the native 2.6.0 upgrade reference](references/native-2.6.0-upgrade.md) before using the older
+`2.5.10` package inventories bundled into several child skills.
+
 ## Hard Routing Guardrail (Read First)
 
 - If the user asks for custom real-time video app behavior (topic/session join, custom rendering, attach/detach), route to Video SDK.
@@ -104,7 +120,11 @@ Video SDK gives you **full control over the UI**:
 
 ## SDK-Bundled API Skills
 
-Video SDK 2.5.10 packages include version-matched API skills and paired Markdown/JSON documentation for several native platforms. Keep the platform skill in this repository as the workflow entry point, then use the SDK-bundled skill to verify exact signatures, enums, callback timing, role requirements, and object lifetime.
+The reviewed Video SDK 2.5.10 packages include version-matched API skills and paired Markdown/JSON
+documentation for several native platforms. These are historical package snapshots now that
+native `2.6.0` is public. Keep the platform skill in this repository as the workflow entry point,
+then use the bundled skill from the exact package you deploy to verify signatures, enums,
+callbacks, threading, role requirements, and object lifetime.
 
 | Platform | SDK-bundled skill |
 |----------|-------------------|

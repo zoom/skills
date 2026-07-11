@@ -16,6 +16,12 @@ triggers:
 
 Embed Zoom meeting capabilities into Windows desktop applications for native C++ integrations and headless bots.
 
+> **Version boundary:** The public changelog's current Windows release is `7.1.0` (verified
+> 2026-07-10), while detailed interface inventories in this skill were generated from
+> `6.7.2.26830`. Version `7.1.0` includes breaking changes, a VC++ runtime DLL upgrade, I420
+> Limited/Full, breakout-room summaries, face ROI in raw video, and on-demand avatar download.
+> Diff the `7.1.0` headers, required virtual methods, DLL set, and samples before upgrading.
+
 ## New to Zoom SDK? Start Here!
 
 **The fastest way to master the SDK:**

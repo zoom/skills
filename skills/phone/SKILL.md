@@ -22,6 +22,11 @@ Official docs:
 - https://developers.zoom.us/docs/phone/
 - CRM sample reference: https://github.com/zoom/CRM-Sample
 
+The current API Hub inventory contains 391 Phone operations (verified 2026-07-10), including
+expanded call-handling/settings coverage and call-element recording/voicemail resources. Use
+[the generated Phone API reference](../rest-api/references/phone.md) for exact paths rather than
+relying on an older endpoint list in examples.
+
 ## Routing Guardrail
 
 - If the user needs embedded softphone behavior in a web app, use Smart Embed ([examples/smart-embed-postmessage-bridge.md](examples/smart-embed-postmessage-bridge.md)).

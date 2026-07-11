@@ -15,6 +15,10 @@ triggers:
 
 Use this skill when building custom iOS video session experiences.
 
+> **Current release:** `2.6.0` (verified 2026-07-10). It changes singleton access, adds required
+> `util.framework` and `zContext.framework`, and includes other breaking API changes. The bundled
+> inventory below is `2.5.10`; use [the upgrade notes](../references/native-2.6.0-upgrade.md).
+
 ## Start Here
 
 1. [ios.md](ios.md)

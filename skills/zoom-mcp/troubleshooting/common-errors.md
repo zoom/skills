@@ -14,7 +14,7 @@ registration is missing.
 ```bash
 claude mcp remove zoom-mcp
 claude mcp add --transport http zoom-mcp \
-  https://mcp-us.zoom.us/mcp/zoom/streamable \
+  https://mcp.zoom.us/mcp/zoom/streamable \
   --header "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   --scope user
 ```
@@ -55,6 +55,10 @@ for the tool you called.
 ### `get_file_content` fails on scope
 
 **Required scope:** `docs:read:export`
+
+### Hub content tools fail on scope
+
+**Required scopes:** `hub:write:content` for creation and `hub:read:content` for retrieval.
 
 ## Search and Retrieval Issues
 
@@ -121,8 +125,13 @@ Returned resource URLs still require the bearer token.
 sent to the wrong MCP surface.
 
 **Fix:**
-- Zoom MCP: `https://mcp-us.zoom.us/mcp/zoom/streamable`
-- Whiteboard MCP: `https://mcp-us.zoom.us/mcp/whiteboard/streamable`
+- Zoom MCP: `https://mcp.zoom.us/mcp/zoom/streamable`
+- Whiteboard MCP: `https://mcp.zoom.us/mcp/whiteboard/streamable`
+- Team Chat MCP: `https://mcp.zoom.us/mcp/chat/streamable`
+- Meetings MCP: `https://mcp.zoom.us/mcp/meeting/streamable`
+- Docs MCP: `https://mcp.zoom.us/mcp/docs/streamable`
+- Tasks MCP: `https://mcp.zoom.us/mcp/tasks/streamable`
+- Revenue Accelerator MCP: `https://mcp.zoom.us/mcp/revenue_accelerator/streamable`
 - re-run `tools/list`
 - use the current tool names exposed by that server
 - if the request is Whiteboard-specific, route to [../whiteboard/SKILL.md](../whiteboard/SKILL.md)

@@ -182,7 +182,7 @@ Include the SDK snippet in the `<head>` tag of your HTML page:
       fragment.appendChild(c);
     }
     loadJs(
-      `https://us01-zcb.zoom.us/static/resource/sdk/${ZOOM_SDK_KEY}/js/2.13.2`
+      `https://us01-zcb.zoom.us/static/resource/sdk/${ZOOM_SDK_KEY}/js/3.6.0`
     );
     d.parentNode.insertBefore(fragment, d);
   })(window, document, 'script', 'ZoomCobrowseSDK');
@@ -193,10 +193,14 @@ Include the SDK snippet in the `<head>` tag of your HTML page:
 
 Set the SDK VERSION using semantic versioning:
 
-- **Fixed version**: `js/2.13.2` - Use exact version 2.13.2
-- **Latest patch**: `js/2.13.x` - Use latest `>=2.13.0 and <2.14.0`
+- **Fixed version**: `js/3.6.0` - Use exact version 3.6.0
+- **Latest patch**: `js/3.6.x` - Use latest `>=3.6.0 and <3.7.0`
 
-**Current version**: 2.13.2 (as of February 2026)
+**Current public changelog version**: 3.6.0 (June 29, 2026; verified 2026-07-10).
+
+The general get-started page can show an older illustrative CDN version. Use the product
+changelog plus your account's downloadable package as the version authority, then regression-test
+initialization, masking, annotations, remote assist, and reconnection before upgrading major lines.
 
 ### Initialize the SDK
 
@@ -256,7 +260,7 @@ session.start({ sdkToken: token });
         c.src = url;
         fragment.appendChild(c);
       }
-      loadJs(`https://us01-zcb.zoom.us/static/resource/sdk/${ZOOM_SDK_KEY}/js/2.13.2`);
+      loadJs(`https://us01-zcb.zoom.us/static/resource/sdk/${ZOOM_SDK_KEY}/js/3.6.0`);
       d.parentNode.insertBefore(fragment, d);
     })(window, document, "script", "ZoomCobrowseSDK");
   </script>

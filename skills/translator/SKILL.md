@@ -14,6 +14,10 @@ triggers:
 
 # Zoom AI Services Translator
 
+**Current API audit:** Official docs and OpenAPI were rechecked on 2026-07-10. The full fast,
+batch job, job-list/status/cancel, file-list, and per-file detail surface released May 18, 2026
+is included below.
+
 Implementation guidance for Zoom AI Services Translator across:
 - synchronous plain-text translation (`POST /aiservices/translator/translate`)
 - asynchronous batch text-file jobs (`/aiservices/translator/jobs*`)

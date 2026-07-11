@@ -22,6 +22,8 @@ Implementation guidance for Zoom Rivet (JavaScript/TypeScript) as a server-side 
 - Typed REST API endpoint wrappers
 - Multi-module server composition
 
+Current npm package verified on 2026-07-10: `@zoom/rivet@0.4.0`.
+
 Official docs:
 - https://developers.zoom.us/docs/rivet/
 - https://developers.zoom.us/docs/rivet/javascript/
@@ -78,7 +80,8 @@ Start here:
 ## High-Level Scenarios
 
 - Team Chat slash-command bot + Team Chat data API enrichment.
-- Multi-module backend (Users + Meetings + Team Chat + Phone) sharing one process.
+- Multi-module backend (Users + Meetings + Team Chat + Phone + Commerce) sharing one process.
+- Marketplace automation module paired with the Marketplace app templates in this repository.
 - Video SDK telemetry backend using `videosdk` module event stream + API surfaces.
 - ISV orchestration layer with tenant-aware token storage and per-module webhooks.
 - AWS Lambda webhook processor with Rivet `AwsLambdaReceiver`.

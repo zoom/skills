@@ -33,14 +33,21 @@ From `@zoom/meetingsdk-react-native` wrapper surface:
 - `updateMeetingSetting(config)`
 - `joinMeeting(config)`
 - `startMeeting(config)`
+- `muteMyVideo(mute)`
+- `muteMyAudio(mute)`
+- `connectMyAudio(on)`
 - `cleanup()`
 
 See: **[Wrapper API](references/wrapper-api.md)**
 
 ## Critical Notes
 
+- Latest npm wrapper verified on 2026-07-10: `@zoom/meetingsdk-react-native@7.0.5`.
 - You still need native iOS/Android Meeting SDK dependencies configured.
-- `joinMeeting` and `startMeeting` return numeric status/error codes from native layer.
+- In `7.0.5`, `joinMeeting` and `startMeeting` resolve `MobileRTCMeetError` string values rather
+  than the older numeric return type.
+- New `7.0.5` events include auth return, meeting error, join confirmation, meeting state change,
+  and auth identity expiration notifications.
 - For host start flow, pass `zoomAccessToken` (ZAK).
 - Keep JWT generation on backend, never embed SDK secret in app.
 - Current docs note React Native support up to `0.75.4`; Expo is not supported.

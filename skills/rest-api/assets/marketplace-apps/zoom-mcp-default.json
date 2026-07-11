@@ -46,9 +46,17 @@
         {
           "scope": "docs:read:export",
           "optional": false
+        },
+        {
+          "scope": "hub:write:content",
+          "optional": false
+        },
+        {
+          "scope": "hub:read:content",
+          "optional": false
         }
       ],
-      "scope_description": "Use the seven default Zoom MCP tools for the authorizing user.",
+      "scope_description": "Use the nine default Zoom MCP tools for the authorizing user.",
       "enable_private_pkce_client": true,
       "enable_public_pkce_client": false
     },

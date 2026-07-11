@@ -14,6 +14,10 @@ triggers:
 
 Use this skill when building Android apps with custom real-time video sessions.
 
+> **Current release:** `2.6.0` (verified 2026-07-10). The bundled API inventory below is from
+> `2.5.10`. Read [the 2.6.0 upgrade notes](../references/native-2.6.0-upgrade.md) and verify exact
+> Java/native declarations in the downloaded `2.6.0` package.
+
 ## Start Here
 
 1. [android.md](android.md)

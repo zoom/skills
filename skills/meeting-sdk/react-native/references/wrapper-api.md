@@ -14,8 +14,11 @@
 
 - `initSDK(config): Promise<boolean>`
 - `isInitialized(): Promise<boolean>`
-- `joinMeeting(config): Promise<number>`
-- `startMeeting(config): Promise<number>`
+- `joinMeeting(config): Promise<MobileRTCMeetError>` (`7.0.5+`)
+- `startMeeting(config): Promise<MobileRTCMeetError>` (`7.0.5+`)
+- `muteMyVideo(mute): Promise<MobileRTCSDKError>` (`7.0.5+`)
+- `muteMyAudio(mute): Promise<MobileRTCAudioError | MobileRTCSDKError>` (`7.0.5+`)
+- `connectMyAudio(on): Promise<boolean>` (`7.0.5+`)
 - `updateMeetingSetting(config): void`
 - `cleanup(): void`
 

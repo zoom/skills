@@ -2,6 +2,11 @@
 
 Understanding the different token types for Meeting SDK authentication, especially for bots joining meetings.
 
+> **Platform guardrail:** `@zoom/meetingsdk` for Web is documented for human participants and
+> must not be used for bots or AI notetakers. Use [Meeting SDK Linux](../linux/SKILL.md) or RTMS
+> for bot/media workloads. Web snippets below only illustrate how a human Web participant passes
+> ZAK/OBF fields; they are not a bot architecture.
+
 ## Overview
 
 Meeting SDK authentication involves multiple token types that serve different purposes. This guide clarifies the confusion between JWT signatures, ZAK tokens, and OBF tokens.
@@ -45,12 +50,12 @@ A JWT (JSON Web Token) signature authenticates your application to use the Meeti
 // Server-side (Node.js)
 const KJUR = require('jsrsasign');
 
-function generateSignature(sdkKey, sdkSecret, meetingNumber, role) {
+function generateSignature(clientId, clientSecret, meetingNumber, role) {
   const iat = Math.round(Date.now() / 1000) - 30;  // 30 seconds ago
   const exp = iat + 60 * 60 * 2;                    // 2 hours from iat
   
   const payload = {
-    sdkKey: sdkKey,        // Your SDK Client ID
+    appKey: clientId,      // Your Meeting SDK Client ID
     mn: meetingNumber,     // Meeting number to join
     role: role,            // 0 = participant, 1 = host
     iat: iat,
@@ -63,22 +68,20 @@ function generateSignature(sdkKey, sdkSecret, meetingNumber, role) {
   return KJUR.jws.JWS.sign('HS256', 
     JSON.stringify(header), 
     JSON.stringify(payload), 
-    sdkSecret              // Your SDK Client Secret
+    clientSecret           // Your Meeting SDK Client Secret
   );
 }
 ```
 
-### Best Practice: Short-Lived Tokens
+### Best Practice: Generate Tokens On Demand
 
 ```javascript
 // Generate token just before joining
-const iat = Math.floor(Date.now() / 1000) - 7200;  // 2 hours in past
-const exp = Math.floor(Date.now() / 1000) + 10;    // 10 seconds from now
+const iat = Math.floor(Date.now() / 1000) - 30; // tolerate clock skew
+const exp = iat + 60 * 60 * 2;                  // two hours
 
-// Why this works:
-// - exp is short-lived (security)
-// - exp - iat >= 2 hours (Zoom requirement)
-// - Token generated right before use
+// Current docs require exp/tokenExp at least 1,800 seconds after iat
+// and recommend no more than 48 hours.
 ```
 
 ### Role Values
@@ -141,10 +144,9 @@ user:read:zak
 // Web SDK
 ZoomMtg.join({
   signature: signature,      // JWT signature (always required)
-  sdkKey: clientId,
   meetingNumber: meetingNumber,
   passWord: password,
-  userName: "Meeting Bot",
+  userName: "SDK Participant",
   zak: zakToken,             // ZAK token for authenticated join
   success: (success) => console.log('Joined'),
   error: (error) => console.error(error)
@@ -154,15 +156,15 @@ ZoomMtg.join({
 ### Key Properties
 
 - **Short-lived**: Configurable TTL (typically 1-2 hours)
-- **Any ZAK works**: Doesn't need to be from a meeting participant
-- **No concurrency limit**: One service account can generate unlimited tokens
+- **Identity matters**: The ZAK identifies a Zoom user; that user still must satisfy meeting
+  authentication, account, licensing, and admin policy.
+- **Do not assume unlimited use**: Token endpoint limits and product concurrency rules still apply.
 - **Expiry checked at join**: If already in meeting, bot stays connected even if ZAK expires
 
 ### Common Mistake
 
-**Wrong:** Thinking ZAK must be from a meeting participant.
-
-**Right:** Any Zoom account's ZAK satisfies "Only Authenticated Users" requirement. Create one service account (e.g., `meeting-bot@company.com`) for all your bots.
+Do not assume one arbitrary service-account ZAK satisfies every meeting's authentication profile.
+Use the intended Zoom user and validate that user's account/domain against the meeting policy.
 
 ---
 
@@ -222,10 +224,9 @@ user:read:token
 // Web SDK
 ZoomMtg.join({
   signature: signature,      // JWT signature (always required)
-  sdkKey: clientId,
   meetingNumber: meetingNumber,
   passWord: password,
-  userName: "Meeting Bot",
+  userName: "SDK Participant",
   obfToken: obfToken,        // OBF token (NOT zak)
   success: (success) => console.log('Joined'),
   error: (error) => console.error(error)
@@ -275,7 +276,7 @@ You must map users to their meetings:
 
 ```javascript
 // 1. Generate JWT signature (always required)
-const signature = await generateSignature(sdkKey, sdkSecret, meetingNumber, 0);
+const signature = await generateSignature(clientId, clientSecret, meetingNumber, 0);
 
 // 2. Optionally get ZAK for authenticated-only meetings
 let zakToken = null;
@@ -286,10 +287,9 @@ if (meetingRequiresAuth) {
 // 3. Join meeting
 await ZoomMtg.join({
   signature: signature,
-  sdkKey: sdkKey,
   meetingNumber: meetingNumber,
   passWord: password,
-  userName: "Meeting Bot",
+  userName: "SDK Participant",
   zak: zakToken,  // Optional
 });
 ```
@@ -298,7 +298,7 @@ await ZoomMtg.join({
 
 ```javascript
 // 1. Generate JWT signature (always required)
-const signature = await generateSignature(sdkKey, sdkSecret, meetingNumber, 0);
+const signature = await generateSignature(clientId, clientSecret, meetingNumber, 0);
 
 // 2. For external meetings, get OBF token
 const obfToken = await getOBFToken(accessToken, meetingNumber);
@@ -309,10 +309,9 @@ const obfToken = await getOBFToken(accessToken, meetingNumber);
 // 4. Join meeting
 await ZoomMtg.join({
   signature: signature,
-  sdkKey: sdkKey,
   meetingNumber: meetingNumber,
   passWord: password,
-  userName: "Meeting Bot",
+  userName: "SDK Participant",
   obfToken: obfToken,  // For external meetings
 });
 ```

@@ -16,6 +16,11 @@ triggers:
 
 Expert guidance for building headless meeting bots with the Zoom Meeting SDK on Linux. This SDK enables server-side meeting participation, raw media capture, transcription, and AI-powered meeting automation.
 
+**Current public changelog release:** `7.1.0` (verified 2026-07-10). It includes breaking
+changes plus I420 Limited/Full, breakout-room summaries, face ROI in raw video, and on-demand
+avatar download. Verify the downloaded headers before using new symbols; existing examples can
+reflect an older package snapshot.
+
 ## How to Build a Meeting Bot That Automatically Joins and Records
 
 Use this skill when the requirement is:

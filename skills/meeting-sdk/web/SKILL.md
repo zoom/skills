@@ -26,6 +26,20 @@ triggers:
 
 Embed Zoom meeting capabilities into web applications with two integration options: **Client View** (full-page) or **Component View** (embeddable).
 
+## Current Package Baseline
+
+- Latest npm package verified on 2026-07-10: `@zoom/meetingsdk@6.2.0`.
+- The package declares exact React and React DOM peer dependencies at `18.2.0`; React 19 is
+  not part of the published support contract. Isolate the SDK in a React 18 boundary if the
+  surrounding application uses React 19.
+- The `6.2.0` changelog notes restored Client View `onUserJoin` behavior, Phase 1 ultrasound
+  signaling for same-device My Notes restrictions, retired AI Companion branding in Client View,
+  and an optimized Component View join process.
+- Use `5.1.4` or newer for WebRTC video to avoid compatibility problems with future Chrome
+  versions.
+- Meeting SDK Web is for human meeting participants. Do not use it for bots or AI notetakers;
+  route live media and notetaker workloads to [RTMS](../../rtms/SKILL.md).
+
 ## How to Implement a Custom Video User Interface for a Zoom Meeting in a Web App
 
 Use **Meeting SDK Web Component View**.
@@ -40,7 +54,7 @@ Browser page
   -> fetch Meeting SDK signature from backend
   -> ZoomMtgEmbedded.createClient()
   -> client.init({ zoomAppRoot })
-  -> client.join({ signature, sdkKey, meetingNumber, userName, password })
+  -> client.join({ signature, meetingNumber, userName, password })
   -> apply layout/style/customize options around the embedded meeting container
 ```
 
@@ -60,7 +74,7 @@ export async function startEmbeddedMeeting(meetingNumber: string, userName: stri
 
   if (!sigRes.ok) throw new Error(`signature_fetch_failed:${sigRes.status}`);
 
-  const { signature, sdkKey } = await sigRes.json();
+  const { signature } = await sigRes.json();
 
   await client.init({
     zoomAppRoot: document.getElementById('meetingSDKElement')!,
@@ -74,7 +88,6 @@ export async function startEmbeddedMeeting(meetingNumber: string, userName: stri
 
   await client.join({
     signature,
-    sdkKey,
     meetingNumber,
     userName,
     password,
@@ -127,7 +140,7 @@ For the direct custom-meeting-UI path, start with
 ## Prerequisites
 
 - Zoom app with Meeting SDK credentials from [Marketplace](https://marketplace.zoom.us/)
-- SDK Key (Client ID) and Secret
+- Meeting SDK Client ID and Client Secret
 - Modern browser (Chrome, Firefox, Safari, Edge)
 - Backend auth endpoint for signature generation
 
@@ -198,7 +211,7 @@ npm install @zoom/meetingsdk --save
 <script src="https://source.zoom.us/zoom-meeting-embedded-{VERSION}.min.js"></script>
 ```
 
-Replace `{VERSION}` with the [latest version](https://www.npmjs.com/package/@zoom/meetingsdk) (e.g., `3.11.0`).
+Replace `{VERSION}` with the package version you validated, for example `6.2.0`.
 
 ## Quick Start (Client View)
 
@@ -288,21 +301,21 @@ async function startMeeting() {
 
 ## Authentication Endpoint (Required)
 
-Both views require a JWT signature from a backend server. **Never expose your SDK Secret in frontend code!**
+Both views require a JWT signature from a backend server. **Never expose your Client Secret in frontend code!**
 
 ```bash
 # Clone Zoom's official auth endpoint
 git clone https://github.com/zoom/meetingsdk-auth-endpoint-sample --depth 1
 cd meetingsdk-auth-endpoint-sample
 cp .env.example .env
-# Edit .env with your SDK Key and Secret
+# Edit .env with your Meeting SDK Client ID and Client Secret
 npm install && npm run start
 ```
 
 ### Signature Generation
 
 The signature encodes:
-- `sdkKey` (or `clientId` for newer apps)
+- `appKey` set to the Meeting SDK Client ID
 - `meetingNumber`
 - `role` (0 = participant, 1 = host)
 - `iat` (issued at timestamp)
@@ -564,7 +577,6 @@ await client.init({
 await client.join({
   // Required
   signature: string,
-  sdkKey: string,
   meetingNumber: string | number,
   userName: string,
   
@@ -718,7 +730,7 @@ export default defineConfig({
 
 | Issue | Solution |
 |-------|----------|
-| **Join fails with signature error** | Verify signature generation, check sdkKey format |
+| **Join fails with signature error** | Verify HS256 signing, Client ID/Secret pairing, `appKey`, `mn`, `role`, and token timestamps |
 | **Join fails with 4004/50004, aborted RWC ping, or Gallery View warning** | Verify `window.crossOriginIsolated`; add COOP/COEP headers or `coi-serviceworker`; see [troubleshooting/common-issues.md](troubleshooting/common-issues.md) |
 | **"passWord" typo** | Client View uses `passWord` (capital W), Component View uses `password` |
 | **No HD video** | Enable cross-origin isolation / SharedArrayBuffer headers, check browser support |
@@ -749,7 +761,7 @@ See [concepts/browser-support.md](concepts/browser-support.md) for complete matr
 
 ### Options
 
-1. **App Privilege Token (OBF)** - Recommended for bots
+1. **App Privilege Token (OBF)** - Authorizes eligible cross-account joins
    ```javascript
    ZoomMtg.join({
      ...
@@ -908,7 +920,7 @@ function ZoomMeeting({ meetingNumber, password, userName }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ meetingNumber, role: 0 }),
       });
-      const { signature, sdkKey } = await response.json();
+      const { signature } = await response.json();
       
       await clientRef.current.init({
         zoomAppRoot: containerRef.current,
@@ -919,7 +931,6 @@ function ZoomMeeting({ meetingNumber, password, userName }: Props) {
 
       await clientRef.current.join({
         signature,
-        sdkKey,
         meetingNumber,
         password,
         userName,
@@ -948,12 +959,10 @@ function ZoomMeeting({ meetingNumber, password, userName }: Props) {
 ```bash
 # .env.local
 VITE_AUTH_ENDPOINT=http://YOUR_AUTH_SERVER_HOST:4000
-VITE_SDK_KEY=your_sdk_key
 ```
 
 ```tsx
 const authEndpoint = import.meta.env.VITE_AUTH_ENDPOINT;
-const sdkKey = import.meta.env.VITE_SDK_KEY;
 ```
 
 ## Detailed References
@@ -1038,7 +1047,7 @@ if (!requirements.browserInfo.isChrome && !requirements.browserInfo.isFirefox) {
 
 ---
 
-**Documentation Version**: Based on Zoom Web Meeting SDK v3.11+
+**Documentation Version**: Checked against `@zoom/meetingsdk@6.2.0` on 2026-07-10.
 
 **Need help?** Start with [SKILL.md](SKILL.md) for complete navigation.
 

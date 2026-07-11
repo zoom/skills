@@ -4,19 +4,21 @@ Tools available on the Zoom MCP server. Treat the raw server tool names as autho
 Some MCP clients namespace them in the UI, for example `zoom-mcp:recordings_list`.
 
 This reference is based on the current `tools/list` output and tool execution behavior of
-`https://mcp-us.zoom.us/mcp/zoom/streamable`.
+`https://mcp.zoom.us/mcp/zoom/streamable`.
 
 Treat the live MCP protocol `tools/list` response as the authoritative source for the current
 tool list and schemas.
 
 ## Current Live Tools
 
-The default Zoom MCP server currently exposes 7 tools:
+The default Zoom MCP server currently exposes 9 tools:
 
 - `create_new_file_with_markdown`
 - `get_file_content`
 - `get_meeting_assets`
 - `get_recording_resource`
+- `hub_create_file_from_content`
+- `hub_get_file_content`
 - `recordings_list`
 - `search_meetings`
 - `search_zoom`
@@ -35,6 +37,8 @@ Protected-resource metadata for Zoom MCP advertised these scope families:
 - `meeting:read:search`
 - `cloud_recording:read:content`
 - `cloud_recording:read:list_user_recordings`
+- `hub:write:content`
+- `hub:read:content`
 
 ## Documents
 
@@ -67,6 +71,35 @@ Read a Zoom Docs or My Notes file as Markdown.
 Successful calls return:
 - file name
 - full file content in Markdown format
+
+## Hub Content
+
+### `hub_create_file_from_content`
+
+Create a Hub file from plain-text content.
+
+**Verified scope:** `hub:write:content`
+
+Supported content representations documented by Zoom:
+- Docs and paper docs: Markdown
+- Spreadsheets: CSV
+- Maximum content size: 100 KB
+
+Use the live `tools/list` schema for file type, filename, and destination parameters.
+
+### `hub_get_file_content`
+
+Retrieve Hub file content in a format supported by the file type.
+
+**Verified scope:** `hub:read:content`
+
+Documented export formats:
+- Docs: `markdown` or `xml`
+- Spreadsheets: `csv`
+- Presentations: `markdown`
+- Paper docs: `markdown`
+
+Use the live `tools/list` schema for the file identifier and format parameter names.
 
 ## Meeting Discovery and Assets
 

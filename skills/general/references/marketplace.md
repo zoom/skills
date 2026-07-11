@@ -59,10 +59,17 @@ Key cross-product rules:
 - Use these same credentials to request `client_credentials` tokens when a
   General App endpoint requires app-owned scopes.
 
-### SDK Apps
+### Meeting SDK Apps
 
-- **SDK Key** - Used in JWT payload
-- **SDK Secret** - Used to sign JWT, keep secret
+- **Client ID** - Used as the Meeting SDK JWT `appKey`
+- **Client Secret** - Used to sign the Meeting SDK JWT; keep server-side
+- Legacy Meeting SDK Key/Secret migration was enforced on June 27, 2026.
+
+### Build Platform SDK Apps
+
+Video SDK, Cobrowse, and AI Services use the credentials exposed by their Build Platform app.
+Credential labels and token contracts are product-specific; use the corresponding product skill
+instead of assuming Meeting SDK Client ID/Secret semantics.
 
 ## Publishing
 

@@ -18,21 +18,21 @@ Authoritative endpoint inventory for Clips. This file mirrors the official Zoom 
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 13 |
-| Path templates | 11 |
+| Endpoint operations | 20 |
+| Path templates | 15 |
 | Tags | 7 |
 
 ## Tag Index
 
 | Tag | Operations |
 |-----|------------|
-| Clips | 3 |
-| Collaborator | 1 |
+| Clips | 2 |
+| Collaborator | 2 |
 | Comment | 2 |
 | Download | 1 |
-| Single | 1 |
+| Single | 7 |
 | Transfer | 2 |
-| Upload | 3 |
+| Upload | 4 |
 
 ## Endpoints by Tag
 
@@ -41,13 +41,13 @@ Authoritative endpoint inventory for Clips. This file mirrors the official Zoom 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/clips` | List all clips | `GetUserClips` |
-| GET | `/clips/{clipId}` | Get a clip | `GetClipById` |
 | GET | `/clips/{clipId}/collaborators` | Get collaborators of a clip | `GetClipCollaborators` |
 
 ### Collaborator
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
+| POST | `/clips/{clipId}/collaborators` | Share a clip with new users | `CreateCollaborator` |
 | DELETE | `/clips/{clipId}/collaborators` | Remove the collaborator from a clip | `DeleteCollaborator` |
 
 ### Comment
@@ -67,7 +67,13 @@ Authoritative endpoint inventory for Clips. This file mirrors the official Zoom 
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
+| GET | `/clips/{clipId}` | Get a clip | `GetClipById` |
 | DELETE | `/clips/{clipId}` | Delete a clip(soft delete) | `DeleteClip` |
+| PATCH | `/clips/{clipId}` | Update a clip's basic info | `UpdateClipById` |
+| GET | `/clips/{clipId}/chapters` | Get Clip Chapters | `GetClipChapters` |
+| POST | `/clips/{clipId}/chapters` | Create Clip Chapters | `createClipChapters` |
+| POST | `/clips/{clipId}/duplicate` | Duplicate Clips | `DuplicateClips` |
+| PATCH | `/clips/{clipId}/share_settings` | Update clips share setting | `Updateclipssharesetting` |
 
 ### Transfer
 
@@ -83,3 +89,4 @@ Authoritative endpoint inventory for Clips. This file mirrors the official Zoom 
 | POST | `/clips/files` | Upload clip file | `UploadClipFile` |
 | POST | `/clips/files/multipart` | Upload clip multipart files | `UploadIqMultipartClipFile` |
 | POST | `/clips/files/multipart/upload_events` | Initiate and complete the multipart file upload for a clip | `InitiateAndCompleteAClipMultipartUpload.` |
+| POST | `/clips/files/tmp` | Temporary file upload API for Clips | `TemporaryfileuploadAPIforClips` |

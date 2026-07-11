@@ -90,7 +90,7 @@ app.post('/cobrowse-token', (req, res) => {
         c.src = url;
         fragment.appendChild(c);
       }
-      loadJs(`https://us01-zcb.zoom.us/static/resource/sdk/${ZOOM_SDK_KEY}/js/2.13.2`);
+      loadJs(`https://us01-zcb.zoom.us/static/resource/sdk/${ZOOM_SDK_KEY}/js/3.6.0`);
       d.parentNode.insertBefore(fragment, d);
     })(window, document, "script", "ZoomCobrowseSDK");
   </script>

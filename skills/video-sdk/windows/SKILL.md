@@ -13,6 +13,11 @@ triggers:
 
 Expert guidance for developing with the Zoom Video SDK on Windows. This SDK enables custom video applications, raw media capture/injection, cloud recording, live streaming, and real-time transcription on Windows platforms.
 
+> **Version boundary:** The current public release is `2.6.0` (verified 2026-07-10), while this
+> skill's detailed API inventory is from `2.5.10`. Version `2.6.0` has breaking changes and a
+> VC++ 2022 runtime requirement. Read [the upgrade reference](../references/native-2.6.0-upgrade.md)
+> and diff the downloaded headers/DLLs before compiling.
+
 **Official Documentation**: https://developers.zoom.us/docs/video-sdk/windows/
 **API Reference**: https://marketplacefront.zoom.us/sdk/custom/windows/
 **Sample Repository**: https://github.com/zoom/videosdk-windows-rawdata-sample

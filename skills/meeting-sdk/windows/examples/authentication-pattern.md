@@ -309,8 +309,8 @@ bool WaitForProxyDetection() {
 1. **Go to Zoom Marketplace**: https://marketplace.zoom.us/
 2. **Create/Select App**: Go to "Develop" → "Build App" → "Meeting SDK"
 3. **Get Credentials**: Find "App Credentials" tab
-   - SDK Key (Client ID)
-   - SDK Secret (Client Secret)
+   - Meeting SDK Client ID
+   - Meeting SDK Client Secret
 4. **Generate JWT**: Use the built-in JWT generator or create manually
 
 ### JWT Token Format

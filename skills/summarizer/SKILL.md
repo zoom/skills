@@ -15,6 +15,10 @@ triggers:
 
 # Zoom AI Services Summarizer
 
+**Current API audit:** Official docs and OpenAPI were rechecked on 2026-07-10. The May 21, 2026
+release added batch job listing/cancellation and a `details` field on batch file list/detail
+responses; all endpoints are included below.
+
 Implementation guidance for Zoom AI Services Summarizer across:
 - synchronous inline transcript summarization (`POST /aiservices/summarizer/summarize`)
 - asynchronous batch transcript-file jobs (`/aiservices/summarizer/jobs*`)

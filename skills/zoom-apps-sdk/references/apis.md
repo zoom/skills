@@ -259,6 +259,31 @@ await zoomSdk.clearWebView({ webviewId: 'my-view' });
 await zoomSdk.startCollaborate({ shareScreen: true });
 ```
 
+## APIs Added Through `0.16.39`
+
+Declare every method used in `config({ capabilities: [...] })`, then check
+`getSupportedJsApis()` because npm availability does not guarantee support in the user's Zoom
+Workplace version or running context.
+
+| API | Purpose |
+|-----|---------|
+| `startRTMS()` | Start RTMS for the current supported meeting context |
+| `stopRTMS()` | Stop the current RTMS stream |
+| `pauseRTMS()` | Pause RTMS delivery |
+| `resumeRTMS()` | Resume paused RTMS delivery |
+| `getRTMSStatus()` | Read current RTMS status |
+| `onRTMSStatusChange()` | Observe RTMS status transitions |
+| `getZoomRoomDeviceDetails()` | Retrieve supported Zoom Room device details |
+| `sendKeypadControls()` | Send supported keypad controls |
+| `removeParticipant()` | Remove an eligible participant |
+| `promptUpgradeRequest()` | Prompt the supported client upgrade flow |
+| `renderInMail()` | Render supported content in Zoom Mail |
+| `unsubscribeBeforeMailSend()` | Remove a before-send Mail subscription |
+
+For RTMS transport, media handshakes, and stream consumption, chain with
+[zoom-rtms](../../rtms/SKILL.md). Zoom Apps SDK controls the client-side feature; it does not
+replace the RTMS receiver implementation.
+
 ## Event Listeners
 
 ```javascript

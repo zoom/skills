@@ -1,5 +1,12 @@
 # Versioning and Compatibility Notes
 
+## Current Public Versions
+
+- Web: `5.6.0`
+- Android: `5.6.0`
+- iOS: `5.6.0`
+- Verified: 2026-07-10 against the official Contact Center changelog.
+
 ## Minimum Version Enforcement
 
 - Zoom enforces SDK minimum versions quarterly.
@@ -38,4 +45,3 @@
 - Feature-detect methods/events before calling them.
 - Keep adapters between your domain model and SDK payloads.
 - Avoid hard-coding assumptions about optional fields.
-

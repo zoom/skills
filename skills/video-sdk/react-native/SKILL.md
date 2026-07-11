@@ -28,6 +28,9 @@ Use this skill for React Native apps that need fully custom video session experi
 
 ## Core Notes
 
+- Current npm/changelog release: `2.5.10` (verified 2026-07-10).
+- Release `2.5.10` adds Broadcast Streaming and AI-oriented documentation and fixes
+  `enableMicOriginalInput`.
 - Video SDK sessions are not Zoom Meetings and use session tokens.
 - JWT generation must stay backend-side.
 - Wrapper is helper-heavy (audio/video/chat/share/recording/transcription, etc.).

@@ -170,7 +170,8 @@ The `api_url` field in OAuth token responses indicates the user's region. Use re
 > **Need to create or validate the app first?** Use
 > [Marketplace app management](references/marketplace-apps.md) before implementing REST calls.
 > It covers General App manifests, S2S rollout quirks, app-owned `client_credentials` scopes,
-> event subscription setup, and credential response shapes.
+> event subscription setup, credential response shapes, and the requirement to manually create
+> a first bootstrap app before the app-creation API can authorize creation of later apps.
 
 > **Need help with authentication?** See the **[zoom-oauth](../oauth/SKILL.md)** skill for complete OAuth flow implementation.
 

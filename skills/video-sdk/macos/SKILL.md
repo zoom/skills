@@ -15,6 +15,10 @@ triggers:
 
 Use this skill when building custom macOS desktop video session apps.
 
+> **Current release:** `2.6.0` (verified 2026-07-10). The bundled inventory below is `2.5.10`.
+> Review renamed statistic/audio APIs, framework removal, external-source changes, and new
+> callbacks in [the 2.6.0 upgrade notes](../references/native-2.6.0-upgrade.md).
+
 ## Start Here
 
 1. [macos.md](macos.md)

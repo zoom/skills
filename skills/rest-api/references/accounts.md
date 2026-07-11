@@ -18,8 +18,8 @@ Authoritative endpoint inventory for Accounts. This file mirrors the official Zo
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 59 |
-| Path templates | 46 |
+| Endpoint operations | 66 |
+| Path templates | 53 |
 | Tags | 6 |
 
 ## Tag Index
@@ -27,11 +27,11 @@ Authoritative endpoint inventory for Accounts. This file mirrors the official Zo
 | Tag | Operations |
 |-----|------------|
 | Accounts | 11 |
-| Dashboards | 26 |
+| Dashboards | 32 |
 | Data Requests | 5 |
 | Information Barriers | 5 |
 | Roles | 8 |
-| Survey Management | 4 |
+| Survey Management | 5 |
 
 ## Endpoints by Tag
 
@@ -47,14 +47,20 @@ Authoritative endpoint inventory for Accounts. This file mirrors the official Zo
 | PATCH | `/accounts/{accountId}/settings` | Update account settings | `accountSettingsUpdate` |
 | GET | `/accounts/{accountId}/settings/registration` | Get an account's webinar registration settings | `accountSettingsRegistration` |
 | PATCH | `/accounts/{accountId}/settings/registration` | Update an account's webinar registration settings | `accountSettingsRegistrationUpdate` |
-| DELETE | `/accounts/{accountId}/settings/virtual_backgrounds` | Delete virtual background files | `delVB` |
 | POST | `/accounts/{accountId}/settings/virtual_backgrounds` | Upload virtual background files | `uploadVB` |
+| DELETE | `/accounts/{accountId}/settings/virtual_backgrounds` | Delete virtual background files | `delVB` |
 | GET | `/accounts/{accountId}/trusted_domains` | Get account's trusted domains | `accountTrustedDomain` |
 
 ### Dashboards
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
+| GET | `/metrics/ai/adoption` | Get AI adoption | `GetAIAdoption` |
+| GET | `/metrics/ai/kpis` | Get AI KPIs | `GetAIROIKPIs` |
+| GET | `/metrics/ai/usage/details` | Get AI usage details | `GetAIDetails` |
+| GET | `/metrics/ai/usage/trend` | Get AI usage trend | `GetAItrends` |
+| GET | `/metrics/aic/roi/kpis` | Get AIC ROI KPIs | `getDashboardKpis` |
+| GET | `/metrics/aic/roi/meeting_summary_usage` | Get AIC ROI meeting summary usage | `dashboardMeetingSummaryUsage` |
 | GET | `/metrics/chat` | Get chat metrics | `dashboardChat` |
 | GET | `/metrics/client/feedback` | List Zoom meetings client feedback | `dashboardClientFeedback` |
 | GET | `/metrics/client/feedback/{feedbackId}` | Get zoom meetings client feedback | `dashboardClientFeedbackDetail` |
@@ -88,9 +94,9 @@ Authoritative endpoint inventory for Accounts. This file mirrors the official Zo
 |--------|----------|---------|-------------|
 | GET | `/data_requests/files/{fileId}/url` | Get download link for data access request file | `DownloadfilesfromDataRequest` |
 | GET | `/data_requests/requests` | List data request history | `GetDataRequestsHistory` |
-| POST | `/data_requests/requests` | Create data  (export/deletion) request | `CreateDataAccessRequest` |
-| DELETE | `/data_requests/requests/{requestId}` | Cancel data deletion request | `CancelDataRequest` |
+| POST | `/data_requests/requests` | Create data (export/deletion) request | `CreateDataAccessRequest` |
 | GET | `/data_requests/requests/{requestId}` | List downloadable files for export data request | `GetDownloadableFilesforDataRequest` |
+| DELETE | `/data_requests/requests/{requestId}` | Cancel data deletion request | `CancelDataRequest` |
 
 ### Information Barriers
 
@@ -98,8 +104,8 @@ Authoritative endpoint inventory for Accounts. This file mirrors the official Zo
 |--------|----------|---------|-------------|
 | GET | `/information_barriers/policies` | List information Barrier policies | `InformationBarriersList` |
 | POST | `/information_barriers/policies` | Create an Information Barrier policy | `InformationBarriersCreate` |
-| DELETE | `/information_barriers/policies/{policyId}` | Remove an Information Barrier policy | `InformationBarriersDelete` |
 | GET | `/information_barriers/policies/{policyId}` | Get an Information Barrier policy by ID | `InformationBarriersGet` |
+| DELETE | `/information_barriers/policies/{policyId}` | Remove an Information Barrier policy | `InformationBarriersDelete` |
 | PATCH | `/information_barriers/policies/{policyId}` | Update an Information Barriers policy | `InformationBarriersUpdate` |
 
 ### Roles
@@ -108,8 +114,8 @@ Authoritative endpoint inventory for Accounts. This file mirrors the official Zo
 |--------|----------|---------|-------------|
 | GET | `/roles` | List roles | `roles` |
 | POST | `/roles` | Create a role | `createRole` |
-| DELETE | `/roles/{roleId}` | Delete a role | `deleteRole` |
 | GET | `/roles/{roleId}` | Get role information | `getRoleInformation` |
+| DELETE | `/roles/{roleId}` | Delete a role | `deleteRole` |
 | PATCH | `/roles/{roleId}` | Update role information | `updateRole` |
 | GET | `/roles/{roleId}/members` | List members in a role | `roleMembers` |
 | POST | `/roles/{roleId}/members` | Assign a role | `AddRoleMembers` |
@@ -120,6 +126,7 @@ Authoritative endpoint inventory for Accounts. This file mirrors the official Zo
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/surveys` | Get surveys | `getAccountSurveys` |
+| GET | `/surveys/channels/{channelId}/instances` | List channel survey instances | `Getsurveyinstances` |
 | GET | `/surveys/{surveyId}` | Get survey info | `getSurveyInfo` |
 | GET | `/surveys/{surveyId}/answers` | Get survey answers | `getSurveyAnswers` |
 | GET | `/surveys/{surveyId}/instances` | Get survey instances | `getSurveyInstancesInfo` |

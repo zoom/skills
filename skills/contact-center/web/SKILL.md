@@ -12,6 +12,11 @@ triggers:
 
 # Zoom Contact Center SDK - Web
 
+**Current public changelog release:** `5.6.0` (verified 2026-07-10). New coverage includes Agent
+UI V3/Prism video updates, authenticated consumer chat history, campaign digital front door,
+Dynamics CRM full-screen/share/remote control, CTI/PWA Cobrowse, additional locales, and campaign
+script-load fallback protection. Account feature flags still govern rollout.
+
 Official docs:
 - https://developers.zoom.us/docs/contact-center/web/
 - https://developers.zoom.us/docs/contact-center/web/sdk-reference/

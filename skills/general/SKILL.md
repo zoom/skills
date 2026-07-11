@@ -46,7 +46,12 @@ type SkillId =
   | 'zoom-video-sdk'
   | 'zoom-plugin-sdk'
   | 'zoom-mcp'
-  | 'zoom-mcp/team-chat';
+  | 'zoom-mcp/team-chat'
+  | 'zoom-mcp/whiteboard'
+  | 'zoom-mcp/meetings'
+  | 'zoom-mcp/docs'
+  | 'zoom-mcp/tasks'
+  | 'zoom-mcp/revenue-accelerator';
 
 const hasAny = (q: string, words: string[]) => words.some((w) => q.includes(w));
 
@@ -64,6 +69,11 @@ function detectSignals(rawQuery: string) {
     translator: hasAny(q, ['translator', 'translate text', 'batch translation', 'target_languages']),
     mcp: hasAny(q, ['zoom mcp', 'agentic retrieval', 'tools/list', 'semantic meeting search', 'search zoom', 'zoom docs search', 'zoom chat search']),
     teamChatMcp: hasAny(q, ['team chat mcp', 'zoom chat mcp', 'send zoom chat via mcp', 'zoom_chat_message_send']),
+    whiteboardMcp: hasAny(q, ['whiteboard mcp', 'zoom whiteboard mcp']),
+    meetingsMcp: hasAny(q, ['meetings mcp', 'meeting mcp server']),
+    docsMcp: hasAny(q, ['zoom docs mcp', 'docs mcp server', 'create_file_with_content']),
+    tasksMcp: hasAny(q, ['zoom tasks mcp', 'tasks mcp server', 'create task mcp']),
+    revenueMcp: hasAny(q, ['revenue accelerator mcp', 'zra mcp', 'conversation analysis mcp']),
   };
 }
 
@@ -71,6 +81,11 @@ function pickPrimarySkill(s: ReturnType<typeof detectSignals>): SkillId {
   if (s.meetingCustomUi) return 'zoom-meeting-sdk-web-component-view';
   if (s.pluginSdk) return 'zoom-plugin-sdk';
   if (s.teamChatMcp) return 'zoom-mcp/team-chat';
+  if (s.whiteboardMcp) return 'zoom-mcp/whiteboard';
+  if (s.meetingsMcp) return 'zoom-mcp/meetings';
+  if (s.docsMcp) return 'zoom-mcp/docs';
+  if (s.tasksMcp) return 'zoom-mcp/tasks';
+  if (s.revenueMcp) return 'zoom-mcp/revenue-accelerator';
   if (s.mcp) return 'zoom-mcp';
   if (s.summarizer) return 'summarizer';
   if (s.translator) return 'translator';
@@ -82,7 +97,11 @@ function pickPrimarySkill(s: ReturnType<typeof detectSignals>): SkillId {
 
 function buildChain(primary: SkillId, s: ReturnType<typeof detectSignals>): SkillId[] {
   const chain = [primary];
-  if ((s.oauth || s.pluginSdk) && !chain.includes('zoom-oauth')) chain.push('zoom-oauth');
+  const needsMcpOAuth = s.mcp || s.teamChatMcp || s.whiteboardMcp || s.meetingsMcp ||
+    s.docsMcp || s.tasksMcp || s.revenueMcp;
+  if ((s.oauth || s.pluginSdk || needsMcpOAuth) && !chain.includes('zoom-oauth')) {
+    chain.push('zoom-oauth');
+  }
   if (s.webhooks && !chain.includes('zoom-webhooks')) chain.push('zoom-webhooks');
   return chain;
 }
@@ -128,8 +147,12 @@ For the full TypeScript implementation and handoff contract, use
 | Add pre-built UI components for Video SDK | **[zoom-ui-toolkit](../ui-toolkit/SKILL.md)** |
 | Implement OAuth authentication (all grant types) | **[zoom-oauth](../oauth/SKILL.md)** |
 | Build AI-driven tool workflows over Zoom meetings, Team Chat, Docs, My Notes, and recordings | **[zoom-mcp](../zoom-mcp/SKILL.md)** |
-| Send, edit, or administer Zoom Team Chat through MCP tools | **[zoom-mcp/team-chat](../zoom-mcp/team-chat/SKILL.md)** |
+| Search, send, edit, or administer Zoom Team Chat through MCP tools | **[zoom-mcp/team-chat](../zoom-mcp/team-chat/SKILL.md)** |
 | Build AI-driven Whiteboard workflows over Zoom Whiteboard MCP | **[zoom-mcp/whiteboard](../zoom-mcp/whiteboard/SKILL.md)** |
+| Search meetings and retrieve assets or recording resources through dedicated MCP | **[zoom-mcp/meetings](../zoom-mcp/meetings/SKILL.md)** |
+| Create or retrieve Zoom Docs through dedicated MCP | **[zoom-mcp/docs](../zoom-mcp/docs/SKILL.md)** |
+| Manage tasks, assignees, comments, and steps through MCP | **[zoom-mcp/tasks](../zoom-mcp/tasks/SKILL.md)** |
+| Retrieve Revenue Accelerator conversations, transcripts, deals, and coaching data | **[zoom-mcp/revenue-accelerator](../zoom-mcp/revenue-accelerator/SKILL.md)** |
 | Build enterprise AI systems with stable API core + AI tool layer | **[zoom-rest-api](../rest-api/SKILL.md)** + **[zoom-mcp](../zoom-mcp/SKILL.md)** |
 
 ## Planning Checkpoint: Rivet SDK (Optional)
@@ -178,7 +201,7 @@ Routing guardrails:
 - Prefer hybrid routing when the user needs both stable automation and AI-driven interactions.
 - MCP remote server works over Streamable HTTP/SSE; use this path when the target client/agent supports MCP transports (for example Claude, Cursor, VS Code).
 - Do not design per-tenant custom MCP endpoint provisioning; Zoom MCP endpoints are shared at instance/cluster level.
-- Source: https://developers.zoom.us/docs/mcp/library/resources/apis-vs-mcp/
+- Source: https://developers.zoom.us/docs/mcp/apis-vs-mcp/
 
 ### Ambiguity Resolution (Ask Before Routing)
 
@@ -193,9 +216,10 @@ Then route as:
 
 ### MCP Availability and Topology Notes
 
-- Zoom-hosted MCP access is evolving; docs indicate a model where Zoom exposes product-scoped MCP servers (for example Meetings, Team Chat, Whiteboard).
+- Zoom-hosted MCP currently exposes product-scoped servers for Meetings, Docs, Tasks, Team Chat,
+  Whiteboard, and Revenue Accelerator in addition to the default Zoom server.
 - Use `zoom-mcp` as the parent MCP entry point.
-- Route Whiteboard-specific MCP requests to **[zoom-mcp/whiteboard](../zoom-mcp/whiteboard/SKILL.md)**.
+- Route product-specific requests to the matching child under `zoom-mcp/`.
 - When a request is product-specific and MCP coverage exists, route to that MCP product surface first; otherwise use REST/SDK skills for deterministic implementation.
 
 ### Webhooks vs WebSockets

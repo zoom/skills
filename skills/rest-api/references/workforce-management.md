@@ -18,21 +18,30 @@ Authoritative endpoint inventory for Workforce Management. This file mirrors the
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 12 |
-| Path templates | 9 |
-| Tags | 5 |
+| Endpoint operations | 17 |
+| Path templates | 13 |
+| Tags | 8 |
 
 ## Tag Index
 
 | Tag | Operations |
 |-----|------------|
+| Filter groups | 1 |
 | Forecasts | 2 |
-| Imports | 2 |
+| Imports | 4 |
 | Organizational Groups | 5 |
 | Reports | 2 |
 | Schedules | 1 |
+| Scheduling groups | 1 |
+| Users | 1 |
 
 ## Endpoints by Tag
+
+### Filter groups
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/workforce-management/filter-groups` | List filter groups | `Listfiltergroups` |
 
 ### Forecasts
 
@@ -45,6 +54,8 @@ Authoritative endpoint inventory for Workforce Management. This file mirrors the
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
+| POST | `/workforce-management/imports/historical-agent-status` | Upload historical agent status | `uploadHistoricalAgentStatus` |
+| DELETE | `/workforce-management/imports/historical-agent-status` | Delete historical agent status | `deleteHistoricalAgentStatus` |
 | POST | `/workforce-management/imports/historical-queue-metrics` | Upload historical queue metrics | `Uploadhistoricalqueuemetrics` |
 | GET | `/workforce-management/imports/{importId}/historical-queue-metrics` | Get historical queue metrics import metadata | `Viewhistoricalqueuemetricimoprtmeta` |
 
@@ -54,8 +65,8 @@ Authoritative endpoint inventory for Workforce Management. This file mirrors the
 |--------|----------|---------|-------------|
 | GET | `/workforce-management/organizational-groups` | Get multiple organizational groups | `getMultipleOrganizationalGroups` |
 | POST | `/workforce-management/organizational-groups` | Create an organizational group | `createOrganizationalGroup` |
-| DELETE | `/workforce-management/organizational-groups/{organizationalGroupId}` | Delete organizational group | `deleteOrganizationalGroup` |
 | GET | `/workforce-management/organizational-groups/{organizationalGroupId}` | Get a single organizational group | `getOrganizationalGroup` |
+| DELETE | `/workforce-management/organizational-groups/{organizationalGroupId}` | Delete organizational group | `deleteOrganizationalGroup` |
 | PATCH | `/workforce-management/organizational-groups/{organizationalGroupId}` | Update an organizational group | `updateOrganizationalGroup` |
 
 ### Reports
@@ -70,3 +81,15 @@ Authoritative endpoint inventory for Workforce Management. This file mirrors the
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/workforce-management/schedules/agents` | List all schedule agents | `listSchedules` |
+
+### Scheduling groups
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/workforce-management/scheduling-groups` | List scheduling groups | `Listschedulinggroups` |
+
+### Users
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/workforce-management/users` | List users | `Listallusers` |

@@ -1,10 +1,10 @@
 # Zoom Team Chat API
 
-Authoritative endpoint inventory for Team Chat. This file mirrors the official Zoom API Hub OpenAPI document for this product area.
+Authoritative endpoint inventory for Chat. This file mirrors the official Zoom API Hub OpenAPI document for this product area.
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/team-chat/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api-hub/chat/methods/endpoints.json
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 
@@ -18,8 +18,8 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 107 |
-| Path templates | 69 |
+| Endpoint operations | 109 |
+| Path templates | 71 |
 | Tags | 16 |
 
 ## Tag Index
@@ -28,11 +28,11 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 |-----|------------|
 | Chat Channel Mention Group | 7 |
 | Chat Channels | 16 |
-| Chat Channels (Account-level) | 16 |
+| Chat Channels (Account-level) | 17 |
 | Chat Emoji | 3 |
 | Chat Files | 4 |
 | Chat Messages | 15 |
-| Chat Migration | 7 |
+| Chat Migration | 8 |
 | Chat Reminder | 3 |
 | Chat Sessions | 2 |
 | Contacts | 3 |
@@ -53,9 +53,9 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 | POST | `/chat/channels/{channelId}/mention_group` | Create a channel mention group | `createChannelMentionGroup` |
 | DELETE | `/chat/channels/{channelId}/mention_group/{mentionGroupId}` | Delete a channel mention group | `deleteAChannelMentionGroup` |
 | PATCH | `/chat/channels/{channelId}/mention_group/{mentionGroupId}` | Update a channel mention group information | `updateChannelMentionGroup` |
-| DELETE | `/chat/channels/{channelId}/mention_group/{mentionGroupId}/members` | Remove channel mention group members | `removeChannelMentionGroupMembers` |
 | GET | `/chat/channels/{channelId}/mention_group/{mentionGroupId}/members` | List the members of a mention group | `listTheMembersOfMentionGroup` |
 | POST | `/chat/channels/{channelId}/mention_group/{mentionGroupId}/members` | Add channel members to a mention group | `addAChannelMembersToMentionGroup` |
+| DELETE | `/chat/channels/{channelId}/mention_group/{mentionGroupId}/members` | Remove channel mention group members | `removeChannelMentionGroupMembers` |
 
 ### Chat Channels
 
@@ -63,17 +63,17 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 |--------|----------|---------|-------------|
 | GET | `/chat/activities/channels` | List channel activity logs | `listAllChannelActivityLogs` |
 | PATCH | `/chat/channels/events` | Perform operations on channels | `PerformOperationsOnChannels` |
-| DELETE | `/chat/channels/{channelId}` | Delete a channel | `deleteUserLevelChannel` |
 | GET | `/chat/channels/{channelId}` | Get a channel | `getUserLevelChannel` |
+| DELETE | `/chat/channels/{channelId}` | Delete a channel | `deleteUserLevelChannel` |
 | PATCH | `/chat/channels/{channelId}` | Update a channel | `updateUserLevelChannel` |
-| DELETE | `/chat/channels/{channelId}/members` | Batch remove members from a channel | `batchRemoveChannelMembers` |
 | GET | `/chat/channels/{channelId}/members` | List channel members | `listUserLevelChannelMembers` |
 | POST | `/chat/channels/{channelId}/members` | Invite channel members | `InviteUserLevelChannelMembers` |
+| DELETE | `/chat/channels/{channelId}/members` | Batch remove members from a channel | `batchRemoveChannelMembers` |
 | GET | `/chat/channels/{channelId}/members/groups` | List channel members (Groups) | `listChannelMembersGroups` |
 | POST | `/chat/channels/{channelId}/members/groups` | Invite channel members (Groups) | `inviteChannelMembersGroups` |
 | DELETE | `/chat/channels/{channelId}/members/groups/{groupId}` | Remove a member (group) | `removeAMemberGroup` |
-| DELETE | `/chat/channels/{channelId}/members/me` | Leave a channel | `leaveChannel` |
 | POST | `/chat/channels/{channelId}/members/me` | Join a channel | `joinChannel` |
+| DELETE | `/chat/channels/{channelId}/members/me` | Leave a channel | `leaveChannel` |
 | DELETE | `/chat/channels/{channelId}/members/{identifier}` | Remove a member | `removeAUserLevelChannelMember` |
 | GET | `/chat/users/{userId}/channels` | List user's channels | `getChannels` |
 | POST | `/chat/users/{userId}/channels` | Create a channel | `createChannel` |
@@ -82,21 +82,22 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
+| DELETE | `/chat/users/{userId}/channels` | Batch delete channels | `batchDeleteChannelsAccountLevel` |
 | GET | `/chat/channels` | List account's public channels | `getAccountChannels` |
 | POST | `/chat/channels/search` | Search user's or account's channels | `searchChannels` |
 | GET | `/chat/channels/{channelId}/activities` | List channel activity logs | `listChannelActivityLogs` |
+| PATCH | `/chat/channels/{channelId}/owner/{identifier}` | Assign a new channel owner | `reassignChannelOwner` |
 | GET | `/chat/channels/{channelId}/retention` | Get retention policy of a channel | `getChannelRetention` |
 | PATCH | `/chat/channels/{channelId}/retention` | Update retention policy of a channel | `updateChannelRetention` |
-| DELETE | `/chat/users/{userId}/channels` | Batch delete channels | `batchDeleteChannelsAccountLevel` |
-| DELETE | `/chat/users/{userId}/channels/{channelId}` | Delete a channel | `deleteChannel` |
 | GET | `/chat/users/{userId}/channels/{channelId}` | Get a channel | `getChannel` |
+| DELETE | `/chat/users/{userId}/channels/{channelId}` | Delete a channel | `deleteChannel` |
 | PATCH | `/chat/users/{userId}/channels/{channelId}` | Update a channel | `updateChannel` |
-| DELETE | `/chat/users/{userId}/channels/{channelId}/admins` | Batch demote channel administrators | `batchDemoteChannelAdministrators` |
 | GET | `/chat/users/{userId}/channels/{channelId}/admins` | List channel administrators | `listChannelAdministrators` |
 | POST | `/chat/users/{userId}/channels/{channelId}/admins` | Promote channel members to administrators | `promoteChannelMembersAsAdmin` |
-| DELETE | `/chat/users/{userId}/channels/{channelId}/members` | Batch remove members from a user's channel | `batchRemoveUserChannelMembers` |
+| DELETE | `/chat/users/{userId}/channels/{channelId}/admins` | Batch demote channel administrators | `batchDemoteChannelAdministrators` |
 | GET | `/chat/users/{userId}/channels/{channelId}/members` | List channel members | `listChannelMembers` |
 | POST | `/chat/users/{userId}/channels/{channelId}/members` | Invite channel members | `inviteChannelMembers` |
+| DELETE | `/chat/users/{userId}/channels/{channelId}/members` | Batch remove members from a user's channel | `batchRemoveUserChannelMembers` |
 | DELETE | `/chat/users/{userId}/channels/{channelId}/members/{identifier}` | Remove a member | `removeAChannelMember` |
 
 ### Chat Emoji
@@ -111,8 +112,8 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/chat/files/{fileId}` | Delete a chat file | `deleteChatFile` |
 | GET | `/chat/files/{fileId}` | Get file info | `getFileInfo` |
+| DELETE | `/chat/files/{fileId}` | Delete a chat file | `deleteChatFile` |
 | POST | `/chat/users/{userId}/files` | Upload a chat file | `uploadAChatFile` |
 | POST | `/chat/users/{userId}/messages/files` | Send a chat file | `sendChatFile` |
 
@@ -129,9 +130,9 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 | DELETE | `/chat/messages/schedule/{draftId}` | Delete a scheduled message | `deleteScheduleMessage` |
 | GET | `/chat/users/{userId}/messages` | List user's chat messages | `getChatMessages` |
 | POST | `/chat/users/{userId}/messages` | Send a chat message | `sendaChatMessage` |
-| DELETE | `/chat/users/{userId}/messages/{messageId}` | Delete a message | `deleteChatMessage` |
 | GET | `/chat/users/{userId}/messages/{messageId}` | Get a message | `getChatMessage` |
 | PUT | `/chat/users/{userId}/messages/{messageId}` | Update a message | `editMessage` |
+| DELETE | `/chat/users/{userId}/messages/{messageId}` | Delete a message | `deleteChatMessage` |
 | PATCH | `/chat/users/{userId}/messages/{messageId}/emoji_reactions` | React to a chat message | `reactMessage` |
 | PATCH | `/chat/users/{userId}/messages/{messageId}/status` | Mark message read or unread | `markMessage` |
 | GET | `/chat/users/{userId}/messages/{messageId}/thread` | Retrieve a thread | `retrieveThread` |
@@ -141,6 +142,7 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | POST | `/chat/migration/channels/{channelId}/members` | Migrate channel members | `MigrateChannelMembers` |
+| POST | `/chat/migration/channels/{channelId}/tabs` | Migrate a channel tab | `MigrateAChannelTab` |
 | POST | `/chat/migration/emoji_reactions` | Migrate chat message reactions | `MigrateChatMessageReactions` |
 | GET | `/chat/migration/mappings/channels` | Get migrated Zoom channel IDs | `getMigrationChannelsMapping` |
 | GET | `/chat/migration/mappings/users` | Get migrated Zoom user IDs | `getMigrationUsersMapping` |
@@ -152,8 +154,8 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/chat/messages/{messageId}/reminder` | Delete a reminder for a message | `deleteReminderForMessage` |
 | POST | `/chat/messages/{messageId}/reminder` | Create a reminder message | `createReminderForMessage` |
+| DELETE | `/chat/messages/{messageId}/reminder` | Delete a reminder for a message | `deleteReminderForMessage` |
 | GET | `/chat/reminder` | List reminders | `listReminders` |
 
 ### Chat Sessions
@@ -183,8 +185,8 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 |--------|----------|---------|-------------|
 | GET | `/im/groups` | List IM directory groups | `imGroups` |
 | POST | `/im/groups` | Create an IM directory group | `imGroupCreate` |
-| DELETE | `/im/groups/{groupId}` | Delete an IM directory group | `imGroupDelete` |
 | GET | `/im/groups/{groupId}` | Retrieve an IM directory group | `imGroup` |
+| DELETE | `/im/groups/{groupId}` | Delete an IM directory group | `imGroupDelete` |
 | PATCH | `/im/groups/{groupId}` | Update an IM directory group | `imGroupUpdate` |
 | GET | `/im/groups/{groupId}/members` | List IM directory group members | `imGroupMembers` |
 | POST | `/im/groups/{groupId}/members` | Add IM directory group members | `imGroupMembersCreate` |
@@ -220,14 +222,14 @@ Authoritative endpoint inventory for Team Chat. This file mirrors the official Z
 |--------|----------|---------|-------------|
 | GET | `/chat/spaces` | List shared spaces | `listSharedSpaces` |
 | POST | `/chat/spaces` | Create a shared space | `createSpace` |
-| DELETE | `/chat/spaces/{spaceId}` | Delete a shared space | `deleteSpace` |
 | GET | `/chat/spaces/{spaceId}` | Get a shared space | `getASharedSpace` |
+| DELETE | `/chat/spaces/{spaceId}` | Delete a shared space | `deleteSpace` |
 | PATCH | `/chat/spaces/{spaceId}` | Update shared space settings | `updateSharedSpaceSettings` |
-| DELETE | `/chat/spaces/{spaceId}/admins` | Demote shared space administrators to members | `demoteSpaceAdmins` |
 | POST | `/chat/spaces/{spaceId}/admins` | Promote shared space members to administrators | `promoteSpaceMembers` |
+| DELETE | `/chat/spaces/{spaceId}/admins` | Demote shared space administrators to members | `demoteSpaceAdmins` |
 | GET | `/chat/spaces/{spaceId}/channels` | List shared space channels | `listSharedSpaceChannels` |
 | PATCH | `/chat/spaces/{spaceId}/channels` | Move shared space channels | `updateSharedSpaceChannels` |
-| DELETE | `/chat/spaces/{spaceId}/members` | Remove members from a shared space | `deleteSpaceMembers` |
 | GET | `/chat/spaces/{spaceId}/members` | List shared space members | `listSharedSpaceMembers` |
 | POST | `/chat/spaces/{spaceId}/members` | Add members to a shared space | `addSpaceMembers` |
+| DELETE | `/chat/spaces/{spaceId}/members` | Remove members from a shared space | `deleteSpaceMembers` |
 | PATCH | `/chat/spaces/{spaceId}/owner` | Transfer shared space ownership | `transferSpaceOwner` |

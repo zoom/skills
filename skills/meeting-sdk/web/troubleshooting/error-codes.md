@@ -221,13 +221,13 @@ client.on('connection-change', (payload) => {
 ### "Signature is invalid" (3712)
 
 **Causes:**
-1. SDK Secret doesn't match SDK Key
+1. Client Secret doesn't match the Meeting SDK Client ID in `appKey`
 2. Signature generated with wrong algorithm (must be HS256)
 3. Clock skew between server and Zoom
 4. Missing or incorrect `appKey` field in signature
 
 **Debug Steps:**
-1. Verify SDK Key and Secret in Marketplace
+1. Verify Meeting SDK Client ID and Client Secret in Marketplace
 2. Check signature generation code
 3. Ensure server time is accurate (NTP sync)
 4. Test with official [auth-endpoint-sample](https://github.com/zoom/meetingsdk-auth-endpoint-sample)
@@ -248,9 +248,12 @@ client.on('connection-change', (payload) => {
 2. No OBF or ZAK token provided
 
 **Solutions:**
-1. For bots: Use App Privilege Token (OBF)
-2. For users: Get their ZAK token
-3. For same-account meetings: No token needed
+1. For an eligible cross-account participant join, provide the required App Privilege Token (OBF).
+2. For an authenticated host flow, obtain the user's ZAK token.
+3. For same-account meetings, follow the current authorization policy for the selected app.
+
+Do not interpret OBF support as permission to build a Web Meeting SDK bot or AI notetaker.
+The current Web package directs those workloads to RTMS.
 
 ### "Cross-account join blocked" (4011)
 

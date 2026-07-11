@@ -47,7 +47,7 @@ sdk.dir=C\:\\Users\\<user>\\AppData\\Local\\Android\\Sdk
 ## 6. Dependency pinning for copied sample projects
 
 - If project was copied from SDK sources, do not keep local relative dependency (`"@zoom/react-native-videosdk": "../"`) unless parent package exists at that exact location.
-- Pin/install a concrete version instead (example `@zoom/react-native-videosdk@2.4.5`) to avoid Metro resolution failures.
+- Pin/install a concrete version instead (current verified example `@zoom/react-native-videosdk@2.5.10`) to avoid Metro resolution failures.
 
 ## 7. Security baseline
 

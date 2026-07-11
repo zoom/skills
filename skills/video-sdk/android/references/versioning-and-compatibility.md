@@ -2,9 +2,14 @@
 
 ## Package evidence
 
+- Latest public changelog release: `2.6.0` (verified 2026-07-10)
 - SDK package: `zoom-video-sdk-android-2.5.10.zip`
 - Internal version: `v2.5.10 (40300)`
 - Package includes `mobilertc.aar`, optional feature AARs, samples, and `Docs/` API documentation.
+
+The package evidence below is a historical `2.5.10` snapshot. See
+[native 2.6.0 upgrade](../../references/native-2.6.0-upgrade.md) before treating any declaration
+as current.
 
 ## Compatibility notes
 

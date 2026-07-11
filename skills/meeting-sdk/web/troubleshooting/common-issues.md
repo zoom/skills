@@ -161,7 +161,7 @@ window.crossOriginIsolated
 
 **Causes & Solutions**:
 
-1. **Wrong SDK Secret**
+1. **Wrong Client Secret**
    ```bash
    # Verify in Zoom Marketplace > App > App Credentials
    ```
@@ -172,14 +172,23 @@ window.crossOriginIsolated
    // Regenerate signature if needed
    ```
 
-3. **Missing appKey prefix (v5.0.0+)**
+3. **Missing `appKey` claim or deprecated `sdkKey` join option**
    ```javascript
-   // WRONG (pre-5.0 format)
-   signature: "eyJhbGc..."
-   
-   // CORRECT (5.0+ format)
-   signature: "appKey:sdkKey.eyJhbGc..."
+   // JWT payload generated on the backend
+   {
+     appKey: process.env.ZOOM_CLIENT_ID,
+     mn: meetingNumber,
+     role: 0,
+     iat,
+     exp,
+     tokenExp: exp
+   }
+
+   // Web join options: pass the signed JWT, not sdkKey
+   client.join({ signature, meetingNumber, userName, password })
    ```
+
+   Do not prepend a literal `appKey:sdkKey.` string. `appKey` is a claim inside the HS256 JWT.
 
 4. **Wrong algorithm**
    ```javascript
@@ -189,14 +198,14 @@ window.crossOriginIsolated
 
 ### "API Key is invalid" (Error 3704)
 
-**Symptom**: SDK Key rejected.
+**Symptom**: Meeting SDK Client ID rejected (the legacy error text can still say API/SDK Key).
 
 **Causes**:
-1. Typo in SDK Key
-2. SDK Key from different app type
-3. SDK Key not activated
+1. Typo in Client ID
+2. Client ID from a different app type
+3. Meeting SDK app not activated
 
-**Solution**: Verify SDK Key in Zoom Marketplace matches exactly.
+**Solution**: Verify the Meeting SDK Client ID in Zoom Marketplace matches the JWT `appKey`.
 
 ### "SDK Key is disabled" (Error 3710)
 

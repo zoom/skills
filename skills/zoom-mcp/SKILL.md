@@ -1,13 +1,10 @@
 ---
 name: zoom-mcp
 description: |
-  Official Zoom MCP Server guidance for AI-agent access to semantic meeting search,
-  Zoom-wide chat/docs search, meeting assets, recording resources, and Zoom Docs
-  import/export over MCP. Use when the request is about Zoom tools/list or tools/call
-  against Zoom's hosted MCP endpoints, AI Companion retrieval, recording-content access,
-  Zoom chat/docs search, or Zoom Docs creation/content retrieval via MCP.
-  Route Whiteboard-specific MCP requests to zoom-mcp/whiteboard and write-capable
-  Team Chat MCP requests to zoom-mcp/team-chat.
+  Official Zoom MCP Server guidance for AI-agent access to Zoom search, meeting assets,
+  recording resources, Docs, Team Chat, Whiteboard, Tasks, Meetings, and Revenue Accelerator.
+  Use for Zoom-hosted MCP endpoints, tools/list, tools/call, OAuth scopes, or selecting the
+  right server. Route product-specific work to the matching zoom-mcp child skill.
 triggers:
   - "zoom mcp"
   - "zoom mcp server"
@@ -31,13 +28,14 @@ triggers:
 
 # Zoom MCP Server
 
-Zoom hosts an MCP server at `mcp-us.zoom.us` for AI-agent access to:
+Zoom hosts an MCP server at `mcp.zoom.us` for AI-agent access to:
 
 - semantic meeting search
 - cross-Zoom search over Team Chat messages and Zoom Docs
 - meeting-linked asset retrieval
 - recording resource retrieval
 - Zoom Docs creation from Markdown and Markdown content export
+- Zoom Hub file creation and multi-format content export
 
 Current default Zoom MCP server tool names verified by `tools/list`:
 
@@ -45,6 +43,8 @@ Current default Zoom MCP server tool names verified by `tools/list`:
 - `get_file_content`
 - `get_meeting_assets`
 - `get_recording_resource`
+- `hub_create_file_from_content`
+- `hub_get_file_content`
 - `recordings_list`
 - `search_meetings`
 - `search_zoom`
@@ -52,38 +52,52 @@ Current default Zoom MCP server tool names verified by `tools/list`:
 Some MCP clients namespace server tools in the UI, for example `zoom-mcp:recordings_list`.
 Treat the raw tool names above as authoritative.
 
-Whiteboard-specific MCP work is split into the child skill
-[whiteboard/SKILL.md](whiteboard/SKILL.md).
+Product-specific MCP work is split into child skills for
+[Whiteboard](whiteboard/SKILL.md), [Team Chat](team-chat/SKILL.md),
+[Meetings](meetings/SKILL.md), [Docs](docs/SKILL.md), [Tasks](tasks/SKILL.md), and
+[Revenue Accelerator](revenue-accelerator/SKILL.md).
 
-Write-capable Team Chat MCP work is split into the child skill
-[team-chat/SKILL.md](team-chat/SKILL.md).
-
-> **Need the OAuth app/scopes first?** Use
-> [Marketplace app management](../rest-api/references/marketplace-apps.md) to create or
-> validate the General App, select user/admin scopes for MCP tools, and understand credential
-> response shapes before minting the bearer token passed to the MCP server. Start from the
-> [default Zoom MCP template](../rest-api/assets/marketplace-apps/zoom-mcp-default.json), or
-> select the dedicated Team Chat or Whiteboard template from the
-> [Marketplace template selector](../rest-api/references/marketplace-app-templates.md).
+> **Marketplace-first skill chain:** Before connecting to any Zoom MCP server, route to
+> [Marketplace app management](../rest-api/references/marketplace-apps.md) and the
+> [Marketplace template selector](../rest-api/references/marketplace-app-templates.md). Create
+> a user-managed General App from the matching MCP template and obtain its client ID. Then
+> route to [zoom-oauth](../oauth/SKILL.md) to authorize the user, exchange the authorization
+> code (with PKCE where configured), and obtain the bearer access token. Only after those steps
+> should this skill configure the MCP endpoint and call `initialize`, `tools/list`, or
+> `tools/call`.
 
 ## Quick Start
 
-**1. Add to an MCP client (Claude Code example):**
+**1. Create the Marketplace app:**
+
+- Select the exact MCP scenario from the
+  [Marketplace template selector](../rest-api/references/marketplace-app-templates.md).
+- Create the user-managed General App and configure its redirect URI.
+- Keep only the scopes required by the MCP tools you intend to call.
+
+**2. Obtain a user OAuth access token:**
+
+- Complete authorization-code OAuth, using PKCE when the client cannot safely hold a secret.
+- Exchange the returned code and retain the access and refresh tokens securely.
+- Follow [concepts/oauth-setup.md](concepts/oauth-setup.md) for the complete flow.
+
+**3. Add to an MCP client (Claude Code example):**
 ```bash
 claude mcp add --transport http zoom-mcp \
-  https://mcp-us.zoom.us/mcp/zoom/streamable \
+  https://mcp.zoom.us/mcp/zoom/streamable \
   --header "Authorization: Bearer YOUR_ZOOM_OAUTH_TOKEN" \
   --scope user
 ```
 
-**2. Verify discovery:**
-- Confirm the client can see 7 default Zoom MCP tools: `search_meetings`,
+**4. Verify discovery:**
+- Confirm the client can see 9 default Zoom MCP tools: `search_meetings`,
   `create_new_file_with_markdown`, `search_zoom`, `get_meeting_assets`,
-  `get_recording_resource`, `get_file_content`, and `recordings_list`.
+  `get_recording_resource`, `get_file_content`, `recordings_list`,
+  `hub_create_file_from_content`, and `hub_get_file_content`.
 - If the client exposes raw protocol inspection, `tools/list` is the authoritative discovery source.
 - The current catalog is documented in [references/tools.md](references/tools.md).
 
-**3. Run the first useful call:**
+**5. Run the first useful call:**
 ```text
 recordings_list
   from: "2026-03-01"
@@ -114,6 +128,8 @@ The key scopes for this surface are:
 - `cloud_recording:read:content`
 - `docs:write:import` for Zoom Docs creation
 - `docs:read:export` for Zoom Docs/My Notes Markdown content export
+- `hub:write:content` for Hub file creation
+- `hub:read:content` for Hub file content export
 
 **3. AI Companion features are feature prerequisites, not scope substitutes**
 
@@ -126,11 +142,11 @@ settings do not replace the required OAuth scopes.
 The Zoom MCP endpoint and the Whiteboard MCP endpoint are separate. Route Whiteboard-specific
 requests to [whiteboard/SKILL.md](whiteboard/SKILL.md).
 
-**5. Team Chat write tools are a separate MCP surface**
+**5. Team Chat tools are a separate MCP surface**
 
 The default Zoom MCP server includes read-only `search_zoom` for Team Chat and Docs search.
-The Team Chat MCP server is separate and exposes write/update tools for messages, contacts,
-channels, and channel members. Route write-capable Team Chat MCP requests to
+The Team Chat MCP server is separate and exposes read, search, write, and update tools for
+messages, files, contacts, channels, and channel members. Route Team Chat MCP requests to
 [team-chat/SKILL.md](team-chat/SKILL.md).
 
 **6. Use REST for deterministic meeting CRUD**
@@ -143,14 +159,20 @@ route to [../rest-api/SKILL.md](../rest-api/SKILL.md).
 
 | Transport | URL |
 |-----------|-----|
-| Streamable HTTP (recommended) | `https://mcp-us.zoom.us/mcp/zoom/streamable` |
-| SSE (fallback) | `https://mcp-us.zoom.us/mcp/zoom/sse` |
+| Streamable HTTP (recommended) | `https://mcp.zoom.us/mcp/zoom/streamable` |
+| SSE (fallback) | `https://mcp.zoom.us/mcp/zoom/sse` |
 
 Whiteboard child skill:
 - [whiteboard/SKILL.md](whiteboard/SKILL.md)
 
 Team Chat child skill:
 - [team-chat/SKILL.md](team-chat/SKILL.md)
+
+Other dedicated child skills:
+- [meetings/SKILL.md](meetings/SKILL.md)
+- [docs/SKILL.md](docs/SKILL.md)
+- [tasks/SKILL.md](tasks/SKILL.md)
+- [revenue-accelerator/SKILL.md](revenue-accelerator/SKILL.md)
 
 ## Search and Retrieval Model
 
@@ -177,6 +199,8 @@ workflow.
 | `get_file_content` | `fileId`* | `docs:read:export` |
 | `get_meeting_assets` | `meetingId`* | `meeting:read:assets` |
 | `get_recording_resource` | `meetingId`*, `types`, `clip_num`, `play_time`, `raw_passcode`, `encode_passcode` | `cloud_recording:read:content` |
+| `hub_create_file_from_content` | `content`*, file type/name and destination fields from live schema | `hub:write:content` |
+| `hub_get_file_content` | file identifier* and `format` | `hub:read:content` |
 | `recordings_list` | `from`, `to`, `meeting_id`, `trash`, `trash_type`, `page_size`, `next_page_token` | `cloud_recording:read:list_user_recordings` |
 | `search_meetings` | `q`, `from`, `to`, `include_zoom_my_notes`, `page_size`, `next_page_token` | `meeting:read:search` |
 | `search_zoom` | `search_entities`*, `query`, `page_size` | `ai_companion:read:search` |
@@ -255,6 +279,10 @@ Full error reference: [references/error-codes.md](references/error-codes.md)
 - [references/error-codes.md](references/error-codes.md) — MCP and Zoom API errors with fixes
 - [whiteboard/SKILL.md](whiteboard/SKILL.md) — Whiteboard MCP child skill
 - [team-chat/SKILL.md](team-chat/SKILL.md) — Team Chat MCP child skill
+- [meetings/SKILL.md](meetings/SKILL.md) — Dedicated Meetings MCP child skill
+- [docs/SKILL.md](docs/SKILL.md) — Dedicated Docs MCP child skill
+- [tasks/SKILL.md](tasks/SKILL.md) — Tasks MCP child skill
+- [revenue-accelerator/SKILL.md](revenue-accelerator/SKILL.md) — Revenue Accelerator MCP child skill
 
 ### Troubleshooting
 - [troubleshooting/common-errors.md](troubleshooting/common-errors.md) — Scope failures, endpoint mixups, search/recording issues

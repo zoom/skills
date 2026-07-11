@@ -10,12 +10,32 @@ A **Server-to-Server OAuth** token can initialize against the MCP gateway and co
 tool parity, though: actual execution is still scope-gated and must be verified per token
 type and MCP server.
 
-## Step 1: Create a User OAuth App
+## Required Skill Chain
+
+Use this order for every Zoom-hosted MCP server:
+
+1. **Marketplace app creation:** Route to
+   [Marketplace app management](../../rest-api/references/marketplace-apps.md), choose the
+   matching MCP template from the
+   [Marketplace template selector](../../rest-api/references/marketplace-app-templates.md),
+   and create a user-managed General App.
+2. **OAuth and token acquisition:** Return here and use [zoom-oauth](../../oauth/SKILL.md) to
+   configure the redirect URI, authorize the user, exchange the code, and store the access and
+   refresh tokens.
+3. **MCP connection:** Pass the access token as `Authorization: Bearer ...`, initialize the
+   selected MCP endpoint, discover its current tools, and then invoke tools.
+
+Do not start at the MCP endpoint without first establishing which Marketplace app owns the
+credentials and whether its granted scopes cover the selected tools.
+
+## Step 1: Create a User-Managed General App
 
 1. Go to [marketplace.zoom.us](https://marketplace.zoom.us) → **Develop** → **Build App**.
-2. Select **OAuth** for the per-user MCP path.
-3. Set a redirect URL for your client or local test environment.
-4. Note the client ID and client secret.
+2. Select a **General App** with user-managed OAuth for the per-user MCP path.
+3. Start from the matching JSON template in
+   [Marketplace app templates](../../rest-api/references/marketplace-app-templates.md).
+4. Set a redirect URL for your client or local test environment.
+5. Note the client ID and protect the client secret if the selected client type uses one.
 
 ## Step 2: Configure Zoom MCP Scopes
 
@@ -30,10 +50,16 @@ Add the MCP-specific granular scopes required by the tools you want to use.
 | `cloud_recording:read:content` | `get_recording_resource` |
 | `docs:write:import` | `create_new_file_with_markdown` |
 | `docs:read:export` | `get_file_content` |
+| `hub:write:content` | `hub_create_file_from_content` |
+| `hub:read:content` | `hub_get_file_content` |
 
-Whiteboard MCP and Team Chat MCP use separate scope sets. See:
+Dedicated product MCP servers use separate, least-privilege scope sets. See:
 - [../whiteboard/SKILL.md](../whiteboard/SKILL.md)
 - [../team-chat/SKILL.md](../team-chat/SKILL.md)
+- [../meetings/SKILL.md](../meetings/SKILL.md)
+- [../docs/SKILL.md](../docs/SKILL.md)
+- [../tasks/SKILL.md](../tasks/SKILL.md)
+- [../revenue-accelerator/SKILL.md](../revenue-accelerator/SKILL.md)
 
 ## Step 3: Authorize and Exchange for Tokens
 
@@ -71,15 +97,16 @@ Claude Code example:
 
 ```bash
 claude mcp add --transport http zoom-mcp \
-  https://mcp-us.zoom.us/mcp/zoom/streamable \
+  https://mcp.zoom.us/mcp/zoom/streamable \
   --header "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   --scope user
 ```
 
 Verification:
-- confirm the client can see 7 default Zoom MCP tools: `search_meetings`,
+- confirm the client can see 9 default Zoom MCP tools: `search_meetings`,
   `create_new_file_with_markdown`, `search_zoom`, `get_meeting_assets`,
-  `get_recording_resource`, `get_file_content`, and `recordings_list`
+  `get_recording_resource`, `get_file_content`, `recordings_list`,
+  `hub_create_file_from_content`, and `hub_get_file_content`
 - if your client exposes protocol inspection, use `tools/list` as the authority for the live catalog
 - run a simple tool such as `recordings_list` to verify the token has the correct MCP scopes
 

@@ -14,6 +14,12 @@ triggers:
 
 Expert guidance for implementing collaborative browsing with the Zoom Cobrowse SDK. This SDK enables support agents to view and interact with a customer's browser session in real-time, with privacy controls and annotation tools.
 
+**Current public changelog release:** `3.6.0` (June 29, 2026; verified 2026-07-10).
+The current 3.x line adds multi-agent remote-assist control, keyboard-accessible annotations,
+broader masking for image/SVG/iframe/canvas/text/background content, customer-only multi-tab
+transfer, annotation snap-to-element, and improved synchronization/latency. Pin and test an exact
+version before using a floating minor selector.
+
 **Official Documentation**: https://developers.zoom.us/docs/cobrowse-sdk/  
 **API Reference**: https://marketplacefront.zoom.us/sdk/cobrowse/  
 **Quickstart Repository**: https://github.com/zoom/CobrowseSDK-Quickstart  
@@ -220,7 +226,7 @@ npm start
         c.src = url;
         fragment.appendChild(c);
       }
-      loadJs(`https://us01-zcb.zoom.us/static/resource/sdk/${ZOOM_SDK_KEY}/js/2.13.2`);
+      loadJs(`https://us01-zcb.zoom.us/static/resource/sdk/${ZOOM_SDK_KEY}/js/3.6.0`);
       d.parentNode.insertBefore(fragment, d);
     })(window, document, "script", "ZoomCobrowseSDK");
   </script>

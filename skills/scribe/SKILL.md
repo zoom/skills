@@ -14,6 +14,9 @@ triggers:
 
 # Zoom AI Services Scribe
 
+**Current API audit:** Official docs and OpenAPI were rechecked on 2026-07-10. The May 18, 2026
+release added `GET /aiservices/scribe/jobs/{jobId}/files/{fileId}`; it is included below.
+
 Implementation guidance for Zoom AI Services Scribe across:
 - synchronous single-file transcription (`POST /aiservices/scribe/transcribe`)
 - asynchronous batch jobs (`/aiservices/scribe/jobs*`)

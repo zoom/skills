@@ -16,6 +16,10 @@ triggers:
 
 Use this skill when building Electron desktop apps that embed Zoom Meeting SDK capabilities through the Electron wrapper.
 
+**Current public changelog release:** `7.1.0` (verified 2026-07-10). It adds participant
+callbacks/interfaces, breakout-room summaries, face ROI in raw video, on-demand avatar download,
+and a breakout-room join fix. Verify wrapper declarations before relying on those additions.
+
 ## Start Here
 
 1. **[Lifecycle Workflow](concepts/lifecycle-workflow.md)** - init -> auth -> join/start -> in-meeting -> cleanup

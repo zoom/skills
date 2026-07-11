@@ -14,6 +14,51 @@ Authoritative endpoint inventory for Marketplace. This file mirrors the official
 - Scope names are defined per operation and frequently use granular scope names. Check the API Hub operation page for the exact scopes before implementation.
 - Use this file for endpoint discovery and inventory. Use `../examples/` for orchestration patterns, not as the canonical source of path names.
 
+## Bootstrap Requirement: Create the First App Manually
+
+Marketplace app creation is not self-bootstrapping. The create APIs require a Zoom OAuth
+access token, and that token must come from an app that already exists. For a new account or
+automation environment:
+
+1. An account owner, admin, or user with the required Zoom developer role manually creates the
+   first credential-bearing app in the Zoom App Marketplace.
+2. Add the exact Marketplace app-management scope required by the creation endpoint.
+3. Activate/install or authorize that bootstrap app as required by its app type.
+4. Mint an access token from the bootstrap app.
+5. Use that token to validate manifests and create subsequent apps through the Marketplace API.
+
+The bootstrap app can commonly be either:
+
+- a manually created **Server-to-Server OAuth app** for unattended same-account automation; or
+- a manually created **admin-managed General App** when an account admin will complete the
+  authorization-code flow.
+
+However, app type alone is not sufficient. The token must contain the scope for the exact
+endpoint, and the caller must satisfy its role restrictions:
+
+| Creation target | Endpoint | Required scope | Bootstrap guidance |
+|-----------------|----------|----------------|--------------------|
+| General App manifest | `POST /v2/marketplace/apps` | `marketplace:write:app` or `marketplace:write:app:admin` | An admin-managed General App or an S2S app with the accepted admin scope is suitable for account automation. The documented user scope also permits a user-authorized path where available. |
+| S2S OAuth or Meeting SDK app | `POST /v2/accounts/{accountId}/marketplace/apps` | `marketplace:write:app:master` | Requires the account owner/master-authorized path. Use a bootstrap app that can actually mint this master scope; do not assume `marketplace:write:app:admin` is equivalent. |
+
+Practical guardrails:
+
+- You cannot use the credentials of the app being created to authorize its own creation.
+- Confirm the returned token's granted `scope` before calling the API.
+- A scope appearing in an API description does not prove it is enabled for every account or
+  selectable on every app type; verify it in the bootstrap app's Marketplace scope picker.
+- Keep at least one working bootstrap app until a replacement app has successfully minted a
+  token and created a disposable test app.
+- Restrict the bootstrap app to Marketplace administration, store its secret/refresh token in a
+  secret manager, and do not reuse it as a general application credential.
+
+Official references:
+
+- Regular Marketplace API: https://developers.zoom.us/docs/api/marketplace/
+- Marketplace Master API: https://developers.zoom.us/docs/api/marketplace/ma/
+- General App OAuth setup: https://developers.zoom.us/docs/integrations/create/
+- Server-to-Server OAuth setup: https://developers.zoom.us/docs/internal-apps/create/
+
 ## Auth Caveat: App-Owned Marketplace Scopes
 
 Some Marketplace app-management scopes require an app-owned access token from the OAuth

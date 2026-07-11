@@ -19,7 +19,7 @@ If Flutter is not on PATH in your shell, use the full `flutter.bat` path for all
 
 ```yaml
 dependencies:
-  flutter_zoom_videosdk: ^<version>
+  flutter_zoom_videosdk: 2.5.10
 ```
 
 ```bash

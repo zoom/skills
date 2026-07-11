@@ -1,10 +1,9 @@
 ---
 name: zoom-mcp/team-chat
 description: |
-  Zoom Team Chat MCP server guidance. Use for Team Chat MCP endpoints, OAuth scopes,
-  and write-capable tool workflows such as sending or editing messages, creating or
-  updating channels, adding channel members, and sending contact invitations. Prefer
-  this child skill when the request is specifically about Team Chat MCP rather than
+  Zoom Team Chat MCP server guidance for channel, message, contact, session, and file
+  search/read workflows plus write-capable message and channel operations. Use for Team
+  Chat MCP endpoints, OAuth scopes, tools/list, and agent-driven Chat actions rather than
   default Zoom MCP search or deterministic Team Chat REST API implementation.
 triggers:
   - "team chat mcp"
@@ -31,8 +30,8 @@ that should not depend on agent tool invocation.
 
 | Transport | URL |
 |-----------|-----|
-| Streamable HTTP (recommended) | `https://mcp.zoom.us/mcp/team_chat/streamable` |
-| SSE (fallback) | `https://mcp.zoom.us/mcp/team_chat/sse` |
+| Streamable HTTP (recommended) | `https://mcp.zoom.us/mcp/chat/streamable` |
+| Legacy alias | `https://mcp.zoom.us/mcp/team_chat/streamable` |
 
 The repo MCP bundle registers this as `zoom-team-chat-mcp` in [../../../.mcp.json](../../../.mcp.json).
 
@@ -41,7 +40,8 @@ The repo MCP bundle registers this as `zoom-team-chat-mcp` in [../../../.mcp.jso
 - OAuth bearer tokens are passed through the MCP `Authorization` header.
 - Start app registration from the
   [Team Chat MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-team-chat.json).
-- The protected-resource metadata endpoint is `https://mcp.zoom.us/.well-known/oauth-protected-resource/mcp_team_chat`.
+- Protected-resource metadata is available through both `mcp_chat` and the legacy
+  `mcp_team_chat` resource name.
 - The server is scoped to the caller's account and subject to Team Chat policy restrictions.
 - End-to-end encrypted, archived, retention-restricted, or policy-blocked chats may not be accessible or mutable through this surface.
 
@@ -55,6 +55,16 @@ Team Chat MCP scopes advertised by protected-resource metadata:
 - `team_chat:write:user_channel`
 - `team_chat:update:user_channel`
 - `team_chat:write:members`
+- `team_chat:read:channel`
+- `team_chat:update:channel_member_role`
+- `team_chat:read:list_members`
+- `team_chat:read:list_user_channels`
+- `team_chat:read:list_contacts`
+- `team_chat:read:list_user_files`
+- `team_chat:read:list_user_messages`
+- `team_chat:read:list_user_sessions`
+- `chat_channel:read`
+- `chat_channel:write`
 
 ## Safety Rules
 
@@ -68,7 +78,7 @@ This server contains write-capable tools. Before invoking a write tool:
 
 ## Available Tools
 
-The current Team Chat MCP tool surface is:
+The current Team Chat MCP tool surface has 20 tools:
 
 - `zoom_chat_message_send`
 - `zoom_chat_message_update`
@@ -76,6 +86,20 @@ The current Team Chat MCP tool surface is:
 - `zoom_chat_channel_create`
 - `zoom_chat_channel_update`
 - `zoom_chat_channel_members_add`
+- `zoom_chat_channel_get_by_id`
+- `zoom_chat_channel_member_role_update`
+- `zoom_chat_channel_members_list`
+- `zoom_chat_channels_list`
+- `zoom_chat_channels_search`
+- `zoom_chat_contacts_get_by_id`
+- `zoom_chat_contacts_search`
+- `zoom_chat_files_search`
+- `zoom_chat_message_get_by_id`
+- `zoom_chat_message_replies_list`
+- `zoom_chat_messages_fetch`
+- `zoom_chat_messages_filter`
+- `zoom_chat_messages_search`
+- `zoom_chat_sessions_recent_list`
 
 Some MCP clients namespace server tools in the UI. Treat the raw tool names above as
 authoritative after `tools/list`.
@@ -135,9 +159,13 @@ zoom_chat_channel_members_add
 
 ## Chaining
 
+- Marketplace app creation: [Team Chat MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-team-chat.json)
+  via [Marketplace app management](../../rest-api/references/marketplace-apps.md)
+- Token acquisition: create the app first, then use
+  [OAuth guidance](../concepts/oauth-setup.md) to authorize the user and mint the bearer token
+  supplied to this MCP endpoint
 - Parent MCP skill: [../SKILL.md](../SKILL.md)
 - Deterministic Team Chat API skill: [../../team-chat/SKILL.md](../../team-chat/SKILL.md)
-- OAuth guidance: [../concepts/oauth-setup.md](../concepts/oauth-setup.md)
 - General routing: [../../general/SKILL.md](../../general/SKILL.md)
 
 ## References

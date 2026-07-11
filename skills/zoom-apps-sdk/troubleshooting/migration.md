@@ -4,12 +4,12 @@ Notes on upgrading @zoom/appssdk versions and handling deprecations.
 
 ## Current Version
 
-**Recommended:** `@zoom/appssdk` v0.16.26+ (latest stable)
+**Current verified release:** `@zoom/appssdk@0.16.39` (2026-07-10)
 
 ```json
 {
   "dependencies": {
-    "@zoom/appssdk": "^0.16.26"
+    "@zoom/appssdk": "0.16.39"
   }
 }
 ```
@@ -18,9 +18,9 @@ Notes on upgrading @zoom/appssdk versions and handling deprecations.
 
 | Strategy | package.json | Risk | Use When |
 |----------|-------------|------|----------|
-| **Exact** | `"0.16.26"` | Lowest | Production apps, critical stability |
-| **Patch** | `"~0.16.26"` | Low | Most apps |
-| **Minor** | `"^0.16.26"` | Medium | Active development |
+| **Exact** | `"0.16.39"` | Lowest | Production apps, critical stability |
+| **Patch** | `"~0.16.39"` | Low | Accept compatible patch updates after testing |
+| **Minor** | `"^0.16.39"` | Medium | Active development with automated regression coverage |
 
 ## Checking API Availability at Runtime
 

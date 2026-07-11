@@ -4,18 +4,18 @@ Generate JWT signatures for Meeting SDK authentication.
 
 ## Overview
 
-Meeting SDK uses JWT (JSON Web Token) signatures to authenticate users joining meetings. Signatures must be generated server-side to protect your SDK Secret.
+Meeting SDK uses JWT (JSON Web Token) signatures to authenticate users joining meetings. Signatures must be generated server-side to protect your Client Secret.
 
 ## Prerequisites
 
-- Meeting SDK Key and Secret from [Marketplace](https://marketplace.zoom.us/) (sign-in required)
+- Meeting SDK Client ID and Client Secret from [Marketplace](https://marketplace.zoom.us/) (sign-in required)
 - Server-side code to generate signatures
 
 ## JWT Structure
 
 | Claim | Description |
 |-------|-------------|
-| `sdkKey` | Your SDK Key |
+| `appKey` | Your Meeting SDK Client ID |
 | `mn` | Meeting number |
 | `role` | 0 = participant, 1 = host |
 | `iat` | Issued at timestamp |
@@ -29,11 +29,11 @@ Meeting SDK uses JWT (JSON Web Token) signatures to authenticate users joining m
 For security, generate tokens with short expiry:
 
 ```javascript
-const iat = Math.floor(Date.now() / 1000) - 7200; // 2 hours in the past
-const exp = Math.floor(Date.now() / 1000) + 10;   // 10 seconds from now
+const iat = Math.floor(Date.now() / 1000) - 30; // tolerate small clock skew
+const exp = iat + 60 * 60 * 2;                  // two hours
 
 const payload = {
-  sdkKey: SDK_KEY,
+  appKey: CLIENT_ID,
   mn: meetingNumber,
   role: role,
   iat: iat,
@@ -42,22 +42,21 @@ const payload = {
 };
 ```
 
-**Why this works:**
-- `exp` is only 10 seconds after generation (short-lived for security)
-- `iat` is set 2 hours in the past to satisfy Zoom's requirement that `exp - iat >= 2 hours`
-- Token is generated just before joining, so 10 second window is sufficient
+The current auth reference requires `exp` and `tokenExp` to be at least 1,800 seconds after
+`iat` and recommends no more than 48 hours. Generate on demand and enforce authorization at your
+signature endpoint rather than manipulating `iat` far into the past.
 
 ### Server-Side Example (Node.js)
 
 ```javascript
 const jwt = require('jsonwebtoken');
 
-function generateSignature(sdkKey, sdkSecret, meetingNumber, role) {
-  const iat = Math.floor(Date.now() / 1000) - 7200; // 2 hours ago
-  const exp = Math.floor(Date.now() / 1000) + 10;   // 10 seconds from now
+function generateSignature(clientId, clientSecret, meetingNumber, role) {
+  const iat = Math.floor(Date.now() / 1000) - 30;
+  const exp = iat + 60 * 60 * 2;
   
   const payload = {
-    sdkKey: sdkKey,
+    appKey: clientId,
     mn: meetingNumber,
     role: role,
     iat: iat,
@@ -65,7 +64,7 @@ function generateSignature(sdkKey, sdkSecret, meetingNumber, role) {
     tokenExp: exp
   };
   
-  return jwt.sign(payload, sdkSecret, { algorithm: 'HS256' });
+  return jwt.sign(payload, clientSecret, { algorithm: 'HS256' });
 }
 ```
 
@@ -80,7 +79,7 @@ function generateSignature(sdkKey, sdkSecret, meetingNumber, role) {
 
 | Do | Don't |
 |----|-------|
-| Generate signatures server-side | Expose SDK Secret in client code |
+| Generate signatures server-side | Expose Client Secret in client code |
 | Use short expiry times | Use long-lived tokens |
 | Validate user before generating | Generate for unauthenticated users |
 

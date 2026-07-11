@@ -18,9 +18,9 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 90 |
-| Path templates | 52 |
-| Tags | 17 |
+| Endpoint operations | 91 |
+| Path templates | 53 |
+| Tags | 18 |
 
 ## Tag Index
 
@@ -34,6 +34,7 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 | Exhibitors | 6 |
 | Files | 3 |
 | Hubs | 5 |
+| Insights | 1 |
 | Registrants | 2 |
 | Reports | 7 |
 | Sessions | 15 |
@@ -75,8 +76,8 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 |--------|----------|---------|-------------|
 | GET | `/zoom_events/events/{eventId}/access_links` | List event access links | `getEventAccessLinks` |
 | POST | `/zoom_events/events/{eventId}/access_links` | Create event access link | `createEventAccessLink` |
-| DELETE | `/zoom_events/events/{eventId}/access_links/{accessLinkId}` | Delete event access link | `deleteEventAccessLink` |
 | GET | `/zoom_events/events/{eventId}/access_links/{accessLinkId}` | Get event access link | `GetEventAccessLink` |
+| DELETE | `/zoom_events/events/{eventId}/access_links/{accessLinkId}` | Delete event access link | `deleteEventAccessLink` |
 | PATCH | `/zoom_events/events/{eventId}/access_links/{accessLinkId}` | Update event access | `updateEventAccess` |
 
 ### Events
@@ -85,8 +86,8 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 |--------|----------|---------|-------------|
 | GET | `/zoom_events/events` | List events | `getEvents` |
 | POST | `/zoom_events/events` | Create an event | `createEvent` |
-| DELETE | `/zoom_events/events/{eventId}` | Delete an event | `deleteEvent` |
 | GET | `/zoom_events/events/{eventId}` | Get an event | `getEventInfo` |
+| DELETE | `/zoom_events/events/{eventId}` | Delete an event | `deleteEvent` |
 | PATCH | `/zoom_events/events/{eventId}` | Update an event | `updateEvent` |
 | POST | `/zoom_events/events/{eventId}/event_actions` | Event actions | `EventActions` |
 
@@ -96,8 +97,8 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 |--------|----------|---------|-------------|
 | GET | `/zoom_events/events/{eventId}/exhibitors` | List exhibitors | `getExhibitors` |
 | POST | `/zoom_events/events/{eventId}/exhibitors` | Create an exhibitor | `createExhibitor` |
-| DELETE | `/zoom_events/events/{eventId}/exhibitors/{exhibitorId}` | Delete an exhibitor | `deleteExhibitor` |
 | GET | `/zoom_events/events/{eventId}/exhibitors/{exhibitorId}` | Get an exhibitor | `getExhibitorInfo` |
+| DELETE | `/zoom_events/events/{eventId}/exhibitors/{exhibitorId}` | Delete an exhibitor | `deleteExhibitor` |
 | PATCH | `/zoom_events/events/{eventId}/exhibitors/{exhibitorId}` | Update exhibitor for an event | `updateExhibitor` |
 | GET | `/zoom_events/events/{eventId}/sponsor_tiers` | List sponsor tiers | `ListSponsorTiers` |
 
@@ -118,6 +119,12 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 | POST | `/zoom_events/hubs/{hubId}/hosts` | Creates a new hub host | `createHubHost` |
 | DELETE | `/zoom_events/hubs/{hubId}/hosts/{hostUserId}` | Remove hub host | `deleteHubHost` |
 | GET | `/zoom_events/hubs/{hubId}/videos` | List hub videos | `ListHubVideos` |
+
+### Insights
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/zoom_events/hubs/{hubId}/attendee_insights/engagement` | Get attendee engagement data | `getAttendeeEngagement` |
 
 ### Registrants
 
@@ -144,8 +151,8 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 |--------|----------|---------|-------------|
 | GET | `/zoom_events/events/{eventId}/sessions` | List sessions | `getEventSessionList` |
 | POST | `/zoom_events/events/{eventId}/sessions` | Create a session | `createEventSession` |
-| DELETE | `/zoom_events/events/{eventId}/sessions/{sessionId}` | Delete a session | `deleteEventSession` |
 | GET | `/zoom_events/events/{eventId}/sessions/{sessionId}` | Get the session information | `getEventSessionInfo` |
+| DELETE | `/zoom_events/events/{eventId}/sessions/{sessionId}` | Delete a session | `deleteEventSession` |
 | PATCH | `/zoom_events/events/{eventId}/sessions/{sessionId}` | Update a session | `updateEventSession` |
 | GET | `/zoom_events/events/{eventId}/sessions/{sessionId}/interpreters` | List session interpreters | `getSessionInterpreterList` |
 | PUT | `/zoom_events/events/{eventId}/sessions/{sessionId}/interpreters` | Create or update session interpreters | `updateSessionInterpreters` |
@@ -154,9 +161,9 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 | PATCH | `/zoom_events/events/{eventId}/sessions/{sessionId}/livestream` | Update session livestream configuration | `UpdateSessionLivestreamConfiguration` |
 | GET | `/zoom_events/events/{eventId}/sessions/{sessionId}/polls` | List session polls | `getSessionPolls` |
 | PUT | `/zoom_events/events/{eventId}/sessions/{sessionId}/polls` | Create or update session polls | `updateSessionPolls` |
-| DELETE | `/zoom_events/events/{eventId}/sessions/{sessionId}/reservations` | Delete session reservations | `DeleteSessionReservations` |
 | GET | `/zoom_events/events/{eventId}/sessions/{sessionId}/reservations` | List session reservations | `ListSessionReservations` |
 | POST | `/zoom_events/events/{eventId}/sessions/{sessionId}/reservations` | Add session reservations | `AddSessionReservations` |
+| DELETE | `/zoom_events/events/{eventId}/sessions/{sessionId}/reservations` | Delete session reservations | `DeleteSessionReservations` |
 
 ### Speakers
 
@@ -164,8 +171,8 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 |--------|----------|---------|-------------|
 | GET | `/zoom_events/events/{eventId}/speakers` | List speakers | `getSpeakers` |
 | POST | `/zoom_events/events/{eventId}/speakers` | Create a speaker | `createSpeaker` |
-| DELETE | `/zoom_events/events/{eventId}/speakers/{speakerId}` | Delete a speaker | `deleteSpeaker` |
 | GET | `/zoom_events/events/{eventId}/speakers/{speakerId}` | Get a speaker | `getSpeaker` |
+| DELETE | `/zoom_events/events/{eventId}/speakers/{speakerId}` | Delete a speaker | `deleteSpeaker` |
 | PATCH | `/zoom_events/events/{eventId}/speakers/{speakerId}` | Update a speaker | `updateSpeaker` |
 
 ### Ticket Types
@@ -187,8 +194,8 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 |--------|----------|---------|-------------|
 | GET | `/zoom_events/events/{eventId}/tickets` | List tickets | `getTickets` |
 | POST | `/zoom_events/events/{eventId}/tickets` | Create tickets | `createTickets` |
-| DELETE | `/zoom_events/events/{eventId}/tickets/{ticketId}` | Delete a ticket | `deleteTicket` |
 | GET | `/zoom_events/events/{eventId}/tickets/{ticketId}` | Get a ticket | `getTicketDetails` |
+| DELETE | `/zoom_events/events/{eventId}/tickets/{ticketId}` | Delete a ticket | `deleteTicket` |
 | PATCH | `/zoom_events/events/{eventId}/tickets/{ticketId}` | Update ticket | `Updateticket` |
 
 ### Video On-Demand
@@ -197,8 +204,8 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 |--------|----------|---------|-------------|
 | GET | `/zoom_events/hubs/{hubId}/vod_channels` | List channels | `getVODChannels` |
 | POST | `/zoom_events/hubs/{hubId}/vod_channels` | Create VOD channel | `createVodChannel` |
-| DELETE | `/zoom_events/hubs/{hubId}/vod_channels/{channelId}` | Delete VOD Channel | `DeleteVODChannel` |
 | GET | `/zoom_events/hubs/{hubId}/vod_channels/{channelId}` | Get VOD channel details | `getVODChannelDetail` |
+| DELETE | `/zoom_events/hubs/{hubId}/vod_channels/{channelId}` | Delete VOD Channel | `DeleteVODChannel` |
 | PATCH | `/zoom_events/hubs/{hubId}/vod_channels/{channelId}` | Update VOD channel | `UpdateVideoChannel` |
 | POST | `/zoom_events/hubs/{hubId}/vod_channels/{channelId}/actions` | VOD channel actions | `vodChannelActions` |
 | GET | `/zoom_events/hubs/{hubId}/vod_channels/{channelId}/videos` | List VOD channel videos | `ListVODChannelVideos` |
@@ -219,4 +226,4 @@ Authoritative endpoint inventory for Events. This file mirrors the official Zoom
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/zoom_events/videos/{videoId}/metadata` | Get metadata for a specific video | `getVideoMetadata` |
-| PATCH | `/zoom_events/videos/{videoId}/metadata` | Update metadata for a specific video. | `updateVideoMetadata` |
+| PATCH | `/zoom_events/videos/{videoId}/metadata` | Update metadata for a specific video | `updateVideoMetadata` |

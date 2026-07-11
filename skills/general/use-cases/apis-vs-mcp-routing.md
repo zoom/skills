@@ -39,9 +39,14 @@ Zoom APIs and Zoom MCP are complementary:
 
 ### Pattern B: MCP-first AI tool workflows
 
-1. `zoom-oauth` for user OAuth token required by MCP server.
-2. `zoom-mcp` for semantic meeting search, Team Chat/Docs search, Docs content export, summaries, recordings/transcripts, and tool invocation.
-3. `zoom-mcp/team-chat` when the AI agent needs write-capable Team Chat tools such as send/edit message or channel/member changes.
+1. `zoom-rest-api` Marketplace app management selects the matching MCP manifest template and
+   creates a user-managed General App with the required scopes.
+2. `zoom-oauth` configures user authorization/PKCE and exchanges the code for the access token
+   required by the MCP server.
+3. `zoom-mcp` connects the token to the selected server for semantic meeting search, Team
+   Chat/Docs search, Docs content export, summaries, recordings/transcripts, and tool invocation.
+4. `zoom-mcp/team-chat` handles write-capable Team Chat tools such as send/edit message or
+   channel/member changes.
 
 ### Pattern C: Hybrid enterprise AI architecture
 
@@ -83,4 +88,4 @@ Use `zoom-mcp` when you are:
 
 ## Source
 
-- https://developers.zoom.us/docs/mcp/library/resources/apis-vs-mcp/
+- https://developers.zoom.us/docs/mcp/apis-vs-mcp/

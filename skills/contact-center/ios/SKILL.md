@@ -12,6 +12,10 @@ triggers:
 
 # Zoom Contact Center SDK - iOS
 
+**Current public changelog release:** `5.6.0` (verified 2026-07-10). Real-time audio translation
+logic changed, and the backend now controls available AI live-interpreter languages and volume
+restrictions. Treat those as runtime service capabilities rather than a fixed client list.
+
 Official docs:
 - https://developers.zoom.us/docs/contact-center/ios/
 - https://marketplacefront.zoom.us/sdk/contact/ios/index.html

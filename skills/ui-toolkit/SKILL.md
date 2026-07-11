@@ -58,7 +58,7 @@ npm install @zoom/videosdk-ui-toolkit jsrsasign
 npm install -D @types/jsrsasign
 ```
 
-**Current package**: `@zoom/videosdk-ui-toolkit@2.4.5-1` is the latest npm release verified on 2026-06-25. Check npm before pinning.
+**Current package**: `@zoom/videosdk-ui-toolkit@2.4.5-1` is the latest npm release verified on 2026-07-10. Check npm before pinning.
 
 **Peer dependencies for 2.4.5-1**: `@zoom/videosdk@^2.4.5`, React 18, React DOM 18, `@reduxjs/toolkit@^2`, `react-redux@^9`, and `react-draggable@^4`.
 

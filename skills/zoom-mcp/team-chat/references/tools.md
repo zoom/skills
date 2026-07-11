@@ -1,9 +1,10 @@
 # Tools — Team Chat MCP
 
-Current `tools/list` result from `https://mcp.zoom.us/mcp/team_chat/streamable`.
+Current catalog for `https://mcp.zoom.us/mcp/chat/streamable`. The older
+`/mcp/team_chat/streamable` route remains a runtime alias.
 
-This is a write-capable MCP surface for Zoom Team Chat. It is separate from the default
-Zoom MCP server's read-only `search_zoom` tool.
+This is a read/write MCP surface for Zoom Team Chat. It is separate from the default Zoom MCP
+server's broader `search_zoom` tool.
 
 ## Tool Catalog
 
@@ -15,6 +16,20 @@ Zoom MCP server's read-only `search_zoom` tool.
 | `zoom_chat_channel_create` | Create a public channel, private channel, or group chat | `team_chat:write:user_channel` |
 | `zoom_chat_channel_update` | Update channel settings such as name, visibility, and permissions | `team_chat:update:user_channel` |
 | `zoom_chat_channel_members_add` | Add users to an existing channel by email | `team_chat:write:members` |
+| `zoom_chat_channel_get_by_id` | Get a channel by ID | `team_chat:read:channel` |
+| `zoom_chat_channel_member_role_update` | Update a channel member's role | `team_chat:update:channel_member_role` |
+| `zoom_chat_channel_members_list` | List channel members | `team_chat:read:list_members` |
+| `zoom_chat_channels_list` | List the caller's channels | `team_chat:read:list_user_channels` |
+| `zoom_chat_channels_search` | Search channels by keyword, ownership, or visibility | `team_chat:read:list_user_channels` |
+| `zoom_chat_contacts_get_by_id` | Resolve one or more contacts by user/member ID | `team_chat:read:list_contacts` |
+| `zoom_chat_contacts_search` | Search contacts by name or email | `team_chat:read:list_contacts` |
+| `zoom_chat_files_search` | Search shared Team Chat files | `team_chat:read:list_user_files` |
+| `zoom_chat_message_get_by_id` | Get a message from a chat session | `team_chat:read:list_user_messages` |
+| `zoom_chat_message_replies_list` | List replies in a message thread | `team_chat:read:list_user_messages` |
+| `zoom_chat_messages_fetch` | Fetch messages from a chat session | `team_chat:read:list_user_messages` |
+| `zoom_chat_messages_filter` | Filter messages such as unread, mentions, or sent-by-me | `team_chat:read:list_user_messages` |
+| `zoom_chat_messages_search` | Search messages in one or all sessions | `team_chat:read:list_user_messages` |
+| `zoom_chat_sessions_recent_list` | List recent channels and direct-message sessions | `team_chat:read:list_user_sessions` |
 
 ## Supported Scope Families
 
@@ -26,11 +41,21 @@ Protected-resource metadata for Team Chat MCP advertises:
 - `team_chat:write:user_channel`
 - `team_chat:update:user_channel`
 - `team_chat:write:members`
+- `team_chat:read:channel`
+- `team_chat:update:channel_member_role`
+- `team_chat:read:list_members`
+- `team_chat:read:list_user_channels`
+- `team_chat:read:list_contacts`
+- `team_chat:read:list_user_files`
+- `team_chat:read:list_user_messages`
+- `team_chat:read:list_user_sessions`
+- `chat_channel:read`
+- `chat_channel:write`
 
 Metadata endpoint:
 
 ```text
-https://mcp.zoom.us/.well-known/oauth-protected-resource/mcp_team_chat
+https://mcp.zoom.us/.well-known/oauth-protected-resource/mcp_chat
 ```
 
 ## Message Tools
@@ -129,6 +154,6 @@ Notes:
 
 ## Routing Notes
 
-- Use `zoom-mcp/team-chat` for agent-driven write/update Team Chat actions.
+- Use `zoom-mcp/team-chat` for agent-driven read/search/write/update Team Chat actions.
 - Use the default `zoom-mcp` `search_zoom` tool for read-only Team Chat and Zoom Docs search.
 - Use `team-chat` REST skill for deterministic production integrations, bulk jobs, webhooks, and custom retry/audit requirements.

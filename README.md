@@ -121,6 +121,8 @@ The **general** skill acts as a router and directs to the appropriate specialize
 | "Summarize this transcript" | summarizer |
 | "Translate this text" | translator |
 | "Build AI-agent meeting search tools" | zoom-mcp |
+| "Manage Zoom Tasks from an AI agent" | zoom-mcp/tasks |
+| "Analyze Revenue Accelerator conversations" | zoom-mcp/revenue-accelerator |
 
 ### 3. Skills chain automatically
 
@@ -154,7 +156,13 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | [zoom-ui-toolkit](skills/ui-toolkit/) | Pre-built UI components for Video SDK |
 | [zoom-cobrowse-sdk](skills/cobrowse-sdk/) | Collaborative browsing for support |
 | [zoom-oauth](skills/oauth/) | OAuth authentication (all 4 grant types) |
-| [zoom-mcp](skills/zoom-mcp/) | Zoom-hosted MCP server workflows for AI-agent tooling, meeting search, Team Chat/Docs search, Docs content, and transcript retrieval |
+| [zoom-mcp](skills/zoom-mcp/) | Parent router for Zoom-hosted MCP servers and the default 9-tool Zoom MCP surface |
+| [zoom-mcp/meetings](skills/zoom-mcp/meetings/) | Meeting search, assets, recordings, and recording-resource retrieval |
+| [zoom-mcp/docs](skills/zoom-mcp/docs/) | Zoom Docs Markdown creation and content retrieval |
+| [zoom-mcp/tasks](skills/zoom-mcp/tasks/) | Task, comment, assignee, collaborator, and step workflows |
+| [zoom-mcp/revenue-accelerator](skills/zoom-mcp/revenue-accelerator/) | ZRA conversations, transcripts, analyses, deals, customers, and coaching data |
+| [zoom-mcp/team-chat](skills/zoom-mcp/team-chat/) | Team Chat message, file, contact, session, channel, and member tools |
+| [zoom-mcp/whiteboard](skills/zoom-mcp/whiteboard/) | Whiteboard creation, retrieval, and collaborator tools |
 
 ## Common Use Cases
 
@@ -179,8 +187,32 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | Low-latency event notifications | zoom-websockets |
 | OAuth authentication setup | oauth |
 | AI-driven tool workflows over Zoom meetings, Team Chat, Docs, and recordings | zoom-mcp |
-| Write-capable Team Chat MCP workflows | zoom-mcp/team-chat |
+| Team Chat MCP search, read, and write workflows | zoom-mcp/team-chat |
+| Meeting asset and recording retrieval through dedicated MCP | zoom-mcp/meetings |
+| Zoom Docs creation and retrieval through dedicated MCP | zoom-mcp/docs |
+| Task management through MCP | zoom-mcp/tasks |
+| Revenue Accelerator conversation and deal intelligence | zoom-mcp/revenue-accelerator |
 | Enterprise AI architecture (API core + AI tool layer) | zoom-rest-api + zoom-mcp |
+
+## Current Package Snapshot
+
+Public package versions verified on 2026-07-10:
+
+| Package | Version |
+|---------|---------|
+| `@zoom/meetingsdk` | `6.2.0` |
+| `@zoom/meetingsdk-react-native` | `7.0.5` |
+| `@zoom/videosdk` | `2.4.5` |
+| `@zoom/react-native-videosdk` | `2.5.10` |
+| `flutter_zoom_videosdk` | `2.5.10` |
+| `@zoom/videosdk-ui-toolkit` | `2.4.5-1` |
+| `@zoom/appssdk` | `0.16.39` |
+| `@zoom/probesdk` | `1.0.4` |
+| `@zoom/rivet` | `0.4.0` |
+
+Use [the SDK upgrade guide](skills/general/references/sdk-upgrade-guide.md) for source hierarchy,
+version verification, and migration guardrails. Native SDK versions must be checked against the
+download package or release notes for the target platform rather than inferred from web packages.
 
 ## Architecture
 
@@ -211,7 +243,11 @@ zoom-general (HUB)
        ├── zoom-oauth
        └── zoom-mcp
            ├── whiteboard
-           └── team-chat
+           ├── team-chat
+           ├── meetings
+           ├── docs
+           ├── tasks
+           └── revenue-accelerator
 ```
 
 ## Directory Structure
@@ -256,7 +292,11 @@ repo/
 │   ├── oauth/
 │   └── zoom-mcp/
 │       ├── whiteboard/
-│       └── team-chat/
+│       ├── team-chat/
+│       ├── meetings/
+│       ├── docs/
+│       ├── tasks/
+│       └── revenue-accelerator/
 ```
 
 ## Resources

@@ -1,5 +1,10 @@
 # Version Drift
 
+- In `2.5.10`, use the newly named playback-volume APIs when available and treat older volume
+  controls as deprecated.
+- QoS payloads changed to a richer Web-aligned structure; update parsers for codec, network,
+  jitter, packet-loss, and encode/decode metrics rather than assuming the older shape.
+
 Flutter wrapper, native SDKs, and docs can drift independently.
 
 ## Upgrade checklist

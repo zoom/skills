@@ -30,6 +30,22 @@
         {
           "scope": "whiteboard:write:whiteboard",
           "optional": false
+        },
+        {
+          "scope": "whiteboard:write:collaborator",
+          "optional": false
+        },
+        {
+          "scope": "whiteboard:delete:collaborator",
+          "optional": false
+        },
+        {
+          "scope": "whiteboard:update:collaborator",
+          "optional": false
+        },
+        {
+          "scope": "whiteboard:read:list_collaborators",
+          "optional": false
         }
       ],
       "scope_description": "Use the current Whiteboard MCP read and write tools for the authorizing user.",

@@ -2,8 +2,14 @@
 
 ## Observed Versions
 
-- Local SDK package: `v6.7.5.37500`
-- Docs baseline: current Meeting SDK Android docs tree captured on this crawl.
+- Latest public changelog release verified on 2026-07-10: `7.1.0`
+- Local API/package inventory used by this skill: `v6.7.5.37500`
+- Docs baseline: current Meeting SDK Android docs tree captured on 2026-07-10.
+
+The local package inventory is a historical API snapshot, not a latest-version claim. Version
+`7.1.0` includes breaking changes plus I420 Limited/Full, breakout-room summaries, face ROI in
+raw video, and on-demand avatar download. Re-crawl/diff the exact downloaded package before using
+new symbols.
 
 ## Compatibility Practices
 

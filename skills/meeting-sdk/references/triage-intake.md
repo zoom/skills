@@ -32,8 +32,8 @@ Request the exact values and formats (redact secrets):
 - `meetingNumber` (digits only)
 - `passcode` / `password` (and on Web Client View, confirm they used `passWord` key name)
 - `userName`
-- `sdkKey` (OK to share)
-- signature generation code (server-side) and the payload fields used (`mn`, `role`, `iat`, `exp`, `tokenExp`)
+- Meeting SDK Client ID (OK to share)
+- signature generation code (server-side) and the payload fields used (`appKey`, `mn`, `role`, `iat`, `exp`, `tokenExp`)
 
 ## 5) The Symptom
 
@@ -49,4 +49,3 @@ Pick one bucket:
 - Minimal steps to reproduce
 - SDK logs (see `general/references/sdk-logs-troubleshooting.md`)
 - On Web: browser + OS, console errors, and whether corporate proxy/adblock is present
-

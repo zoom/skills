@@ -1,5 +1,7 @@
 # Rivet Versioning and Compatibility
 
+Current verified npm release: `@zoom/rivet@0.4.0` (2026-07-10).
+
 ## Upgrade Strategy
 
 Use the repository-standard workflow:
@@ -16,6 +18,20 @@ For Rivet, treat upgrades as three parallel checks:
 - Type alias or endpoint wrapper signature changes.
 - Event payload shape differences for webhook types.
 - Receiver behavior changes in Node runtime/Lambda environments.
+
+## 0.4.0 Breaking Changes
+
+- `CommerceOAuthClient` became `CommerceS2SAuthClient` and requires S2S credentials.
+- Meetings renamed `upgradeZpaOsApp` to `upgradeZPAFirmwareOrApp`.
+- Meetings renamed `listMeetingSummariesOfAccount` to `listAccountsMeetingOrWebinarSummaries`.
+- Meetings renamed `getMeetingSummary` to `getMeetingOrWebinarSummary`.
+- Phone renamed `addPolicySettingToCallQueue` to `addPolicySubsettingToCallQueue`.
+- Phone renamed `addCommonAreaSettings` / `updateCommonAreaSettings` to singular names.
+- Team Chat renamed `getChatMessagesReports` to `getChatMessageReports`.
+- Users renamed `bulkUpdateFeaturesForUser` to `bulkUpdateFeaturesForUsers`.
+
+Search and replace only after compiling against `0.4.0`; generated endpoint names can change
+again when the underlying OpenAPI clients are regenerated.
 
 ## Version Signals
 

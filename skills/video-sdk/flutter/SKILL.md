@@ -29,6 +29,9 @@ Use this skill for Flutter apps that build custom real-time video session experi
 
 ## Core Notes
 
+- Latest pub.dev package verified on 2026-07-10: `flutter_zoom_videosdk 2.5.10`.
+- Release `2.5.10` adds a Web-aligned QoS statistics structure, introduces renamed playback
+  volume controls while deprecating older methods, and fixes an iOS simulator build issue.
 - Video SDK sessions are custom sessions, not Zoom Meetings.
 - Keep SDK credentials server-side; generate JWT token on backend.
 - Integration is strongly event-driven; bind listener flows early.

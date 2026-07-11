@@ -15,8 +15,9 @@ Use this before deep debugging. It catches high-frequency Meeting SDK failures q
 
 ## 2) Confirm Signature Path
 
-- Generate signature server-side with SDK Secret.
-- Never expose SDK Secret in browser code.
+- Generate the signature server-side with the Meeting SDK Client Secret.
+- Never expose the Client Secret in browser code.
+- Confirm the JWT `appKey` is the Meeting SDK Client ID and Web `join()` omits deprecated `sdkKey`.
 - Confirm `meetingNumber` and `role` in signature payload match join request.
 
 ## 3) Confirm Join Payload Hygiene

@@ -23,9 +23,9 @@ Troubleshooting guide for Meeting SDK across all platforms.
 
 | Issue | Possible Cause | Solution |
 |-------|----------------|----------|
-| Auth failed | Invalid credentials | Check SDK Key/Secret |
+| Auth failed | Invalid credentials | Check Meeting SDK Client ID/Secret |
 | Token expired | JWT too old | Generate fresh signature |
-| Signature invalid | Wrong secret used | Verify SDK Secret |
+| Signature invalid | Wrong secret used | Verify Client Secret and JWT `appKey` |
 
 ### No Video
 

@@ -649,7 +649,7 @@ xcopy /Y /D "$(SolutionDir)SDK\$(PlatformTarget)\bin\*.*" "$(OutDir)"
 **Cause**: Invalid JWT token
 
 **Fix**:
-1. Verify JWT token is correctly generated with SDK Key and Secret
+1. Verify JWT token is correctly generated with Meeting SDK Client ID and Client Secret
 2. Check token expiration time (iat and exp)
 3. Ensure meeting number in JWT matches meeting number in join request
 4. See [authorization.md](../../references/authorization.md) for JWT generation

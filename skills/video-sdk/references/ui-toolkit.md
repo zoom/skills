@@ -24,7 +24,7 @@ The Video SDK UI Toolkit provides ready-to-use video components so you don't hav
 npm install @zoom/videosdk-ui-toolkit --save
 ```
 
-Current verified latest is `@zoom/videosdk-ui-toolkit@2.4.5-1` as of 2026-06-25. Its peer dependencies include `@zoom/videosdk@^2.4.5`, React 18, React DOM 18, `@reduxjs/toolkit@^2`, `react-redux@^9`, and `react-draggable@^4`.
+Current verified latest is `@zoom/videosdk-ui-toolkit@2.4.5-1` as of 2026-07-10. Its peer dependencies include `@zoom/videosdk@^2.4.5`, React 18, React DOM 18, `@reduxjs/toolkit@^2`, `react-redux@^9`, and `react-draggable@^4`.
 
 Use `2.3.15-1` or newer for WebRTC video because Zoom flags that version floor for future Chrome compatibility.
 

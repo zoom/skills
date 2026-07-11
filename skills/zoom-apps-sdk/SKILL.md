@@ -33,6 +33,9 @@ Build web apps that run inside the Zoom client - meetings, webinars, main client
 **SDK Reference**: https://appssdk.zoom.us/
 **NPM Package**: https://www.npmjs.com/package/@zoom/appssdk
 
+Current npm package verified on 2026-07-10: `@zoom/appssdk@0.16.39`. Keep
+`config({ version: '0.16' })`; the config protocol version is not the npm patch version.
+
 ## Quick Links
 
 **New to Zoom Apps? Follow this path:**
@@ -77,6 +80,9 @@ The Zoom Apps SDK (`@zoom/appssdk`) provides JavaScript APIs for web apps runnin
 - **Collaborate Mode** - Shared app state across participants
 - **App Communication** - Message passing between app instances (main client <-> meeting)
 - **Media Controls** - Virtual backgrounds, camera listing, recording control
+- **RTMS Controls** - Start, stop, pause, resume, inspect, and observe RTMS state when the
+  running context and client version support those capabilities
+- **Zoom Rooms and Phone Controls** - Device details, keypad controls, and participant removal
 - **UI Controls** - Expand app, notifications, popout
 - **Events** - React to meeting state, participants, sharing, and more
 
@@ -393,7 +399,8 @@ See **[Layers Immersive](examples/layers-immersive.md)** and **[Camera Mode](exa
 | [zoomapps-cameramode-vuejs](https://github.com/zoom/zoomapps-cameramode-vuejs) | Camera Mode | - | - | - |
 | [zoomapps-workshop-sample](https://github.com/zoom/zoomapps-workshop-sample) | Workshop | - | - | - |
 
-**Recommended for new projects:** Use `@zoom/appssdk` version `^0.16.26`.
+**Recommended for new projects:** Start from `@zoom/appssdk@0.16.39`, then pin according to
+your release policy and test required capabilities against the target Zoom Workplace client.
 
 ### Community
 
@@ -656,7 +663,7 @@ Complete working code. Get something running before diving into advanced feature
 
 ## Document Version
 
-Based on **@zoom/appssdk v0.16.x** (latest: 0.16.26+)
+Based on **@zoom/appssdk v0.16.x** (latest verified: `0.16.39` on 2026-07-10)
 
 ---
 

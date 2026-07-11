@@ -18,8 +18,8 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 183 |
-| Path templates | 128 |
+| Endpoint operations | 184 |
+| Path templates | 129 |
 | Tags | 19 |
 
 ## Tag Index
@@ -37,7 +37,7 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | Meetings | 13 |
 | PAC | 1 |
 | Polls | 7 |
-| Reports | 23 |
+| Reports | 24 |
 | SIP Phone | 4 |
 | Summaries | 3 |
 | Surveys | 3 |
@@ -56,15 +56,15 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | GET | `/archive_files/statistics` | Get archived file statistics | `getArchivedFileStatistics` |
 | PATCH | `/archive_files/{fileId}` | Update an archived file's auto-delete status | `updateArchivedFile` |
 | GET | `/meetings/{meetingId}/jointoken/local_archiving` | Get a meeting's archive token for local archiving | `meetingLocalArchivingArchiveToken` |
-| DELETE | `/past_meetings/{meetingUUID}/archive_files` | Delete a meeting's archived files | `deleteArchivedFiles` |
 | GET | `/past_meetings/{meetingUUID}/archive_files` | Get a meeting's archived files | `getArchivedFiles` |
+| DELETE | `/past_meetings/{meetingUUID}/archive_files` | Delete a meeting's archived files | `deleteArchivedFiles` |
 
 ### Cloud Recording
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/meetings/{meetingId}/recordings` | Delete meeting or webinar recordings | `recordingDelete` |
 | GET | `/meetings/{meetingId}/recordings` | Get meeting recordings | `recordingGet` |
+| DELETE | `/meetings/{meetingId}/recordings` | Delete meeting or webinar recordings | `recordingDelete` |
 | GET | `/meetings/{meetingId}/recordings/analytics_details` | Get a meeting or webinar recording's analytics details | `analytics_details` |
 | GET | `/meetings/{meetingId}/recordings/analytics_summary` | Get a meeting or webinar recording's analytics summary | `analytics_summary` |
 | GET | `/meetings/{meetingId}/recordings/registrants` | List recording registrants | `meetingRecordingRegistrants` |
@@ -76,8 +76,8 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | PATCH | `/meetings/{meetingId}/recordings/settings` | Update meeting recording settings | `recordingSettingsUpdate` |
 | DELETE | `/meetings/{meetingId}/recordings/{recordingId}` | Delete a recording file for a meeting or webinar | `recordingDeleteOne` |
 | PUT | `/meetings/{meetingId}/recordings/{recordingId}/status` | Recover a single recording | `recordingStatusUpdateOne` |
-| DELETE | `/meetings/{meetingId}/transcript` | Delete a meeting or webinar transcript | `DeleteMeetingTranscript` |
 | GET | `/meetings/{meetingId}/transcript` | Get a meeting transcript | `GetMeetingTranscript` |
+| DELETE | `/meetings/{meetingId}/transcript` | Delete a meeting or webinar transcript | `DeleteMeetingTranscript` |
 | PUT | `/meetings/{meetingUUID}/recordings/status` | Recover meeting recordings | `recordingStatusUpdate` |
 | GET | `/users/{userId}/recordings` | List all recordings | `recordingsList` |
 
@@ -93,8 +93,8 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | POST | `/devices/zpa/upgrade` | Upgrade ZPA firmware or app | `UpgradeZpas/app` |
 | DELETE | `/devices/zpa/vendors/{vendor}/mac_addresses/{macAddress}` | Delete ZPA device by vendor and mac address | `DeleteZpaDeviceByVendorAndMacAddress` |
 | GET | `/devices/zpa/zdm_groups/{zdmGroupId}/versions` | Get ZPA version info | `GetZpaVersioninfo` |
-| DELETE | `/devices/{deviceId}` | Delete device | `deleteDevice` |
 | GET | `/devices/{deviceId}` | Get device detail | `getDevice` |
+| DELETE | `/devices/{deviceId}` | Delete device | `deleteDevice` |
 | PATCH | `/devices/{deviceId}` | Change device | `updateDevice` |
 | PATCH | `/devices/{deviceId}/assign_group` | Assign a device to a group | `assginGroup` |
 | PATCH | `/devices/{deviceId}/assignment` | Change device association | `changeDeviceAssociation` |
@@ -112,8 +112,8 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/meetings/{meetingId}/open_apps` | Delete a meeting app | `meetingAppDelete` |
 | POST | `/meetings/{meetingId}/open_apps` | Add a meeting app | `meetingAppAdd` |
+| DELETE | `/meetings/{meetingId}/open_apps` | Delete a meeting app | `meetingAppDelete` |
 
 ### In-Meeting Features
 
@@ -137,8 +137,8 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | GET | `/meetings/{meetingId}/registrants/questions` | List registration questions | `meetingRegistrantsQuestionsGet` |
 | PATCH | `/meetings/{meetingId}/registrants/questions` | Update registration questions | `meetingRegistrantQuestionUpdate` |
 | PUT | `/meetings/{meetingId}/registrants/status` | Update registrant's status | `meetingRegistrantStatus` |
-| DELETE | `/meetings/{meetingId}/registrants/{registrantId}` | Delete a meeting registrant | `meetingregistrantdelete` |
 | GET | `/meetings/{meetingId}/registrants/{registrantId}` | Get a meeting registrant | `meetingRegistrantGet` |
+| DELETE | `/meetings/{meetingId}/registrants/{registrantId}` | Delete a meeting registrant | `meetingregistrantdelete` |
 
 ### Live streaming
 
@@ -154,8 +154,8 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | PATCH | `/live_meetings/{meetingId}/rtms_app/status` | Update participant Real-Time Media Streams (RTMS) app status | `meetingRTMSStatusUpdate` |
-| DELETE | `/meetings/{meetingId}` | Delete a meeting | `meetingDelete` |
 | GET | `/meetings/{meetingId}` | Get a meeting | `meeting` |
+| DELETE | `/meetings/{meetingId}` | Delete a meeting | `meetingDelete` |
 | PATCH | `/meetings/{meetingId}` | Update a meeting | `meetingUpdate` |
 | POST | `/meetings/{meetingId}/sip_dialing` | Get a meeting SIP URI with passcode | `getSipDialingWithPasscode` |
 | PUT | `/meetings/{meetingId}/status` | Update meeting status | `meetingStatus` |
@@ -180,9 +180,9 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | POST | `/meetings/{meetingId}/batch_polls` | Perform batch poll creation | `createBatchPolls` |
 | GET | `/meetings/{meetingId}/polls` | List meeting polls | `meetingPolls` |
 | POST | `/meetings/{meetingId}/polls` | Create a meeting poll | `meetingPollCreate` |
-| DELETE | `/meetings/{meetingId}/polls/{pollId}` | Delete a meeting poll | `meetingPollDelete` |
 | GET | `/meetings/{meetingId}/polls/{pollId}` | Get a meeting poll | `meetingPollGet` |
 | PUT | `/meetings/{meetingId}/polls/{pollId}` | Update a meeting poll | `meetingPollUpdate` |
+| DELETE | `/meetings/{meetingId}/polls/{pollId}` | Delete a meeting poll | `meetingPollDelete` |
 | GET | `/past_meetings/{meetingId}/polls` | List past meeting's poll results | `listPastMeetingPolls` |
 
 ### Reports
@@ -194,6 +194,7 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | GET | `/report/billing/invoices` | Get billing invoice reports | `getBillingInvoicesReports` |
 | GET | `/report/cloud_recording` | Get cloud recording usage report | `reportCloudRecording` |
 | GET | `/report/daily` | Get daily usage report | `reportDaily` |
+| GET | `/report/disclaimer` | Get disclaimer report | `Getdisclaimerreport` |
 | GET | `/report/history_meetings` | Get history meeting and webinar list | `Gethistorymeetingandwebinarlist` |
 | GET | `/report/meeting_activities` | Get a meeting activities report | `reportMeetingactivitylogs` |
 | GET | `/report/meetings/{meetingId}` | Get meeting detail reports | `reportMeetingDetails` |
@@ -227,15 +228,15 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/meetings/meeting_summaries` | List an account's meeting or webinar summaries | `Listmeetingsummaries` |
-| DELETE | `/meetings/{meetingId}/meeting_summary` | Delete a meeting or webinar summary | `Deletemeetingorwebinarsummary` |
 | GET | `/meetings/{meetingId}/meeting_summary` | Get a meeting or webinar summary | `Getameetingsummary` |
+| DELETE | `/meetings/{meetingId}/meeting_summary` | Delete a meeting or webinar summary | `Deletemeetingorwebinarsummary` |
 
 ### Surveys
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/meetings/{meetingId}/survey` | Delete a meeting survey | `meetingSurveyDelete` |
 | GET | `/meetings/{meetingId}/survey` | Get a meeting survey | `meetingSurveyGet` |
+| DELETE | `/meetings/{meetingId}/survey` | Delete a meeting survey | `meetingSurveyDelete` |
 | PATCH | `/meetings/{meetingId}/survey` | Update a meeting survey | `meetingSurveyUpdate` |
 
 ### Templates
@@ -251,8 +252,8 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 |--------|----------|---------|-------------|
 | GET | `/tracking_fields` | List tracking fields | `trackingfieldList` |
 | POST | `/tracking_fields` | Create a tracking field | `trackingfieldCreate` |
-| DELETE | `/tracking_fields/{fieldId}` | Delete a tracking field | `trackingfieldDelete` |
 | GET | `/tracking_fields/{fieldId}` | Get a tracking field | `trackingfieldGet` |
+| DELETE | `/tracking_fields/{fieldId}` | Delete a tracking field | `trackingfieldDelete` |
 | PATCH | `/tracking_fields/{fieldId}` | Update a tracking field | `trackingfieldUpdate` |
 
 ### TSP
@@ -264,8 +265,8 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | GET | `/users/{userId}/tsp` | List user's TSP accounts | `userTSPs` |
 | POST | `/users/{userId}/tsp` | Add a user's TSP account | `userTSPCreate` |
 | PATCH | `/users/{userId}/tsp/settings` | Set global dial-in URL for a TSP user | `tspUrlUpdate` |
-| DELETE | `/users/{userId}/tsp/{tspId}` | Delete a user's TSP account | `userTSPDelete` |
 | GET | `/users/{userId}/tsp/{tspId}` | Get a user's TSP account | `userTSP` |
+| DELETE | `/users/{userId}/tsp/{tspId}` | Delete a user's TSP account | `userTSPDelete` |
 | PATCH | `/users/{userId}/tsp/{tspId}` | Update a TSP account | `userTSPUpdate` |
 
 ### Webinars
@@ -282,19 +283,19 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | POST | `/users/{userId}/webinar_templates` | Create a webinar template | `webinarTemplateCreate` |
 | GET | `/users/{userId}/webinars` | List webinars | `webinars` |
 | POST | `/users/{userId}/webinars` | Create a webinar | `webinarCreate` |
-| DELETE | `/webinars/{webinarId}` | Delete a webinar | `webinarDelete` |
 | GET | `/webinars/{webinarId}` | Get a webinar | `webinar` |
+| DELETE | `/webinars/{webinarId}` | Delete a webinar | `webinarDelete` |
 | PATCH | `/webinars/{webinarId}` | Update a webinar | `webinarUpdate` |
 | POST | `/webinars/{webinarId}/batch_registrants` | Perform batch registration | `addBatchWebinarRegistrants` |
 | GET | `/webinars/{webinarId}/branding` | Get webinar's session branding | `getWebinarBranding` |
-| DELETE | `/webinars/{webinarId}/branding/name_tags` | Delete a webinar's branding name tag | `deleteWebinarBrandingNameTag` |
 | POST | `/webinars/{webinarId}/branding/name_tags` | Create a webinar's branding name tag | `createWebinarBrandingNameTag` |
+| DELETE | `/webinars/{webinarId}/branding/name_tags` | Delete a webinar's branding name tag | `deleteWebinarBrandingNameTag` |
 | PATCH | `/webinars/{webinarId}/branding/name_tags/{nameTagId}` | Update a webinar's branding name tag | `updateWebinarBrandingNameTag` |
+| POST | `/webinars/{webinarId}/branding/virtual_backgrounds` | Upload a webinar's branding virtual background | `uploadWebinarBrandingVB` |
 | DELETE | `/webinars/{webinarId}/branding/virtual_backgrounds` | Delete a webinar's branding virtual backgrounds | `deleteWebinarBrandingVB` |
 | PATCH | `/webinars/{webinarId}/branding/virtual_backgrounds` | Set webinar's default branding virtual background | `setWebinarBrandingVB` |
-| POST | `/webinars/{webinarId}/branding/virtual_backgrounds` | Upload a webinar's branding virtual background | `uploadWebinarBrandingVB` |
-| DELETE | `/webinars/{webinarId}/branding/wallpaper` | Delete a webinar's branding wallpaper | `deleteWebinarBrandingWallpaper` |
 | POST | `/webinars/{webinarId}/branding/wallpaper` | Upload a webinar's branding wallpaper | `uploadWebinarBrandingWallpaper` |
+| DELETE | `/webinars/{webinarId}/branding/wallpaper` | Delete a webinar's branding wallpaper | `deleteWebinarBrandingWallpaper` |
 | POST | `/webinars/{webinarId}/invite_links` | Create webinar's invite links | `webinarInviteLinksCreate` |
 | GET | `/webinars/{webinarId}/jointoken/live_streaming` | Get a webinar's join token for live streaming | `webinarLiveStreamingJoinToken` |
 | GET | `/webinars/{webinarId}/jointoken/local_archiving` | Get a webinar's archive token for local archiving | `webinarLocalArchivingArchiveToken` |
@@ -302,26 +303,26 @@ Authoritative endpoint inventory for Meetings. This file mirrors the official Zo
 | GET | `/webinars/{webinarId}/livestream` | Get live stream details | `getWebinarLiveStreamDetails` |
 | PATCH | `/webinars/{webinarId}/livestream` | Update a live stream | `webinarLiveStreamUpdate` |
 | PATCH | `/webinars/{webinarId}/livestream/status` | Update live stream status | `webinarLiveStreamStatusUpdate` |
-| DELETE | `/webinars/{webinarId}/panelists` | Remove all panelists | `webinarPanelistsDelete` |
 | GET | `/webinars/{webinarId}/panelists` | List panelists | `webinarPanelists` |
 | POST | `/webinars/{webinarId}/panelists` | Add panelists | `webinarPanelistCreate` |
+| DELETE | `/webinars/{webinarId}/panelists` | Remove all panelists | `webinarPanelistsDelete` |
 | DELETE | `/webinars/{webinarId}/panelists/{panelistId}` | Remove a panelist | `webinarPanelistDelete` |
 | GET | `/webinars/{webinarId}/polls` | List a webinar's polls | `webinarPolls` |
 | POST | `/webinars/{webinarId}/polls` | Create a webinar's poll | `webinarPollCreate` |
-| DELETE | `/webinars/{webinarId}/polls/{pollId}` | Delete a webinar poll | `webinarPollDelete` |
 | GET | `/webinars/{webinarId}/polls/{pollId}` | Get a webinar poll | `webinarPollGet` |
 | PUT | `/webinars/{webinarId}/polls/{pollId}` | Update a webinar poll | `webinarPollUpdate` |
+| DELETE | `/webinars/{webinarId}/polls/{pollId}` | Delete a webinar poll | `webinarPollDelete` |
 | GET | `/webinars/{webinarId}/registrants` | List webinar registrants | `webinarRegistrants` |
 | POST | `/webinars/{webinarId}/registrants` | Add a webinar registrant | `webinarRegistrantCreate` |
 | GET | `/webinars/{webinarId}/registrants/questions` | List registration questions | `webinarRegistrantsQuestionsGet` |
 | PATCH | `/webinars/{webinarId}/registrants/questions` | Update registration questions | `webinarRegistrantQuestionUpdate` |
 | PUT | `/webinars/{webinarId}/registrants/status` | Update registrant's status | `webinarRegistrantStatus` |
-| DELETE | `/webinars/{webinarId}/registrants/{registrantId}` | Delete a webinar registrant | `deleteWebinarRegistrant` |
 | GET | `/webinars/{webinarId}/registrants/{registrantId}` | Get a webinar registrant | `webinarRegistrantGet` |
+| DELETE | `/webinars/{webinarId}/registrants/{registrantId}` | Delete a webinar registrant | `deleteWebinarRegistrant` |
 | POST | `/webinars/{webinarId}/sip_dialing` | Get a webinar SIP URI with passcode | `getWebinarSipDialingWithPasscode` |
 | PUT | `/webinars/{webinarId}/status` | Update webinar status | `webinarStatus` |
-| DELETE | `/webinars/{webinarId}/survey` | Delete a webinar survey | `webinarSurveyDelete` |
 | GET | `/webinars/{webinarId}/survey` | Get a webinar survey | `webinarSurveyGet` |
+| DELETE | `/webinars/{webinarId}/survey` | Delete a webinar survey | `webinarSurveyDelete` |
 | PATCH | `/webinars/{webinarId}/survey` | Update a webinar survey | `webinarSurveyUpdate` |
 | GET | `/webinars/{webinarId}/token` | Get webinar's token | `webinarToken` |
 | GET | `/webinars/{webinarId}/tracking_sources` | Get webinar tracking sources | `getTrackingSources` |

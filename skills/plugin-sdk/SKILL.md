@@ -105,6 +105,8 @@ Use [Native Zoom Workplace Companion](../general/use-cases/native-zoom-workplace
 ## Version and Source Policy
 
 - Public docs used for this skill: [macOS](https://developers.zoom.us/docs/plugin-sdk/macos/) and [Windows](https://developers.zoom.us/docs/plugin-sdk/windows/).
+- The public product changelog currently labels both platforms as Plugin SDK `1.0.0` (initial
+  launch); this product release label is separate from the bundled package/build versions below.
 - Package review baseline: macOS `7.1.0.595` and Windows `7.1.0.2020`.
 - Verify exact names and signatures against the headers and sample bundled with the downloaded package.
 - Prefer package headers over examples when generated docs and the selected package disagree.

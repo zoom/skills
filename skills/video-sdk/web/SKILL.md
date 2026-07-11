@@ -15,6 +15,10 @@ triggers:
 
 # Zoom Video SDK Web (v2.4.5)
 
+Current npm/changelog release verified on 2026-07-10. Version `2.4.5` adds incoming RTMP
+ingestion and `customAudioConstraints`, improves share rendering, AMD environments, and virtual
+backgrounds on lower-performance devices, and restores the missing `userKey` field.
+
 Expert guidance for building video sessions with Zoom Video SDK for Web.
 
 This skill is for **custom video sessions**, not embedded Zoom meetings.

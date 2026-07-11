@@ -18,8 +18,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 354 |
-| Path templates | 213 |
+| Endpoint operations | 391 |
+| Path templates | 238 |
 | Tags | 47 |
 
 ## Tag Index
@@ -29,14 +29,14 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | Accounts | 4 |
 | Alerts | 5 |
 | Audio Library | 6 |
-| Auto Receptionists | 13 |
+| Auto Receptionists | 19 |
 | Billing Account | 2 |
 | Blocked List | 5 |
 | Call Handling | 4 |
 | Call Logs | 15 |
-| Call Queues | 17 |
+| Call Queues | 32 |
 | Carrier Reseller | 4 |
-| Common Areas | 17 |
+| Common Areas | 19 |
 | Dashboard | 11 |
 | Device Line Keys | 2 |
 | Dial by Name Directory | 6 |
@@ -59,19 +59,19 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | Private Directory | 4 |
 | Provider Exchange | 5 |
 | Provision Templates | 5 |
-| Recordings | 8 |
+| Recordings | 9 |
 | Reports | 4 |
 | Routing Rules | 5 |
 | Setting Templates | 4 |
 | Settings | 8 |
 | Shared Line Appearance | 1 |
-| Shared Line Group | 16 |
+| Shared Line Group | 22 |
 | Sites | 12 |
 | SMS | 7 |
 | SMS Campaign | 7 |
 | SMS Consent | 1 |
-| Users | 18 |
-| Voicemails | 7 |
+| Users | 24 |
+| Voicemails | 8 |
 | Zoom Rooms | 10 |
 
 ## Endpoints by Tag
@@ -81,9 +81,9 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/phone/account_settings` | List an account's Zoom Phone settings | `listZoomPhoneAccountSettings` |
-| DELETE | `/phone/outbound_caller_id/customized_numbers` | Delete phone numbers for an account's customized outbound caller ID | `deleteOutboundCallerNumbers` |
 | GET | `/phone/outbound_caller_id/customized_numbers` | List an account's customized outbound caller ID phone numbers | `listCustomizeOutboundCallerNumbers` |
 | POST | `/phone/outbound_caller_id/customized_numbers` | Add phone numbers for an account's customized outbound caller ID | `addOutboundCallerNumbers` |
+| DELETE | `/phone/outbound_caller_id/customized_numbers` | Delete phone numbers for an account's customized outbound caller ID | `deleteOutboundCallerNumbers` |
 
 ### Alerts
 
@@ -91,16 +91,16 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/alert_settings` | List alert settings with paging query | `ListAlertSettingsWithPagingQuery` |
 | POST | `/phone/alert_settings` | Add an alert setting | `AddAnAlertSetting` |
-| DELETE | `/phone/alert_settings/{alertSettingId}` | Delete an alert setting | `DeleteAnAlertSetting` |
 | GET | `/phone/alert_settings/{alertSettingId}` | Get alert setting details | `GetAlertSettingDetails` |
+| DELETE | `/phone/alert_settings/{alertSettingId}` | Delete an alert setting | `DeleteAnAlertSetting` |
 | PATCH | `/phone/alert_settings/{alertSettingId}` | Update an alert setting | `UpdateAnAlertSetting` |
 
 ### Audio Library
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/phone/audios/{audioId}` | Delete an audio item | `DeleteAudioItem` |
 | GET | `/phone/audios/{audioId}` | Get an audio item | `GetAudioItem` |
+| DELETE | `/phone/audios/{audioId}` | Delete an audio item | `DeleteAudioItem` |
 | PATCH | `/phone/audios/{audioId}` | Update an audio item | `UpdateAudioItem` |
 | GET | `/phone/users/{userId}/audios` | List audio items | `ListAudioItems` |
 | POST | `/phone/users/{userId}/audios` | Add an audio item for text-to-speech conversion | `AddAnAudio` |
@@ -112,17 +112,23 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/auto_receptionists` | List auto receptionists | `listAutoReceptionists` |
 | POST | `/phone/auto_receptionists` | Add an auto receptionist | `addAutoReceptionist` |
-| DELETE | `/phone/auto_receptionists/{autoReceptionistId}` | Delete a non-primary auto receptionist | `deleteAutoReceptionist` |
 | GET | `/phone/auto_receptionists/{autoReceptionistId}` | Get an auto receptionist | `getAutoReceptionistDetail` |
+| DELETE | `/phone/auto_receptionists/{autoReceptionistId}` | Delete a non-primary auto receptionist | `deleteAutoReceptionist` |
 | PATCH | `/phone/auto_receptionists/{autoReceptionistId}` | Update an auto receptionist | `updateAutoReceptionist` |
-| DELETE | `/phone/auto_receptionists/{autoReceptionistId}/phone_numbers` | Unassign all phone numbers | `unassignAllPhoneNumsAutoReceptionist` |
+| GET | `/phone/auto_receptionists/{autoReceptionistId}/call_handling/settings` | Get auto receptionist call handling setting | `getAutoReceptionistCallHandlingSettings` |
+| PATCH | `/phone/auto_receptionists/{autoReceptionistId}/call_handling/settings/{hourType}` | Update auto receptionist call handling setting | `updateAutoReceptionistCallHandlingSettings` |
 | POST | `/phone/auto_receptionists/{autoReceptionistId}/phone_numbers` | Assign phone numbers | `assignPhoneNumbersAutoReceptionist` |
+| DELETE | `/phone/auto_receptionists/{autoReceptionistId}/phone_numbers` | Unassign all phone numbers | `unassignAllPhoneNumsAutoReceptionist` |
 | DELETE | `/phone/auto_receptionists/{autoReceptionistId}/phone_numbers/{phoneNumberId}` | Unassign a phone number | `unassignAPhoneNumAutoReceptionist` |
 | GET | `/phone/auto_receptionists/{autoReceptionistId}/policies` | Get an auto receptionist policy | `getAutoReceptionistsPolicy` |
 | PATCH | `/phone/auto_receptionists/{autoReceptionistId}/policies` | Update an auto receptionist policy | `updateAutoReceptionistPolicy` |
+| POST | `/phone/auto_receptionists/{autoReceptionistId}/policies/{policyType}` | Add a policy subsetting | `AddPolicy` |
 | DELETE | `/phone/auto_receptionists/{autoReceptionistId}/policies/{policyType}` | Delete a policy subsetting | `DeletePolicy` |
 | PATCH | `/phone/auto_receptionists/{autoReceptionistId}/policies/{policyType}` | Update a policy subsetting | `updatePolicy` |
-| POST | `/phone/auto_receptionists/{autoReceptionistId}/policies/{policyType}` | Add a policy subsetting | `AddPolicy` |
+| GET | `/phone/auto_receptionists/{autoReceptionistId}/settings` | Get auto receptionist settings | `getAutoReceptionistSettings` |
+| POST | `/phone/auto_receptionists/{autoReceptionistId}/settings/{settingType}` | Add auto receptionist setting | `addAutoReceptionistSetting` |
+| DELETE | `/phone/auto_receptionists/{autoReceptionistId}/settings/{settingType}` | Delete auto receptionist setting | `deleteAutoReceptionistSetting` |
+| PATCH | `/phone/auto_receptionists/{autoReceptionistId}/settings/{settingType}` | Update auto receptionist setting | `updateAutoReceptionistSetting` |
 
 ### Billing Account
 
@@ -137,8 +143,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/blocked_list` | List blocked lists | `listBlockedList` |
 | POST | `/phone/blocked_list` | Create a blocked list | `addAnumberToBlockedList` |
-| DELETE | `/phone/blocked_list/{blockedListId}` | Delete a blocked list | `deleteABlockedList` |
 | GET | `/phone/blocked_list/{blockedListId}` | Get blocked list details | `getABlockedList` |
+| DELETE | `/phone/blocked_list/{blockedListId}` | Delete a blocked list | `deleteABlockedList` |
 | PATCH | `/phone/blocked_list/{blockedListId}` | Update a blocked list | `updateBlockedList` |
 
 ### Call Handling
@@ -146,9 +152,9 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/phone/extension/{extensionId}/call_handling/settings` | Get call handling settings | `getCallHandling` |
+| POST | `/phone/extension/{extensionId}/call_handling/settings/{settingType}` | Add a call handling setting | `addCallHandling` |
 | DELETE | `/phone/extension/{extensionId}/call_handling/settings/{settingType}` | Delete a call handling setting | `deleteCallHandling` |
 | PATCH | `/phone/extension/{extensionId}/call_handling/settings/{settingType}` | Update a call handling setting | `updateCallHandling` |
-| POST | `/phone/extension/{extensionId}/call_handling/settings/{settingType}` | Add a call handling setting | `addCallHandling` |
 
 ### Call Logs
 
@@ -177,28 +183,43 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | GET | `/phone/call_queue_analytics` | List call queue analytics | `callqueueanalytics` |
 | GET | `/phone/call_queues` | List call queues | `listCallQueues` |
 | POST | `/phone/call_queues` | Create a call queue | `createCallQueue` |
-| DELETE | `/phone/call_queues/{callQueueId}` | Delete a call queue | `deleteACallQueue` |
 | GET | `/phone/call_queues/{callQueueId}` | Get call queue details | `getACallQueue` |
+| DELETE | `/phone/call_queues/{callQueueId}` | Delete a call queue | `deleteACallQueue` |
 | PATCH | `/phone/call_queues/{callQueueId}` | Update call queue details | `updateCallQueue` |
-| DELETE | `/phone/call_queues/{callQueueId}/members` | Unassign all members | `unassignAllMembers` |
+| GET | `/phone/call_queues/{callQueueId}/call_handling/settings` | Get call queue call handling setting | `getCallQueueCallHandlingSetting` |
+| PATCH | `/phone/call_queues/{callQueueId}/call_handling/settings/{hourType}` | Update call queue call handling setting | `updateCallQueueCallHandlingSetting` |
+| GET | `/phone/call_queues/{callQueueId}/custom_groups` | List custom groups of a call queue | `Listcustomgroupsofacallqueue` |
+| POST | `/phone/call_queues/{callQueueId}/custom_groups` | Create a custom group in a call queue | `Createacustomgroupinacallqueue` |
+| GET | `/phone/call_queues/{callQueueId}/custom_groups/{customGroupId}` | Get call queue custom group detail | `Getacustomgroup` |
+| DELETE | `/phone/call_queues/{callQueueId}/custom_groups/{customGroupId}` | Delete a custom group | `Deleteacustomgroup` |
+| PATCH | `/phone/call_queues/{callQueueId}/custom_groups/{customGroupId}` | Update a custom group | `Updateacustomgroup` |
+| POST | `/phone/call_queues/{callQueueId}/custom_groups/{customGroupId}/members` | Add members to a custom group | `Addmemberstoacustomgroup` |
+| DELETE | `/phone/call_queues/{callQueueId}/custom_groups/{customGroupId}/members/{extensionId}` | Remove a member from a custom group | `Removeamemberfromacustomgroup` |
 | GET | `/phone/call_queues/{callQueueId}/members` | List call queue members | `listCallQueueMembers` |
 | POST | `/phone/call_queues/{callQueueId}/members` | Add members to a call queue | `addMembersToCallQueue` |
+| DELETE | `/phone/call_queues/{callQueueId}/members` | Unassign all members | `unassignAllMembers` |
 | DELETE | `/phone/call_queues/{callQueueId}/members/{memberId}` | Unassign a member | `unassignMemberFromCallQueue` |
-| DELETE | `/phone/call_queues/{callQueueId}/phone_numbers` | Unassign all phone numbers | `unassignAPhoneNumCallQueue` |
 | POST | `/phone/call_queues/{callQueueId}/phone_numbers` | Assign numbers to a call queue | `assignPhoneToCallQueue` |
+| DELETE | `/phone/call_queues/{callQueueId}/phone_numbers` | Unassign all phone numbers | `unassignAPhoneNumCallQueue` |
 | DELETE | `/phone/call_queues/{callQueueId}/phone_numbers/{phoneNumberId}` | Unassign a phone number | `unAssignPhoneNumCallQueue` |
+| GET | `/phone/call_queues/{callQueueId}/policies` | Get call queue policy | `getCallQueuePolicy` |
+| PATCH | `/phone/call_queues/{callQueueId}/policies` | Update call queue policy | `updateCallQueuePolicy` |
+| POST | `/phone/call_queues/{callQueueId}/policies/{policyType}` | Add a policy subsetting to a call queue | `addCQPolicySubSetting` |
 | DELETE | `/phone/call_queues/{callQueueId}/policies/{policyType}` | Delete a CQ policy setting | `removeCQPolicySubSetting` |
 | PATCH | `/phone/call_queues/{callQueueId}/policies/{policyType}` | Update a call queue's policy subsetting | `updateCQPolicySubSetting` |
-| POST | `/phone/call_queues/{callQueueId}/policies/{policyType}` | Add a policy subsetting to a call queue | `addCQPolicySubSetting` |
 | GET | `/phone/call_queues/{callQueueId}/recordings` | Get call queue recordings | `getCallQueueRecordings` |
+| GET | `/phone/call_queues/{callQueueId}/settings` | Get call queue settings | `getCallQueueSettings` |
+| POST | `/phone/call_queues/{callQueueId}/settings/{settingType}` | Add call queue setting | `addCallQueueSetting` |
+| DELETE | `/phone/call_queues/{callQueueId}/settings/{settingType}` | Delete call queue setting | `deleteCallQueueSetting` |
+| PATCH | `/phone/call_queues/{callQueueId}/settings/{settingType}` | Update call queue setting | `updateCallQueueSetting` |
 
 ### Carrier Reseller
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/phone/carrier_reseller/numbers` | List phone numbers | `listCRPhoneNumbers` |
-| PATCH | `/phone/carrier_reseller/numbers` | Activate phone numbers | `activeCRPhoneNumbers` |
 | POST | `/phone/carrier_reseller/numbers` | Create phone numbers | `createCRPhoneNumbers` |
+| PATCH | `/phone/carrier_reseller/numbers` | Activate phone numbers | `activeCRPhoneNumbers` |
 | DELETE | `/phone/carrier_reseller/numbers/{number}` | Delete a phone number | `deleteCRPhoneNumber` |
 
 ### Common Areas
@@ -210,18 +231,20 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | POST | `/phone/common_areas/activation_code` | Generate activation codes for common areas | `Generateactivationcodesforcommonareas` |
 | GET | `/phone/common_areas/activation_codes` | List activation codes | `listActivationCodes` |
 | POST | `/phone/common_areas/template_id/{templateId}` | Apply template to common areas | `ApplyTemplatetoCommonAreas` |
-| DELETE | `/phone/common_areas/{commonAreaId}` | Delete a common area | `deleteCommonArea` |
 | GET | `/phone/common_areas/{commonAreaId}` | Get common area details | `getACommonArea` |
+| DELETE | `/phone/common_areas/{commonAreaId}` | Delete a common area | `deleteCommonArea` |
 | PATCH | `/phone/common_areas/{commonAreaId}` | Update common area | `updateCommonArea` |
+| GET | `/phone/common_areas/{commonAreaId}/call_handling/settings` | Get common area call handling setting | `getCommonAreaCallHandlingSetting` |
+| PATCH | `/phone/common_areas/{commonAreaId}/call_handling/settings/{hourType}` | Update common area call handling setting | `updateCommonAreaCallHandlingSetting` |
 | POST | `/phone/common_areas/{commonAreaId}/calling_plans` | Assign calling plans to a common area | `assignCallingPlansToCommonArea` |
 | DELETE | `/phone/common_areas/{commonAreaId}/calling_plans/{type}` | Unassign a calling plan from the common area | `unassignCallingPlansFromCommonArea` |
 | POST | `/phone/common_areas/{commonAreaId}/phone_numbers` | Assign phone numbers to a common area | `assignPhoneNumbersToCommonArea` |
 | DELETE | `/phone/common_areas/{commonAreaId}/phone_numbers/{phoneNumberId}` | Unassign phone numbers from common area | `unassignPhoneNumbersFromCommonArea` |
 | PATCH | `/phone/common_areas/{commonAreaId}/pin_code` | Update common area pin code | `UpdateCommonAreaPinCode` |
 | GET | `/phone/common_areas/{commonAreaId}/settings` | Get common area settings | `getCommonAreaSettings` |
+| POST | `/phone/common_areas/{commonAreaId}/settings/{settingType}` | Add common area setting | `AddCommonAreaSetting` |
 | DELETE | `/phone/common_areas/{commonAreaId}/settings/{settingType}` | Delete common area setting | `deleteCommonAreaSetting` |
 | PATCH | `/phone/common_areas/{commonAreaId}/settings/{settingType}` | Update common area setting | `UpdateCommonAreaSetting` |
-| POST | `/phone/common_areas/{commonAreaId}/settings/{settingType}` | Add common area setting | `AddCommonAreaSetting` |
 
 ### Dashboard
 
@@ -250,12 +273,12 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/phone/dial_by_name_directory/extensions` | Delete users from a directory | `DeleteUsersFromDirectory` |
 | GET | `/phone/dial_by_name_directory/extensions` | List users in directory | `ListUsersFromDirectory` |
 | POST | `/phone/dial_by_name_directory/extensions` | Add users to a directory | `AddUsersToDirectory` |
-| DELETE | `/phone/sites/{siteId}/dial_by_name_directory/extensions` | Delete users from a directory of a site | `DeleteUsersFromDirectoryBySite` |
+| DELETE | `/phone/dial_by_name_directory/extensions` | Delete users from a directory | `DeleteUsersFromDirectory` |
 | GET | `/phone/sites/{siteId}/dial_by_name_directory/extensions` | List users in a directory by site | `ListUsersFromDirectoryBySite` |
 | POST | `/phone/sites/{siteId}/dial_by_name_directory/extensions` | Add users to a directory of a site | `AddUsersToDirectoryBySite` |
+| DELETE | `/phone/sites/{siteId}/dial_by_name_directory/extensions` | Delete users from a directory of a site | `DeleteUsersFromDirectoryBySite` |
 
 ### Emergency Addresses
 
@@ -263,8 +286,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/emergency_addresses` | List emergency addresses | `listEmergencyAddresses` |
 | POST | `/phone/emergency_addresses` | Add an emergency address | `addEmergencyAddress` |
-| DELETE | `/phone/emergency_addresses/{emergencyAddressId}` | Delete an emergency address | `deleteEmergencyAddress` |
 | GET | `/phone/emergency_addresses/{emergencyAddressId}` | Get emergency address details | `getEmergencyAddress` |
+| DELETE | `/phone/emergency_addresses/{emergencyAddressId}` | Delete an emergency address | `deleteEmergencyAddress` |
 | PATCH | `/phone/emergency_addresses/{emergencyAddressId}` | Update an emergency address | `updateEmergencyAddress` |
 
 ### Emergency Service Locations
@@ -274,8 +297,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | POST | `/phone/batch_locations` | Batch add emergency service locations | `batchAddLocations` |
 | GET | `/phone/locations` | List emergency service locations | `listLocations` |
 | POST | `/phone/locations` | Add an emergency service location | `addLocation` |
-| DELETE | `/phone/locations/{locationId}` | Delete an emergency location | `deleteLocation` |
 | GET | `/phone/locations/{locationId}` | Get emergency service location details | `getLocation` |
+| DELETE | `/phone/locations/{locationId}` | Delete an emergency location | `deleteLocation` |
 | PATCH | `/phone/locations/{locationId}` | Update emergency service location | `updateLocation` |
 
 ### External Contacts
@@ -284,8 +307,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/external_contacts` | List external contacts | `listExternalContacts` |
 | POST | `/phone/external_contacts` | Add an external contact | `addExternalContact` |
-| DELETE | `/phone/external_contacts/{externalContactId}` | Delete an external contact | `deleteAExternalContact` |
 | GET | `/phone/external_contacts/{externalContactId}` | Get external contact details | `getAExternalContact` |
+| DELETE | `/phone/external_contacts/{externalContactId}` | Delete an external contact | `deleteAExternalContact` |
 | PATCH | `/phone/external_contacts/{externalContactId}` | Update external contact | `updateExternalContact` |
 
 ### Fax
@@ -296,8 +319,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | GET | `/phone/extension/{extensionId}/fax/logs` | Get extension's fax logs | `Getuser'sfaxlogs` |
 | POST | `/phone/fax/documents` | Send fax | `SendEFax` |
 | GET | `/phone/fax/logs` | Get account's fax logs | `GetAccount'sFaxLogs` |
-| DELETE | `/phone/fax/logs/{faxLogId}` | Delete fax log | `DeleteFaxLog` |
 | GET | `/phone/fax/logs/{faxLogId}` | Get fax log details | `GetFaxLogDetails` |
+| DELETE | `/phone/fax/logs/{faxLogId}` | Delete fax log | `DeleteFaxLog` |
 | PATCH | `/phone/fax/logs/{faxLogId}` | Update fax log read status | `UpdateFaxLogReadStatus` |
 | GET | `/phone/fax/logs/{faxLogId}/file/{fileId}` | Download fax file | `Downloadfaxfile` |
 
@@ -307,8 +330,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/firmware_update_rules` | List firmware update rules | `ListFirmwareRules` |
 | POST | `/phone/firmware_update_rules` | Add a firmware update rule | `AddFirmwareRule` |
-| DELETE | `/phone/firmware_update_rules/{ruleId}` | Delete firmware update rule | `DeleteFirmwareUpdateRule` |
 | GET | `/phone/firmware_update_rules/{ruleId}` | Get firmware update rule information | `GetFirmwareRuleDetail` |
+| DELETE | `/phone/firmware_update_rules/{ruleId}` | Delete firmware update rule | `DeleteFirmwareUpdateRule` |
 | PATCH | `/phone/firmware_update_rules/{ruleId}` | Update firmware update rule | `UpdateFirmwareRule` |
 | GET | `/phone/firmwares` | List updatable firmwares | `ListFirmwares` |
 
@@ -318,8 +341,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/group_call_pickup` | List group call pickup objects | `listGCP` |
 | POST | `/phone/group_call_pickup` | Add a group call pickup object | `addGCP` |
-| DELETE | `/phone/group_call_pickup/{groupId}` | Delete group call pickup objects | `deleteGCP` |
 | GET | `/phone/group_call_pickup/{groupId}` | Get call pickup group by ID | `GetGCP` |
+| DELETE | `/phone/group_call_pickup/{groupId}` | Delete group call pickup objects | `deleteGCP` |
 | PATCH | `/phone/group_call_pickup/{groupId}` | Update the group call pickup information | `updateGCP` |
 | GET | `/phone/group_call_pickup/{groupId}/members` | List call pickup group members | `listGCPMembers` |
 | POST | `/phone/group_call_pickup/{groupId}/members` | Add members to a call pickup group | `addGCPMembers` |
@@ -337,15 +360,15 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/phone/extension/{extensionId}/inbound_blocked/rules` | Delete an extension's inbound block rule | `DeleteExtensiontLevelInboundBlockRules` |
 | GET | `/phone/extension/{extensionId}/inbound_blocked/rules` | List an extension's inbound block rules | `ListExtensionLevelInboundBlockRules` |
 | POST | `/phone/extension/{extensionId}/inbound_blocked/rules` | Add an extension's inbound block rule | `AddExtensiontLevelInboundBlockRules` |
-| DELETE | `/phone/inbound_blocked/extension_rules/statistics` | Delete an account's inbound blocked statistics | `DeleteAccountLevelInboundBlockedStatistics` |
+| DELETE | `/phone/extension/{extensionId}/inbound_blocked/rules` | Delete an extension's inbound block rule | `DeleteExtensiontLevelInboundBlockRules` |
 | GET | `/phone/inbound_blocked/extension_rules/statistics` | List an account's inbound blocked statistics | `ListAccountLevelInboundBlockedStatistics` |
+| DELETE | `/phone/inbound_blocked/extension_rules/statistics` | Delete an account's inbound blocked statistics | `DeleteAccountLevelInboundBlockedStatistics` |
 | PATCH | `/phone/inbound_blocked/extension_rules/statistics/blocked_for_all` | Mark a phone number as blocked for all extensions | `MarkPhoneNumberAsBlockedForAllExtensions` |
-| DELETE | `/phone/inbound_blocked/rules` | Delete an account's inbound block rule | `DeleteAccountLevelInboundBlockRules` |
 | GET | `/phone/inbound_blocked/rules` | List an account's inbound block rules | `ListAccountLevelInboundBlockRules` |
 | POST | `/phone/inbound_blocked/rules` | Add an account's inbound block rule | `AddAccountLevelInboundBlockRules` |
+| DELETE | `/phone/inbound_blocked/rules` | Delete an account's inbound block rule | `DeleteAccountLevelInboundBlockRules` |
 | PATCH | `/phone/inbound_blocked/rules/{blockedRuleId}` | Update an account's inbound block rule | `UpdateAccountLevelInboundBlockRule` |
 
 ### IVR
@@ -369,12 +392,12 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/monitoring_groups` | Get a list of monitoring groups on an account | `listMonitoringGroup` |
 | POST | `/phone/monitoring_groups` | Create a monitoring group | `createMonitoringGroup` |
-| DELETE | `/phone/monitoring_groups/{monitoringGroupId}` | Delete a monitoring group | `deleteMonitoringGroup` |
 | GET | `/phone/monitoring_groups/{monitoringGroupId}` | Get monitoring group by ID | `getMonitoringGroupById` |
+| DELETE | `/phone/monitoring_groups/{monitoringGroupId}` | Delete a monitoring group | `deleteMonitoringGroup` |
 | PATCH | `/phone/monitoring_groups/{monitoringGroupId}` | Update a monitoring group | `updateMonitoringGroup` |
-| DELETE | `/phone/monitoring_groups/{monitoringGroupId}/monitor_members` | Remove all monitors or monitored members from a monitoring group | `removeMembers` |
 | GET | `/phone/monitoring_groups/{monitoringGroupId}/monitor_members` | Get members of a monitoring group | `listMembers` |
 | POST | `/phone/monitoring_groups/{monitoringGroupId}/monitor_members` | Add members to a monitoring group | `addMembers` |
+| DELETE | `/phone/monitoring_groups/{monitoringGroupId}/monitor_members` | Remove all monitors or monitored members from a monitoring group | `removeMembers` |
 | DELETE | `/phone/monitoring_groups/{monitoringGroupId}/monitor_members/{memberExtensionId}` | Remove a member from a monitoring group | `removeMember` |
 
 ### Outbound Calling
@@ -413,8 +436,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | GET | `/phone/devices` | List devices | `listPhoneDevices` |
 | POST | `/phone/devices` | Add a device | `addPhoneDevice` |
 | POST | `/phone/devices/sync` | Sync deskphones | `syncPhoneDevice` |
-| DELETE | `/phone/devices/{deviceId}` | Delete a device | `deleteADevice` |
 | GET | `/phone/devices/{deviceId}` | Get device details | `getADevice` |
+| DELETE | `/phone/devices/{deviceId}` | Delete a device | `deleteADevice` |
 | PATCH | `/phone/devices/{deviceId}` | Update a device | `updateADevice` |
 | POST | `/phone/devices/{deviceId}/extensions` | Assign an entity to a device | `addExtensionsToADevice` |
 | DELETE | `/phone/devices/{deviceId}/extensions/{extensionId}` | Unassign an entity from the device | `deleteExtensionFromADevice` |
@@ -427,8 +450,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | POST | `/phone/byoc_numbers` | Add BYOC phone numbers | `addBYOCNumber` |
-| DELETE | `/phone/numbers` | Delete unassigned phone numbers | `deleteUnassignedPhoneNumbers` |
 | GET | `/phone/numbers` | List phone numbers | `listAccountPhoneNumbers` |
+| DELETE | `/phone/numbers` | Delete unassigned phone numbers | `deleteUnassignedPhoneNumbers` |
 | PATCH | `/phone/numbers/sites/{siteId}` | Update a site's unassigned phone numbers | `updateSiteForUnassignedPhoneNumbers` |
 | GET | `/phone/numbers/{phoneNumberId}` | Get a phone number | `getPhoneNumberDetails` |
 | PATCH | `/phone/numbers/{phoneNumberId}` | Update a phone number | `updatePhoneNumberDetails` |
@@ -448,15 +471,15 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/roles` | List phone roles | `ListPhoneRoles` |
 | POST | `/phone/roles` | Duplicate a phone role | `DuplicatePhoneRole` |
-| DELETE | `/phone/roles/{roleId}` | Delete a phone role | `DeletePhoneRole` |
 | GET | `/phone/roles/{roleId}` | Get role information | `getRoleInformation` |
+| DELETE | `/phone/roles/{roleId}` | Delete a phone role | `DeletePhoneRole` |
 | PATCH | `/phone/roles/{roleId}` | Update a phone role | `UpdatePhoneRole` |
-| DELETE | `/phone/roles/{roleId}/members` | Delete members in a role | `DelRoleMembers` |
 | GET | `/phone/roles/{roleId}/members` | List members in a role | `ListRoleMembers` |
 | POST | `/phone/roles/{roleId}/members` | Add members to roles | `AddRoleMembers` |
-| DELETE | `/phone/roles/{roleId}/targets` | Delete phone role targets | `DeletePhoneRoleTargets` |
+| DELETE | `/phone/roles/{roleId}/members` | Delete members in a role | `DelRoleMembers` |
 | GET | `/phone/roles/{roleId}/targets` | List phone role targets | `ListPhoneRoleTargets` |
 | POST | `/phone/roles/{roleId}/targets` | Add phone role targets | `AddPhoneRoleTargets` |
+| DELETE | `/phone/roles/{roleId}/targets` | Delete phone role targets | `DeletePhoneRoleTargets` |
 
 ### Private Directory
 
@@ -472,10 +495,10 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/phone/carrier_peering/numbers` | List carrier peering phone numbers. | `listCarrierPeeringPhoneNumbers` |
-| DELETE | `/phone/peering/numbers` | Remove peering phone numbers | `deletePeeringPhoneNumbers` |
 | GET | `/phone/peering/numbers` | List peering phone numbers | `listPeeringPhoneNumbers` |
-| PATCH | `/phone/peering/numbers` | Update peering phone numbers | `updatePeeringPhoneNumbers` |
 | POST | `/phone/peering/numbers` | Add peering phone numbers | `addPeeringPhoneNumbers` |
+| DELETE | `/phone/peering/numbers` | Remove peering phone numbers | `deletePeeringPhoneNumbers` |
+| PATCH | `/phone/peering/numbers` | Update peering phone numbers | `updatePeeringPhoneNumbers` |
 
 ### Provision Templates
 
@@ -483,14 +506,15 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/provision_templates` | List provision templates | `listAccountProvisionTemplate` |
 | POST | `/phone/provision_templates` | Add a provision template | `addProvisionTemplate` |
-| DELETE | `/phone/provision_templates/{templateId}` | Delete a provision template | `deleteProvisionTemplate` |
 | GET | `/phone/provision_templates/{templateId}` | Get a provision template | `GetProvisionTemplate` |
+| DELETE | `/phone/provision_templates/{templateId}` | Delete a provision template | `deleteProvisionTemplate` |
 | PATCH | `/phone/provision_templates/{templateId}` | Update a provision template | `updateProvisionTemplate` |
 
 ### Recordings
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
+| GET | `/phone/call_element/{callElementId}/recording` | Get a recording by call element ID | `getPhoneRecordingByCallElementId` |
 | GET | `/phone/call_logs/{id}/recordings` | Get recording by call ID | `getPhoneRecordingsByCallIdOrCallLogId` |
 | GET | `/phone/recording/download/{fileId}` | Download a phone recording | `phoneDownloadRecordingFile` |
 | GET | `/phone/recording_transcript/download/{recordingId}` | Download a phone recording transcript | `phoneDownloadRecordingTranscript` |
@@ -515,8 +539,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/routing_rules` | List directory backup routing rules | `listRoutingRule` |
 | POST | `/phone/routing_rules` | Add directory backup routing rule | `addRoutingRule` |
-| DELETE | `/phone/routing_rules/{routingRuleId}` | Delete directory backup routing rule | `deleteRoutingRule` |
 | GET | `/phone/routing_rules/{routingRuleId}` | Get directory backup routing rule | `getRoutingRule` |
+| DELETE | `/phone/routing_rules/{routingRuleId}` | Delete directory backup routing rule | `deleteRoutingRule` |
 | PATCH | `/phone/routing_rules/{routingRuleId}` | Update directory backup routing rule | `updateRoutingRule` |
 
 ### Setting Templates
@@ -554,19 +578,25 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | GET | `/phone/shared_line_groups` | List shared line groups | `listSharedLineGroups` |
 | POST | `/phone/shared_line_groups` | Create a shared line group | `createASharedLineGroup` |
 | GET | `/phone/shared_line_groups/{sharedLineGroupId}` | Get a shared line group | `getASharedLineGroup` |
+| GET | `/phone/shared_line_groups/{sharedLineGroupId}/call_handling/settings` | Get shared line group call handling setting | `getSharedLineGroupCallHandlingSetting` |
+| PATCH | `/phone/shared_line_groups/{sharedLineGroupId}/call_handling/settings/{hourType}` | Update shared line group call handling setting | `updateSharedLineGroupCallHandlingSetting` |
 | GET | `/phone/shared_line_groups/{sharedLineGroupId}/policies` | Get a shared line group policy | `getSharedLineGroupPolicy` |
 | PATCH | `/phone/shared_line_groups/{sharedLineGroupId}/policies` | Update a shared line group policy | `updateSharedLineGroupPolicy` |
+| GET | `/phone/shared_line_groups/{sharedLineGroupId}/settings` | Get shared line group settings | `getSharedLineGroupSettings` |
+| POST | `/phone/shared_line_groups/{sharedLineGroupId}/settings/{settingType}` | Add shared line group setting | `addSharedLineGroupSetting` |
+| DELETE | `/phone/shared_line_groups/{sharedLineGroupId}/settings/{settingType}` | Delete shared line group setting | `deleteSharedLineGroupSetting` |
+| PATCH | `/phone/shared_line_groups/{sharedLineGroupId}/settings/{settingType}` | Update shared line group setting | `updateSharedLineGroupSetting` |
 | DELETE | `/phone/shared_line_groups/{slgId}` | Delete a shared line group | `deleteASharedLineGroup` |
 | PATCH | `/phone/shared_line_groups/{slgId}` | Update a shared line group | `updateASharedLineGroup` |
-| DELETE | `/phone/shared_line_groups/{slgId}/members` | Unassign members from a shared line group | `deleteMembersOfSLG` |
 | POST | `/phone/shared_line_groups/{slgId}/members` | Add members to a shared line group | `addMembersToSharedLineGroup` |
+| DELETE | `/phone/shared_line_groups/{slgId}/members` | Unassign members from a shared line group | `deleteMembersOfSLG` |
 | DELETE | `/phone/shared_line_groups/{slgId}/members/{memberId}` | Unassign a member from a shared line group | `deleteAMemberSLG` |
-| DELETE | `/phone/shared_line_groups/{slgId}/phone_numbers` | Unassign all phone numbers | `deletePhoneNumbersSLG` |
 | POST | `/phone/shared_line_groups/{slgId}/phone_numbers` | Assign phone numbers | `assignPhoneNumbersSLG` |
+| DELETE | `/phone/shared_line_groups/{slgId}/phone_numbers` | Unassign all phone numbers | `deletePhoneNumbersSLG` |
 | DELETE | `/phone/shared_line_groups/{slgId}/phone_numbers/{phoneNumberId}` | Unassign a phone number | `deleteAPhoneNumberSLG` |
+| POST | `/phone/shared_line_groups/{slgId}/policies/{policyType}` | Add a policy setting to a shared line group | `addSLGPolicySubSetting` |
 | DELETE | `/phone/shared_line_groups/{slgId}/policies/{policyType}` | Delete an SLG policy setting | `removeSLGPolicySubSetting` |
 | PATCH | `/phone/shared_line_groups/{slgId}/policies/{policyType}` | Update an SLG policy setting | `updateSLGPolicySubSetting` |
-| POST | `/phone/shared_line_groups/{slgId}/policies/{policyType}` | Add a policy setting to a shared line group | `addSLGPolicySubSetting` |
 
 ### Sites
 
@@ -574,16 +604,16 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 |--------|----------|---------|-------------|
 | GET | `/phone/sites` | List phone sites | `listPhoneSites` |
 | POST | `/phone/sites` | Create a phone site | `createPhoneSite` |
-| DELETE | `/phone/sites/{siteId}` | Delete a phone site | `deletePhoneSite` |
 | GET | `/phone/sites/{siteId}` | Get phone site details | `getASite` |
+| DELETE | `/phone/sites/{siteId}` | Delete a phone site | `deletePhoneSite` |
 | PATCH | `/phone/sites/{siteId}` | Update phone site details | `updateSiteDetails` |
-| DELETE | `/phone/sites/{siteId}/outbound_caller_id/customized_numbers` | Remove customized outbound caller ID phone numbers | `deleteSiteOutboundCallerNumbers` |
 | GET | `/phone/sites/{siteId}/outbound_caller_id/customized_numbers` | List customized outbound caller ID phone numbers | `listSiteCustomizeOutboundCallerNumbers` |
 | POST | `/phone/sites/{siteId}/outbound_caller_id/customized_numbers` | Add customized outbound caller ID phone numbers | `addSiteOutboundCallerNumbers` |
-| DELETE | `/phone/sites/{siteId}/settings/{settingType}` | Delete a site setting | `deleteSiteSetting` |
+| DELETE | `/phone/sites/{siteId}/outbound_caller_id/customized_numbers` | Remove customized outbound caller ID phone numbers | `deleteSiteOutboundCallerNumbers` |
 | GET | `/phone/sites/{siteId}/settings/{settingType}` | Get a phone site setting | `getSiteSettingForType` |
-| PATCH | `/phone/sites/{siteId}/settings/{settingType}` | Update the site setting | `updateSiteSetting` |
 | POST | `/phone/sites/{siteId}/settings/{settingType}` | Add a site setting | `addSiteSetting` |
+| DELETE | `/phone/sites/{siteId}/settings/{settingType}` | Delete a site setting | `deleteSiteSetting` |
+| PATCH | `/phone/sites/{siteId}/settings/{settingType}` | Update the site setting | `updateSiteSetting` |
 
 ### SMS
 
@@ -620,34 +650,41 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | GET | `/phone/users` | List phone users | `listPhoneUsers` |
-| POST | `/phone/users/batch` | Batch add users | `batchAddUsers` |
 | PUT | `/phone/users/batch` | Update multiple users' properties in batch | `updateUsersPropertiesInBatch` |
+| POST | `/phone/users/batch` | Batch add users | `batchAddUsers` |
 | GET | `/phone/users/{userId}` | Get a user's profile | `phoneUser` |
 | PATCH | `/phone/users/{userId}` | Update a user's profile | `updateUserProfile` |
-| POST | `/phone/users/{userId}/calling_plans` | Assign calling plan to a user | `assignCallingPlan` |
+| POST | `/phone/users/{userId}/call_forward_settings/{hourType}` | Add user call forward setting | `addUserCallForwardSetting` |
+| DELETE | `/phone/users/{userId}/call_forward_settings/{hourType}` | Delete user call forward setting | `deleteUserCallForwardSetting` |
+| GET | `/phone/users/{userId}/call_handling/settings` | Get user call handling setting | `getUserCallHandlingSetting` |
+| PATCH | `/phone/users/{userId}/call_handling/settings/{hourType}` | Update user call handling setting | `updateUserCallHandlingSetting` |
 | PUT | `/phone/users/{userId}/calling_plans` | Update user's calling plan | `updateCallingPlan` |
+| POST | `/phone/users/{userId}/calling_plans` | Assign calling plan to a user | `assignCallingPlan` |
 | DELETE | `/phone/users/{userId}/calling_plans/{planType}` | Unassign user's calling plan | `unassignCallingPlan` |
-| DELETE | `/phone/users/{userId}/outbound_caller_id/customized_numbers` | Remove users' customized outbound caller ID phone numbers | `deleteUserOutboundCallerNumbers` |
 | GET | `/phone/users/{userId}/outbound_caller_id/customized_numbers` | List users' phone numbers for a customized outbound caller ID | `listUserCustomizeOutboundCallerNumbers` |
 | POST | `/phone/users/{userId}/outbound_caller_id/customized_numbers` | Add phone numbers for users' customized outbound caller ID | `addUserOutboundCallerNumbers` |
+| DELETE | `/phone/users/{userId}/outbound_caller_id/customized_numbers` | Remove users' customized outbound caller ID phone numbers | `deleteUserOutboundCallerNumbers` |
 | GET | `/phone/users/{userId}/policies/{policyType}` | Get user policy details | `GetUserPolicyDetails` |
 | PATCH | `/phone/users/{userId}/policies/{policyType}` | Update user policy | `updateUserPolicy` |
+| POST | `/phone/users/{userId}/profile_settings/{settingType}` | Add a user's profile setting | `addUserProfileSetting` |
+| DELETE | `/phone/users/{userId}/profile_settings/{settingType}` | Delete a user's profile profile setting | `deleteUserProfileSetting` |
 | GET | `/phone/users/{userId}/settings` | Get a user's profile settings | `phoneUserSettings` |
 | PATCH | `/phone/users/{userId}/settings` | Update a user's profile settings | `updateUserSettings` |
+| POST | `/phone/users/{userId}/settings/{settingType}` | Add a user's shared access setting | `addUserSetting` |
 | DELETE | `/phone/users/{userId}/settings/{settingType}` | Delete a user's shared access setting | `deleteUserSetting` |
 | PATCH | `/phone/users/{userId}/settings/{settingType}` | Update a user's shared access setting | `updateUserSetting` |
-| POST | `/phone/users/{userId}/settings/{settingType}` | Add a user's shared access setting | `addUserSetting` |
 
 ### Voicemails
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
+| GET | `/phone/call_element/{callElementId}/voice_mail` | Get a voicemail by call element ID | `getVoicemailDetailsByCallElementId` |
 | GET | `/phone/users/{userId}/call_logs/{id}/voice_mail` | Get user voicemail details from a call log | `getVoicemailDetailsByCallIdOrCallLogId` |
 | GET | `/phone/users/{userId}/voice_mails` | Get user's voicemails | `phoneUserVoiceMails` |
 | GET | `/phone/voice_mails` | Get account voicemails | `accountVoiceMails` |
 | GET | `/phone/voice_mails/download/{fileId}` | Download a phone voicemail | `phoneDownloadVoicemailFile` |
-| DELETE | `/phone/voice_mails/{voicemailId}` | Delete a voicemail | `deleteVoicemail` |
 | GET | `/phone/voice_mails/{voicemailId}` | Get voicemail details | `getVoicemailDetails` |
+| DELETE | `/phone/voice_mails/{voicemailId}` | Delete a voicemail | `deleteVoicemail` |
 | PATCH | `/phone/voice_mails/{voicemailId}` | Update Voicemail Read Status | `updateVoicemailReadStatus` |
 
 ### Zoom Rooms
@@ -657,8 +694,8 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 | GET | `/phone/rooms` | List Zoom Rooms under Zoom Phone license | `listZoomRooms` |
 | POST | `/phone/rooms` | Add a Zoom Room to a Zoom Phone | `addZoomRoom` |
 | GET | `/phone/rooms/unassigned` | List Zoom Rooms without Zoom Phone assignment | `listUnassignedZoomRooms` |
-| DELETE | `/phone/rooms/{roomId}` | Remove a Zoom Room from a ZP account | `RemoveZoomRoom` |
 | GET | `/phone/rooms/{roomId}` | Get a Zoom Room under Zoom Phone license | `getZoomRoom` |
+| DELETE | `/phone/rooms/{roomId}` | Remove a Zoom Room from a ZP account | `RemoveZoomRoom` |
 | PATCH | `/phone/rooms/{roomId}` | Update a Zoom Room under Zoom Phone license | `updateZoomRoom` |
 | POST | `/phone/rooms/{roomId}/calling_plans` | Assign calling plans to a Zoom Room | `assignCallingPlanToRoom` |
 | DELETE | `/phone/rooms/{roomId}/calling_plans/{type}` | Remove a calling plan from a Zoom Room | `unassignCallingPlanFromRoom` |

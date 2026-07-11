@@ -38,7 +38,14 @@ If you choose the wrong type early, auth/scopes/endpoints all mismatch and imple
 
 **Official Documentation**: https://developers.zoom.us/docs/team-chat/  
 **Chatbot Documentation**: https://developers.zoom.us/docs/team-chat/chatbot/extend/  
-**API Reference**: https://developers.zoom.us/docs/api/rest/reference/chatbot/
+**API Reference**: https://developers.zoom.us/docs/api/rest/reference/chat/methods/#overview
+**Chatbot API Reference**: https://developers.zoom.us/docs/api/rest/reference/chatbot/methods/#overview
+
+The current Team Chat API Hub inventory contains 109 operations (verified 2026-07-10), including
+channel-owner reassignment and channel-tab migration. Use
+[the generated Team Chat API reference](../rest-api/references/team-chat.md) for exact current
+paths. For the separate 20-tool hosted MCP surface, use
+[Zoom Team Chat MCP](../zoom-mcp/team-chat/SKILL.md).
 
 ## Quick Links
 
@@ -442,7 +449,8 @@ ngrok http 4000
 ## Resources
 
 - **Official Docs**: https://developers.zoom.us/docs/team-chat/
-- **API Reference**: https://developers.zoom.us/docs/api/rest/reference/chatbot/
+- **API Reference**: https://developers.zoom.us/docs/api/rest/reference/chat/methods/#overview
+- **Chatbot API Reference**: https://developers.zoom.us/docs/api/rest/reference/chatbot/methods/#overview
 - **Dev Forum**: https://devforum.zoom.us/
 - **App Marketplace**: https://marketplace.zoom.us/
 

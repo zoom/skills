@@ -18,8 +18,8 @@ Authoritative endpoint inventory for Video Management. This file mirrors the off
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 25 |
-| Path templates | 11 |
+| Endpoint operations | 27 |
+| Path templates | 12 |
 | Tags | 5 |
 
 ## Tag Index
@@ -30,7 +30,7 @@ Authoritative endpoint inventory for Video Management. This file mirrors the off
 | files | 1 |
 | Permissions | 4 |
 | Playlists | 7 |
-| Videos | 7 |
+| Videos | 9 |
 
 ## Endpoints by Tag
 
@@ -40,8 +40,8 @@ Authoritative endpoint inventory for Video Management. This file mirrors the off
 |--------|----------|---------|-------------|
 | GET | `/video_management/channels` | List channels | `listVideoChannels` |
 | POST | `/video_management/channels` | Create a channel | `createChannel` |
-| DELETE | `/video_management/channels/{channelId}` | Delete channel | `DeleteChannel` |
 | GET | `/video_management/channels/{channelId}` | Get channel details | `getChannelDetail` |
+| DELETE | `/video_management/channels/{channelId}` | Delete channel | `DeleteChannel` |
 | PATCH | `/video_management/channels/{channelId}` | Update channel | `UpdateVideoChannel` |
 | PATCH | `/video_management/channels/{channelId}/actions` | Channel actions | `channelActions` |
 
@@ -49,24 +49,24 @@ Authoritative endpoint inventory for Video Management. This file mirrors the off
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| POST | `/video_management/files` | Upload file for video management | `uploadVODtFile` |
+| POST | `/video_management/files` | Upload file for video management | `uploadFileToVideoMgmt` |
 
 ### Permissions
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/video_management/channels/{channelId}/permissions` | Delete channel permissions | `DeleteChannelPermissions` |
 | GET | `/video_management/channels/{channelId}/permissions` | List channel permissions | `listChannelPermissions` |
-| PATCH | `/video_management/channels/{channelId}/permissions` | Update channel permissions | `updateChannelPermissions` |
 | POST | `/video_management/channels/{channelId}/permissions` | Create channel permissions | `createChannelPermissions` |
+| DELETE | `/video_management/channels/{channelId}/permissions` | Delete channel permissions | `DeleteChannelPermissions` |
+| PATCH | `/video_management/channels/{channelId}/permissions` | Update channel permissions | `updateChannelPermissions` |
 
 ### Playlists
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/video_management/channels/{channelId}/playlists` | Delete channel playlists | `DeleteChannelPlaylists` |
 | GET | `/video_management/channels/{channelId}/playlists` | List channel playlists | `ListChannelPlaylists` |
 | POST | `/video_management/channels/{channelId}/playlists` | Add channel playlists | `AddChannelPlaylists` |
+| DELETE | `/video_management/channels/{channelId}/playlists` | Delete channel playlists | `DeleteChannelPlaylists` |
 | GET | `/video_management/playlists` | List playlists | `ListPlaylists` |
 | POST | `/video_management/playlists` | Create a playlist | `createPlaylist` |
 | DELETE | `/video_management/playlists/{playlistId}` | Delete playlist | `DeletePlaylist` |
@@ -76,10 +76,12 @@ Authoritative endpoint inventory for Video Management. This file mirrors the off
 
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
-| DELETE | `/video_management/channels/{channelId}/videos` | Delete channel videos | `DeleteChannelVideos` |
 | GET | `/video_management/channels/{channelId}/videos` | List channel videos | `ListChannelVideos` |
 | POST | `/video_management/channels/{channelId}/videos` | Add channel videos | `AddChannelVideos` |
-| DELETE | `/video_management/playlists/{playlistId}/videos` | Delete playlist videos | `DeletePlaylistVideos` |
+| DELETE | `/video_management/channels/{channelId}/videos` | Delete channel videos | `DeleteChannelVideos` |
 | GET | `/video_management/playlists/{playlistId}/videos` | List playlist videos | `ListPlaylistVideos` |
 | POST | `/video_management/playlists/{playlistId}/videos` | Add playlist videos | `AddPlaylistVideos` |
+| DELETE | `/video_management/playlists/{playlistId}/videos` | Delete playlist videos | `DeletePlaylistVideos` |
 | GET | `/video_management/videos` | List all videos | `ListAllVideos` |
+| GET | `/video_management/videos/{videoId}/metadata` | Get metadata for a specific video | `getVideoMetadata` |
+| PATCH | `/video_management/videos/{videoId}/metadata` | Update metadata for a specific video. | `updateVideoMetadata` |

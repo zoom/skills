@@ -116,8 +116,10 @@ Backend automation without user authorization.
 - Access your account's data
 - Can include webhooks and zoom-websockets
 - Best for: automation, reporting, integrations
-- Marketplace API creation for S2S apps is expected around 2026-07-12; before that
-  rollout, create S2S apps through Marketplace UI and use API testing only for General Apps.
+- Marketplace API creation was runtime-verified on 2026-07-10 through
+  `POST /v2/accounts/{accountId}/marketplace/apps` with `app_type: "s2s_oauth"` and
+  `marketplace:write:app:master`. Use the account-scoped endpoint rather than the regular
+  General App create route.
 
 ## Webhook-only App
 

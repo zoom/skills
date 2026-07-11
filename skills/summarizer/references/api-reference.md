@@ -79,6 +79,10 @@ Optional:
 - `notifications.webhook_url`
 - `notifications.secret`
 
+Batch file list and detail responses can include `details` (added May 21, 2026). Treat it as
+per-file processing detail and preserve unknown/new subfields rather than validating against a
+closed object shape.
+
 ## Limits and Constraints
 
 | Area | Value |

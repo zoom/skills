@@ -27,6 +27,17 @@ Official docs:
 - https://marketplacefront.zoom.us/sdk/contact/android/index.html
 - https://marketplacefront.zoom.us/sdk/contact/ios/index.html
 
+## Current Release Snapshot
+
+- Web, Android, and iOS SDK changelogs are at `5.6.0` (verified 2026-07-10).
+- Web `5.6.0` adds Agent UI V3/Prism video updates, authenticated consumer chat history,
+  campaign digital front door, Dynamics CRM share/remote control, CTI/PWA Cobrowse, and new
+  locales/fallback behavior.
+- Android/iOS `5.6.0` revise real-time audio translation; iOS now receives available languages
+  and interpreter volume restrictions from the backend service.
+- The current Contact Center REST inventory contains 314 operations; use
+  [the generated reference](../rest-api/references/contact-center.md) for exact paths.
+
 ## Routing Guardrail
 
 - If the user is building an app inside the Zoom Contact Center desktop client, stay on the Zoom Apps SDK path and use this skill plus `zoom-apps-sdk`.

@@ -22,6 +22,10 @@ Official docs:
 - https://developers.zoom.us/docs/virtual-agent/android/
 - https://developers.zoom.us/docs/virtual-agent/ios/
 
+The current API Hub inventory contains 12 Virtual Agent operations (verified 2026-07-10). Use
+[the generated Virtual Agent API reference](../rest-api/references/virtual-agent.md) for exact
+knowledge-base and integration paths.
+
 ## Routing Guardrail
 
 - If the user is implementing Contact Center app surfaces inside Zoom client, chain with [../contact-center/SKILL.md](../contact-center/SKILL.md).

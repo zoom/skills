@@ -84,7 +84,6 @@ async function joinMeeting() {
     // Step 4: Join meeting
     await client.join({
       signature: signature,
-      sdkKey: sdkKey,
       meetingNumber: meetingNumber,
       userName: userName,
       password: password,  // lowercase!
@@ -195,7 +194,6 @@ await client.init({
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `signature` | `string` | SDK JWT from backend |
-| `sdkKey` | `string` | SDK Key / Client ID |
 | `meetingNumber` | `string \| number` | Meeting number |
 | `userName` | `string` | Display name |
 
@@ -442,7 +440,7 @@ function ZoomMeeting({ meetingNumber, password, userName }: Props) {
 
     try {
       // Get signature from backend
-      const { signature, sdkKey } = await fetchSignature(meetingNumber);
+      const { signature } = await fetchSignature(meetingNumber);
       
       await clientRef.current.init({
         zoomAppRoot: containerRef.current,
@@ -453,7 +451,6 @@ function ZoomMeeting({ meetingNumber, password, userName }: Props) {
 
       await clientRef.current.join({
         signature,
-        sdkKey,
         meetingNumber,
         password,
         userName,

@@ -22,7 +22,11 @@ does not encode the complete feature.
 | Webhook events | Yes for user events | Yes for account events | Yes for account events | - |
 | WebSocket events | No; WebSockets are account-level | Yes | Yes | - |
 | Default Zoom MCP server | Yes, recommended | Conditional by tool scope | Do not assume tool parity | - |
-| Team Chat MCP server | Yes, required for current user tools | No | No | - |
+| Meetings MCP server | Yes, required for current tools | No | Do not assume tool parity | - |
+| Docs MCP server | Yes, required for current tools | No | Do not assume tool parity | - |
+| Tasks MCP server | Yes, required for current tools | No | Do not assume tool parity | - |
+| Revenue Accelerator MCP server | Yes, with ZRA license/data access | No | Do not assume tool parity | - |
+| Team Chat MCP server | Yes, required for current read/write tools | No | No | - |
 | Whiteboard MCP server | Yes, verified path | No | Discovery only until tool execution is proven | - |
 | Meeting SDK | No | No | No | Dedicated `meeting_sdk` app |
 
@@ -60,6 +64,10 @@ SDK requires a user OAuth token matching the user signed in to Zoom Workplace.
 | Meeting/Webinar RTMS, excluding ZCC | [general-user-meeting-webinar-rtms.json](../assets/marketplace-apps/general-user-meeting-webinar-rtms.json) | General App user, then RTMS events | [RTMS](../../rtms/SKILL.md) |
 | Contact Center Voice RTMS | [zcc-voice-rtms.json](../assets/marketplace-apps/zcc-voice-rtms.json) | General App with ZCC RTMS events | [RTMS](../../rtms/SKILL.md) |
 | Default Zoom MCP server | [zoom-mcp-default.json](../assets/marketplace-apps/zoom-mcp-default.json) | General App, user-managed with PKCE | [Zoom MCP](../../zoom-mcp/SKILL.md) |
+| Meetings MCP server | [zoom-mcp-meetings.json](../assets/marketplace-apps/zoom-mcp-meetings.json) | General App, user-managed with PKCE | [Meetings MCP](../../zoom-mcp/meetings/SKILL.md) |
+| Zoom Docs MCP server | [zoom-mcp-docs.json](../assets/marketplace-apps/zoom-mcp-docs.json) | General App, user-managed with PKCE | [Docs MCP](../../zoom-mcp/docs/SKILL.md) |
+| Zoom Tasks MCP server | [zoom-mcp-tasks.json](../assets/marketplace-apps/zoom-mcp-tasks.json) | General App, user-managed with PKCE | [Tasks MCP](../../zoom-mcp/tasks/SKILL.md) |
+| Revenue Accelerator MCP server | [zoom-mcp-revenue-accelerator.json](../assets/marketplace-apps/zoom-mcp-revenue-accelerator.json) | General App, user-managed with PKCE | [Revenue Accelerator MCP](../../zoom-mcp/revenue-accelerator/SKILL.md) |
 | Team Chat MCP server | [zoom-mcp-team-chat.json](../assets/marketplace-apps/zoom-mcp-team-chat.json) | General App, user-managed with PKCE | [Team Chat MCP](../../zoom-mcp/team-chat/SKILL.md) |
 | Whiteboard MCP server | [zoom-mcp-whiteboard.json](../assets/marketplace-apps/zoom-mcp-whiteboard.json) | General App, user-managed with PKCE | [Whiteboard MCP](../../zoom-mcp/whiteboard/SKILL.md) |
 
@@ -92,10 +100,13 @@ product's app model unless the child skill states otherwise.
 | `scribe` | Uses Build Platform API key/secret JWT authentication, not a General/S2S Marketplace template. |
 | `summarizer` | Uses Build Platform API key/secret JWT authentication, not a General/S2S Marketplace template. |
 | `translator` | Uses Build Platform API key/secret JWT authentication, not a General/S2S Marketplace template. |
-| `zoom-mcp` | Covered by separate default, Team Chat, and Whiteboard user-managed General App templates with PKCE. |
+| `zoom-mcp` | Covered by separate default, Meetings, Docs, Tasks, Revenue Accelerator, Team Chat, and Whiteboard user-managed General App templates with PKCE. |
 
 ## Create Workflow
 
+0. Bootstrap the account manually if no existing app can mint an access token with the required
+   Marketplace app-creation scope. Follow
+   [Bootstrap Requirement: Create the First App Manually](marketplace-apps.md#bootstrap-requirement-create-the-first-app-manually).
 1. Select the narrowest matching template.
 2. Replace all `example.com` URLs, app names, descriptions, domains, and contact fields.
 3. Check every OAuth scope against the exact target API operation. Remove unused scopes.
@@ -129,6 +140,11 @@ curl -X POST "https://api.zoom.us/v2/accounts/$ZOOM_ACCOUNT_ID/marketplace/apps"
   -H "Content-Type: application/json" \
   --data @TEMPLATE.json
 ```
+
+The access token in both examples comes from the previously created bootstrap app, not from the
+new app represented by `TEMPLATE.json`. For the account-scoped endpoint, verify both the master
+scope and account-owner requirement; an admin-scoped token is not interchangeable with a master
+token.
 
 7. Store returned client secrets in a secret manager. Never print, commit, or retain them in
    test artifacts.

@@ -17,7 +17,7 @@ The Zoom Meeting SDK for Web embeds the full Zoom meeting experience into your w
 ## Prerequisites
 
 - Meeting SDK credentials from [Marketplace](https://marketplace.zoom.us/) (sign-in required)
-- SDK Key and Secret
+- Meeting SDK Client ID and Client Secret
 - Modern browser (Chrome, Firefox, Safari, Edge)
 
 ## View Options
@@ -46,12 +46,12 @@ npm install @zoom/meetingsdk
 ### Client View (CDN)
 
 ```html
-<script src="https://source.zoom.us/6.0.0/lib/vendor/react.min.js"></script>
-<script src="https://source.zoom.us/6.0.0/lib/vendor/react-dom.min.js"></script>
-<script src="https://source.zoom.us/6.0.0/lib/vendor/redux.min.js"></script>
-<script src="https://source.zoom.us/6.0.0/lib/vendor/redux-thunk.min.js"></script>
-<script src="https://source.zoom.us/6.0.0/lib/vendor/lodash.min.js"></script>
-<script src="https://source.zoom.us/6.0.0/zoom-meeting-6.0.0.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/lib/vendor/react.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/lib/vendor/react-dom.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/lib/vendor/redux.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/lib/vendor/redux-thunk.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/lib/vendor/lodash.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/zoom-meeting-6.2.0.min.js"></script>
 ```
 
 > **Note:** CDN provides `ZoomMtg` (Client View). For `ZoomMtgEmbedded` (Component View), use npm.

@@ -26,6 +26,22 @@ triggers:
 
 Embed the full Zoom meeting experience into web, mobile, desktop, and headless integrations.
 
+## Current Release Snapshot
+
+Verified from the public changelog on 2026-07-10:
+
+| Platform family | Current release |
+|-----------------|-----------------|
+| Android, Electron, iOS, Linux, macOS, Windows | `7.1.0` |
+| React Native | `7.0.5` |
+| Web | `6.2.0` |
+| Unreal wrapper | `1.1.0` (wraps Meeting SDK `6.1.5`) |
+
+Native `7.1.0` adds I420 Limited/Full support, face-region ROI in raw video, on-demand avatar
+download, and platform-specific breakout-room additions. It includes breaking changes on several
+native platforms, so diff the downloaded headers/wrappers before copying examples from older
+package snapshots in this repository.
+
 ## Hard Routing Guardrail (Read First)
 
 - If the user asks to embed/join meetings inside their app UI, route to Meeting SDK implementation.
@@ -35,7 +51,8 @@ Embed the full Zoom meeting experience into web, mobile, desktop, and headless i
 ## Prerequisites
 
 - Zoom app with Meeting SDK credentials
-- SDK Key and Secret from Marketplace
+- Client ID and Client Secret from Marketplace; legacy SDK Key/Secret migration was enforced on
+  June 27, 2026
 - Platform-specific development environment (Web, Android, iOS, macOS, Unreal, Electron, Linux, or Windows)
 
 > **Need to create the SDK app first?** Use
@@ -53,12 +70,12 @@ Embed the full Zoom meeting experience into web, mobile, desktop, and headless i
 ## Quick Start (Web - Client View via CDN)
 
 ```html
-<script src="https://source.zoom.us/6.0.0/lib/vendor/react.min.js"></script>
-<script src="https://source.zoom.us/6.0.0/lib/vendor/react-dom.min.js"></script>
-<script src="https://source.zoom.us/6.0.0/lib/vendor/redux.min.js"></script>
-<script src="https://source.zoom.us/6.0.0/lib/vendor/redux-thunk.min.js"></script>
-<script src="https://source.zoom.us/6.0.0/lib/vendor/lodash.min.js"></script>
-<script src="https://source.zoom.us/6.0.0/zoom-meeting-6.0.0.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/lib/vendor/react.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/lib/vendor/react-dom.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/lib/vendor/redux.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/lib/vendor/redux-thunk.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/lib/vendor/lodash.min.js"></script>
+<script src="https://source.zoom.us/6.2.0/zoom-meeting-6.2.0.min.js"></script>
 
 <script>
 // CDN provides ZoomMtg (Client View - full page)
@@ -73,7 +90,6 @@ ZoomMtg.init({
   disableCORP: !window.crossOriginIsolated,
   success: function() {
     ZoomMtg.join({
-      sdkKey: 'YOUR_SDK_KEY',
       signature: 'YOUR_SIGNATURE',  // Generate server-side!
       meetingNumber: 'MEETING_NUMBER',
       userName: 'User Name',
@@ -98,7 +114,7 @@ ZoomMtg.init({
 
 ### 2. Backend Required for Production
 
-**Never expose SDK Secret in client code.** Generate signatures server-side:
+**Never expose the Client Secret in client code.** Generate signatures server-side:
 
 ```javascript
 // server.js (Node.js example)
@@ -111,7 +127,7 @@ app.post('/api/signature', (req, res) => {
   
   const header = { alg: 'HS256', typ: 'JWT' };
   const payload = {
-    sdkKey: process.env.ZOOM_SDK_KEY,
+    appKey: process.env.ZOOM_CLIENT_ID,
     mn: String(meetingNumber).replace(/\D/g, ''),
     role: parseInt(role, 10),
     iat, exp, tokenExp: exp
@@ -120,10 +136,10 @@ app.post('/api/signature', (req, res) => {
   const signature = KJUR.jws.JWS.sign('HS256',
     JSON.stringify(header),
     JSON.stringify(payload),
-    process.env.ZOOM_SDK_SECRET
+    process.env.ZOOM_CLIENT_SECRET
   );
   
-  res.json({ signature, sdkKey: process.env.ZOOM_SDK_KEY });
+  res.json({ signature });
 });
 ```
 
@@ -189,8 +205,8 @@ Meeting SDK provides **Zoom's UI with customization options**:
 
 | Concept | Description |
 |---------|-------------|
-| SDK Key/Secret | Credentials from Marketplace |
-| Signature | JWT signed with SDK Secret |
+| Client ID/Secret | Current Meeting SDK credentials from Marketplace |
+| Signature | JWT with `appKey` signed using the Client Secret |
 | Component View | Extractable, customizable UI (Web) |
 | Client View | Full-page Zoom UI (Web) |
 

@@ -11,11 +11,21 @@
 From `@zoom/rivet` TypeDoc module index:
 - Accounts
 - Chatbot
+- Commerce
+- Marketplace
 - Meetings
 - Phone
 - Team Chat
 - Users
 - Video SDK
+
+The `Commerce` and `Marketplace` package exports are present in `@zoom/rivet@0.4.0`. The
+high-level authorization documentation may lag these exports, so verify constructors and auth
+types against the installed `.d.ts` files before generating setup code.
+
+Commerce specifically uses `CommerceS2SAuthClient` in `0.4.0`, not the older
+`CommerceOAuthClient`. See [versioning and compatibility](versioning-and-compatibility.md) for
+the endpoint rename list introduced by regenerated clients.
 
 Each module generally exposes:
 - `*Client` class(es)
