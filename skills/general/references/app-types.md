@@ -116,10 +116,11 @@ Backend automation without user authorization.
 - Access your account's data
 - Can include webhooks and zoom-websockets
 - Best for: automation, reporting, integrations
-- Marketplace API creation was runtime-verified on 2026-07-10 through
+- Marketplace API creation was runtime-verified end to end on 2026-07-13 through
   `POST /v2/accounts/{accountId}/marketplace/apps` with `app_type: "s2s_oauth"` and
   `marketplace:write:app:master`. Use the account-scoped endpoint rather than the regular
-  General App create route.
+  General App create route. The temporary inactive app was then deleted successfully through
+  `DELETE /v2/marketplace/apps/{appId}`.
 
 ## Webhook-only App
 

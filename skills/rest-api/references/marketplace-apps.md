@@ -562,8 +562,10 @@ account-scoped endpoint:
 - Set `active: true` only when `scopes` contains at least one valid scope. Use
   `active: false` to create an inactive draft.
 - Do not send a General App `manifest` for `s2s_oauth`; send top-level `scopes`.
-- Successful responses can include generated development and production credentials.
-  Capture them once and never log or commit client secrets.
+- S2S has a single credential state. The API labels that one pair
+  `development_credentials`; `production_credentials` is not expected for S2S. Meeting SDK
+  publishing has a separate development/production credential model. Capture S2S credentials
+  once and never log or commit client secrets.
 
 A live authorization probe on 2026-07-10 reached the account-scoped endpoint, but the supplied
 tokens lacked its required master scope:
@@ -575,9 +577,124 @@ tokens lacked its required master scope:
 }
 ```
 
-No app was created in the probes. Use the account-scoped route and a token containing
-`marketplace:write:app:master`; do not rely on the broader operation description for the regular
-create endpoint until runtime behavior changes.
+That earlier probe did not create an app. A follow-up production probe on **2026-07-13** used a
+token containing `marketplace:write:app:master` and confirmed the complete reversible flow:
+
+- `POST /v2/accounts/{accountId}/marketplace/apps` returned HTTP `201`.
+- `app_type: "s2s_oauth"` created an inactive S2S OAuth app.
+- The requested `meeting:read:meeting:admin` scope was preserved in the response.
+- `DELETE /v2/marketplace/apps/{appId}` returned HTTP `200` with an empty body and removed the
+  temporary app. The live delete status therefore differs from the documented `204` response.
+
+Use the account-scoped route and a token containing `marketplace:write:app:master`; do not rely
+on the broader operation description for the regular create endpoint until runtime behavior
+changes. Treat returned client credentials as one-time secrets even when running an inactive
+creation probe.
+
+### S2S Create, Token, and Manifest Shapes (Verified 2026-07-13)
+
+S2S OAuth uses a native top-level request, not the General App manifest model.
+
+Minimal inactive request (scopes can be omitted):
+
+```json
+{
+  "app_type": "s2s_oauth",
+  "app_name": "My S2S App",
+  "contact_name": "Developer Name",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "active": false
+}
+```
+
+Active request (at least one valid scope is required):
+
+```json
+{
+  "app_type": "s2s_oauth",
+  "app_name": "My Active S2S App",
+  "contact_name": "Developer Name",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "active": true,
+  "scopes": [
+    "meeting:read:meeting:admin"
+  ]
+}
+```
+
+Do not send `manifest` or `publish` for S2S. The live endpoint accepted malformed `manifest`
+values (including a string), `publish`, and unknown top-level fields, but silently ignored them.
+Permissive input handling is not manifest support.
+
+Observed HTTP `201` create response fields:
+
+| Field | Observed type/shape | Notes |
+|-------|---------------------|-------|
+| `app_id` | string | Identifier required for later management and cleanup |
+| `app_name` | string | Echoes the requested name |
+| `app_type` | `"s2s_oauth"` | Native create response type |
+| `create_at` | date-time string | Live field is `create_at`, not documented `created_at` |
+| `dev_public_key` | `{ "enabled": boolean }` | Public-key feature state; no key material was returned in the probe |
+| `prod_public_key` | `{ "enabled": boolean }` | Production public-key feature state |
+| `development_credentials` | `{ "client_id": string, "client_secret": string }` | The single S2S credential pair; the field name does not imply a second production state |
+| `production_credentials` | absent by design | S2S has one credential state; do not treat this as an incomplete create response |
+| `scopes` | string array | Echoes retained valid scopes; this is not sufficient proof that a newly minted token has propagated them |
+
+The response does not echo `active`, `manifest`, `publish`, `company_name`, or contact fields.
+
+Observed validation and routing behavior:
+
+| Request case | HTTP/result | Implementation consequence |
+|--------------|-------------|----------------------------|
+| `active: false`, scopes omitted | `201`, `scopes: []` | Valid inactive draft |
+| `active: true`, valid scope | `201`, requested scope returned | Valid active app |
+| `active: true`, empty scopes | `404`, code `1500`, `invalid_scope_value` | Require at least one valid scope |
+| `active: false`, invalid scope | `201`, invalid scope silently removed | Compare returned scopes with requested scopes |
+| Malformed or wrong-type `manifest` | `201`, field ignored | Never infer S2S manifest support from create success |
+| `publish` or unknown top-level fields | `201`, fields ignored | Send only S2S-native fields |
+| Missing `contact_email` | `404`, code `1500`, missing required fields | Validate required fields client-side |
+| S2S sent to `POST /v2/marketplace/apps` | `404`, code `1500` directing account route | Use `/v2/accounts/{accountId}/marketplace/apps` |
+| Delete through `DELETE /v2/marketplace/apps/{appId}` | `200`, empty body | Accept `200` even though the schema documents `204` |
+
+Token exchange after active S2S creation:
+
+```bash
+curl -X POST \
+  "https://zoom.us/oauth/token?grant_type=account_credentials&account_id=$ZOOM_ACCOUNT_ID" \
+  -u "$ZOOM_CLIENT_ID:$ZOOM_CLIENT_SECRET"
+```
+
+Observed HTTP `200` token response:
+
+```json
+{
+  "access_token": "<redacted>",
+  "token_type": "bearer",
+  "expires_in": 3599,
+  "scope": "space-delimited granted scopes",
+  "api_url": "https://api-us.zoom.us"
+}
+```
+
+The `scope` field can be absent or incomplete immediately after creation while the app/scopes
+propagate. A follow-up token exchange after 12 seconds contained the requested scopes. Use a
+bounded retry, verify the token response `scope`, and send API calls to the returned `api_url`
+instead of assuming the global API hostname.
+
+S2S manifest capability was tested with an active S2S token containing
+`marketplace:read:app:admin` and `marketplace:write:app:admin`:
+
+| Operation | Result |
+|-----------|--------|
+| `GET /v2/marketplace/apps/{appId}` | `200`; reported `app_type: "OAuthApp"`, `app_status: "unpublished"`, and the S2S scopes |
+| `GET /v2/marketplace/apps/{appId}/manifest` | `404`, code `1500`: `You can only export Draft General app's manifest now` |
+| `PUT /v2/marketplace/apps/{appId}/manifest` | `400`, `error: "invalid_manifest"`: `You can only update Draft General app now` |
+
+Therefore, do not use the generic `app_type: "OAuthApp"` returned by the information endpoint
+as proof that an S2S app is a General App. S2S configuration is managed through native fields
+and scopes; General App manifest export/update does not apply.
 
 ## Coverage
 

@@ -175,9 +175,19 @@ token.
 
 - `s2s_oauth` and `meeting_sdk` are native create request types; they do not use a General App
   manifest.
-- Runtime testing on 2026-07-10 required S2S and Meeting SDK creation through
+- The S2S create endpoint can silently ignore `manifest`, `publish`, and unknown fields. This is
+  not manifest support. Compare returned scopes with requested scopes because invalid scopes on
+  an inactive app can be silently dropped. See
+  [S2S Create, Token, and Manifest Shapes](marketplace-apps.md#s2s-create-token-and-manifest-shapes-verified-2026-07-13).
+- Newly created active S2S scopes may take several seconds to appear in an
+  `account_credentials` token. Retry token exchange with a short bounded backoff and verify the
+  returned `scope` before calling product APIs.
+- Runtime testing on 2026-07-13 confirmed S2S creation through
   `/v2/accounts/{accountId}/marketplace/apps`; the regular endpoint redirected callers to that
-  route despite broader wording in the public API description.
+  route despite broader wording in the public API description. The test returned HTTP `201`,
+  and cleanup through `DELETE /v2/marketplace/apps/{appId}` returned HTTP `200` with an empty
+  body. Meeting SDK uses the same account-scoped creation surface but was not created in that
+  probe.
 - General App `USER_OPERATION` accepts user scopes; `ADMIN_MANAGEMENT` accepts admin scopes.
 - App-owned scopes such as `marketplace:write:event_subscription` do not belong in
   `oauth_information.scopes`; obtain them through `client_credentials` after app creation.
