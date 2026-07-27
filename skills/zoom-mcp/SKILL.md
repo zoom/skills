@@ -59,7 +59,10 @@ Product-specific MCP work is split into child skills for
 
 > **Marketplace-first skill chain:** Before connecting to any Zoom MCP server, route to
 > [Marketplace app management](../rest-api/references/marketplace-apps.md) and the
-> [Marketplace template selector](../rest-api/references/marketplace-app-templates.md). Create
+> [Marketplace template selector](../rest-api/references/marketplace-app-templates.md). For an
+> automated client, first inspect the machine-readable
+> [template index](../rest-api/assets/marketplace-apps/marketplace-manifest-template-index.json).
+> Create
 > a user-managed General App from the matching MCP template and obtain its client ID. Then
 > route to [zoom-oauth](../oauth/SKILL.md) to authorize the user, exchange the authorization
 > code (with PKCE where configured), and obtain the bearer access token. Only after those steps
@@ -72,6 +75,8 @@ Product-specific MCP work is split into child skills for
 
 - Select the exact MCP scenario from the
   [Marketplace template selector](../rest-api/references/marketplace-app-templates.md).
+- Confirm the selected index entry has `app_type: general`, `usage: USER_OPERATION`, and
+  `supports_manifest_update: true`; do not substitute an S2S or Meeting SDK create request.
 - Create the user-managed General App and configure its redirect URI.
 - Keep only the scopes required by the MCP tools you intend to call.
 

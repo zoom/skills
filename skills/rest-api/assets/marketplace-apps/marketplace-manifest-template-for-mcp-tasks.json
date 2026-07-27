@@ -1,0 +1,41 @@
+{
+  "app_type": "general",
+  "app_name": "Zoom Tasks MCP Connector",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Zoom Tasks MCP Connector",
+      "description": "Authorizes task, comment, assignee, collaborator, and task-step workflows through Tasks MCP."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "production_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "oauth_allow_list": ["https://mcp-client.example.com/oauth/callback"],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        { "scope": "tasks:read:list_tasks", "optional": false },
+        { "scope": "tasks:read:task", "optional": false },
+        { "scope": "tasks:write:task", "optional": false },
+        { "scope": "tasks:update:task", "optional": false },
+        { "scope": "tasks:delete:trash_task", "optional": false },
+        { "scope": "tasks:write:comment", "optional": false },
+        { "scope": "tasks:delete:comment", "optional": false },
+        { "scope": "tasks:read:comments", "optional": false },
+        { "scope": "tasks:write:assignees", "optional": false },
+        { "scope": "tasks:read:assignees", "optional": false },
+        { "scope": "tasks:delete:assignees", "optional": false },
+        { "scope": "tasks:write:collaborators", "optional": false },
+        { "scope": "tasks:read:list_collaborators", "optional": false },
+        { "scope": "tasks:delete:collaborator", "optional": false }
+      ],
+      "scope_description": "Use the current Zoom Tasks MCP tools for the authorizing user.",
+      "enable_private_pkce_client": true,
+      "enable_public_pkce_client": false
+    },
+    "features": { "products": [] }
+  }
+}

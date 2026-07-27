@@ -29,7 +29,7 @@ Dedicated guidance for Zoom's Whiteboard MCP server.
 ## Authentication
 
 - Start app registration from the
-  [Whiteboard MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-whiteboard.json).
+  [Whiteboard MCP template](../../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-whiteboard.json).
 - **User OAuth with Whiteboard scopes** is the verified working path for `list_whiteboards`
   and `get_a_whiteboard`.
 - **S2S OAuth** can reach the Whiteboard MCP gateway and complete `tools/list`, but tool
@@ -97,7 +97,7 @@ Reference: [references/tools.md](references/tools.md)
 
 ## Chaining
 
-- Marketplace app creation: [Whiteboard MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-whiteboard.json)
+- Marketplace app creation: [Whiteboard MCP template](../../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-whiteboard.json)
   via [Marketplace app management](../../rest-api/references/marketplace-apps.md)
 - Token acquisition: create the app first, then use
   [OAuth guidance](../concepts/oauth-setup.md) to authorize the user and mint the bearer token

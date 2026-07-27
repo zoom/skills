@@ -68,8 +68,8 @@ Start here:
 > [Marketplace app management](../rest-api/references/marketplace-apps.md) for General App or
 > S2S app setup, admin/user scope selection, event subscription behavior, and credential
 > response shapes before implementing Phone APIs or Smart Embed workflows. Start from the
-> [General App Phone template](../rest-api/assets/marketplace-apps/phone-api.json) or
-> [S2S Phone template](../rest-api/assets/marketplace-apps/create-s2s-phone-api.json).
+> [General App Phone template](../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-general-admin-phone-api.json) or
+> [S2S Phone template](../rest-api/assets/marketplace-apps/marketplace-app-creation-template-for-s2s-phone-api.json).
 
 ## High-Level Scenarios
 

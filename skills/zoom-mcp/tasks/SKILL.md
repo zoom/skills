@@ -34,7 +34,7 @@ See [references/tools.md](references/tools.md) for the current 20-tool catalog a
 
 ## Chaining
 
-- Marketplace app creation: [Tasks MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-tasks.json)
+- Marketplace app creation: [Tasks MCP template](../../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-tasks.json)
   via [Marketplace app management](../../rest-api/references/marketplace-apps.md)
 - Token acquisition: create the app first, then use [OAuth and PKCE](../../oauth/SKILL.md) to
   authorize the user and mint the bearer token supplied to this MCP endpoint

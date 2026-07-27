@@ -1,0 +1,39 @@
+{
+  "app_type": "general",
+  "app_name": "ZRA MCP Connector",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "ZRA MCP Connector",
+      "description": "Authorizes conversation, scorecard, deal, customer, indicator, team, and user retrieval through ZRA MCP."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "production_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "oauth_allow_list": ["https://mcp-client.example.com/oauth/callback"],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        { "scope": "zra:read:list_conversations", "optional": false },
+        { "scope": "zra:read:conversations", "optional": false },
+        { "scope": "zra:read:conversation_analysis", "optional": false },
+        { "scope": "zra:read:list_conversation_comments", "optional": false },
+        { "scope": "zra:read:conversation_scorecards", "optional": false },
+        { "scope": "zra:read:list_deals", "optional": false },
+        { "scope": "zra:read:deal", "optional": false },
+        { "scope": "zra:read:list_deal_activities", "optional": false },
+        { "scope": "zra:read:crm_customer_contact", "optional": false },
+        { "scope": "zra:read:indicator", "optional": false },
+        { "scope": "zra:read:team", "optional": false },
+        { "scope": "zra:read:user", "optional": false }
+      ],
+      "scope_description": "Use the current Zoom Revenue Accelerator MCP tools for the authorizing user.",
+      "enable_private_pkce_client": true,
+      "enable_public_pkce_client": false
+    },
+    "features": { "products": [] }
+  }
+}

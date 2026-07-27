@@ -1,0 +1,77 @@
+{
+  "app_type": "general",
+  "app_name": "User-Managed Meeting Webinar RTMS",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "User-Managed Meeting Webinar RTMS",
+      "description": "Receives live meeting and webinar media through user-level RTMS."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://rtms.example.com/oauth/callback",
+      "production_redirect_uri": "https://rtms.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://rtms.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "meeting:read:meeting_audio",
+          "optional": false
+        },
+        {
+          "scope": "meeting:read:meeting_video",
+          "optional": false
+        },
+        {
+          "scope": "meeting:read:meeting_transcript",
+          "optional": false
+        },
+        {
+          "scope": "meeting:read:meeting_chat",
+          "optional": false
+        },
+        {
+          "scope": "webinar:read:webinar_audio",
+          "optional": false
+        },
+        {
+          "scope": "webinar:read:webinar_video",
+          "optional": false
+        },
+        {
+          "scope": "webinar:read:webinar_transcript",
+          "optional": false
+        },
+        {
+          "scope": "webinar:read:webinar_chat",
+          "optional": false
+        }
+      ],
+      "scope_description": "Receive live meeting and webinar audio, video, transcript, and chat media.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": [
+        "ZOOM_MEETING",
+        "ZOOM_WEBINAR"
+      ],
+      "development_home_uri": "https://rtms.example.com/",
+      "production_home_uri": "https://rtms.example.com/",
+      "domain_allow_list": [
+        {
+          "domain": "rtms.example.com",
+          "explanation": "Hosts OAuth, RTMS, and event receiver endpoints."
+        }
+      ],
+      "event_subscription": {
+        "enable": false
+      }
+    }
+  }
+}

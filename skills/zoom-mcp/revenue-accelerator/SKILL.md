@@ -38,7 +38,7 @@ See [references/tools.md](references/tools.md) for the current 15-tool catalog a
 
 ## Chaining
 
-- Marketplace app creation: [Revenue Accelerator MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-revenue-accelerator.json)
+- Marketplace app creation: [Revenue Accelerator MCP template](../../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-revenue-accelerator.json)
   via [Marketplace app management](../../rest-api/references/marketplace-apps.md)
 - Token acquisition: create the app first, then use [OAuth and PKCE](../../oauth/SKILL.md) to
   authorize the licensed user and mint the bearer token supplied to this MCP endpoint

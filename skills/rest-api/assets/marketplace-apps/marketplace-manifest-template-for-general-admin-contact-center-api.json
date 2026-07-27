@@ -1,0 +1,50 @@
+{
+  "app_type": "general",
+  "app_name": "Contact Center Application",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Contact Center Application",
+      "description": "Embeds Contact Center and reads completed engagements."
+    },
+    "oauth_information": {
+      "usage": "ADMIN_MANAGEMENT",
+      "development_redirect_uri": "https://zcc.example.com/oauth/callback",
+      "production_redirect_uri": "https://zcc.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://zcc.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "contact_center:read:engagement:admin",
+          "optional": false
+        }
+      ],
+      "scope_description": "Read completed Contact Center engagements.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": [
+        "ZOOM_CONTACT_CENTER"
+      ],
+      "development_home_uri": "https://zcc.example.com/",
+      "production_home_uri": "https://zcc.example.com/",
+      "domain_allow_list": [
+        {
+          "domain": "zcc.example.com",
+          "explanation": "Hosts the Contact Center integration."
+        }
+      ],
+      "embed": {
+        "contact_center_sdk": {
+          "enable": true
+        }
+      }
+    }
+  }
+}

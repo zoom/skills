@@ -59,6 +59,10 @@ Official references:
 - General App OAuth setup: https://developers.zoom.us/docs/integrations/create/
 - Server-to-Server OAuth setup: https://developers.zoom.us/docs/internal-apps/create/
 
+For scenario-to-app-type selection, use the
+[Marketplace template selector](marketplace-app-templates.md) or its
+[machine-readable template index](../assets/marketplace-apps/marketplace-manifest-template-index.json).
+
 ## Auth Caveat: App-Owned Marketplace Scopes
 
 Some Marketplace app-management scopes require an app-owned access token from the OAuth
@@ -363,6 +367,11 @@ Export manifest:
 GET /v2/marketplace/apps/{appId}/manifest
 ```
 
+For the complete export, validate, full-replacement update, and read-back sequence, use
+[Marketplace Manifest Update Workflow](marketplace-manifest-update-workflow.md). For automated
+scenario selection, use the machine-readable
+[Marketplace template index](../assets/marketplace-apps/marketplace-manifest-template-index.json).
+
 Response shape:
 
 ```json
@@ -656,7 +665,7 @@ Observed validation and routing behavior:
 | `publish` or unknown top-level fields | `201`, fields ignored | Send only S2S-native fields |
 | Missing `contact_email` | `404`, code `1500`, missing required fields | Validate required fields client-side |
 | S2S sent to `POST /v2/marketplace/apps` | `404`, code `1500` directing account route | Use `/v2/accounts/{accountId}/marketplace/apps` |
-| Delete through `DELETE /v2/marketplace/apps/{appId}` | `200`, empty body | Accept `200` even though the schema documents `204` |
+| Delete through `DELETE /v2/marketplace/apps/{appId}` | `200`, empty body | Accept `200` even though the schema documents `204`; verify removal with `GET /v2/marketplace/apps?type=account_created` |
 
 Token exchange after active S2S creation:
 
@@ -695,6 +704,19 @@ S2S manifest capability was tested with an active S2S token containing
 Therefore, do not use the generic `app_type: "OAuthApp"` returned by the information endpoint
 as proof that an S2S app is a General App. S2S configuration is managed through native fields
 and scopes; General App manifest export/update does not apply.
+
+### Delete Verification
+
+Treat the delete response as an acknowledgement, not the final cleanup assertion. After
+`DELETE /v2/marketplace/apps/{appId}` returns `200`, query:
+
+```text
+GET /v2/marketplace/apps?type=account_created&page_size=30
+```
+
+Confirm the deleted `app_id` is absent. A July 14, 2026 cleanup verified that two leftover S2S
+probe apps disappeared only after this account-created listing check. Do not delete by app name
+alone; use the exact `app_id` returned by the listing or create response.
 
 ## Coverage
 

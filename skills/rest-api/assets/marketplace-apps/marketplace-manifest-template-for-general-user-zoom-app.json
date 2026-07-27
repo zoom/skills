@@ -1,0 +1,71 @@
+{
+  "app_type": "general",
+  "app_name": "In-Client Zoom App",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "In-Client Zoom App",
+      "description": "Runs inside Zoom Workplace and meetings."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://zoomapp.example.com/oauth/callback",
+      "production_redirect_uri": "https://zoomapp.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://zoomapp.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "zoomapp:inmeeting",
+          "optional": false
+        },
+        {
+          "scope": "user:read:email",
+          "optional": false
+        }
+      ],
+      "scope_description": "Run in the meeting client and identify the authorizing user.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": [
+        "ZOOM_MEETING"
+      ],
+      "development_home_uri": "https://zoomapp.example.com/",
+      "production_home_uri": "https://zoomapp.example.com/",
+      "domain_allow_list": [
+        {
+          "domain": "zoomapp.example.com",
+          "explanation": "Hosts the in-client Zoom App."
+        }
+      ],
+      "in_client_feature": {
+        "zoom_app_api": {
+          "enable": true,
+          "zoom_app_apis": [
+            "getSupportedJsApis",
+            "getMeetingContext",
+            "getUserContext"
+          ]
+        },
+        "guest_mode": {
+          "enable": false,
+          "enable_test_guest_mode": false
+        },
+        "in_client_oauth": {
+          "enable": true
+        },
+        "collaborate_mode": {
+          "enable": false,
+          "enable_screen_sharing": false,
+          "enable_play_together": false
+        }
+      }
+    }
+  }
+}

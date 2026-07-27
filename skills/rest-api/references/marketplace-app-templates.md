@@ -5,6 +5,15 @@ for a known scenario. Most files are POST-ready create requests. Templates marke
 require feature setup in Marketplace after creation because the public create or manifest schema
 does not encode the complete feature.
 
+The canonical filenames intentionally include `marketplace-manifest-template-for` or
+`marketplace-app-creation-template-for` so an MCP client can distinguish a General App manifest
+from a native S2S or Meeting SDK create request. The machine-readable selector is
+[marketplace-manifest-template-index.json](../assets/marketplace-apps/marketplace-manifest-template-index.json).
+
+For existing General Apps, use the complete read/validate/replace workflow in
+[Marketplace Manifest Update Workflow](marketplace-manifest-update-workflow.md). Do not apply a
+static template directly to an existing app without exporting its current manifest first.
+
 ## App-Type Compatibility
 
 | Scenario | General user-managed | General admin-managed | S2S OAuth | Other required type |
@@ -37,39 +46,44 @@ Meeting/Webinar RTMS is specifically user-managed. Contact Center Voice RTMS is 
 can use General or S2S depending on whether the workflow acts for a user or the account. Plugin
 SDK requires a user OAuth token matching the user signed in to Zoom Workplace.
 
+The compatibility rules are machine-readable in
+[marketplace-manifest-template-index.json](../assets/marketplace-apps/marketplace-manifest-template-index.json).
+An MCP client must check `app_type`, `usage`, `unsupported_app_types`, and
+`supports_manifest_update` before selecting a file. Matching scopes alone is not sufficient.
+
 ## Template Selector
 
 | Scenario | Template | App model | Primary skill |
 |----------|----------|-----------|---------------|
-| S2S Meeting/account API | [create-s2s-oauth.json](../assets/marketplace-apps/create-s2s-oauth.json) | Server-to-Server OAuth | [OAuth](../../oauth/SKILL.md) |
-| S2S Contact Center API | [create-s2s-contact-center-api.json](../assets/marketplace-apps/create-s2s-contact-center-api.json) | Server-to-Server OAuth | [Contact Center](../../contact-center/SKILL.md) |
-| S2S Phone API | [create-s2s-phone-api.json](../assets/marketplace-apps/create-s2s-phone-api.json) | Server-to-Server OAuth | [Phone](../../phone/SKILL.md) |
-| S2S Team Chat admin API | [create-s2s-team-chat-api.json](../assets/marketplace-apps/create-s2s-team-chat-api.json) | Server-to-Server OAuth | [Team Chat](../../team-chat/SKILL.md) |
-| S2S webhook event base | [create-s2s-webhooks.json](../assets/marketplace-apps/create-s2s-webhooks.json) | Server-to-Server OAuth, then Access UI | [Webhooks](../../webhooks/SKILL.md) |
-| S2S WebSocket event base | [create-s2s-websocket.json](../assets/marketplace-apps/create-s2s-websocket.json) | Server-to-Server OAuth, then Access UI | [WebSockets](../../websockets/SKILL.md) |
-| S2S Contact Center Voice RTMS | [create-s2s-zcc-voice-rtms.json](../assets/marketplace-apps/create-s2s-zcc-voice-rtms.json) | Server-to-Server OAuth, then RTMS events | [RTMS](../../rtms/SKILL.md) |
-| Embed Zoom meetings | [create-meeting-sdk.json](../assets/marketplace-apps/create-meeting-sdk.json) | Meeting SDK | [Meeting SDK](../../meeting-sdk/SKILL.md) |
-| User-authorized REST API | [general-user-api.json](../assets/marketplace-apps/general-user-api.json) | General App, user-managed | [REST API](../SKILL.md) |
-| Account-wide REST API | [general-admin-api.json](../assets/marketplace-apps/general-admin-api.json) | General App, admin-managed | [REST API](../SKILL.md) |
-| In-client Zoom App | [zoom-app.json](../assets/marketplace-apps/zoom-app.json) | General App with Zoom Apps surface | [Zoom Apps SDK](../../zoom-apps-sdk/SKILL.md) |
-| Native Plugin SDK companion | [plugin-sdk.json](../assets/marketplace-apps/plugin-sdk.json) | General App, user-managed with PKCE | [Plugin SDK](../../plugin-sdk/SKILL.md) |
-| User-authorized Team Chat API | [team-chat-api.json](../assets/marketplace-apps/team-chat-api.json) | General App, user-managed | [Team Chat](../../team-chat/SKILL.md) |
-| Admin-authorized Team Chat API | [team-chat-admin-api.json](../assets/marketplace-apps/team-chat-admin-api.json) | General App, admin-managed | [Team Chat](../../team-chat/SKILL.md) |
-| Team Chat chatbot | [team-chat-chatbot.json](../assets/marketplace-apps/team-chat-chatbot.json) | General App with Chat subscription | [Team Chat](../../team-chat/SKILL.md) |
-| Contact Center admin API | [contact-center.json](../assets/marketplace-apps/contact-center.json) | General App, admin-managed | [Contact Center](../../contact-center/SKILL.md) |
-| Zoom Phone API | [phone-api.json](../assets/marketplace-apps/phone-api.json) | General App, admin-managed | [Phone](../../phone/SKILL.md) |
-| User meeting webhooks | [general-user-webhooks.json](../assets/marketplace-apps/general-user-webhooks.json) | General App, user-managed | [Webhooks](../../webhooks/SKILL.md) |
-| Meeting webhooks | [meeting-webhooks.json](../assets/marketplace-apps/meeting-webhooks.json) | General App with event subscription | [Webhooks](../../webhooks/SKILL.md) |
-| General App WebSocket event base | [general-admin-websocket.json](../assets/marketplace-apps/general-admin-websocket.json) | General App admin, then Access UI | [WebSockets](../../websockets/SKILL.md) |
-| Meeting/Webinar RTMS, excluding ZCC | [general-user-meeting-webinar-rtms.json](../assets/marketplace-apps/general-user-meeting-webinar-rtms.json) | General App user, then RTMS events | [RTMS](../../rtms/SKILL.md) |
-| Contact Center Voice RTMS | [zcc-voice-rtms.json](../assets/marketplace-apps/zcc-voice-rtms.json) | General App with ZCC RTMS events | [RTMS](../../rtms/SKILL.md) |
-| Default Zoom MCP server | [zoom-mcp-default.json](../assets/marketplace-apps/zoom-mcp-default.json) | General App, user-managed with PKCE | [Zoom MCP](../../zoom-mcp/SKILL.md) |
-| Meetings MCP server | [zoom-mcp-meetings.json](../assets/marketplace-apps/zoom-mcp-meetings.json) | General App, user-managed with PKCE | [Meetings MCP](../../zoom-mcp/meetings/SKILL.md) |
-| Zoom Docs MCP server | [zoom-mcp-docs.json](../assets/marketplace-apps/zoom-mcp-docs.json) | General App, user-managed with PKCE | [Docs MCP](../../zoom-mcp/docs/SKILL.md) |
-| Zoom Tasks MCP server | [zoom-mcp-tasks.json](../assets/marketplace-apps/zoom-mcp-tasks.json) | General App, user-managed with PKCE | [Tasks MCP](../../zoom-mcp/tasks/SKILL.md) |
-| Revenue Accelerator MCP server | [zoom-mcp-revenue-accelerator.json](../assets/marketplace-apps/zoom-mcp-revenue-accelerator.json) | General App, user-managed with PKCE | [Revenue Accelerator MCP](../../zoom-mcp/revenue-accelerator/SKILL.md) |
-| Team Chat MCP server | [zoom-mcp-team-chat.json](../assets/marketplace-apps/zoom-mcp-team-chat.json) | General App, user-managed with PKCE | [Team Chat MCP](../../zoom-mcp/team-chat/SKILL.md) |
-| Whiteboard MCP server | [zoom-mcp-whiteboard.json](../assets/marketplace-apps/zoom-mcp-whiteboard.json) | General App, user-managed with PKCE | [Whiteboard MCP](../../zoom-mcp/whiteboard/SKILL.md) |
+| S2S Meeting/account API | [marketplace-app-creation-template-for-s2s-api.json](../assets/marketplace-apps/marketplace-app-creation-template-for-s2s-api.json) | Server-to-Server OAuth | [OAuth](../../oauth/SKILL.md) |
+| S2S Contact Center API | [marketplace-app-creation-template-for-s2s-contact-center-api.json](../assets/marketplace-apps/marketplace-app-creation-template-for-s2s-contact-center-api.json) | Server-to-Server OAuth | [Contact Center](../../contact-center/SKILL.md) |
+| S2S Phone API | [marketplace-app-creation-template-for-s2s-phone-api.json](../assets/marketplace-apps/marketplace-app-creation-template-for-s2s-phone-api.json) | Server-to-Server OAuth | [Phone](../../phone/SKILL.md) |
+| S2S Team Chat admin API | [marketplace-app-creation-template-for-s2s-team-chat-api.json](../assets/marketplace-apps/marketplace-app-creation-template-for-s2s-team-chat-api.json) | Server-to-Server OAuth | [Team Chat](../../team-chat/SKILL.md) |
+| S2S webhook event base | [marketplace-app-creation-template-for-s2s-webhooks.json](../assets/marketplace-apps/marketplace-app-creation-template-for-s2s-webhooks.json) | Server-to-Server OAuth, then Access UI | [Webhooks](../../webhooks/SKILL.md) |
+| S2S WebSocket event base | [marketplace-app-creation-template-for-s2s-websocket.json](../assets/marketplace-apps/marketplace-app-creation-template-for-s2s-websocket.json) | Server-to-Server OAuth, then Access UI | [WebSockets](../../websockets/SKILL.md) |
+| S2S Contact Center Voice RTMS | [marketplace-app-creation-template-for-s2s-zcc-voice-rtms.json](../assets/marketplace-apps/marketplace-app-creation-template-for-s2s-zcc-voice-rtms.json) | Server-to-Server OAuth, then RTMS events | [RTMS](../../rtms/SKILL.md) |
+| Embed Zoom meetings | [marketplace-app-creation-template-for-meeting-sdk.json](../assets/marketplace-apps/marketplace-app-creation-template-for-meeting-sdk.json) | Meeting SDK | [Meeting SDK](../../meeting-sdk/SKILL.md) |
+| User-authorized REST API | [marketplace-manifest-template-for-general-user-api.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-user-api.json) | General App, user-managed | [REST API](../SKILL.md) |
+| Account-wide REST API | [marketplace-manifest-template-for-general-admin-api.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-admin-api.json) | General App, admin-managed | [REST API](../SKILL.md) |
+| In-client Zoom App | [marketplace-manifest-template-for-general-user-zoom-app.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-user-zoom-app.json) | General App with Zoom Apps surface | [Zoom Apps SDK](../../zoom-apps-sdk/SKILL.md) |
+| Native Plugin SDK companion | [marketplace-manifest-template-for-general-user-plugin-sdk.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-user-plugin-sdk.json) | General App, user-managed with PKCE | [Plugin SDK](../../plugin-sdk/SKILL.md) |
+| User-authorized Team Chat API | [marketplace-manifest-template-for-general-user-team-chat-api.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-user-team-chat-api.json) | General App, user-managed | [Team Chat](../../team-chat/SKILL.md) |
+| Admin-authorized Team Chat API | [marketplace-manifest-template-for-general-admin-team-chat-api.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-admin-team-chat-api.json) | General App, admin-managed | [Team Chat](../../team-chat/SKILL.md) |
+| Team Chat chatbot | [marketplace-manifest-template-for-general-admin-team-chat-chatbot.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-admin-team-chat-chatbot.json) | General App with Chat subscription | [Team Chat](../../team-chat/SKILL.md) |
+| Contact Center admin API | [marketplace-manifest-template-for-general-admin-contact-center-api.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-admin-contact-center-api.json) | General App, admin-managed | [Contact Center](../../contact-center/SKILL.md) |
+| Zoom Phone API | [marketplace-manifest-template-for-general-admin-phone-api.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-admin-phone-api.json) | General App, admin-managed | [Phone](../../phone/SKILL.md) |
+| User meeting webhooks | [marketplace-manifest-template-for-general-user-webhooks.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-user-webhooks.json) | General App, user-managed | [Webhooks](../../webhooks/SKILL.md) |
+| Meeting webhooks | [marketplace-manifest-template-for-general-admin-webhooks.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-admin-webhooks.json) | General App with event subscription | [Webhooks](../../webhooks/SKILL.md) |
+| General App WebSocket event base | [marketplace-manifest-template-for-general-admin-websocket.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-admin-websocket.json) | General App admin, then Access UI | [WebSockets](../../websockets/SKILL.md) |
+| Meeting/Webinar RTMS, excluding ZCC | [marketplace-manifest-template-for-general-user-meeting-webinar-rtms.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-user-meeting-webinar-rtms.json) | General App user, then RTMS events | [RTMS](../../rtms/SKILL.md) |
+| Contact Center Voice RTMS | [marketplace-manifest-template-for-general-admin-zcc-voice-rtms.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-admin-zcc-voice-rtms.json) | General App with ZCC RTMS events | [RTMS](../../rtms/SKILL.md) |
+| Default Zoom MCP server | [marketplace-manifest-template-for-mcp-default.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-default.json) | General App, user-managed with PKCE | [Zoom MCP](../../zoom-mcp/SKILL.md) |
+| Meetings MCP server | [marketplace-manifest-template-for-mcp-meetings.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-meetings.json) | General App, user-managed with PKCE | [Meetings MCP](../../zoom-mcp/meetings/SKILL.md) |
+| Zoom Docs MCP server | [marketplace-manifest-template-for-mcp-docs.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-docs.json) | General App, user-managed with PKCE | [Docs MCP](../../zoom-mcp/docs/SKILL.md) |
+| Zoom Tasks MCP server | [marketplace-manifest-template-for-mcp-tasks.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-tasks.json) | General App, user-managed with PKCE | [Tasks MCP](../../zoom-mcp/tasks/SKILL.md) |
+| Revenue Accelerator MCP server | [marketplace-manifest-template-for-mcp-revenue-accelerator.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-revenue-accelerator.json) | General App, user-managed with PKCE | [Revenue Accelerator MCP](../../zoom-mcp/revenue-accelerator/SKILL.md) |
+| Team Chat MCP server | [marketplace-manifest-template-for-mcp-team-chat.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-team-chat.json) | General App, user-managed with PKCE | [Team Chat MCP](../../zoom-mcp/team-chat/SKILL.md) |
+| Whiteboard MCP server | [marketplace-manifest-template-for-mcp-whiteboard.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-whiteboard.json) | General App, user-managed with PKCE | [Whiteboard MCP](../../zoom-mcp/whiteboard/SKILL.md) |
 
 ## Skill Coverage Audit
 
@@ -82,13 +96,13 @@ product's app model unless the child skill states otherwise.
 | `general` | Routes to the selector and generic General user, General admin, and S2S templates. |
 | `oauth` | Covered by generic General user, General admin, and S2S templates; select by grant and scope ownership. |
 | `rest-api` | Covered by generic API templates plus Contact Center, Phone, Team Chat, webhook, and WebSocket variants. |
-| `meeting-sdk` | Uses the dedicated [Meeting SDK create request](../assets/marketplace-apps/create-meeting-sdk.json). All platform children inherit it. |
+| `meeting-sdk` | Uses the dedicated [Meeting SDK create request](../assets/marketplace-apps/marketplace-app-creation-template-for-meeting-sdk.json). All platform children inherit it. |
 | `video-sdk` | Uses Build Platform SDK credentials, not a supported Marketplace app-generation payload. All platform children inherit it. |
 | `ui-toolkit` | Uses the same Build Platform Video SDK app and session JWT as `video-sdk`. |
 | `cobrowse-sdk` | Uses the Build Platform app's Cobrowse credentials; do not create a General App manifest for the SDK session. |
 | `probe-sdk` | Requires no Zoom Marketplace credentials for core diagnostics. |
-| `zoom-apps-sdk` | Covered by [zoom-app.json](../assets/marketplace-apps/zoom-app.json). |
-| `plugin-sdk` | Covered by [plugin-sdk.json](../assets/marketplace-apps/plugin-sdk.json). |
+| `zoom-apps-sdk` | Covered by [marketplace-manifest-template-for-general-user-zoom-app.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-user-zoom-app.json). |
+| `plugin-sdk` | Covered by [marketplace-manifest-template-for-general-user-plugin-sdk.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-user-plugin-sdk.json). |
 | `rtms` | Covered for Meeting/Webinar General App, ZCC Voice General/S2S, and Build Platform Video SDK RTMS. |
 | `team-chat` | Covered for user API, admin API, S2S API, and chatbot scenarios. |
 | `webhooks` | Covered for General user, General admin, and S2S starters; Build Platform events remain configured on the Build app. |
@@ -150,6 +164,11 @@ token.
    test artifacts.
 8. Fetch the created app or exported General App manifest and compare it with the intended
    configuration because Marketplace can normalize or omit fields.
+
+For an existing General App, do not use the create workflow as an update shortcut. Follow
+[Marketplace Manifest Update Workflow](marketplace-manifest-update-workflow.md), which exports
+the current manifest, validates the complete candidate, replaces the full configuration, and
+reads the result back.
 
 ## Required Post-Create Setup
 

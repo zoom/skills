@@ -55,7 +55,7 @@ The application does not render or transport meeting media itself. It sends supp
 > [Marketplace app management](../rest-api/references/marketplace-apps.md) for manifest
 > validation, `plugin_sdk` feature shape, PKCE/public-client settings, redirect URL rules,
 > and credential response shapes before wiring Plugin SDK auth. Start from the
-> [Plugin SDK template](../rest-api/assets/marketplace-apps/plugin-sdk.json).
+> [Plugin SDK template](../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-general-user-plugin-sdk.json).
 
 ## OAuth Token Exchange
 

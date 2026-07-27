@@ -59,7 +59,7 @@ package snapshots in this repository.
 > [Marketplace app management](../rest-api/references/marketplace-apps.md) for app creation,
 > manifest validation, app-type quirks, and credential response shapes before generating
 > Meeting SDK signatures. Start from the
-> [Meeting SDK create template](../rest-api/assets/marketplace-apps/create-meeting-sdk.json).
+> [Meeting SDK create template](../rest-api/assets/marketplace-apps/marketplace-app-creation-template-for-meeting-sdk.json).
 
 > **Need help with OAuth or signatures?** See the **[zoom-oauth](../oauth/SKILL.md)** skill for authentication flows.
 

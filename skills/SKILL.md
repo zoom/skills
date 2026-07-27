@@ -66,6 +66,10 @@ creation, app type selection, manifest validation, scopes, event subscriptions, 
 credential retrieval, route first to
 [Marketplace app management](rest-api/references/marketplace-apps.md), then return to
 the product skill.
+For automated selection, read the
+[Marketplace template index](rest-api/assets/marketplace-apps/marketplace-manifest-template-index.json).
+Use the [manifest update workflow](rest-api/references/marketplace-manifest-update-workflow.md)
+for existing General Apps; S2S and Meeting SDK entries are create requests, not General App manifests.
 
 ## Skill Discovery (Integrated)
 

@@ -99,7 +99,7 @@ The Zoom Apps SDK (`@zoom/appssdk`) provides JavaScript APIs for web apps runnin
 > [Marketplace app management](../rest-api/references/marketplace-apps.md) for General App
 > manifest validation, product/surface fields, domain allow-list object shape, Zoom Apps
 > scopes, app-owned credentials, and Marketplace review quirks. Start from the
-> [Zoom App template](../rest-api/assets/marketplace-apps/zoom-app.json).
+> [Zoom App template](../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-general-user-zoom-app.json).
 
 ## Quick Start
 

@@ -1,0 +1,29 @@
+{
+  "app_type": "general",
+  "app_name": "Zoom Docs MCP Connector",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Zoom Docs MCP Connector",
+      "description": "Authorizes document creation and content retrieval through Zoom Docs MCP."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "production_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "oauth_allow_list": ["https://mcp-client.example.com/oauth/callback"],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        { "scope": "docs:write:import", "optional": false },
+        { "scope": "docs:read:export", "optional": false }
+      ],
+      "scope_description": "Use the dedicated Zoom Docs MCP tools for the authorizing user.",
+      "enable_private_pkce_client": true,
+      "enable_public_pkce_client": false
+    },
+    "features": { "products": [] }
+  }
+}

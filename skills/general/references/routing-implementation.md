@@ -238,15 +238,16 @@ function buildResourceHints(primary: SkillId, s: Signals): string[] {
 
   if (mcpIntent) {
     hints.push('rest-api/references/marketplace-app-templates.md');
+    hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-index.json');
     hints.push('zoom-mcp/concepts/oauth-setup.md');
   }
-  if (s.meetingsMcp) hints.push('rest-api/assets/marketplace-apps/zoom-mcp-meetings.json');
-  else if (s.docsMcp) hints.push('rest-api/assets/marketplace-apps/zoom-mcp-docs.json');
-  else if (s.tasksMcp) hints.push('rest-api/assets/marketplace-apps/zoom-mcp-tasks.json');
-  else if (s.revenueMcp) hints.push('rest-api/assets/marketplace-apps/zoom-mcp-revenue-accelerator.json');
-  else if (s.teamChatMcp) hints.push('rest-api/assets/marketplace-apps/zoom-mcp-team-chat.json');
-  else if (s.whiteboardMcp) hints.push('rest-api/assets/marketplace-apps/zoom-mcp-whiteboard.json');
-  else if (s.mcp) hints.push('rest-api/assets/marketplace-apps/zoom-mcp-default.json');
+  if (s.meetingsMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-meetings.json');
+  else if (s.docsMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-docs.json');
+  else if (s.tasksMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-tasks.json');
+  else if (s.revenueMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-revenue-accelerator.json');
+  else if (s.teamChatMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-team-chat.json');
+  else if (s.whiteboardMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-whiteboard.json');
+  else if (s.mcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-default.json');
 
   if (primary === 'zoom-plugin-sdk' || primary === 'zoom-plugin-sdk-macos' || primary === 'zoom-plugin-sdk-windows' || s.pluginSdk || s.pluginMacos || s.pluginWindows) {
     hints.push('plugin-sdk/faq.md');

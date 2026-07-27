@@ -1,0 +1,11 @@
+{
+  "app_type": "s2s_oauth",
+  "app_name": "S2S Meeting Webhook Service",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "active": true,
+  "scopes": [
+    "meeting:read:meeting:admin"
+  ]
+}

@@ -129,7 +129,7 @@ RTMS is a data pipeline that gives your app access to live media from Zoom meeti
 > [Marketplace app management](../rest-api/references/marketplace-apps.md) before RTMS
 > implementation. It documents General App manifests, event subscription API behavior,
 > app-owned `client_credentials`, and RTMS event validation drift. Use the user-managed
-> [Meeting/Webinar RTMS template](../rest-api/assets/marketplace-apps/general-user-meeting-webinar-rtms.json),
+> [Meeting/Webinar RTMS template](../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-general-user-meeting-webinar-rtms.json),
 > or the General App or S2S Contact Center Voice templates in the
 > [template selector](../rest-api/references/marketplace-app-templates.md).
 

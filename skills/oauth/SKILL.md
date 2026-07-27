@@ -48,7 +48,9 @@ Quick navigation:
 > creation, manifest validation, app type selection, app-owned Marketplace scopes, and credential
 > response shapes before implementing token flows. Use the
 > [template selector](../rest-api/references/marketplace-app-templates.md) for S2S, user-managed,
-> admin-managed, and app-owned credential scenarios.
+> admin-managed, and app-owned credential scenarios. Automation services should also inspect the
+> [machine-readable template index](../rest-api/assets/marketplace-apps/marketplace-manifest-template-index.json)
+> before selecting an app type.
 
 ## Four Authorization Use Cases
 

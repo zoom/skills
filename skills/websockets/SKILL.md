@@ -48,8 +48,8 @@ Receive real-time event notifications from Zoom via persistent WebSocket connect
 > [Marketplace app management](../rest-api/references/marketplace-apps.md) for app creation,
 > manifest validation, app-owned WebSocket/event subscription scopes, and the `WEB_SOCKET`
 > subscription enum before connecting. Start from the
-> [General admin](../rest-api/assets/marketplace-apps/general-admin-websocket.json) or
-> [S2S](../rest-api/assets/marketplace-apps/create-s2s-websocket.json) WebSocket base, then
+> [General admin](../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-general-admin-websocket.json) or
+> [S2S](../rest-api/assets/marketplace-apps/marketplace-app-creation-template-for-s2s-websocket.json) WebSocket base, then
 > select the WebSocket delivery method under Features > Access.
 
 > **Need help with S2S OAuth?** See the **[zoom-oauth](../oauth/SKILL.md)** skill for complete authentication flows.

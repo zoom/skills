@@ -1,0 +1,67 @@
+{
+  "app_type": "general",
+  "app_name": "Team Chat Chatbot",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Team Chat Chatbot",
+      "description": "Receives slash commands and sends chatbot messages."
+    },
+    "oauth_information": {
+      "usage": "ADMIN_MANAGEMENT",
+      "development_redirect_uri": "https://bot.example.com/oauth/callback",
+      "production_redirect_uri": "https://bot.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://bot.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "imchat:bot",
+          "optional": false
+        }
+      ],
+      "scope_description": "Receive Team Chat commands and send chatbot messages.",
+      "enable_private_pkce_client": false,
+      "enable_public_pkce_client": false
+    },
+    "features": {
+      "products": [
+        "ZOOM_CHAT"
+      ],
+      "development_home_uri": "https://bot.example.com/",
+      "production_home_uri": "https://bot.example.com/",
+      "domain_allow_list": [
+        {
+          "domain": "bot.example.com",
+          "explanation": "Hosts the chatbot OAuth and message endpoints."
+        }
+      ],
+      "team_chat_subscription": {
+        "enable": true,
+        "enable_support_channel": false,
+        "slash_command": {
+          "command": "replace-me-bot",
+          "command_hints": [
+            {
+              "description": "Ask the bot for help.",
+              "usage_hint": "help"
+            }
+          ],
+          "enable_add_to_channel": true,
+          "development_message_url": "https://bot.example.com/zoom/chat/events",
+          "production_message_url": "https://bot.example.com/zoom/chat/events",
+          "sender_type": "zoom",
+          "welcome_msg": {
+            "title": "Chatbot installed",
+            "body": "Type /replace-me-bot help to begin."
+          }
+        },
+        "shortcuts": []
+      }
+    }
+  }
+}

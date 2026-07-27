@@ -39,7 +39,7 @@ when deterministic editing or block-level control is required.
 
 ## Chaining
 
-- Marketplace app creation: [Docs MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-docs.json)
+- Marketplace app creation: [Docs MCP template](../../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-docs.json)
   via [Marketplace app management](../../rest-api/references/marketplace-apps.md)
 - Token acquisition: create the app first, then use [OAuth and PKCE](../../oauth/SKILL.md) to
   authorize the user and mint the bearer token supplied to this MCP endpoint

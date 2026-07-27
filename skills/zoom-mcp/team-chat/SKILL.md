@@ -39,7 +39,7 @@ The repo MCP bundle registers this as `zoom-team-chat-mcp` in [../../../.mcp.jso
 
 - OAuth bearer tokens are passed through the MCP `Authorization` header.
 - Start app registration from the
-  [Team Chat MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-team-chat.json).
+  [Team Chat MCP template](../../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-team-chat.json).
 - Protected-resource metadata is available through both `mcp_chat` and the legacy
   `mcp_team_chat` resource name.
 - The server is scoped to the caller's account and subject to Team Chat policy restrictions.
@@ -159,7 +159,7 @@ zoom_chat_channel_members_add
 
 ## Chaining
 
-- Marketplace app creation: [Team Chat MCP template](../../rest-api/assets/marketplace-apps/zoom-mcp-team-chat.json)
+- Marketplace app creation: [Team Chat MCP template](../../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-team-chat.json)
   via [Marketplace app management](../../rest-api/references/marketplace-apps.md)
 - Token acquisition: create the app first, then use
   [OAuth guidance](../concepts/oauth-setup.md) to authorize the user and mint the bearer token

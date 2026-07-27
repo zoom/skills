@@ -1,0 +1,8 @@
+{
+  "app_type": "meeting_sdk",
+  "app_name": "Meeting SDK Application",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "publish": false
+}

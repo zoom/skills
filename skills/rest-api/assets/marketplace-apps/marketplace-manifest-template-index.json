@@ -1,0 +1,360 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Machine-readable selector for Zoom Marketplace app manifests and native app creation requests.",
+  "source_of_truth": "The referenced JSON template contains the exact request and scope list. This index supplies compatibility and workflow metadata.",
+  "selection_rules": [
+    "Select by capability and supported app_type before reading scopes.",
+    "Never use a user-operation manifest for account-level work.",
+    "Never use s2s_oauth for Meeting SDK, Zoom Apps, Plugin SDK, Chatbot, MCP, or user-authorized flows.",
+    "Never use meeting_sdk for REST API OAuth, S2S, MCP, or Zoom Apps.",
+    "For General Apps, preserve the complete manifest when updating an existing app.",
+    "Treat the referenced template scopes as the baseline and remove unused scopes before submission.",
+    "App-owned Marketplace scopes are obtained with client_credentials and are not manifest scopes."
+  ],
+  "templates": [
+    {
+      "id": "general-user-api",
+      "file": "marketplace-manifest-template-for-general-user-api.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "required_settings": ["oauth_information", "development_redirect_uri", "production_redirect_uri", "oauth_allow_list", "at_least_one_non_optional_scope"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-admin-api",
+      "file": "marketplace-manifest-template-for-general-admin-api.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "ADMIN_MANAGEMENT",
+      "scope_mode": "admin",
+      "supports_manifest_update": true,
+      "required_settings": ["oauth_information", "admin_scopes", "development_redirect_uri", "production_redirect_uri", "oauth_allow_list"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-user-zoom-app",
+      "file": "marketplace-manifest-template-for-general-user-zoom-app.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "required_settings": ["features.products=ZOOM_MEETING", "features.in_client_feature.zoom_app_api.enable", "zoomapp:inmeeting", "development_home_uri", "production_home_uri", "domain_allow_list"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-user-plugin-sdk",
+      "file": "marketplace-manifest-template-for-general-user-plugin-sdk.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "required_settings": ["features.plugin_sdk.enable", "plugin_sdk:read:connection_meta", "redirect_uri", "PKCE_settings"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-user-team-chat-api",
+      "file": "marketplace-manifest-template-for-general-user-team-chat-api.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "required_settings": ["features.products=ZOOM_CHAT", "user Team Chat scopes"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-admin-team-chat-api",
+      "file": "marketplace-manifest-template-for-general-admin-team-chat-api.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "ADMIN_MANAGEMENT",
+      "scope_mode": "admin",
+      "supports_manifest_update": true,
+      "required_settings": ["features.products=ZOOM_CHAT", "admin Team Chat scopes"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-admin-team-chat-chatbot",
+      "file": "marketplace-manifest-template-for-general-admin-team-chat-chatbot.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "ADMIN_MANAGEMENT",
+      "scope_mode": "admin",
+      "supports_manifest_update": true,
+      "required_settings": ["features.products=ZOOM_CHAT", "imchat:bot", "team_chat_subscription.enable", "unique slash command", "development_message_url", "production_message_url"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-user-meeting-webinar-rtms",
+      "file": "marketplace-manifest-template-for-general-user-meeting-webinar-rtms.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "required_settings": ["features.products=ZOOM_MEETING/ZOOM_WEBINAR", "meeting/webinar RTMS media scopes", "RTMS event subscriptions after creation"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-admin-zcc-voice-rtms",
+      "file": "marketplace-manifest-template-for-general-admin-zcc-voice-rtms.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "ADMIN_MANAGEMENT",
+      "scope_mode": "admin",
+      "supports_manifest_update": true,
+      "required_settings": ["features.products=ZOOM_CONTACT_CENTER", "ZCC Voice RTMS scopes", "contact_center.voice_rtms_* event subscriptions"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-admin-contact-center-api",
+      "file": "marketplace-manifest-template-for-general-admin-contact-center-api.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "ADMIN_MANAGEMENT",
+      "scope_mode": "admin",
+      "supports_manifest_update": true,
+      "required_settings": ["features.products=ZOOM_CONTACT_CENTER", "Contact Center admin scopes"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-admin-phone-api",
+      "file": "marketplace-manifest-template-for-general-admin-phone-api.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "ADMIN_MANAGEMENT",
+      "scope_mode": "admin",
+      "supports_manifest_update": true,
+      "required_settings": ["features.products=ZOOM_PHONE", "Phone admin scopes"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-user-webhooks",
+      "file": "marketplace-manifest-template-for-general-user-webhooks.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "required_settings": ["event_subscription.enable", "EVENT_FOR_USER", "development_webhook_url", "production_webhook_url", "event verification secret"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "general-admin-webhooks",
+      "file": "marketplace-manifest-template-for-general-admin-webhooks.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "ADMIN_MANAGEMENT",
+      "scope_mode": "admin",
+      "supports_manifest_update": true,
+      "required_settings": ["event_subscription.enable", "EVENT_FOR_ADMIN", "development_webhook_url", "production_webhook_url", "event verification secret"],
+      "unsupported_app_types": ["meeting_sdk"]
+    },
+    {
+      "id": "general-admin-websocket",
+      "file": "marketplace-manifest-template-for-general-admin-websocket.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "ADMIN_MANAGEMENT",
+      "scope_mode": "admin",
+      "supports_manifest_update": true,
+      "required_settings": ["account event subscription", "delivery method WEB_SOCKET", "app-owned WebSocket scopes through client_credentials"],
+      "unsupported_app_types": ["general user", "meeting_sdk"]
+    },
+    {
+      "id": "mcp-default",
+      "file": "marketplace-manifest-template-for-mcp-default.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "requires_pkce": true,
+      "required_settings": ["exact default MCP tool scopes", "MCP client redirect URI", "oauth_allow_list"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "mcp-meetings",
+      "file": "marketplace-manifest-template-for-mcp-meetings.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "requires_pkce": true,
+      "required_settings": ["meeting search/assets scopes", "recording list/content scopes", "MCP client redirect URI"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "mcp-docs",
+      "file": "marketplace-manifest-template-for-mcp-docs.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "requires_pkce": true,
+      "required_settings": ["docs import/export scopes", "MCP client redirect URI"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "mcp-tasks",
+      "file": "marketplace-manifest-template-for-mcp-tasks.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "requires_pkce": true,
+      "required_settings": ["exact Tasks read/write/update/delete scopes", "MCP client redirect URI"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "mcp-team-chat",
+      "file": "marketplace-manifest-template-for-mcp-team-chat.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "requires_pkce": true,
+      "required_settings": ["Team Chat/channel read/write scopes", "MCP client redirect URI"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "mcp-whiteboard",
+      "file": "marketplace-manifest-template-for-mcp-whiteboard.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "requires_pkce": true,
+      "required_settings": ["Whiteboard read/write/collaborator scopes", "MCP client redirect URI"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "mcp-revenue-accelerator",
+      "file": "marketplace-manifest-template-for-mcp-revenue-accelerator.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "requires_pkce": true,
+      "required_settings": ["ZRA scopes", "ZRA entitlement", "MCP client redirect URI"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "s2s-api",
+      "file": "marketplace-app-creation-template-for-s2s-api.json",
+      "kind": "create_request",
+      "app_type": "s2s_oauth",
+      "scope_mode": "account",
+      "supports_manifest_update": false,
+      "required_settings": ["active", "account/admin scopes", "account-scoped creation endpoint"],
+      "unsupported_app_types": ["general", "meeting_sdk"]
+    },
+    {
+      "id": "s2s-team-chat-api",
+      "file": "marketplace-app-creation-template-for-s2s-team-chat-api.json",
+      "kind": "create_request",
+      "app_type": "s2s_oauth",
+      "scope_mode": "account",
+      "supports_manifest_update": false,
+      "required_settings": ["admin Team Chat scopes", "account_credentials token"],
+      "unsupported_app_types": ["general", "meeting_sdk"]
+    },
+    {
+      "id": "s2s-phone-api",
+      "file": "marketplace-app-creation-template-for-s2s-phone-api.json",
+      "kind": "create_request",
+      "app_type": "s2s_oauth",
+      "scope_mode": "account",
+      "supports_manifest_update": false,
+      "required_settings": ["Phone admin scopes", "account_credentials token"],
+      "unsupported_app_types": ["general", "meeting_sdk"]
+    },
+    {
+      "id": "s2s-contact-center-api",
+      "file": "marketplace-app-creation-template-for-s2s-contact-center-api.json",
+      "kind": "create_request",
+      "app_type": "s2s_oauth",
+      "scope_mode": "account",
+      "supports_manifest_update": false,
+      "required_settings": ["Contact Center admin scopes", "account_credentials token"],
+      "unsupported_app_types": ["general", "meeting_sdk"]
+    },
+    {
+      "id": "s2s-webhooks",
+      "file": "marketplace-app-creation-template-for-s2s-webhooks.json",
+      "kind": "create_request",
+      "app_type": "s2s_oauth",
+      "scope_mode": "account",
+      "supports_manifest_update": false,
+      "required_settings": ["account event subscription after creation", "webhook URL and secret"],
+      "unsupported_app_types": ["general", "meeting_sdk"]
+    },
+    {
+      "id": "s2s-websocket",
+      "file": "marketplace-app-creation-template-for-s2s-websocket.json",
+      "kind": "create_request",
+      "app_type": "s2s_oauth",
+      "scope_mode": "account",
+      "supports_manifest_update": false,
+      "required_settings": ["account event subscription after creation", "delivery method WEB_SOCKET", "app-owned WebSocket scopes"],
+      "unsupported_app_types": ["general", "meeting_sdk"]
+    },
+    {
+      "id": "s2s-zcc-voice-rtms",
+      "file": "marketplace-app-creation-template-for-s2s-zcc-voice-rtms.json",
+      "kind": "create_request",
+      "app_type": "s2s_oauth",
+      "scope_mode": "account",
+      "supports_manifest_update": false,
+      "required_settings": ["ZCC Voice RTMS scopes", "Contact Center Voice RTMS events after creation"],
+      "unsupported_app_types": ["general", "meeting_sdk"]
+    },
+    {
+      "id": "meeting-sdk",
+      "file": "marketplace-app-creation-template-for-meeting-sdk.json",
+      "kind": "create_request",
+      "app_type": "meeting_sdk",
+      "scope_mode": "sdk_credentials",
+      "supports_manifest_update": false,
+      "required_settings": ["publish", "contact fields", "Meeting SDK Client ID and Client Secret"],
+      "unsupported_app_types": ["general", "s2s_oauth"]
+    }
+  ],
+  "not_supported_by_manifest_automation": [
+    {
+      "id": "video-sdk",
+      "reason": "Uses Video SDK or Build Platform credentials; no supported General App manifest template in this catalog."
+    },
+    {
+      "id": "video-sdk-rtms",
+      "reason": "Uses Video SDK Build Platform/session configuration; do not create a fake Marketplace manifest."
+    },
+    {
+      "id": "video-sdk-ui-toolkit",
+      "reason": "Uses Video SDK credentials and session JWTs; no supported manifest automation template."
+    },
+    {
+      "id": "ai-services",
+      "reason": "Uses Build Platform API credentials and JWT authentication."
+    },
+    {
+      "id": "cobrowse-sdk",
+      "reason": "Uses product-specific Build Platform credentials."
+    },
+    {
+      "id": "probe-sdk",
+      "reason": "Core diagnostics do not require a Marketplace app."
+    }
+  ]
+}

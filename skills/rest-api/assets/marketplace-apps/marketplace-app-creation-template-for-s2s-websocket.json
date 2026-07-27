@@ -1,0 +1,11 @@
+{
+  "app_type": "s2s_oauth",
+  "app_name": "S2S WebSocket Event Service",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "active": false,
+  "scopes": [
+    "meeting:read:meeting:admin"
+  ]
+}

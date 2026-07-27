@@ -26,9 +26,9 @@ Receive real-time event notifications from Zoom services.
 > [Marketplace app management](../rest-api/references/marketplace-apps.md) for General App
 > manifest validation, event subscription API setup, webhook vs WebSocket subscription
 > behavior, and app-owned `client_credentials` scopes. Start from the
-> [user-managed General App](../rest-api/assets/marketplace-apps/general-user-webhooks.json),
-> [admin-managed General App](../rest-api/assets/marketplace-apps/meeting-webhooks.json), or
-> [S2S](../rest-api/assets/marketplace-apps/create-s2s-webhooks.json) webhook template.
+> [user-managed General App](../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-general-user-webhooks.json),
+> [admin-managed General App](../rest-api/assets/marketplace-apps/marketplace-manifest-template-for-general-admin-webhooks.json), or
+> [S2S](../rest-api/assets/marketplace-apps/marketplace-app-creation-template-for-s2s-webhooks.json) webhook template.
 
 > **Need help with authentication?** See the **[zoom-oauth](../oauth/SKILL.md)** skill for OAuth setup.
 

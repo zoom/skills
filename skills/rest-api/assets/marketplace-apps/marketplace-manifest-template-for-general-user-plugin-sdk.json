@@ -1,0 +1,38 @@
+{
+  "app_type": "general",
+  "app_name": "Plugin SDK Desktop Companion",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Plugin SDK Desktop Companion",
+      "description": "Controls the signed-in Zoom Workplace client through Plugin SDK."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://plugin.example.com/oauth/callback",
+      "production_redirect_uri": "https://plugin.example.com/oauth/callback",
+      "oauth_allow_list": [
+        "https://plugin.example.com/oauth/callback"
+      ],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        {
+          "scope": "plugin_sdk:read:connection_meta",
+          "optional": false
+        }
+      ],
+      "scope_description": "Connect the desktop companion to the authorizing user's Zoom Workplace client.",
+      "enable_private_pkce_client": true,
+      "enable_public_pkce_client": true
+    },
+    "features": {
+      "products": [],
+      "plugin_sdk": {
+        "enable": true
+      }
+    }
+  }
+}
