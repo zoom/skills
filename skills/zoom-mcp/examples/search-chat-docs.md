@@ -1,12 +1,12 @@
 # Search Zoom Chat, Docs, and My Notes
 
 Use this Zoom MCP path when the user asks for knowledge discovery across Team Chat messages,
-Zoom Docs, or Zoom AI Companion notes/My Notes.
+Zoom Canvas, or Zoom AI Companion notes/My Notes.
 
 ## Prerequisites
 
 - `ai_companion:read:search` for `search_zoom`
-- `docs:read:export` for `get_file_content` when reading returned Zoom Docs/My Notes content
+- `docs:read:export` for `get_file_content` when reading returned Canvas/My Notes content
 
 ## Search Team Chat Messages
 
@@ -28,7 +28,7 @@ Notes:
 - Chat filters support `channel_names`, `hsession_ids`, `from`, `to`, and `unread`.
 - Convert local time references to ISO 8601 UTC before calling the tool.
 
-## Search Zoom Docs
+## Search Zoom Canvas
 
 ```text
 search_zoom
@@ -50,7 +50,7 @@ Supported `doc_view` values:
 - `notes`
 
 Use `doc_view: "notes"` when the user specifically asks for My Notes, meeting notes, or
-AI-generated notes. Do not force `notes` for generic Zoom Docs searches.
+AI-generated notes. Do not force `notes` for generic Canvas searches.
 
 ## Read a Returned Doc
 
@@ -70,5 +70,5 @@ The tool returns the file name and Markdown content.
 |---------------|-----|
 | Meeting by topic, attendee, summary, transcript, or meeting time | `search_meetings` |
 | Team Chat messages | `search_zoom` with `entity_type: "chat"` |
-| Zoom Docs or My Notes | `search_zoom` with `entity_type: "zoom_doc"` |
+| Zoom Canvas or My Notes | `search_zoom` with `entity_type: "zoom_doc"` |
 | Markdown content of a returned doc/note | `get_file_content` |

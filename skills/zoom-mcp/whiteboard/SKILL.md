@@ -23,8 +23,7 @@ Dedicated guidance for Zoom's Whiteboard MCP server.
 
 | Transport | URL |
 |-----------|-----|
-| Streamable HTTP (recommended) | `https://mcp.zoom.us/mcp/whiteboard/streamable` |
-| SSE (fallback) | `https://mcp.zoom.us/mcp/whiteboard/sse` |
+| Streamable HTTP | `https://mcp.zoom.us/mcp/whiteboard/streamable` |
 
 ## Authentication
 

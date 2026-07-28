@@ -48,7 +48,7 @@ Common downstream validation response:
 
 ## Product Server Split
 
-The default, Whiteboard, Team Chat, Meetings, Docs, Tasks, and Revenue Accelerator MCP servers
+The unified, Whiteboard, Team Chat, Meetings, Canvas, Tasks, and Revenue Accelerator MCP servers
 are separate surfaces. A valid tool name can still fail with `-32602` when sent to the wrong one.
 
 Use the Whiteboard child skill for Whiteboard-specific auth, scopes, and identifier mapping:

@@ -12,7 +12,7 @@ Use Zoom MCP for:
 - semantic search across meetings
 - retrieval of meeting-linked assets
 - recording-resource retrieval
-- Zoom Docs creation from Markdown
+- Canvas/My Notes file creation from Markdown
 
 ## What To Use Instead for CRUD
 

@@ -131,6 +131,44 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 - **rtms** (for real-time audio/video/transcript access)
 - **zoom-rest-api** (for creating meetings)
 
+## Test Marketplace Apps Locally
+
+When using the Marketplace helper MCP server to create or update a development app, you can
+test without deploying a public server first. Run your local app on HTTP, then expose it through
+an HTTPS tunnel. Use the tunnel URL for the development OAuth redirect URL, Home URL, and webhook
+or bot endpoint fields.
+
+### ngrok (recommended)
+
+```bash
+# Your local app should listen on port 3000.
+ngrok http 3000
+```
+
+Copy the HTTPS forwarding URL, for example `https://example.ngrok-free.app`, and configure routes
+such as:
+
+```text
+https://example.ngrok-free.app/                 # development Home URL
+https://example.ngrok-free.app/oauth/callback   # OAuth redirect URL
+https://example.ngrok-free.app/webhooks/zoom    # webhook or bot endpoint
+```
+
+Tell the Marketplace helper MCP to use that URL in the development-only manifest fields. The
+redirect URL must match the OAuth request exactly. Free tunnel URLs can change after restart, so
+update the development app settings when that happens. Do not put temporary tunnel URLs in
+production fields.
+
+### Cloudflare Tunnel (alternative)
+
+```bash
+cloudflared tunnel --url http://localhost:3000
+```
+
+Use the generated HTTPS URL the same way. A named Cloudflare Tunnel is preferable when you need a
+stable development hostname. In both cases, keep the app in development mode, validate webhook
+signatures, and do not expose client secrets or access tokens through the tunneled app.
+
 ## Skills
 
 | Skill | Description |
@@ -156,13 +194,28 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | [zoom-ui-toolkit](skills/ui-toolkit/) | Pre-built UI components for Video SDK |
 | [zoom-cobrowse-sdk](skills/cobrowse-sdk/) | Collaborative browsing for support |
 | [zoom-oauth](skills/oauth/) | OAuth authentication (all 4 grant types) |
-| [zoom-mcp](skills/zoom-mcp/) | Parent router for Zoom-hosted MCP servers and the default 9-tool Zoom MCP surface |
+| [zoom-mcp](skills/zoom-mcp/) | Parent router for the unified Zoom MCP Server and dedicated product MCP servers |
 | [zoom-mcp/meetings](skills/zoom-mcp/meetings/) | Meeting search, assets, recordings, and recording-resource retrieval |
-| [zoom-mcp/docs](skills/zoom-mcp/docs/) | Zoom Docs Markdown creation and content retrieval |
+| [zoom-mcp/canvas](skills/zoom-mcp/canvas/) | Canvas file, block, collaborator, and content tools |
 | [zoom-mcp/tasks](skills/zoom-mcp/tasks/) | Task, comment, assignee, collaborator, and step workflows |
 | [zoom-mcp/revenue-accelerator](skills/zoom-mcp/revenue-accelerator/) | ZRA conversations, transcripts, analyses, deals, customers, and coaching data |
 | [zoom-mcp/team-chat](skills/zoom-mcp/team-chat/) | Team Chat message, file, contact, session, channel, and member tools |
 | [zoom-mcp/whiteboard](skills/zoom-mcp/whiteboard/) | Whiteboard creation, retrieval, and collaborator tools |
+
+### Current Zoom MCP Servers
+
+The current hosted catalog uses Streamable HTTP. Tool counts are observations, not API
+contracts; run `tools/list` before relying on a cached inventory.
+
+| Server | Endpoint |
+|--------|----------|
+| Zoom MCP Server | `https://mcp.zoom.us/mcp/zoom/streamable` |
+| Meetings MCP | `https://mcp.zoom.us/mcp/meeting/streamable` |
+| Chat MCP | `https://mcp.zoom.us/mcp/chat/streamable` |
+| Canvas MCP | `https://mcp.zoom.us/mcp/canvas/streamable` |
+| Tasks MCP | `https://mcp.zoom.us/mcp/tasks/streamable` |
+| Whiteboard MCP | `https://mcp.zoom.us/mcp/whiteboard/streamable` |
+| Revenue Accelerator MCP | `https://mcp.zoom.us/mcp/revenue_accelerator/streamable` |
 
 ## Common Use Cases
 
@@ -186,10 +239,10 @@ When your task requires multiple skills, the agent loads them as needed. For exa
 | Pre-join/browser readiness diagnostics | probe-sdk + meeting-sdk or video-sdk |
 | Low-latency event notifications | zoom-websockets |
 | OAuth authentication setup | oauth |
-| AI-driven tool workflows over Zoom meetings, Team Chat, Docs, and recordings | zoom-mcp |
+| AI-driven tool workflows over Zoom meetings, Team Chat, Canvas, and recordings | zoom-mcp |
 | Team Chat MCP search, read, and write workflows | zoom-mcp/team-chat |
 | Meeting asset and recording retrieval through dedicated MCP | zoom-mcp/meetings |
-| Zoom Docs creation and retrieval through dedicated MCP | zoom-mcp/docs |
+| Zoom Canvas file and block workflows through dedicated MCP | zoom-mcp/canvas |
 | Task management through MCP | zoom-mcp/tasks |
 | Revenue Accelerator conversation and deal intelligence | zoom-mcp/revenue-accelerator |
 | Enterprise AI architecture (API core + AI tool layer) | zoom-rest-api + zoom-mcp |
@@ -245,7 +298,7 @@ zoom-general (HUB)
            ├── whiteboard
            ├── team-chat
            ├── meetings
-           ├── docs
+           ├── canvas
            ├── tasks
            └── revenue-accelerator
 ```

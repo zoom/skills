@@ -1,10 +1,10 @@
 ---
 name: zoom-mcp
 description: |
-  Official Zoom MCP Server guidance for AI-agent access to Zoom search, meeting assets,
-  recording resources, Docs, Team Chat, Whiteboard, Tasks, Meetings, and Revenue Accelerator.
-  Use for Zoom-hosted MCP endpoints, tools/list, tools/call, OAuth scopes, or selecting the
-  right server. Route product-specific work to the matching zoom-mcp child skill.
+  Official Zoom MCP Server guidance for AI-agent access to the unified Zoom MCP Server and
+  dedicated Meetings, Chat, Canvas, Tasks, Whiteboard, and Revenue Accelerator servers. Use
+  for Zoom-hosted MCP endpoints, tools/list, tools/call, OAuth scopes, or server selection.
+  Route product-specific work to the matching zoom-mcp child skill.
 triggers:
   - "zoom mcp"
   - "zoom mcp server"
@@ -17,6 +17,8 @@ triggers:
   - "zoom search meetings by content"
   - "zoom meeting assets mcp"
   - "zoom recording resource mcp"
+  - "zoom canvas mcp"
+  - "zoom canvas via mcp"
   - "zoom docs via mcp"
   - "zoom docs content via mcp"
   - "zoom chat search mcp"
@@ -31,10 +33,10 @@ triggers:
 Zoom hosts an MCP server at `mcp.zoom.us` for AI-agent access to:
 
 - semantic meeting search
-- cross-Zoom search over Team Chat messages and Zoom Docs
+- cross-Zoom search over Team Chat messages and Zoom Canvas content
 - meeting-linked asset retrieval
 - recording resource retrieval
-- Zoom Docs creation from Markdown and Markdown content export
+- Canvas/My Notes file creation from Markdown and Markdown content export
 - Zoom Hub file creation and multi-format content export
 
 Current default Zoom MCP server tool names verified by `tools/list`:
@@ -54,8 +56,9 @@ Treat the raw tool names above as authoritative.
 
 Product-specific MCP work is split into child skills for
 [Whiteboard](whiteboard/SKILL.md), [Team Chat](team-chat/SKILL.md),
-[Meetings](meetings/SKILL.md), [Docs](docs/SKILL.md), [Tasks](tasks/SKILL.md), and
+[Meetings](meetings/SKILL.md), [Canvas](canvas/SKILL.md), [Tasks](tasks/SKILL.md), and
 [Revenue Accelerator](revenue-accelerator/SKILL.md).
+The old [Docs alias](docs/SKILL.md) routes legacy "Docs MCP" requests to Canvas.
 
 > **Marketplace-first skill chain:** Before connecting to any Zoom MCP server, route to
 > [Marketplace app management](../rest-api/references/marketplace-apps.md) and the
@@ -117,7 +120,7 @@ recordings_list
 A Server-to-Server OAuth token can:
 - initialize against the MCP gateway
 - complete `tools/list`
-- open SSE sessions
+- open a session in environments where S2S has been separately validated
 
 Use user OAuth as the default execution path for Zoom MCP tool use unless you have already
 validated S2S scope coverage and tool execution for your app.
@@ -131,8 +134,8 @@ The key scopes for this surface are:
 - `ai_companion:read:search`
 - `cloud_recording:read:list_user_recordings`
 - `cloud_recording:read:content`
-- `docs:write:import` for Zoom Docs creation
-- `docs:read:export` for Zoom Docs/My Notes Markdown content export
+- `docs:write:import` for Canvas/My Notes file creation
+- `docs:read:export` for Canvas/My Notes Markdown content export
 - `hub:write:content` for Hub file creation
 - `hub:read:content` for Hub file content export
 
@@ -149,7 +152,7 @@ requests to [whiteboard/SKILL.md](whiteboard/SKILL.md).
 
 **5. Team Chat tools are a separate MCP surface**
 
-The default Zoom MCP server includes read-only `search_zoom` for Team Chat and Docs search.
+The default Zoom MCP server includes read-only `search_zoom` for Team Chat and Canvas search.
 The Team Chat MCP server is separate and exposes read, search, write, and update tools for
 messages, files, contacts, channels, and channel members. Route Team Chat MCP requests to
 [team-chat/SKILL.md](team-chat/SKILL.md).
@@ -160,12 +163,27 @@ The current Zoom MCP tool surface does not expose deterministic
 meeting create, update, or delete tools. If the user needs explicit meeting CRUD operations,
 route to [../rest-api/SKILL.md](../rest-api/SKILL.md).
 
-## Server Endpoints
+## Current Official Server Catalog
 
-| Transport | URL |
-|-----------|-----|
-| Streamable HTTP (recommended) | `https://mcp.zoom.us/mcp/zoom/streamable` |
-| SSE (fallback) | `https://mcp.zoom.us/mcp/zoom/sse` |
+| Official server | Streamable HTTP endpoint | Current tools | Child skill |
+|-----------------|---------------------------|---------------|-------------|
+| Zoom MCP Server (Zoom All-in-One) | `https://mcp.zoom.us/mcp/zoom/streamable` | 9 | This skill |
+| Zoom Meetings MCP Server | `https://mcp.zoom.us/mcp/meeting/streamable` | 4 | [Meetings](meetings/SKILL.md) |
+| Zoom Chat MCP Server | `https://mcp.zoom.us/mcp/chat/streamable` | 20 | [Team Chat](team-chat/SKILL.md) |
+| Zoom Canvas MCP Server | `https://mcp.zoom.us/mcp/canvas/streamable` | 18 | [Canvas](canvas/SKILL.md) |
+| Zoom Tasks MCP Server | `https://mcp.zoom.us/mcp/tasks/streamable` | 20 | [Tasks](tasks/SKILL.md) |
+| Zoom Whiteboard MCP Server | `https://mcp.zoom.us/mcp/whiteboard/streamable` | 11 | [Whiteboard](whiteboard/SKILL.md) |
+| Zoom Revenue Accelerator MCP Server | `https://mcp.zoom.us/mcp/revenue_accelerator/streamable` | 15 | [Revenue Accelerator](revenue-accelerator/SKILL.md) |
+
+The tool counts are observations from Zoom's current official server metadata, not API
+contracts. Always run `tools/list` before making routing or authorization decisions. This
+catalog was last checked on 2026-07-28. The current official catalog documents Streamable
+HTTP; do not assume an SSE fallback exists.
+
+Zoom's general MCP page also describes broader Workplace use cases such as Calendar, Clips,
+and Email. No separate remote endpoint for those surfaces is listed in the current official
+server catalog; use the unified server only when its live `tools/list` response exposes the
+needed capability.
 
 Whiteboard child skill:
 - [whiteboard/SKILL.md](whiteboard/SKILL.md)
@@ -175,7 +193,7 @@ Team Chat child skill:
 
 Other dedicated child skills:
 - [meetings/SKILL.md](meetings/SKILL.md)
-- [docs/SKILL.md](docs/SKILL.md)
+- [canvas/SKILL.md](canvas/SKILL.md)
 - [tasks/SKILL.md](tasks/SKILL.md)
 - [revenue-accelerator/SKILL.md](revenue-accelerator/SKILL.md)
 
@@ -190,8 +208,8 @@ Two result families matter most:
 - **Recording-oriented results**: cloud recording references and transcript-capable resources
 
 Use `search_zoom` instead of `search_meetings` when the task is cross-Zoom knowledge discovery
-over Team Chat messages, Zoom Docs, or My Notes. Use `get_file_content` after `search_zoom`
-when the user asks to inspect the Markdown content of a returned Zoom Doc or My Notes file.
+over Team Chat messages, Zoom Canvas, or My Notes. Use `get_file_content` after `search_zoom`
+when the user asks to inspect the Markdown content of a returned Canvas file or My Notes file.
 
 Use [examples/transcript-retrieval.md](examples/transcript-retrieval.md) for the main retrieval
 workflow.
@@ -242,7 +260,7 @@ create_new_file_with_markdown
   content: "# Decisions\n\n- ..."
 ```
 
-**Search Zoom Chat or Docs, then read a returned file:**
+**Search Zoom Chat or Canvas, then read a returned file:**
 ```text
 search_zoom
   query: "Q4 planning decisions"
@@ -274,8 +292,8 @@ Full error reference: [references/error-codes.md](references/error-codes.md)
 
 ### Examples
 - [examples/transcript-retrieval.md](examples/transcript-retrieval.md) — Search/assets and recording-resource workflows
-- [examples/search-chat-docs.md](examples/search-chat-docs.md) — Cross-Zoom search over Team Chat, Zoom Docs, and My Notes
-- [examples/create-zoom-doc.md](examples/create-zoom-doc.md) — Verified Zoom Docs creation flow
+- [examples/search-chat-docs.md](examples/search-chat-docs.md) — Cross-Zoom search over Team Chat, Zoom Canvas, and My Notes
+- [examples/create-zoom-doc.md](examples/create-zoom-doc.md) — Verified Canvas file creation flow
 - [examples/search-and-act.md](examples/search-and-act.md) — Search, inspect assets, and hand off CRUD work to REST when needed
 - [examples/meeting-lifecycle.md](examples/meeting-lifecycle.md) — Why meeting CRUD belongs in REST, plus the MCP-to-REST handoff pattern
 
@@ -285,7 +303,7 @@ Full error reference: [references/error-codes.md](references/error-codes.md)
 - [whiteboard/SKILL.md](whiteboard/SKILL.md) — Whiteboard MCP child skill
 - [team-chat/SKILL.md](team-chat/SKILL.md) — Team Chat MCP child skill
 - [meetings/SKILL.md](meetings/SKILL.md) — Dedicated Meetings MCP child skill
-- [docs/SKILL.md](docs/SKILL.md) — Dedicated Docs MCP child skill
+- [canvas/SKILL.md](canvas/SKILL.md) — Dedicated Canvas MCP child skill
 - [tasks/SKILL.md](tasks/SKILL.md) — Tasks MCP child skill
 - [revenue-accelerator/SKILL.md](revenue-accelerator/SKILL.md) — Revenue Accelerator MCP child skill
 

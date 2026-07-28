@@ -19,7 +19,7 @@ export type SkillId =
   | 'zoom-mcp/whiteboard'
   | 'zoom-mcp/team-chat'
   | 'zoom-mcp/meetings'
-  | 'zoom-mcp/docs'
+  | 'zoom-mcp/canvas'
   | 'zoom-mcp/tasks'
   | 'zoom-mcp/revenue-accelerator'
   | 'zoom-webhooks'
@@ -69,6 +69,7 @@ interface Signals {
   whiteboardMcp: boolean;
   teamChatMcp: boolean;
   meetingsMcp: boolean;
+  canvasMcp: boolean;
   docsMcp: boolean;
   tasksMcp: boolean;
   revenueMcp: boolean;
@@ -123,6 +124,7 @@ export function detectSignals(rawQuery: string): Signals {
     whiteboardMcp: hasAny(q, ['whiteboard mcp', 'zoom whiteboard mcp', 'list whiteboards', 'get a whiteboard', 'wb/db', 'whiteboard_id']),
     teamChatMcp: hasAny(q, ['team chat mcp', 'zoom chat mcp', 'send zoom chat via mcp', 'edit zoom chat message mcp', 'zoom_chat_message_send', 'zoom_chat_channel_create']),
     meetingsMcp: hasAny(q, ['zoom meetings mcp', 'meetings mcp', 'meeting mcp server']),
+    canvasMcp: hasAny(q, ['zoom canvas mcp', 'canvas mcp server', 'canvas file mcp', 'canvas block mcp']),
     docsMcp: hasAny(q, ['zoom docs mcp', 'docs mcp server', 'create_file_with_content']),
     tasksMcp: hasAny(q, ['zoom tasks mcp', 'tasks mcp server', 'create task mcp']),
     revenueMcp: hasAny(q, ['zoom revenue accelerator mcp', 'zra mcp', 'conversation analysis mcp']),
@@ -165,7 +167,7 @@ function pickPrimarySkill(s: Signals): SkillId {
   if (s.scribe) return 'scribe';
   if (s.teamChatMcp) return 'zoom-mcp/team-chat';
   if (s.meetingsMcp) return 'zoom-mcp/meetings';
-  if (s.docsMcp) return 'zoom-mcp/docs';
+  if (s.canvasMcp || s.docsMcp) return 'zoom-mcp/canvas';
   if (s.tasksMcp) return 'zoom-mcp/tasks';
   if (s.revenueMcp) return 'zoom-mcp/revenue-accelerator';
   if (s.teamChat) return 'zoom-team-chat';
@@ -187,7 +189,7 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   const chain = new Set<SkillId>();
 
   const mcpIntent = s.mcp || s.whiteboardMcp || s.teamChatMcp || s.meetingsMcp ||
-    s.docsMcp || s.tasksMcp || s.revenueMcp;
+    s.canvasMcp || s.docsMcp || s.tasksMcp || s.revenueMcp;
 
   // MCP setup starts with Marketplace app creation, then OAuth token acquisition.
   if (mcpIntent) chain.add('zoom-rest-api');
@@ -234,7 +236,7 @@ function buildResourceHints(primary: SkillId, s: Signals): string[] {
   const hints: string[] = [];
 
   const mcpIntent = s.mcp || s.whiteboardMcp || s.teamChatMcp || s.meetingsMcp ||
-    s.docsMcp || s.tasksMcp || s.revenueMcp;
+    s.canvasMcp || s.docsMcp || s.tasksMcp || s.revenueMcp;
 
   if (mcpIntent) {
     hints.push('rest-api/references/marketplace-app-templates.md');
@@ -242,7 +244,7 @@ function buildResourceHints(primary: SkillId, s: Signals): string[] {
     hints.push('zoom-mcp/concepts/oauth-setup.md');
   }
   if (s.meetingsMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-meetings.json');
-  else if (s.docsMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-docs.json');
+  else if (s.canvasMcp || s.docsMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-canvas.json');
   else if (s.tasksMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-tasks.json');
   else if (s.revenueMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-revenue-accelerator.json');
   else if (s.teamChatMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-team-chat.json');

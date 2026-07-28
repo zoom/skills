@@ -1,7 +1,7 @@
 # Create a Zoom Doc
 
 The current Zoom MCP tool surface includes `create_new_file_with_markdown` for
-creating a Zoom Docs document from Markdown content.
+creating a Zoom Canvas file from Markdown content.
 
 ## Required Scope
 

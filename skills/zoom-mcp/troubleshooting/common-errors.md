@@ -86,7 +86,7 @@ Common causes:
 
 **Fixes:**
 - use `entity_type: "chat"` for Team Chat messages
-- use `entity_type: "zoom_doc"` for Zoom Docs and My Notes
+- use `entity_type: "zoom_doc"` for Zoom Canvas and My Notes
 - use `doc_view: "notes"` only when the user asks for My Notes or meeting notes
 - widen or remove `from` and `to`
 
@@ -129,7 +129,7 @@ sent to the wrong MCP surface.
 - Whiteboard MCP: `https://mcp.zoom.us/mcp/whiteboard/streamable`
 - Team Chat MCP: `https://mcp.zoom.us/mcp/chat/streamable`
 - Meetings MCP: `https://mcp.zoom.us/mcp/meeting/streamable`
-- Docs MCP: `https://mcp.zoom.us/mcp/docs/streamable`
+- Canvas MCP: `https://mcp.zoom.us/mcp/canvas/streamable`
 - Tasks MCP: `https://mcp.zoom.us/mcp/tasks/streamable`
 - Revenue Accelerator MCP: `https://mcp.zoom.us/mcp/revenue_accelerator/streamable`
 - re-run `tools/list`

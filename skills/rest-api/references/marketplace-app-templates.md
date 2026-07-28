@@ -9,6 +9,8 @@ The canonical filenames intentionally include `marketplace-manifest-template-for
 `marketplace-app-creation-template-for` so an MCP client can distinguish a General App manifest
 from a native S2S or Meeting SDK create request. The machine-readable selector is
 [marketplace-manifest-template-index.json](../assets/marketplace-apps/marketplace-manifest-template-index.json).
+The current dedicated document surface is **Zoom Canvas MCP**; the older Docs template is retained
+only as a legacy alias and is not a current selector choice.
 
 For existing General Apps, use the complete read/validate/replace workflow in
 [Marketplace Manifest Update Workflow](marketplace-manifest-update-workflow.md). Do not apply a
@@ -32,7 +34,7 @@ static template directly to an existing app without exporting its current manife
 | WebSocket events | No; WebSockets are account-level | Yes | Yes | - |
 | Default Zoom MCP server | Yes, recommended | Conditional by tool scope | Do not assume tool parity | - |
 | Meetings MCP server | Yes, required for current tools | No | Do not assume tool parity | - |
-| Docs MCP server | Yes, required for current tools | No | Do not assume tool parity | - |
+| Canvas MCP server | Yes, required for current tools | No | Do not assume tool parity | - |
 | Tasks MCP server | Yes, required for current tools | No | Do not assume tool parity | - |
 | Revenue Accelerator MCP server | Yes, with ZRA license/data access | No | Do not assume tool parity | - |
 | Team Chat MCP server | Yes, required for current read/write tools | No | No | - |
@@ -79,7 +81,7 @@ An MCP client must check `app_type`, `usage`, `unsupported_app_types`, and
 | Contact Center Voice RTMS | [marketplace-manifest-template-for-general-admin-zcc-voice-rtms.json](../assets/marketplace-apps/marketplace-manifest-template-for-general-admin-zcc-voice-rtms.json) | General App with ZCC RTMS events | [RTMS](../../rtms/SKILL.md) |
 | Default Zoom MCP server | [marketplace-manifest-template-for-mcp-default.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-default.json) | General App, user-managed with PKCE | [Zoom MCP](../../zoom-mcp/SKILL.md) |
 | Meetings MCP server | [marketplace-manifest-template-for-mcp-meetings.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-meetings.json) | General App, user-managed with PKCE | [Meetings MCP](../../zoom-mcp/meetings/SKILL.md) |
-| Zoom Docs MCP server | [marketplace-manifest-template-for-mcp-docs.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-docs.json) | General App, user-managed with PKCE | [Docs MCP](../../zoom-mcp/docs/SKILL.md) |
+| Zoom Canvas MCP server | [marketplace-manifest-template-for-mcp-canvas.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-canvas.json) | General App, user-managed with PKCE | [Canvas MCP](../../zoom-mcp/canvas/SKILL.md) |
 | Zoom Tasks MCP server | [marketplace-manifest-template-for-mcp-tasks.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-tasks.json) | General App, user-managed with PKCE | [Tasks MCP](../../zoom-mcp/tasks/SKILL.md) |
 | Revenue Accelerator MCP server | [marketplace-manifest-template-for-mcp-revenue-accelerator.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-revenue-accelerator.json) | General App, user-managed with PKCE | [Revenue Accelerator MCP](../../zoom-mcp/revenue-accelerator/SKILL.md) |
 | Team Chat MCP server | [marketplace-manifest-template-for-mcp-team-chat.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-team-chat.json) | General App, user-managed with PKCE | [Team Chat MCP](../../zoom-mcp/team-chat/SKILL.md) |
@@ -114,7 +116,7 @@ product's app model unless the child skill states otherwise.
 | `scribe` | Uses Build Platform API key/secret JWT authentication, not a General/S2S Marketplace template. |
 | `summarizer` | Uses Build Platform API key/secret JWT authentication, not a General/S2S Marketplace template. |
 | `translator` | Uses Build Platform API key/secret JWT authentication, not a General/S2S Marketplace template. |
-| `zoom-mcp` | Covered by separate default, Meetings, Docs, Tasks, Revenue Accelerator, Team Chat, and Whiteboard user-managed General App templates with PKCE. |
+| `zoom-mcp` | Covered by unified, Meetings, Canvas, Tasks, Revenue Accelerator, Team Chat, and Whiteboard user-managed General App templates with PKCE. |
 
 ## Create Workflow
 

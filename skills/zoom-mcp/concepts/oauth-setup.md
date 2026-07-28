@@ -57,7 +57,7 @@ Dedicated product MCP servers use separate, least-privilege scope sets. See:
 - [../whiteboard/SKILL.md](../whiteboard/SKILL.md)
 - [../team-chat/SKILL.md](../team-chat/SKILL.md)
 - [../meetings/SKILL.md](../meetings/SKILL.md)
-- [../docs/SKILL.md](../docs/SKILL.md)
+- [../canvas/SKILL.md](../canvas/SKILL.md)
 - [../tasks/SKILL.md](../tasks/SKILL.md)
 - [../revenue-accelerator/SKILL.md](../revenue-accelerator/SKILL.md)
 

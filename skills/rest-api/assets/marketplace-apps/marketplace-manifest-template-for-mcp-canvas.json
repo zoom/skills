@@ -1,0 +1,43 @@
+{
+  "app_type": "general",
+  "app_name": "Zoom Canvas MCP Connector",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "Zoom Canvas MCP Connector",
+      "description": "Authorizes Canvas file, block, collaborator, and content operations through Zoom MCP."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "production_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "oauth_allow_list": ["https://mcp-client.example.com/oauth/callback"],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        { "scope": "docs:read:export", "optional": false },
+        { "scope": "docs:read:file", "optional": true },
+        { "scope": "docs:read:general_access", "optional": true },
+        { "scope": "docs:read:list_children", "optional": true },
+        { "scope": "docs:read:list_file_collaborators", "optional": true },
+        { "scope": "docs:write:import", "optional": true },
+        { "scope": "docs:write:content", "optional": true },
+        { "scope": "docs:write:collaborator", "optional": true },
+        { "scope": "docs:update:content", "optional": true },
+        { "scope": "docs:update:file", "optional": true },
+        { "scope": "docs:update:file_owner", "optional": true },
+        { "scope": "docs:update:general_access", "optional": true },
+        { "scope": "docs:update:collaborator", "optional": true },
+        { "scope": "docs:delete:content", "optional": true },
+        { "scope": "docs:delete:file", "optional": true },
+        { "scope": "docs:delete:collaborator", "optional": true }
+      ],
+      "scope_description": "Use the dedicated Zoom Canvas MCP tools for the authorizing user.",
+      "enable_private_pkce_client": true,
+      "enable_public_pkce_client": false
+    },
+    "features": { "products": [] }
+  }
+}

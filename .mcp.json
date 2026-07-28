@@ -12,9 +12,9 @@
       "type": "http",
       "url": "https://mcp.zoom.us/mcp/chat/streamable"
     },
-    "zoom-docs-mcp": {
+    "zoom-canvas-mcp": {
       "type": "http",
-      "url": "https://mcp.zoom.us/mcp/docs/streamable"
+      "url": "https://mcp.zoom.us/mcp/canvas/streamable"
     },
     "zoom-revenue-accelerator-mcp": {
       "type": "http",

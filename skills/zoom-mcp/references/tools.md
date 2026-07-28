@@ -44,7 +44,7 @@ Protected-resource metadata for Zoom MCP advertised these scope families:
 
 ### `create_new_file_with_markdown`
 
-Create a Zoom Docs document from Markdown content.
+Create a Zoom Canvas file from Markdown content.
 
 **Verified scope:** `docs:write:import`
 
@@ -60,13 +60,13 @@ Successful calls return:
 
 ### `get_file_content`
 
-Read a Zoom Docs or My Notes file as Markdown.
+Read a Zoom Canvas or My Notes file as Markdown.
 
 **Verified scope:** `docs:read:export`
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `fileId` | string | **Yes** | Unique Zoom Docs file identifier, commonly returned as `file_id` from `search_zoom` |
+| `fileId` | string | **Yes** | Unique Canvas file identifier, commonly returned as `file_id` from `search_zoom` |
 
 Successful calls return:
 - file name
@@ -127,7 +127,7 @@ Read-only search tool for semantic meeting discovery.
 
 ### `search_zoom`
 
-Read-only keyword and semantic search across Team Chat messages and Zoom Docs/My Notes.
+Read-only keyword and semantic search across Team Chat messages and Zoom Canvas/My Notes.
 
 **Verified scope:** `ai_companion:read:search`
 
@@ -163,7 +163,7 @@ Supported `search_entities` shapes:
 
 Filter notes:
 - Chat supports `channel_names`, `hsession_ids`, `from`, `to`, and `unread`.
-- Zoom Docs supports `doc_view`, `from`, and `to`.
+- Zoom Canvas/My Notes supports `doc_view`, `from`, and `to`.
 - `doc_view` values are `recent`, `my_docs`, `shared_with_me`, `starred`, and `notes`.
 - `notes` refers to Zoom AI Companion notes/My Notes. Use it when the user asks for meeting notes or My Notes.
 - All `from` and `to` values must be ISO 8601 UTC. Convert relative time references from the user's timezone.
@@ -174,7 +174,7 @@ Returned items are discriminated by `entity_type`:
 
 ### `get_meeting_assets`
 
-Read-only meeting asset hub. Retrieves meeting summary, recording, whiteboards, Zoom Docs,
+Read-only meeting asset hub. Retrieves meeting summary, recording, whiteboards, Canvas files,
 and related artifacts for a specific meeting.
 
 **Verified scope:** `meeting:read:assets`

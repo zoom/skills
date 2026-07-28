@@ -2,6 +2,73 @@
   "schema_version": "1.0",
   "purpose": "Machine-readable selector for Zoom Marketplace app manifests and native app creation requests.",
   "source_of_truth": "The referenced JSON template contains the exact request and scope list. This index supplies compatibility and workflow metadata.",
+  "mcp_catalog_last_verified": "2026-07-28",
+  "servers": [
+    {
+      "id": "zoom-all-in-one",
+      "official_name": "Zoom MCP Server",
+      "tag": "Zoom All-in-One",
+      "endpoint": "https://mcp.zoom.us/mcp/zoom/streamable",
+      "transport": "streamable_http",
+      "tool_count_observed": 9,
+      "child_skill": "zoom-mcp/SKILL.md",
+      "official_docs": "https://developers.zoom.us/docs/mcp/zoom/"
+    },
+    {
+      "id": "zoom-meetings",
+      "official_name": "Zoom Meetings MCP Server",
+      "endpoint": "https://mcp.zoom.us/mcp/meeting/streamable",
+      "transport": "streamable_http",
+      "tool_count_observed": 4,
+      "child_skill": "zoom-mcp/meetings/SKILL.md",
+      "official_docs": "https://developers.zoom.us/docs/mcp/zoom-meetings-mcp-server/"
+    },
+    {
+      "id": "zoom-chat",
+      "official_name": "Zoom Chat MCP Server",
+      "endpoint": "https://mcp.zoom.us/mcp/chat/streamable",
+      "transport": "streamable_http",
+      "tool_count_observed": 20,
+      "child_skill": "zoom-mcp/team-chat/SKILL.md",
+      "official_docs": "https://developers.zoom.us/docs/mcp/zoom-chat-mcp-server/"
+    },
+    {
+      "id": "zoom-canvas",
+      "official_name": "Zoom Canvas MCP Server",
+      "endpoint": "https://mcp.zoom.us/mcp/canvas/streamable",
+      "transport": "streamable_http",
+      "tool_count_observed": 18,
+      "child_skill": "zoom-mcp/canvas/SKILL.md",
+      "official_docs": "https://developers.zoom.us/docs/mcp/zoom-canvas-mcp-server/"
+    },
+    {
+      "id": "zoom-tasks",
+      "official_name": "Zoom Tasks MCP Server",
+      "endpoint": "https://mcp.zoom.us/mcp/tasks/streamable",
+      "transport": "streamable_http",
+      "tool_count_observed": 20,
+      "child_skill": "zoom-mcp/tasks/SKILL.md",
+      "official_docs": "https://developers.zoom.us/docs/mcp/zoom-tasks-mcp-server/"
+    },
+    {
+      "id": "zoom-whiteboard",
+      "official_name": "Zoom Whiteboard MCP Server",
+      "endpoint": "https://mcp.zoom.us/mcp/whiteboard/streamable",
+      "transport": "streamable_http",
+      "tool_count_observed": 11,
+      "child_skill": "zoom-mcp/whiteboard/SKILL.md",
+      "official_docs": "https://developers.zoom.us/docs/mcp/zoom-whiteboard-mcp-server/"
+    },
+    {
+      "id": "zoom-revenue-accelerator",
+      "official_name": "Zoom Revenue Accelerator MCP Server",
+      "endpoint": "https://mcp.zoom.us/mcp/revenue_accelerator/streamable",
+      "transport": "streamable_http",
+      "tool_count_observed": 15,
+      "child_skill": "zoom-mcp/revenue-accelerator/SKILL.md",
+      "official_docs": "https://developers.zoom.us/docs/mcp/zoom-revenue-accelerator-mcp-server/"
+    }
+  ],
   "selection_rules": [
     "Select by capability and supported app_type before reading scopes.",
     "Never use a user-operation manifest for account-level work.",
@@ -191,15 +258,15 @@
       "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
     },
     {
-      "id": "mcp-docs",
-      "file": "marketplace-manifest-template-for-mcp-docs.json",
+      "id": "mcp-canvas",
+      "file": "marketplace-manifest-template-for-mcp-canvas.json",
       "kind": "manifest",
       "app_type": "general",
       "usage": "USER_OPERATION",
       "scope_mode": "user",
       "supports_manifest_update": true,
       "requires_pkce": true,
-      "required_settings": ["docs import/export scopes", "MCP client redirect URI"],
+      "required_settings": ["Canvas file/block/collaborator scopes", "MCP client redirect URI"],
       "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
     },
     {
@@ -329,6 +396,14 @@
       "supports_manifest_update": false,
       "required_settings": ["publish", "contact fields", "Meeting SDK Client ID and Client Secret"],
       "unsupported_app_types": ["general", "s2s_oauth"]
+    }
+  ],
+  "legacy_aliases": [
+    {
+      "id": "mcp-docs",
+      "file": "marketplace-manifest-template-for-mcp-docs.json",
+      "replaced_by": "mcp-canvas",
+      "reason": "Zoom's current official product server is Zoom Canvas MCP Server; retain this file only for older integrations."
     }
   ],
   "not_supported_by_manifest_automation": [

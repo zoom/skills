@@ -155,5 +155,5 @@ Notes:
 ## Routing Notes
 
 - Use `zoom-mcp/team-chat` for agent-driven read/search/write/update Team Chat actions.
-- Use the default `zoom-mcp` `search_zoom` tool for read-only Team Chat and Zoom Docs search.
+- Use the default `zoom-mcp` `search_zoom` tool for read-only Team Chat and Zoom Canvas search.
 - Use `team-chat` REST skill for deterministic production integrations, bulk jobs, webhooks, and custom retry/audit requirements.

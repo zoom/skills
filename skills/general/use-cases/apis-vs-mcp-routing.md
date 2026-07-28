@@ -25,7 +25,7 @@ Zoom APIs and Zoom MCP are complementary:
 |--------------|-------|
 | "Create meetings nightly and sync metrics to BI" | **zoom-rest-api** |
 | "Let my assistant search meeting content and fetch transcripts" | **zoom-mcp** |
-| "Let my assistant search Team Chat and Zoom Docs, then read the relevant note" | **zoom-mcp** |
+| "Let my assistant search Team Chat and Zoom Canvas, then read the relevant note" | **zoom-mcp** |
 | "Let my assistant send or edit a Zoom Team Chat message through MCP" | **zoom-mcp/team-chat** |
 | "Automate meeting lifecycle, then let agents answer questions from summaries" | **zoom-rest-api + zoom-mcp** |
 
@@ -44,7 +44,7 @@ Zoom APIs and Zoom MCP are complementary:
 2. `zoom-oauth` configures user authorization/PKCE and exchanges the code for the access token
    required by the MCP server.
 3. `zoom-mcp` connects the token to the selected server for semantic meeting search, Team
-   Chat/Docs search, Docs content export, summaries, recordings/transcripts, and tool invocation.
+   Chat/Canvas search, Canvas content export, summaries, recordings/transcripts, and tool invocation.
 4. `zoom-mcp/team-chat` handles write-capable Team Chat tools such as send/edit message or
    channel/member changes.
 
@@ -66,9 +66,9 @@ Use `zoom-mcp` when you are:
 
 ## MCP Client and Transport Constraints
 
-- Zoom remote MCP server is consumed over Streamable HTTP/SSE.
+- Zoom's current remote MCP catalog is consumed over Streamable HTTP.
 - Typical supported MCP clients include Claude, Cursor, and VS Code MCP-capable tooling.
-- A local stdio mode may be available depending on client setup, but remote Zoom MCP routing assumes HTTP/SSE transport.
+- A local stdio mode may be available depending on client setup, but remote Zoom MCP routing assumes Streamable HTTP.
 - Endpoint model is shared by instance/cluster; do not assume per-customer dedicated endpoint generation.
 - MCP server surfaces can be product-scoped (for example Meetings, Team Chat, Whiteboard). Route by product when those surfaces are available.
 
