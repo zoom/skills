@@ -63,6 +63,36 @@ For scenario-to-app-type selection, use the
 [Marketplace template selector](marketplace-app-templates.md) or its
 [machine-readable template index](../assets/marketplace-apps/marketplace-manifest-template-index.json).
 
+## Local Tunnel Workflow with `zoom-marketplace-helper`
+
+When testing a Marketplace app before deploying a public server, start the local app and tunnel
+first. Then use the `zoom-marketplace-helper` MCP server to create or update the development app
+with the live HTTPS URL. Do not create the app with placeholder URLs and assume they will be
+updated automatically.
+
+Example local routes on one tunneled development server:
+
+```text
+https://YOUR_TUNNEL_HOST/                 # development Home URL
+https://YOUR_TUNNEL_HOST/oauth/callback   # development OAuth redirect URL
+https://YOUR_TUNNEL_HOST/webhooks/zoom    # development webhook or bot endpoint
+```
+
+After the tunnel is running, ask the helper to update the applicable development fields:
+
+- `oauth_information.development_redirect_uri`
+- `oauth_information.oauth_allow_list` with the exact redirect URI
+- `features.development_home_uri` when the selected product uses a Home URL
+- `features.event_subscription.events[].development_webhook_url` for webhook event subscriptions
+- `features.team_chat_subscription.slash_command.development_message_url` for Chatbot commands
+- the applicable development bot or webhook endpoint for the selected product
+
+Use the helper's manifest read-back to verify the saved values before starting OAuth or sending a
+test webhook. If the tunnel URL changes, repeat the update and use the new callback URL in the
+authorization request. Keep tunnel URLs in development fields only; use a deployed HTTPS domain
+for production fields. The tunnel exposes your local process publicly, so validate webhook
+signatures and never expose client secrets, access tokens, or debug endpoints.
+
 ## Auth Caveat: App-Owned Marketplace Scopes
 
 Some Marketplace app-management scopes require an app-owned access token from the OAuth

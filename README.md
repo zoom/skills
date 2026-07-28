@@ -154,10 +154,11 @@ https://example.ngrok-free.app/oauth/callback   # OAuth redirect URL
 https://example.ngrok-free.app/webhooks/zoom    # webhook or bot endpoint
 ```
 
-Tell the Marketplace helper MCP to use that URL in the development-only manifest fields. The
-redirect URL must match the OAuth request exactly. Free tunnel URLs can change after restart, so
-update the development app settings when that happens. Do not put temporary tunnel URLs in
-production fields.
+After the tunnel is live, use `zoom-marketplace-helper` MCP to create or update the development
+app with the tunnel-derived URLs. Update the development OAuth redirect URL and allow-list entry,
+Home URL, and webhook or bot endpoint as applicable. The redirect URL must match the OAuth request
+exactly. Free tunnel URLs can change after restart, so run the helper update again before testing.
+Do not put temporary tunnel URLs in production fields.
 
 ### Cloudflare Tunnel (alternative)
 
@@ -167,7 +168,9 @@ cloudflared tunnel --url http://localhost:3000
 
 Use the generated HTTPS URL the same way. A named Cloudflare Tunnel is preferable when you need a
 stable development hostname. In both cases, keep the app in development mode, validate webhook
-signatures, and do not expose client secrets or access tokens through the tunneled app.
+signatures, and do not expose client secrets or access tokens through the tunneled app. See the
+[Marketplace local tunnel workflow](skills/rest-api/references/marketplace-apps.md#local-tunnel-workflow-with-zoom-marketplace-helper)
+for the exact update sequence.
 
 ## Skills
 
