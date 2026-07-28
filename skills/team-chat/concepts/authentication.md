@@ -16,6 +16,8 @@ Use **User OAuth (authorization code)** when you want messages/actions to appear
 
 Use **client credentials** when you want messages/actions to appear as a bot.
 
+Never use an authorization-code/user OAuth token for chatbot messages.
+
 - Typical endpoint:
   - Send bot message: `POST /v2/im/chat/messages`
 - Typical “scope”:

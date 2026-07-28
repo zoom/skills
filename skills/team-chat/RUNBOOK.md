@@ -11,7 +11,8 @@ Use this before deep debugging. It catches the most common Team Chat failures fa
 ## 1) Confirm Integration Type
 
 - User type (Team Chat API): user OAuth + `/v2/chat/users/...`
-- Bot type (Chatbot API): client credentials + `/v2/im/chat/messages`
+- Bot type (Chatbot API): client credentials + `/v2/im/chat/messages`; never use
+  a user OAuth token for this endpoint.
 
 If this is wrong, everything else will fail.
 
@@ -83,3 +84,9 @@ If callback returns but token is missing, focus on `state` validation and persis
 - **All channel APIs 404** -> route mismatch (old UI vs new backend routes).
 - **OAuth works but sends fail** -> wrong scopes or app type mismatch.
 - **Works by curl but fails in browser** -> blocked client/cached old JS.
+
+For a chatbot, also confirm the `bot_notification` contains `cmd`, `toJid`,
+`userJid`, and `accountId`; log the outbound `/im/chat/messages` status/body;
+and verify the reply is visible in Team Chat. A webhook HTTP 200 only confirms
+event receipt. For HTTP 401 code `7010`, check that the token, Bot JID, client
+credentials, and API environment all belong to the same Marketplace app.

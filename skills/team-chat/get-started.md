@@ -43,9 +43,12 @@ See:
 ## Step 3B: Bot Type (Chatbot API)
 
 1. Get token via `grant_type=client_credentials`.
-2. Call `POST /v2/im/chat/messages`.
-3. Add webhook endpoint for interactive events.
-4. Use `https://zoom.us/oauth/token` for `client_credentials` token requests.
+2. Do not use an authorization-code/user OAuth token for `POST /v2/im/chat/messages`.
+3. Build the payload from `bot_notification`: include `robot_jid`, `to_jid`, `user_jid`,
+   `account_id`, and `content.body`.
+4. Call `POST /v2/im/chat/messages` and inspect its response status and body.
+5. Add webhook endpoint for interactive events.
+6. Use `https://zoom.us/oauth/token` for `client_credentials` token requests.
 
 See:
 - `examples/chatbot-setup.md`
@@ -55,6 +58,8 @@ See:
 ## Step 4: Validate with a Minimal Smoke Test
 
 - User type: send one plain text channel message.
-- Bot type: send one plain text bot message.
+- Bot type: run a real slash command, confirm the `bot_notification` fields,
+  confirm client-credentials token acquisition, inspect the outbound message
+  response, and verify the reply appears in Team Chat.
 
 Then add advanced features (buttons/forms/slash commands).

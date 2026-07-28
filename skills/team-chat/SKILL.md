@@ -104,6 +104,32 @@ paths. For the separate 20-tool hosted MCP surface, use
 - Scopes: `imchat:bot` (auto-added)
 - **Rich cards**: buttons, forms, dropdowns, images
 
+### Chatbot Message Rules (Non-Negotiable)
+
+- Obtain the bearer token with `grant_type=client_credentials`.
+- Do **not** use an authorization-code/user OAuth token for `/im/chat/messages`.
+- Build the reply from the incoming `bot_notification` payload. Preserve its
+  `toJid`, `userJid`, and `accountId` values:
+
+```json
+{
+  "robot_jid": "<configured Bot JID>",
+  "to_jid": "<payload.toJid>",
+  "user_jid": "<payload.userJid>",
+  "account_id": "<payload.accountId>",
+  "content": {
+    "body": [{ "type": "message", "text": "Response text" }]
+  }
+}
+```
+
+- A webhook HTTP 200 confirms event receipt only. It does not prove that the
+  chatbot reply succeeded. Log and inspect the outbound `/im/chat/messages`
+  HTTP status and response body, then verify the reply is visible in Team Chat.
+- For HTTP 401 with code `7010`, check for mixed development/production
+  credentials, a Bot JID from the wrong environment, or credentials and Bot
+  JID belonging to different Marketplace apps.
+
 ## Prerequisites
 
 ### System Requirements
@@ -202,6 +228,7 @@ const response = await fetch('https://api.zoom.us/v2/im/chat/messages', {
   body: JSON.stringify({
     robot_jid: process.env.ZOOM_BOT_JID,
     to_jid: payload.toJid,           // From webhook
+    user_jid: payload.userJid,       // From webhook
     account_id: payload.accountId,   // From webhook
     content: {
       head: {
@@ -228,7 +255,17 @@ const response = await fetch('https://api.zoom.us/v2/im/chat/messages', {
     }
   })
 });
+
+const responseBody = await response.text();
+console.log('Chatbot API response:', response.status, responseBody);
+if (!response.ok) {
+  throw new Error(`Chatbot reply failed (${response.status}): ${responseBody}`);
+}
 ```
+
+The webhook response is separate from this outbound API response. Treat the
+chatbot flow as successful only after this request is accepted and the message
+is visible in Team Chat.
 
 **Complete example**: [Chatbot Setup Guide](examples/chatbot-setup.md)
 
@@ -304,13 +341,13 @@ User types /command → Webhook receives bot_notification
 
 ```javascript
 case 'bot_notification': {
-  const { toJid, cmd, accountId } = payload;
+  const { toJid, userJid, cmd, accountId } = payload;
   
   // 1. Call your LLM
   const llmResponse = await callClaude(cmd);
   
   // 2. Send response back
-  await sendChatbotMessage(toJid, accountId, {
+  await sendChatbotMessage(toJid, userJid, accountId, {
     body: [{ type: 'message', text: llmResponse }]
   });
 }
@@ -351,10 +388,10 @@ await fetch('https://api.zoom.us/v2/chat/users/me/messages', {
 ```javascript
 // Webhook handler
 case 'interactive_message_actions': {
-  const { actionItem, toJid, accountId } = payload;
+  const { actionItem, toJid, userJid, accountId } = payload;
   
   if (actionItem.value === 'approve') {
-    await sendChatbotMessage(toJid, accountId, {
+    await sendChatbotMessage(toJid, userJid, accountId, {
       body: [{ type: 'message', text: '✅ Approved!' }]
     });
   }

@@ -153,14 +153,16 @@ const { getChatbotToken } = require('./auth');
 const { sanitizeMessage } = require('./validation');
 
 /**
- * Send chatbot message
+ * Send chatbot message.
+ * userJid must come from the incoming bot_notification payload.
  */
-async function sendChatbotMessage(toJid, accountId, content) {
+async function sendChatbotMessage(toJid, userJid, accountId, content) {
   const accessToken = await getChatbotToken();
 
   const body = {
     robot_jid: process.env.ZOOM_BOT_JID,
     to_jid: toJid,
+    user_jid: userJid,
     account_id: accountId,
     content: content
   };
@@ -174,19 +176,33 @@ async function sendChatbotMessage(toJid, accountId, content) {
     body: JSON.stringify(body),
   });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(`Send message error: ${JSON.stringify(error)}`);
+  const responseText = await response.text();
+  let responseBody;
+  try {
+    responseBody = responseText ? JSON.parse(responseText) : {};
+  } catch {
+    responseBody = { raw: responseText };
   }
 
-  return response.json();
+  // Webhook 200 means receipt only; this is the actual reply result.
+  console.log('[Zoom chatbot] /im/chat/messages response', {
+    status: response.status,
+    ok: response.ok,
+    body: responseBody
+  });
+
+  if (!response.ok) {
+    throw new Error(`Send message error (${response.status}): ${JSON.stringify(responseBody)}`);
+  }
+
+  return responseBody;
 }
 
 /**
  * Send simple text message
  */
-async function sendTextMessage(toJid, accountId, text) {
-  return sendChatbotMessage(toJid, accountId, {
+async function sendTextMessage(toJid, userJid, accountId, text) {
+  return sendChatbotMessage(toJid, userJid, accountId, {
     body: [
       { type: 'message', text: sanitizeMessage(text) }
     ]
@@ -196,10 +212,10 @@ async function sendTextMessage(toJid, accountId, text) {
 /**
  * Send message with buttons
  */
-async function sendMessageWithButtons(toJid, accountId, options) {
+async function sendMessageWithButtons(toJid, userJid, accountId, options) {
   const { title, message, buttons } = options;
 
-  return sendChatbotMessage(toJid, accountId, {
+  return sendChatbotMessage(toJid, userJid, accountId, {
     head: {
       text: title
     },
@@ -220,10 +236,10 @@ async function sendMessageWithButtons(toJid, accountId, options) {
 /**
  * Send message with fields
  */
-async function sendMessageWithFields(toJid, accountId, options) {
+async function sendMessageWithFields(toJid, userJid, accountId, options) {
   const { title, fields } = options;
 
-  return sendChatbotMessage(toJid, accountId, {
+  return sendChatbotMessage(toJid, userJid, accountId, {
     head: {
       text: title
     },
@@ -318,9 +334,15 @@ function handleUrlValidation(req, res) {
  * Handle bot notification (slash command or direct message)
  */
 async function handleBotNotification(payload, res) {
-  const { toJid, cmd, accountId, userName } = payload;
+  const { toJid, userJid, cmd, accountId, userName } = payload;
 
-  console.log(`${userName} sent: ${cmd}`);
+  console.log('bot_notification received', {
+    cmd,
+    toJid,
+    userJid,
+    accountId,
+    userName
+  });
 
   // Respond immediately
   res.status(200).json({ success: true });
@@ -329,15 +351,15 @@ async function handleBotNotification(payload, res) {
   try {
     // Simple command router
     if (cmd.toLowerCase().includes('help')) {
-      await sendTextMessage(toJid, accountId, 
+      await sendTextMessage(toJid, userJid, accountId,
         'Available commands:\n- help: Show this message\n- ping: Test bot\n- demo: Show demo buttons'
       );
     } 
     else if (cmd.toLowerCase().includes('ping')) {
-      await sendTextMessage(toJid, accountId, 'Pong! 🏓');
+      await sendTextMessage(toJid, userJid, accountId, 'Pong! 🏓');
     } 
     else if (cmd.toLowerCase().includes('demo')) {
-      await sendMessageWithButtons(toJid, accountId, {
+      await sendMessageWithButtons(toJid, userJid, accountId, {
         title: 'Demo Buttons',
         message: 'Click a button below:',
         buttons: [
@@ -348,7 +370,7 @@ async function handleBotNotification(payload, res) {
       });
     } 
     else {
-      await sendTextMessage(toJid, accountId, 
+      await sendTextMessage(toJid, userJid, accountId,
         `You said: "${cmd}"\n\nType "help" to see available commands.`
       );
     }
@@ -361,9 +383,15 @@ async function handleBotNotification(payload, res) {
  * Handle button click
  */
 async function handleButtonClick(payload, res) {
-  const { actionItem, toJid, accountId, userName } = payload;
+  const { actionItem, toJid, userJid, accountId, userName } = payload;
 
-  console.log(`${userName} clicked: ${actionItem.value}`);
+  console.log('interactive_message_actions received', {
+    action: actionItem.value,
+    toJid,
+    userJid,
+    accountId,
+    userName
+  });
 
   // Respond immediately
   res.status(200).json({ success: true });
@@ -372,19 +400,19 @@ async function handleButtonClick(payload, res) {
   try {
     switch (actionItem.value) {
       case 'option_a':
-        await sendTextMessage(toJid, accountId, '✅ You selected Option A');
+        await sendTextMessage(toJid, userJid, accountId, '✅ You selected Option A');
         break;
 
       case 'option_b':
-        await sendTextMessage(toJid, accountId, '✅ You selected Option B');
+        await sendTextMessage(toJid, userJid, accountId, '✅ You selected Option B');
         break;
 
       case 'cancel':
-        await sendTextMessage(toJid, accountId, '❌ Cancelled');
+        await sendTextMessage(toJid, userJid, accountId, '❌ Cancelled');
         break;
 
       default:
-        await sendTextMessage(toJid, accountId, `Unknown action: ${actionItem.value}`);
+        await sendTextMessage(toJid, userJid, accountId, `Unknown action: ${actionItem.value}`);
     }
   } catch (error) {
     console.error('Error processing button click:', error);
@@ -462,8 +490,14 @@ You should see the bot respond with the help message!
 
 ## Testing Checklist
 
-- [ ] `/mybot help` - Shows help message
-- [ ] `/mybot ping` - Responds with "Pong! 🏓"
+- [ ] Run a real `/mybot help` slash command.
+- [ ] Confirm `bot_notification` reached the webhook.
+- [ ] Confirm `cmd`, `toJid`, `userJid`, and `accountId` were logged.
+- [ ] Confirm chatbot token acquisition used `grant_type=client_credentials`.
+- [ ] Inspect the outbound `/im/chat/messages` status and response body.
+- [ ] Confirm Zoom accepted the message.
+- [ ] Confirm the reply is visible in Team Chat.
+- [ ] `/mybot ping` - Responds with "Pong!"
 - [ ] `/mybot demo` - Shows buttons
 - [ ] Click button - Sends confirmation message
 

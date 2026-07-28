@@ -273,14 +273,19 @@ Fired when:
 **Key Fields**:
 - `cmd` - User's input after the slash command
 - `toJid` - Where to send response (channel or DM)
+- `userJid` - Recipient user JID for the bot reply
 - `accountId` - Account identifier
 
 **Use Case**: Process commands, integrate LLM, send responses
 
+The `sendChatbotMessage` helper must use a client-credentials token and log the
+outbound `/im/chat/messages` status and body. The webhook's HTTP 200 is not
+evidence that the reply succeeded.
+
 **Implementation**:
 ```javascript
 async function handleBotNotification(payload, res) {
-  const { toJid, cmd, accountId, userName } = payload;
+  const { toJid, userJid, cmd, accountId, userName } = payload;
   
   console.log(`${userName} sent: ${cmd}`);
   
@@ -288,7 +293,7 @@ async function handleBotNotification(payload, res) {
   const response = await processCommand(cmd);
   
   // Send response
-  await sendChatbotMessage(toJid, accountId, {
+  await sendChatbotMessage(toJid, userJid, accountId, {
     body: [{ type: 'message', text: response }]
   });
   
@@ -307,6 +312,7 @@ Fired when user clicks a button in a chatbot message.
   "payload": {
     "accountId": "...",
     "toJid": "...",
+    "userJid": "user@xmpp.zoom.us",
     "actionItem": {
       "text": "Approve",
       "value": "approve"  // This is what you check
@@ -319,22 +325,25 @@ Fired when user clicks a button in a chatbot message.
 
 **Key Field**: `actionItem.value` - The button's value you defined
 
+Use the action payload's `toJid`, `userJid`, and `accountId` when sending the
+reply, then inspect the outbound API response.
+
 **Implementation**:
 ```javascript
 async function handleButtonClick(payload, res) {
-  const { actionItem, toJid, accountId, userName } = payload;
+  const { actionItem, toJid, userJid, accountId, userName } = payload;
   
   console.log(`${userName} clicked: ${actionItem.value}`);
   
   switch (actionItem.value) {
     case 'approve':
-      await sendChatbotMessage(toJid, accountId, {
+      await sendChatbotMessage(toJid, userJid, accountId, {
         body: [{ type: 'message', text: '✅ Approved!' }]
       });
       break;
     
     case 'reject':
-      await sendChatbotMessage(toJid, accountId, {
+      await sendChatbotMessage(toJid, userJid, accountId, {
         body: [{ type: 'message', text: '❌ Rejected' }]
       });
       break;

@@ -109,7 +109,7 @@ async function getChatbotToken() {
 **LLM Integration Pattern**:
 ```javascript
 case 'bot_notification': {
-  const { toJid, cmd, accountId } = payload;
+  const { toJid, userJid, cmd, accountId } = payload;
   
   // Call Claude API
   const response = await anthropic.messages.create({
@@ -121,7 +121,7 @@ case 'bot_notification': {
   const llmResponse = response.content[0].text;
   
   // Send back to Zoom
-  await sendChatbotMessage(toJid, accountId, {
+  await sendChatbotMessage(toJid, userJid, accountId, {
     body: [{ type: 'message', text: llmResponse }]
   });
 }
@@ -229,11 +229,14 @@ CREATE TABLE searches (
 ```javascript
 const cron = require('node-cron');
 
+const targetUserJid = process.env.ZOOM_TARGET_USER_JID;
+
 // Daily report at 9 AM
 cron.schedule('0 9 * * *', async () => {
   const report = await getERPReport();
   
-  await sendChatbotMessage(channelJid, accountId, {
+  // targetUserJid is the recipient user JID required by the Chatbot API.
+  await sendChatbotMessage(channelJid, targetUserJid, accountId, {
     head: { "text": "Daily ERP Report" },
     body: [
       { "type": "fields", "items": report.fields },

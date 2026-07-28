@@ -91,6 +91,11 @@ The Chatbot API allows your application to send messages **as a bot**. Bots can 
 | **User Experience** | Messages appear from your bot |
 | **Interactivity** | Buttons, forms, dropdowns, webhooks |
 
+For `POST /v2/im/chat/messages`, use a `client_credentials` token and include
+`robot_jid`, `to_jid`, `user_jid`, `account_id`, and `content.body`. A webhook
+HTTP 200 is only an event-receipt acknowledgement; inspect the outbound API
+response and verify the visible Team Chat reply.
+
 ### Example Use Cases
 
 1. **Support Bot**
@@ -168,9 +173,26 @@ const response = await fetch('https://zoom.us/oauth/token', {
 const { access_token } = await response.json();
 
 // Step 2: Use access token to send bot messages
-fetch('https://api.zoom.us/v2/im/chat/messages', {
-  headers: { 'Authorization': `Bearer ${access_token}` }
+const messageResponse = await fetch('https://api.zoom.us/v2/im/chat/messages', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${access_token}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    robot_jid: process.env.ZOOM_BOT_JID,
+    to_jid: payload.toJid,
+    user_jid: payload.userJid,
+    account_id: payload.accountId,
+    content: {
+      body: [{ type: 'message', text: 'Response text' }]
+    }
+  })
 });
+
+const messageBody = await messageResponse.text();
+console.log('Chatbot API response:', messageResponse.status, messageBody);
+if (!messageResponse.ok) throw new Error(messageBody);
 ```
 
 ## Can I Use Both?

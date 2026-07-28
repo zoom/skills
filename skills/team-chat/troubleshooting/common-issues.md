@@ -18,8 +18,9 @@ Quick diagnostics and solutions for Zoom Team Chat development.
 **Cause**: Using wrong token endpoint.
 
 **Fix**:
-- Use `https://zoom.us/oauth/token` for token exchange.
-- Do not use `https://zoom.us/oauth/token` for chatbot token requests.
+- Use `https://zoom.us/oauth/token` with `grant_type=client_credentials` for
+  chatbot token acquisition.
+- Do not use an authorization-code/user OAuth token for chatbot messages.
 
 Quick check:
 ```bash
@@ -50,6 +51,20 @@ if (error.message.includes('token expired')) {
 1. Go to Zoom Marketplace → Your App → Scopes
 2. Add missing scope (e.g., `chat_message:write`)
 3. Users must re-authorize the app
+
+## Chatbot Runtime Issues
+
+### "401 code 7010: Invalid authorization token"
+
+**First check for a mixed environment**:
+
+- Development token sent to a production API.
+- Production token sent to a development API.
+- Bot JID belonging to a different environment.
+- Client credentials and Bot JID belonging to different Marketplace apps.
+
+Use the client ID, client secret, Bot JID, and API environment from the same
+Marketplace app and deployment mode. Do not log the secrets themselves.
 
 ## Webhook Issues
 
@@ -118,6 +133,20 @@ console.log('Signature from Zoom:', req.headers['x-zm-signature']);
 # Should see webhook in server logs
 ```
 
+### "Webhook returns 200 but no bot reply appears"
+
+**Important**: webhook HTTP 200 confirms that Zoom delivered the event to your
+webhook. It does not confirm that `POST /v2/im/chat/messages` succeeded.
+
+For a real slash-command test, confirm all of these in order:
+
+- [ ] `bot_notification` reached the webhook.
+- [ ] `cmd`, `toJid`, `userJid`, and `accountId` were present.
+- [ ] Chatbot token acquisition succeeded with `grant_type=client_credentials`.
+- [ ] The outbound `/im/chat/messages` status and response body were logged.
+- [ ] The message API accepted the reply.
+- [ ] The reply is visible in Team Chat.
+
 ## Bot JID Issues
 
 ### "Bot JID not found"
@@ -147,16 +176,20 @@ console.log('Signature from Zoom:', req.headers['x-zm-signature']);
 1. **Wrong `to_jid`**
    ```javascript
    // Use toJid from webhook payload
-   await sendMessage(payload.toJid, accountId, content);
+   await sendMessage(payload.toJid, payload.userJid, payload.accountId, content);
    ```
 
-2. **Missing `account_id`**
+2. **Missing routing fields**
    ```javascript
-   // Required for chatbot messages
+   // Build these fields from bot_notification, not from a different account.
    {
-     "account_id": process.env.ZOOM_ACCOUNT_ID,  // Don't forget!
      "robot_jid": process.env.ZOOM_BOT_JID,
-     "to_jid": toJid
+     "to_jid": payload.toJid,
+     "user_jid": payload.userJid,
+     "account_id": payload.accountId,
+     "content": {
+       "body": [{ "type": "message", "text": "Hello" }]
+     }
    }
    ```
 
