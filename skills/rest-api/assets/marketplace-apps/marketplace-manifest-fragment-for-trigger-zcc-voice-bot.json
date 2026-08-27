@@ -1,0 +1,22 @@
+{
+  "features": {
+    "marketplace_triggers": {
+      "enable": true,
+      "triggers": [
+        {
+          "name": "Voice Bot All Events",
+          "command_id": "voicebot_all_events",
+          "trigger_type": "static_webhook",
+          "built_in_config": {
+            "definition_id": "VoiceBotAllEvents2025_Consolidated",
+            "version": "1.0.0"
+          },
+          "static_webhook_config": {
+            "connector_webhook_key": "voice_bot_conversation_events",
+            "connection_required": false
+          }
+        }
+      ]
+    }
+  }
+}

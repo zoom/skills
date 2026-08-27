@@ -1,0 +1,63 @@
+{
+  "features": {
+    "marketplace_actions": {
+      "enable": true,
+      "actions": [
+        {
+          "name": "Create CRM Record",
+          "command_id": "create_crm_record",
+          "description": "Create a CRM record from an AI Agent conversation.",
+          "locations": [
+            "VIRTUAL_AGENT"
+          ],
+          "trigger_selection_type": "TRIGGER_ENDPOINT",
+          "definition_type": 2,
+          "standard_input_definition": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "title": "Create CRM Record Input",
+            "properties": {
+              "title": {
+                "type": "string",
+                "title": "Title",
+                "description": "Short title for the CRM record."
+              }
+            },
+            "required": [
+              "title"
+            ]
+          },
+          "standard_output_definition": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "title": "Create CRM Record Output",
+            "properties": {
+              "recordId": {
+                "type": "string",
+                "title": "Record ID",
+                "description": "Unique identifier of the created CRM record."
+              }
+            },
+            "required": [
+              "recordId"
+            ]
+          },
+          "endpoint_key": "create_crm_record",
+          "input_mapping": [
+            {
+              "param_key": "title",
+              "required": true,
+              "mapping_template": "{{input.title}}"
+            }
+          ],
+          "output_mapping": [
+            {
+              "param_key": "recordId",
+              "mapping_template": "{{response.id}}"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

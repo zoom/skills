@@ -61,7 +61,8 @@ function detectSignals(rawQuery: string) {
     meetingCustomUi: hasAny(q, ['zoom meeting', 'custom ui', 'component view', 'embed meeting']),
     customVideo: hasAny(q, ['video sdk', 'custom video session', 'peer-video-state-change']),
     pluginSdk: hasAny(q, ['plugin sdk', 'control zoom workplace', 'zoom workplace ipc', 'desktop companion']),
-    restApi: hasAny(q, ['rest api', '/v2/', 'create meeting', 'list users', 's2s oauth']),
+    marketplaceManifest: hasAny(q, ['marketplace manifest', 'create marketplace app', 'marketplace actions', 'marketplace triggers', 'features.connect', 'external mcp connector']),
+    restApi: hasAny(q, ['rest api', '/v2/', 'create meeting', 'list users', 's2s oauth', 'marketplace manifest', 'create marketplace app', 'marketplace actions', 'marketplace triggers', 'features.connect', 'external mcp connector']),
     webhooks: hasAny(q, ['webhook', 'x-zm-signature', 'event subscription', 'crc']),
     oauth: hasAny(q, ['oauth', 'pkce', 'token refresh', 'account_credentials']),
     scribe: hasAny(q, ['scribe', 'transcribe file', 'transcribe recording', 'batch transcription']),
@@ -81,6 +82,7 @@ function detectSignals(rawQuery: string) {
 function pickPrimarySkill(s: ReturnType<typeof detectSignals>): SkillId {
   if (s.meetingCustomUi) return 'zoom-meeting-sdk-web-component-view';
   if (s.pluginSdk) return 'zoom-plugin-sdk';
+  if (s.marketplaceManifest) return 'zoom-rest-api';
   if (s.teamChatMcp) return 'zoom-mcp/team-chat';
   if (s.whiteboardMcp) return 'zoom-mcp/whiteboard';
   if (s.meetingsMcp) return 'zoom-mcp/meetings';
@@ -100,7 +102,7 @@ function buildChain(primary: SkillId, s: ReturnType<typeof detectSignals>): Skil
   const chain = [primary];
   const needsMcpOAuth = s.mcp || s.teamChatMcp || s.whiteboardMcp || s.meetingsMcp ||
     s.canvasMcp || s.docsMcp || s.tasksMcp || s.revenueMcp;
-  if ((s.oauth || s.pluginSdk || needsMcpOAuth) && !chain.includes('zoom-oauth')) {
+  if ((s.oauth || s.pluginSdk || s.marketplaceManifest || needsMcpOAuth) && !chain.includes('zoom-oauth')) {
     chain.push('zoom-oauth');
   }
   if (s.webhooks && !chain.includes('zoom-webhooks')) chain.push('zoom-webhooks');
@@ -128,6 +130,7 @@ For the full TypeScript implementation and handoff contract, use
 |--------------|----------------|
 | Build a custom web UI around a real Zoom meeting | **[zoom-meeting-sdk-web-component-view](../meeting-sdk/web/component-view/SKILL.md)** |
 | Build deterministic automation/configuration/reporting with explicit request control | **[zoom-rest-api](../rest-api/SKILL.md)** |
+| Create or update Marketplace apps, manifests, Connect routes, actions, or triggers | **[zoom-rest-api](../rest-api/SKILL.md)** |
 | Receive event notifications (HTTP push) | **[zoom-webhooks](../webhooks/SKILL.md)** |
 | Receive event notifications (WebSocket, low-latency) | **[zoom-websockets](../websockets/SKILL.md)** |
 | Embed Zoom meetings in my app | **[zoom-meeting-sdk](../meeting-sdk/SKILL.md)** |
@@ -198,6 +201,8 @@ Routing guardrails:
 
 Routing guardrails:
 - Do not replace deterministic backend APIs with MCP-only routing.
+- Route `features.connect.mcp` to `zoom-rest-api`, not `zoom-mcp`: Zoom is connecting to an
+  external MCP server in that manifest mode.
 - Do not force raw REST-first routing when the task is AI-agent tool orchestration.
 - Prefer hybrid routing when the user needs both stable automation and AI-driven interactions.
 - Zoom's current hosted MCP catalog uses Streamable HTTP; use this path when the target client/agent supports MCP transports (for example Claude, Cursor, VS Code).
@@ -362,6 +367,7 @@ Both receive event notifications, but differ in approach:
 - **[references/marketplace.md](references/marketplace.md)** - Marketplace portal navigation
 - **[../rest-api/references/marketplace-apps.md](../rest-api/references/marketplace-apps.md)** - API-driven Marketplace app creation, manifest validation, app-owned scopes, and app credential shapes
 - **[../rest-api/references/marketplace-app-templates.md](../rest-api/references/marketplace-app-templates.md)** - Scenario selector for General, S2S, Meeting SDK, and MCP app setup
+- **[../rest-api/references/marketplace-connect-actions-triggers.md](../rest-api/references/marketplace-connect-actions-triggers.md)** - Connect external APIs/MCP servers and add manifest actions or triggers
 - **[../rest-api/assets/marketplace-apps/marketplace-manifest-template-index.json](../rest-api/assets/marketplace-apps/marketplace-manifest-template-index.json)** - Machine-readable app-type compatibility catalog
 - **[references/query-routing-playbook.md](references/query-routing-playbook.md)** - Route complex queries to the right specialized skills
 - **[references/interview-answer-routing.md](references/interview-answer-routing.md)** - Short interview-ready answer pattern for zoom-general routing

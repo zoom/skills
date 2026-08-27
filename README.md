@@ -171,6 +171,9 @@ stable development hostname. In both cases, keep the app in development mode, va
 signatures, and do not expose client secrets or access tokens through the tunneled app. See the
 [Marketplace local tunnel workflow](skills/rest-api/references/marketplace-apps.md#local-tunnel-workflow-with-zoom-marketplace-helper)
 for the exact update sequence.
+For external REST or MCP connectors and manifest-managed actions/triggers, use the
+[Marketplace feature fragments](skills/rest-api/references/marketplace-connect-actions-triggers.md)
+and merge them into a complete General App manifest rather than submitting them alone.
 
 ## Skills
 

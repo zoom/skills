@@ -1,0 +1,22 @@
+{
+  "features": {
+    "marketplace_triggers": {
+      "enable": true,
+      "triggers": [
+        {
+          "name": "Zoom Phone All Events",
+          "command_id": "zoom_phone_all_events",
+          "trigger_type": "static_webhook",
+          "built_in_config": {
+            "definition_id": "ZoomPhoneAllEvents2025_Consolidated",
+            "version": "1.0.0"
+          },
+          "static_webhook_config": {
+            "connector_webhook_key": "zoom_phone_call_events",
+            "connection_required": false
+          }
+        }
+      ]
+    }
+  }
+}

@@ -5,6 +5,9 @@ for a known scenario. Most files are POST-ready create requests. Templates marke
 require feature setup in Marketplace after creation because the public create or manifest schema
 does not encode the complete feature.
 
+Files named `marketplace-manifest-fragment-for-*` are different: they are partial feature blocks
+that must be merged into a complete General App manifest. Never submit a fragment by itself.
+
 The canonical filenames intentionally include `marketplace-manifest-template-for` or
 `marketplace-app-creation-template-for` so an MCP client can distinguish a General App manifest
 from a native S2S or Meeting SDK create request. The machine-readable selector is
@@ -40,6 +43,7 @@ static template directly to an existing app without exporting its current manife
 | Team Chat MCP server | Yes, required for current read/write tools | No | No | - |
 | Whiteboard MCP server | Yes, verified path | No | Discovery only until tool execution is proven | - |
 | Meeting SDK | No | No | No | Dedicated `meeting_sdk` app |
+| Connect external REST API, MCP, actions, or triggers | Select user/admin usage from the APIs the app also calls | Select user/admin usage from the APIs the app also calls | No | General App manifest feature fragments |
 
 Treat scope suffixes as a hard boundary. User-managed General Apps use user scopes. Admin-managed
 General Apps and S2S apps use account/admin scopes. Do not combine both scope classes in one app.
@@ -86,6 +90,23 @@ An MCP client must check `app_type`, `usage`, `unsupported_app_types`, and
 | Revenue Accelerator MCP server | [marketplace-manifest-template-for-mcp-revenue-accelerator.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-revenue-accelerator.json) | General App, user-managed with PKCE | [Revenue Accelerator MCP](../../zoom-mcp/revenue-accelerator/SKILL.md) |
 | Team Chat MCP server | [marketplace-manifest-template-for-mcp-team-chat.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-team-chat.json) | General App, user-managed with PKCE | [Team Chat MCP](../../zoom-mcp/team-chat/SKILL.md) |
 | Whiteboard MCP server | [marketplace-manifest-template-for-mcp-whiteboard.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-whiteboard.json) | General App, user-managed with PKCE | [Whiteboard MCP](../../zoom-mcp/whiteboard/SKILL.md) |
+
+## Feature Fragment Selector
+
+These fragments extend a complete General App manifest selected above or exported from an
+existing app:
+
+| Capability | Fragment | Important dependency |
+|------------|----------|----------------------|
+| External REST API routes | [marketplace-manifest-fragment-for-connect-rest-api.json](../assets/marketplace-apps/marketplace-manifest-fragment-for-connect-rest-api.json) | Replace the URL, authentication, routes, and schemas |
+| External MCP server exposed inside Zoom | [marketplace-manifest-fragment-for-connect-external-mcp.json](../assets/marketplace-apps/marketplace-manifest-fragment-for-connect-external-mcp.json) | External server must support DCR or CIMD; do not set a static MCP client ID |
+| Custom AI Agent action | [marketplace-manifest-fragment-for-custom-action.json](../assets/marketplace-apps/marketplace-manifest-fragment-for-custom-action.json) | `endpoint_key` must match a Connect route key |
+| Zoom Phone built-in trigger | [marketplace-manifest-fragment-for-trigger-zoom-phone.json](../assets/marketplace-apps/marketplace-manifest-fragment-for-trigger-zoom-phone.json) | `connector_webhook_key` must match the app's Connect webhook |
+| ZCC Voice Bot built-in trigger | [marketplace-manifest-fragment-for-trigger-zcc-voice-bot.json](../assets/marketplace-apps/marketplace-manifest-fragment-for-trigger-zcc-voice-bot.json) | `connector_webhook_key` must match the app's Connect webhook |
+
+Read [Marketplace Connect, Actions, and Triggers](marketplace-connect-actions-triggers.md) before
+merging these blocks. Zoom-hosted MCP OAuth templates and `features.connect.mcp` solve opposite
+directions and are not interchangeable.
 
 ## Skill Coverage Audit
 
@@ -147,8 +168,18 @@ curl -X POST "https://api.zoom.us/v2/marketplace/apps" \
   --data @TEMPLATE.json
 ```
 
-Create S2S and Meeting SDK apps through the account-scoped endpoint with
-`marketplace:write:app:master`:
+For S2S and Meeting SDK apps, first try the current documented create operation with the
+app's native top-level request:
+
+```bash
+curl -X POST "https://api.zoom.us/v2/marketplace/apps" \
+  -H "Authorization: Bearer $ZOOM_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  --data @TEMPLATE.json
+```
+
+If Zoom returns code `1500` directing the caller to the account route, retry once through the
+verified account-scoped endpoint with `marketplace:write:app:master`:
 
 ```bash
 curl -X POST "https://api.zoom.us/v2/accounts/$ZOOM_ACCOUNT_ID/marketplace/apps" \
@@ -157,10 +188,10 @@ curl -X POST "https://api.zoom.us/v2/accounts/$ZOOM_ACCOUNT_ID/marketplace/apps"
   --data @TEMPLATE.json
 ```
 
-The access token in both examples comes from the previously created bootstrap app, not from the
-new app represented by `TEMPLATE.json`. For the account-scoped endpoint, verify both the master
+The access token in these examples comes from the previously created bootstrap app, not from the
+new app represented by `TEMPLATE.json`. For the account-scoped fallback, verify both the master
 scope and account-owner requirement; an admin-scoped token is not interchangeable with a master
-token.
+token. Do not automatically retry other failures or create duplicates after an ambiguous response.
 
 7. Store returned client secrets in a secret manager. Never print, commit, or retain them in
    test artifacts.
@@ -204,8 +235,9 @@ reads the result back.
   `account_credentials` token. Retry token exchange with a short bounded backoff and verify the
   returned `scope` before calling product APIs.
 - Runtime testing on 2026-07-13 confirmed S2S creation through
-  `/v2/accounts/{accountId}/marketplace/apps`; the regular endpoint redirected callers to that
-  route despite broader wording in the public API description. The test returned HTTP `201`,
+  `/v2/accounts/{accountId}/marketplace/apps`; the regular endpoint directed that tenant to the
+  account route. The current public operation schema lists all three app types on the regular
+  endpoint, so probe the regular route first and retain the account-scoped fallback. The test returned HTTP `201`,
   and cleanup through `DELETE /v2/marketplace/apps/{appId}` returned HTTP `200` with an empty
   body. Meeting SDK uses the same account-scoped creation surface but was not created in that
   probe.

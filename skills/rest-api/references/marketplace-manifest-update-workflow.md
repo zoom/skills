@@ -31,6 +31,11 @@ is not automatically authorized to update every app in the account.
 4. Apply the requested changes to the complete manifest in memory.
 5. Preserve all unmodified fields, including URLs, scopes, products, feature settings, and
    subscription configuration.
+   - Preserve unknown/new fields rather than rebuilding from an older static template.
+   - Preserve whichever `features.customer_form` or `features.custom_form` key the export uses.
+   - Connect credentials such as `token`, `password`, `secret`, and `client_secret` are
+     write-only and may be absent from export. Do not interpret omission as a request to clear
+     them or invent replacement values.
 6. Validate the complete candidate with `POST /v2/marketplace/apps/manifest/validate`.
 7. Require both a successful HTTP response and `ok: true`.
 8. Update with `PUT /v2/marketplace/apps/{appId}/manifest`.
@@ -107,6 +112,21 @@ When updating an MCP app:
 - Reauthorize the app after a scope change so newly issued access tokens contain the new scopes.
 - Run `tools/list` after authorization to verify that the active MCP server exposes the expected
   tool surface.
+
+These rules apply to OAuth apps used by an MCP client to call Zoom-hosted MCP servers. They do
+not describe `features.connect.mcp`, where Zoom connects to an external MCP server. For that
+opposite direction, read [Connect, Actions, and Triggers](marketplace-connect-actions-triggers.md).
+
+## Connect Update Rules
+
+- Keep every existing route and incoming-webhook `key` stable because actions and RestHook
+  subscriptions can reference those keys.
+- Merge `features.connect`, `marketplace_actions`, or `marketplace_triggers` into the exported
+  manifest; never replace the entire `features` object with a fragment.
+- If a requested update changes a write-only Connect credential, obtain the new value through a
+  secure channel and submit it once. Never log it or store it in a repository template.
+- For external MCP, keep `mcp.ext` present and do not set a static
+  `security.oauth_config.client_id`; Zoom uses DCR or CIMD.
 
 ## Failure Handling
 

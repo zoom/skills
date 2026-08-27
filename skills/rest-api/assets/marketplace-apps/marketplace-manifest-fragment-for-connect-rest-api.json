@@ -1,0 +1,38 @@
+{
+  "features": {
+    "connect": {
+      "enable": true,
+      "url": "https://api.example.com",
+      "security": {
+        "type": 8
+      },
+      "routes": [
+        {
+          "name": "Create CRM record",
+          "description": "Create a CRM record from an approved Zoom workflow.",
+          "path": "/records",
+          "method": "POST",
+          "key": "create_crm_record",
+          "request_body": {
+            "required": true,
+            "content": "application/json",
+            "schema": {
+              "type": "object",
+              "properties": [
+                {
+                  "key": "title",
+                  "name": "title",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": {
+            "description": "Created CRM record",
+            "content": "application/json"
+          }
+        }
+      ]
+    }
+  }
+}

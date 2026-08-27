@@ -1,8 +1,9 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "purpose": "Machine-readable selector for Zoom Marketplace app manifests and native app creation requests.",
   "source_of_truth": "The referenced JSON template contains the exact request and scope list. This index supplies compatibility and workflow metadata.",
   "mcp_catalog_last_verified": "2026-07-28",
+  "manifest_schema_last_verified": "2026-08-27",
   "servers": [
     {
       "id": "zoom-all-in-one",
@@ -76,7 +77,46 @@
     "Never use meeting_sdk for REST API OAuth, S2S, MCP, or Zoom Apps.",
     "For General Apps, preserve the complete manifest when updating an existing app.",
     "Treat the referenced template scopes as the baseline and remove unused scopes before submission.",
-    "App-owned Marketplace scopes are obtained with client_credentials and are not manifest scopes."
+    "App-owned Marketplace scopes are obtained with client_credentials and are not manifest scopes.",
+    "Feature fragments must be merged into a complete General App manifest and never submitted as standalone create requests.",
+    "Distinguish OAuth apps for Zoom-hosted MCP servers from features.connect.mcp, where Zoom connects to an external MCP server."
+  ],
+  "feature_fragments": [
+    {
+      "id": "connect-rest-api",
+      "file": "marketplace-manifest-fragment-for-connect-rest-api.json",
+      "merge_path": "features.connect",
+      "app_type": "general",
+      "purpose": "Expose external REST API routes to supported Zoom surfaces."
+    },
+    {
+      "id": "connect-external-mcp",
+      "file": "marketplace-manifest-fragment-for-connect-external-mcp.json",
+      "merge_path": "features.connect",
+      "app_type": "general",
+      "purpose": "Expose a third-party MCP server to supported Zoom surfaces; Zoom is the MCP client and uses DCR or CIMD."
+    },
+    {
+      "id": "custom-action",
+      "file": "marketplace-manifest-fragment-for-custom-action.json",
+      "merge_path": "features.marketplace_actions",
+      "app_type": "general",
+      "purpose": "Declare a custom action backed by a Connect route."
+    },
+    {
+      "id": "trigger-zoom-phone",
+      "file": "marketplace-manifest-fragment-for-trigger-zoom-phone.json",
+      "merge_path": "features.marketplace_triggers",
+      "app_type": "general",
+      "purpose": "Declare the documented Zoom Phone All Events built-in trigger."
+    },
+    {
+      "id": "trigger-zcc-voice-bot",
+      "file": "marketplace-manifest-fragment-for-trigger-zcc-voice-bot.json",
+      "merge_path": "features.marketplace_triggers",
+      "app_type": "general",
+      "purpose": "Declare the documented Zoom Contact Center Voice Bot All Events built-in trigger."
+    }
   ],
   "templates": [
     {

@@ -1,0 +1,14 @@
+{
+  "features": {
+    "connect": {
+      "enable": true,
+      "mcp": {
+        "base_url": "https://mcp.example.com/mcp",
+        "name": "Example MCP Server",
+        "ext": {
+          "description": "External MCP tools exposed to supported Zoom surfaces."
+        }
+      }
+    }
+  }
+}

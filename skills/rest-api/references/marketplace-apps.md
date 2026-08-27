@@ -39,7 +39,7 @@ endpoint, and the caller must satisfy its role restrictions:
 | Creation target | Endpoint | Required scope | Bootstrap guidance |
 |-----------------|----------|----------------|--------------------|
 | General App manifest | `POST /v2/marketplace/apps` | `marketplace:write:app` or `marketplace:write:app:admin` | An admin-managed General App or an S2S app with the accepted admin scope is suitable for account automation. The documented user scope also permits a user-authorized path where available. |
-| S2S OAuth or Meeting SDK app | `POST /v2/accounts/{accountId}/marketplace/apps` | `marketplace:write:app:master` | Requires the account owner/master-authorized path. Use a bootstrap app that can actually mint this master scope; do not assume `marketplace:write:app:admin` is equivalent. |
+| S2S OAuth or Meeting SDK app | Try the currently documented `POST /v2/marketplace/apps`; if Zoom returns code `1500` directing an account route, use `POST /v2/accounts/{accountId}/marketplace/apps` | Regular route: operation-listed app-write scope; account route: `marketplace:write:app:master` | Endpoint availability has varied by account and rollout. Preserve the account-owner/master-scope fallback verified in live tests. |
 
 Practical guardrails:
 
@@ -271,9 +271,10 @@ Official manifest schema pages currently document these top-level General App se
 | `oauth_information` | `usage`, redirect URIs, allow-list, strict modes, `scopes`, `scope_description`, `enable_private_pkce_client`, `enable_public_pkce_client`, public key settings | Use `USER_OPERATION` or `ADMIN_MANAGEMENT`; lowercase variants were rejected |
 | `oauth_information.*_public_key` | `enabled`, `well_known_url`, `keys[]` JWK fields for RSA or EC keys | `well_known_url` is mutually exclusive with inline `keys`; inline RSA and EC JWK shapes are documented by Zoom and were accepted in a parallel validation run |
 | `features.products` | `ZOOM_MEETING`, `ZOOM_CHAT`, `ZOOM_PHONE`, `ZOOM_ROOM`, `ZOOM_WEBINAR`, `ZOOM_CONTACT_CENTER`, `ZOOM_WHITEBOARD`, `ZOOM_EVENTS` | Invalid product enum values were rejected |
-| `features` | `connector`, `in_client_feature`, `zoom_client_support`, `embed`, `team_chat_subscription`, `event_subscription`, `connect`, `customer_form`, `marketplace_actions`, `sdk_domain_allow_list`, `plugin_sdk` | Prefer the official key `customer_form`. A parallel validation run also saw `custom_form` accepted, but do not emit it in new manifests |
+| `features` | `connector`, `in_client_feature`, `zoom_client_support`, `embed`, `team_chat_subscription`, `event_subscription`, `connect`, `customer_form` / `custom_form`, `marketplace_actions`, `marketplace_triggers`, `sdk_domain_allow_list`, `plugin_sdk` | Official pages have used both form keys. Preserve the key returned by export; for a new app use the latest official template and validate it rather than renaming blindly |
 | Template feature sections | `in_client_feature`, `zoom_client_support`, `embed`, `team_chat_subscription`, `event_subscription` | These can validate independently; Marketplace review can still require product-specific evidence and complete production URLs |
-| Schema-only feature sections | `connector`, `connect`, `customer_form`, `marketplace_actions`, `marketplace_triggers`, `plugin_sdk` | Parallel validation reported these accepted with `enable: true`, but treat them as schema coverage only unless the app actually uses the feature |
+| Connect and workflow sections | `connect`, `marketplace_actions`, `marketplace_triggers` | These now have field-level public schemas. Use [Connect, Actions, and Triggers](marketplace-connect-actions-triggers.md) and merge only the required fragment into a complete General App manifest |
+| Other feature sections | `connector`, `customer_form` / `custom_form`, `plugin_sdk` | Treat permissive validation as schema acceptance only; entitlement, persistence, installation, and review requirements still apply |
 
 Broad combined manifests are useful for schema testing but are not yet proven as one-shot
 create/persist inputs. A parallel live run reported that a broad combined manifest validated
@@ -288,6 +289,9 @@ Official schema sources:
 - Display information: https://developers.zoom.us/docs/build-flow/manifests/schema/display-information/
 - OAuth information: https://developers.zoom.us/docs/build-flow/manifests/schema/oauth-information/
 - Features: https://developers.zoom.us/docs/build-flow/manifests/schema/features/
+- Connect: https://developers.zoom.us/docs/build-flow/manifests/schema/connect/
+- Actions: https://developers.zoom.us/docs/build-flow/manifests/schema/actions/
+- Triggers: https://developers.zoom.us/docs/build-flow/manifests/schema/trigger/
 - Marketplace app APIs: https://developers.zoom.us/docs/api/marketplace/
 - Marketplace master app APIs: https://developers.zoom.us/docs/api/marketplace/ma/
 - Marketplace API inventory: https://developers.zoom.us/api-hub/marketplace/methods/endpoints.json
@@ -295,6 +299,8 @@ Official schema sources:
 For reusable request bodies, use [Marketplace App Templates](marketplace-app-templates.md).
 Select the closest scenario, replace every `example.com` value, reduce scopes to the exact
 operations required, validate General App manifests, and then create the app.
+For Connect routes, external MCP servers, actions, and built-in trigger blocks, use the
+[feature fragment reference](marketplace-connect-actions-triggers.md).
 
 ### General App Create/Get/Manifest/Update/Delete Shapes
 
@@ -566,6 +572,19 @@ Observed working user-managed pairing from a parallel validation run:
 }
 ```
 
+The current event-subscription API accepts these subscription targets where the app and token
+support them:
+
+| `subscription_scope` | Target fields |
+|----------------------|---------------|
+| `user` | `user_ids` |
+| `account` or `master_account` | `account_id` where required by the operation |
+| `team` | `team_ids` |
+| `group` | `user_group_ids` |
+
+Custom delivery headers can use type `0` (none), `1` (Basic), `2` (OAuth 2.0), or `3`
+(custom key/value). Treat header secrets as credentials and never store them in templates.
+
 This worked with a user-managed General App and a `client_credentials` token minted from
 that app's Client ID and Client Secret. A direct verification run on 2026-07-08 could not
 reproduce the token step because `POST /marketplace/apps` returned only `app_id`, so treat
@@ -590,9 +609,11 @@ live behavior is nuanced:
 - `app_type: "webhook_only"` with the same valid manifest was accepted, but `GET /marketplace/apps/{appId}` reported `app_type: "OAuthApp"` and OAuth scopes. Do not treat this as proof that the API created a true Webhook-only App.
 - `app_type: "webhook"` behaved similarly in live probing.
 
-For Server-to-Server OAuth creation, the current Marketplace API description lists
-`app_type: "s2s_oauth"` on both create surfaces, but live routing on 2026-07-10 required the
-account-scoped endpoint:
+For Server-to-Server OAuth creation, the current public operation schema for
+`POST /v2/marketplace/apps` lists `s2s_oauth`, `meeting_sdk`, and `general`. Its own request-body
+description still refers non-General creation to an account route, while live routing on
+2026-07-10 required the account-scoped endpoint. Use a capability probe rather than hard-coding
+one route for every tenant:
 
 - `POST /v2/marketplace/apps` returned HTTP `404`, Zoom code `1500`, directing the caller to
   `/v2/accounts/{accountId}/marketplace/apps` for Meeting SDK or S2S OAuth app creation.
@@ -625,10 +646,11 @@ token containing `marketplace:write:app:master` and confirmed the complete rever
 - `DELETE /v2/marketplace/apps/{appId}` returned HTTP `200` with an empty body and removed the
   temporary app. The live delete status therefore differs from the documented `204` response.
 
-Use the account-scoped route and a token containing `marketplace:write:app:master`; do not rely
-on the broader operation description for the regular create endpoint until runtime behavior
-changes. Treat returned client credentials as one-time secrets even when running an inactive
-creation probe.
+Try the regular documented route with the scope accepted for that operation. If Zoom returns
+code `1500` directing the request to the account route, retry once through the account-scoped
+route only when the caller has explicitly authorized app creation and the token contains
+`marketplace:write:app:master`. Treat returned client credentials as one-time secrets even when
+running an inactive creation probe.
 
 ### S2S Create, Token, and Manifest Shapes (Verified 2026-07-13)
 
@@ -674,7 +696,7 @@ Observed HTTP `201` create response fields:
 | `app_id` | string | Identifier required for later management and cleanup |
 | `app_name` | string | Echoes the requested name |
 | `app_type` | `"s2s_oauth"` | Native create response type |
-| `create_at` | date-time string | Live field is `create_at`, not documented `created_at` |
+| `create_at` or `created_at` | date-time string | Live probes returned `create_at`; the current public schema documents `created_at`. Accept either field. |
 | `dev_public_key` | `{ "enabled": boolean }` | Public-key feature state; no key material was returned in the probe |
 | `prod_public_key` | `{ "enabled": boolean }` | Production public-key feature state |
 | `development_credentials` | `{ "client_id": string, "client_secret": string }` | The single S2S credential pair; the field name does not imply a second production state |
@@ -694,7 +716,7 @@ Observed validation and routing behavior:
 | Malformed or wrong-type `manifest` | `201`, field ignored | Never infer S2S manifest support from create success |
 | `publish` or unknown top-level fields | `201`, fields ignored | Send only S2S-native fields |
 | Missing `contact_email` | `404`, code `1500`, missing required fields | Validate required fields client-side |
-| S2S sent to `POST /v2/marketplace/apps` | `404`, code `1500` directing account route | Use `/v2/accounts/{accountId}/marketplace/apps` |
+| S2S sent to `POST /v2/marketplace/apps` in the 2026-07 probe | `404`, code `1500` directing account route | Retry once with `/v2/accounts/{accountId}/marketplace/apps` and the master scope; do not assume all tenants still behave this way |
 | Delete through `DELETE /v2/marketplace/apps/{appId}` | `200`, empty body | Accept `200` even though the schema documents `204`; verify removal with `GET /v2/marketplace/apps?type=account_created` |
 
 Token exchange after active S2S creation:

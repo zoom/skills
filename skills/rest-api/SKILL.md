@@ -26,6 +26,11 @@ triggers:
   - "webhook verification"
   - "crc"
   - "download_url"
+  - "marketplace manifest"
+  - "create marketplace app"
+  - "marketplace actions"
+  - "marketplace triggers"
+  - "features.connect"
 ---
 
 # Zoom REST API
@@ -51,6 +56,9 @@ Expert guidance for building server-side integrations with the Zoom REST API. Th
 - **[Users](references/users.md)** - User provisioning and management
 - **[Recordings](references/recordings.md)** - Cloud recording access and download
 - **[AI Services](references/ai-services.md)** - Scribe, Summarizer, and Translator endpoint inventory and current AI Services path surface
+- **[Marketplace Apps](references/marketplace-apps.md)** - App creation, manifest validation, native app types, and response quirks
+- **[Marketplace Templates](references/marketplace-app-templates.md)** - Scenario manifests, native create requests, and merge-only feature fragments
+- **[Connect, Actions, and Triggers](references/marketplace-connect-actions-triggers.md)** - External REST/MCP connectors and manifest-managed workflow capabilities
 - **[GraphQL Queries](examples/graphql-queries.md)** - Alternative query API (beta)
 - **Integrated Index** - see the section below in this file
 
@@ -311,6 +319,7 @@ This skill includes comprehensive guides organized by category:
 - **[references/marketplace-apps.md](references/marketplace-apps.md)** - Marketplace app management
 - **[references/marketplace-app-templates.md](references/marketplace-app-templates.md)** - Select and customize POST-ready Marketplace app templates by scenario
 - **[references/marketplace-manifest-update-workflow.md](references/marketplace-manifest-update-workflow.md)** - Full-replacement updates for existing General App manifests
+- **[references/marketplace-connect-actions-triggers.md](references/marketplace-connect-actions-triggers.md)** - Connect routes, external MCP, custom actions, and built-in trigger fragments
 - **[assets/marketplace-apps/marketplace-manifest-template-index.json](assets/marketplace-apps/marketplace-manifest-template-index.json)** - Machine-readable app-type and template compatibility catalog
 - **[references/commerce.md](references/commerce.md)** - Commerce and billing APIs
 - **[references/contact-center.md](references/contact-center.md)** - Contact Center APIs

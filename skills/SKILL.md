@@ -70,6 +70,9 @@ For automated selection, read the
 [Marketplace template index](rest-api/assets/marketplace-apps/marketplace-manifest-template-index.json).
 Use the [manifest update workflow](rest-api/references/marketplace-manifest-update-workflow.md)
 for existing General Apps; S2S and Meeting SDK entries are create requests, not General App manifests.
+For external REST/MCP connectors and manifest-managed actions or triggers, merge the appropriate
+[feature fragment](rest-api/references/marketplace-connect-actions-triggers.md) into a complete
+General App manifest. This is distinct from configuring OAuth for Zoom-hosted MCP servers.
 
 ## Skill Discovery (Integrated)
 
@@ -101,6 +104,7 @@ Use `zoom-general` when:
 | I want to... | Use this skill |
 |--------------|----------------|
 | Build deterministic automation/configuration/reporting with explicit request control | **zoom-rest-api** |
+| Create or update Marketplace manifests, Connect routes, actions, or triggers | **zoom-rest-api** |
 | Receive event notifications (HTTP push) | **zoom-webhooks** |
 | Receive event notifications (WebSocket) | **zoom-websockets** |
 | Embed Zoom meetings in my app | **zoom-meeting-sdk** |

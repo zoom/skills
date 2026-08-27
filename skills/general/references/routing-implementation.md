@@ -65,6 +65,7 @@ interface Signals {
   pluginMacos: boolean;
   pluginWindows: boolean;
   restApi: boolean;
+  marketplaceManifest: boolean;
   mcp: boolean;
   whiteboardMcp: boolean;
   teamChatMcp: boolean;
@@ -119,7 +120,8 @@ export function detectSignals(rawQuery: string): Signals {
     ]),
     pluginMacos: hasAny(q, ['plugin sdk macos', 'zoomtoolsuiteapi', 'zoomtoolsuite framework']),
     pluginWindows: hasAny(q, ['plugin sdk windows', 'zmtoolsuiteproxy', 'ztoolsuiteipcproxy']),
-    restApi: hasAny(q, ['rest api', 'api create meeting', 'api list meetings', '/v2/', 'list users', 's2s oauth', 'meeting endpoint']),
+    restApi: hasAny(q, ['rest api', 'api create meeting', 'api list meetings', '/v2/', 'list users', 's2s oauth', 'meeting endpoint', 'marketplace manifest', 'create marketplace app', 'marketplace actions', 'marketplace triggers', 'features.connect', 'external mcp connector']),
+    marketplaceManifest: hasAny(q, ['marketplace manifest', 'create marketplace app', 'marketplace actions', 'marketplace triggers', 'features.connect', 'external mcp connector']),
     mcp: hasAny(q, ['zoom mcp', 'mcp server', 'agentic retrieval', 'tools/list', 'tools/call', 'semantic meeting search', 'search zoom', 'zoom docs search', 'zoom chat search']),
     whiteboardMcp: hasAny(q, ['whiteboard mcp', 'zoom whiteboard mcp', 'list whiteboards', 'get a whiteboard', 'wb/db', 'whiteboard_id']),
     teamChatMcp: hasAny(q, ['team chat mcp', 'zoom chat mcp', 'send zoom chat via mcp', 'edit zoom chat message mcp', 'zoom_chat_message_send', 'zoom_chat_channel_create']),
@@ -165,6 +167,7 @@ function pickPrimarySkill(s: Signals): SkillId {
   if (s.summarizer) return 'summarizer';
   if (s.translator) return 'translator';
   if (s.scribe) return 'scribe';
+  if (s.marketplaceManifest) return 'zoom-rest-api';
   if (s.teamChatMcp) return 'zoom-mcp/team-chat';
   if (s.meetingsMcp) return 'zoom-mcp/meetings';
   if (s.canvasMcp || s.docsMcp) return 'zoom-mcp/canvas';
@@ -188,8 +191,8 @@ function pickPrimarySkill(s: Signals): SkillId {
 function buildChain(primary: SkillId, s: Signals): SkillId[] {
   const chain = new Set<SkillId>();
 
-  const mcpIntent = s.mcp || s.whiteboardMcp || s.teamChatMcp || s.meetingsMcp ||
-    s.canvasMcp || s.docsMcp || s.tasksMcp || s.revenueMcp;
+  const mcpIntent = !s.marketplaceManifest && (s.mcp || s.whiteboardMcp || s.teamChatMcp ||
+    s.meetingsMcp || s.canvasMcp || s.docsMcp || s.tasksMcp || s.revenueMcp);
 
   // MCP setup starts with Marketplace app creation, then OAuth token acquisition.
   if (mcpIntent) chain.add('zoom-rest-api');
@@ -235,21 +238,30 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
 function buildResourceHints(primary: SkillId, s: Signals): string[] {
   const hints: string[] = [];
 
-  const mcpIntent = s.mcp || s.whiteboardMcp || s.teamChatMcp || s.meetingsMcp ||
-    s.canvasMcp || s.docsMcp || s.tasksMcp || s.revenueMcp;
+  const mcpIntent = !s.marketplaceManifest && (s.mcp || s.whiteboardMcp || s.teamChatMcp ||
+    s.meetingsMcp || s.canvasMcp || s.docsMcp || s.tasksMcp || s.revenueMcp);
+
+  if (s.marketplaceManifest) {
+    hints.push('rest-api/references/marketplace-apps.md');
+    hints.push('rest-api/references/marketplace-app-templates.md');
+    hints.push('rest-api/references/marketplace-connect-actions-triggers.md');
+    hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-index.json');
+  }
 
   if (mcpIntent) {
     hints.push('rest-api/references/marketplace-app-templates.md');
     hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-index.json');
     hints.push('zoom-mcp/concepts/oauth-setup.md');
   }
-  if (s.meetingsMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-meetings.json');
-  else if (s.canvasMcp || s.docsMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-canvas.json');
-  else if (s.tasksMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-tasks.json');
-  else if (s.revenueMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-revenue-accelerator.json');
-  else if (s.teamChatMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-team-chat.json');
-  else if (s.whiteboardMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-whiteboard.json');
-  else if (s.mcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-default.json');
+  if (mcpIntent) {
+    if (s.meetingsMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-meetings.json');
+    else if (s.canvasMcp || s.docsMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-canvas.json');
+    else if (s.tasksMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-tasks.json');
+    else if (s.revenueMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-revenue-accelerator.json');
+    else if (s.teamChatMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-team-chat.json');
+    else if (s.whiteboardMcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-whiteboard.json');
+    else if (s.mcp) hints.push('rest-api/assets/marketplace-apps/marketplace-manifest-template-for-mcp-default.json');
+  }
 
   if (primary === 'zoom-plugin-sdk' || primary === 'zoom-plugin-sdk-macos' || primary === 'zoom-plugin-sdk-windows' || s.pluginSdk || s.pluginMacos || s.pluginWindows) {
     hints.push('plugin-sdk/faq.md');
