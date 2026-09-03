@@ -1,0 +1,278 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "whiteboard",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/whiteboard.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "StartWhiteboardOptions",
+      "description": "Options for starting a whiteboard session",
+      "properties": [
+        {
+          "name": "isDisableExport",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether to disable whiteboard export functionality.\nWhen set to true, users will not be able to export the whiteboard as PDF."
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "WhiteboardSharePermissionCode",
+      "members": [
+        {
+          "name": "LockShare",
+          "value": "0",
+          "description": "Only the host or manager can start whiteboard sharing.\nOther participants cannot initiate or take control of the whiteboard."
+        },
+        {
+          "name": "HostGrab",
+          "value": "1",
+          "description": "Host or manager can grab control of the whiteboard from the current presenter.\nRegular participants can start whiteboard but may lose control to host/manager."
+        },
+        {
+          "name": "AnyoneGrab",
+          "value": "3",
+          "description": "Any participant can grab control of the whiteboard.\nMost permissive mode allowing any participant to take over whiteboard control."
+        }
+      ],
+      "description": "Permission codes for whiteboard sharing control.\nDetermines who can start or take control of a whiteboard session."
+    },
+    {
+      "kind": "enum",
+      "type": "WhiteboardInitiatePermissionCode",
+      "members": [
+        {
+          "name": "HostOnly",
+          "value": "0",
+          "description": "Only the host or manager can initiate a new whiteboard.\nRegular participants cannot create new whiteboard sessions."
+        },
+        {
+          "name": "AllParticipants",
+          "value": "2",
+          "description": "All participants can initiate new whiteboards.\nMost permissive mode allowing any participant to create whiteboard sessions."
+        }
+      ],
+      "description": "Permission codes for initiating new whiteboard sessions.\nControls who can create new whiteboard instances during a meeting."
+    },
+    {
+      "kind": "enum",
+      "type": "WhiteboardStatus",
+      "members": [
+        {
+          "name": "Closed",
+          "value": "0",
+          "description": "Whiteboard session is closed or not started."
+        },
+        {
+          "name": "Pending",
+          "value": "1",
+          "description": "Whiteboard is initializing."
+        },
+        {
+          "name": "InProgress",
+          "value": "2",
+          "description": "Whiteboard session is active and in progress."
+        }
+      ],
+      "description": "Status of the whiteboard session"
+    },
+    {
+      "kind": "namespace",
+      "type": "WhiteboardClient",
+      "description": "The client for managing whiteboard functionality in a Zoom meeting.\nProvides methods for starting, viewing, and controlling collaborative whiteboards.",
+      "methods": [
+        {
+          "name": "startWhiteboardScreen",
+          "signature": "startWhiteboardScreen(element: HTMLElement, options?: StartWhiteboardOptions): ExecutedResult | Promise<string>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "element",
+              "type": "HTMLElement",
+              "optional": false,
+              "description": "- HTML element where the whiteboard will be rendered"
+            },
+            {
+              "name": "options",
+              "type": "StartWhiteboardOptions",
+              "optional": true,
+              "description": "- Optional configuration whiteboard"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult | Promise<string>",
+            "description": "Promise that resolves when the whiteboard session starts successfully"
+          },
+          "description": "Start a whiteboard session as the presenter.\nThe current user becomes the whiteboard presenter.",
+          "examples": [
+            "// Start a new blank whiteboard\nawait whiteboardClient.startWhiteboardScreen(whiteboardElement);"
+          ]
+        },
+        {
+          "name": "stopWhiteboardScreen",
+          "signature": "stopWhiteboardScreen(): ExecutedResult | Promise<string>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult | Promise<string>",
+            "description": "Promise that resolves when the whiteboard session stops successfully"
+          },
+          "description": "Stop the current whiteboard session as the presenter.\nOnly the current presenter can stop their own whiteboard session.\nOther participants' view will automatically close when the presenter stops.",
+          "examples": [
+            "await whiteboardClient.stopWhiteboardScreen();"
+          ]
+        },
+        {
+          "name": "startWhiteboardView",
+          "signature": "startWhiteboardView(element: HTMLElement, presenterId: number, options?: StartWhiteboardOptions): ExecutedResult | Promise<string>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "element",
+              "type": "HTMLElement",
+              "optional": false,
+              "description": "- HTML element where the whiteboard will be rendered"
+            },
+            {
+              "name": "presenterId",
+              "type": "number",
+              "optional": false,
+              "description": "- User ID of the whiteboard presenter to view"
+            },
+            {
+              "name": "options",
+              "type": "StartWhiteboardOptions",
+              "optional": true,
+              "description": "- Optional configuration whiteboard"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult | Promise<string>",
+            "description": "Promise that resolves when successfully joined the whiteboard view"
+          },
+          "description": "Start viewing another participant's whiteboard session.\nAllows the current user to see and interact with a whiteboard being presented by another user.\nThe viewer can see real-time updates and may be able to annotate based on permissions.",
+          "examples": [
+            "// Listen for peer whiteboard state changes and automatically join\nclient.on('peer-whiteboard-state-change', async (payload) => {\n  const { action, userId } = payload;\n\n  if (action === 'Start') {\n    // Another user started presenting whiteboard\n    await whiteboardClient.startWhiteboardView(whiteboardElement, userId);\n  } else if (action === 'Stop') {\n    // Presenter stopped sharing whiteboard\n    await whiteboardClient.stopWhiteboardView();\n  }\n});\n\n// Or manually view a specific presenter's whiteboard\nconst presenter = whiteboardClient.getWhiteboardPresenter();\nif (presenter) {\n  await whiteboardClient.startWhiteboardView(whiteboardElement, presenter.userId);\n}"
+          ]
+        },
+        {
+          "name": "stopWhiteboardView",
+          "signature": "stopWhiteboardView(): ExecutedResult | Promise<string>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult | Promise<string>",
+            "description": "Promise that resolves when successfully stopped viewing the whiteboard"
+          },
+          "description": "Stop viewing the current whiteboard session.\nDisconnects the current user from viewing another participant's whiteboard.",
+          "examples": [
+            "await whiteboardClient.stopWhiteboardView();"
+          ]
+        },
+        {
+          "name": "exportWhiteboard",
+          "signature": "exportWhiteboard(format: 'pdf', name?: string, includeComments?: boolean): ExecutedResult | Promise<string>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "format",
+              "type": "'pdf'",
+              "optional": false,
+              "description": "- Export format: 'pdf' for document"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "optional": true,
+              "description": "- Optional custom filename (without extension). Defaults to meeting topic"
+            },
+            {
+              "name": "includeComments",
+              "type": "boolean",
+              "optional": true,
+              "description": "- Whether to include comments in the export. Defaults to false"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult | Promise<string>",
+            "description": "Promise that resolves when export completes and download starts"
+          },
+          "description": "Set whiteboard permission settings for the meeting.\nControls who can share and initiate whiteboards.\nOnly the host or manager can change whiteboard permissions.\nLock or unlock whiteboard sharing permissions.\nWhen locked, only the host or manager can start whiteboard sharing.\nConvenience method that sets sharePermission to LockShare or HostGrab.\nExport the current whiteboard content to a file.\nDownloads the whiteboard as an document (PDF).\nCan optionally include comments and annotations in the export.",
+          "examples": [
+            "// Allow only host to start whiteboard, but anyone can grab control\nawait whiteboardClient.setWhiteboardPermission({\n  initiatePermission: WhiteboardInitiatePermissionCode.HostOnly,\n  sharePermission: WhiteboardSharePermissionCode.AnyoneGrab\n});\n\n// Lock down whiteboard to host only\nawait whiteboardClient.setWhiteboardPermission({\n  initiatePermission: WhiteboardInitiatePermissionCode.HostOnly,\n  sharePermission: WhiteboardSharePermissionCode.LockShare\n});",
+            "// Lock whiteboard to host only\nawait whiteboardClient.lockWhiteboardPermission(true);\n\n// Unlock to allow host grabbing\nawait whiteboardClient.lockWhiteboardPermission(false);",
+            "// Export as PDF with default name\nawait whiteboardClient.exportWhiteboard('pdf');\n\n// Export as pdf with custom name and comments\nawait whiteboardClient.exportWhiteboard('pdf', 'brainstorm-session', true);"
+          ]
+        },
+        {
+          "name": "isWhiteboardEnabled",
+          "signature": "isWhiteboardEnabled(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "true if whiteboard feature is available, false otherwise"
+          },
+          "description": "Check if whiteboard feature is enabled for the current meeting.\nWhiteboard may be disabled due to account settings, device limitations,\nor unsupported platforms (e.g., mobile browsers).",
+          "examples": [
+            "if (whiteboardClient.isWhiteboardEnabled()) {\n  // Show whiteboard UI controls\n} else {\n  // Hide or disable whiteboard features\n}"
+          ]
+        },
+        {
+          "name": "getWhiteboardStatus",
+          "signature": "getWhiteboardStatus(): WhiteboardStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "WhiteboardStatus",
+            "description": "Current WhiteboardStatus (Closed, Pending, or InProgress)"
+          },
+          "description": "Get the current whiteboard session status.",
+          "examples": [
+            "const status = whiteboardClient.getWhiteboardStatus();\nif (status === WhiteboardStatus.InProgress) {\n  console.log('Whiteboard is active');\n}"
+          ]
+        },
+        {
+          "name": "getWhiteboardPresenter",
+          "signature": "getWhiteboardPresenter(): Participant | null",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Participant | null",
+            "description": "Participant object of the current presenter, or null if no active session"
+          },
+          "description": "Get the current whiteboard presenter information.\nReturns null if no whiteboard session is active.",
+          "examples": [
+            "const presenter = whiteboardClient.getWhiteboardPresenter();\nif (presenter) {\n  console.log(`${presenter.displayName} is presenting the whiteboard`);\n}"
+          ]
+        },
+        {
+          "name": "canStartWhiteboard",
+          "signature": "canStartWhiteboard(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "true if the current user is allowed to start a whiteboard, false otherwise"
+          },
+          "description": "Get the current whiteboard permission settings for the meeting.\nCheck if the current user can start a whiteboard session.\nTakes into account permissions, current sharing state, and whiteboard status.\nReturns false if whiteboard is disabled, screen sharing is active,\nor user lacks necessary permissions.",
+          "examples": [
+            "const permissions = whiteboardClient.getWhiteboardPermission();\nconsole.log('Share permission:', permissions.sharePermission);\nconsole.log('Initiate permission:', permissions.initiatePermission);",
+            "const startButton = document.getElementById('start-whiteboard-btn');\nstartButton.disabled = !whiteboardClient.canStartWhiteboard();\n\n// Or use in conditional logic\nif (whiteboardClient.canStartWhiteboard()) {\n  await whiteboardClient.startWhiteboardScreen(element);\n} else {\n  console.log('You do not have permission to start a whiteboard');\n}"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/whiteboard.d.ts"
+    ],
+    "declarationCount": 5
+  }
+}

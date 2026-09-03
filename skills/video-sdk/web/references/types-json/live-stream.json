@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "live-stream",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/live-stream.d.ts",
+  "declarations": [
+    {
+      "kind": "enum",
+      "type": "LiveStreamStatus",
+      "members": [
+        {
+          "name": "Ended",
+          "value": "0",
+          "description": "Not started or ended."
+        },
+        {
+          "name": "InProgress",
+          "value": "1",
+          "description": "Live streaming is in progress."
+        },
+        {
+          "name": "Connecting",
+          "value": "2",
+          "description": "Attempting to connect to the live streaming service."
+        },
+        {
+          "name": "Timeout",
+          "value": "3",
+          "description": "The connection to the live streaming service has timed out."
+        }
+      ],
+      "description": "Status of the live stream."
+    },
+    {
+      "kind": "namespace",
+      "type": "LiveStreamClient",
+      "description": "The live streaming client.\nVideo SDK supports live streaming of a session to Facebook Live, YouTube Live, and a number of other custom live streaming platforms.",
+      "methods": [
+        {
+          "name": "startLiveStream",
+          "signature": "startLiveStream(streamUrl: string, streamKey: string, broadcastUrl: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "streamUrl",
+              "type": "string",
+              "optional": false,
+              "description": "Third-party live stream URL."
+            },
+            {
+              "name": "streamKey",
+              "type": "string",
+              "optional": false,
+              "description": "Third-party live streaming key."
+            },
+            {
+              "name": "broadcastUrl",
+              "type": "string",
+              "optional": false,
+              "description": "Broadcast URL."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Start live streaming\n- Only the **host** can start live streaming."
+        },
+        {
+          "name": "stopLiveStream",
+          "signature": "stopLiveStream(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Stops live streaming.\n- Only the **host** can stop live streaming."
+        },
+        {
+          "name": "isLiveStreamEnabled",
+          "signature": "isLiveStreamEnabled(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "boolean"
+          },
+          "description": "Whether live streaming is enabled or not."
+        },
+        {
+          "name": "getLiveStreamStatus",
+          "signature": "getLiveStreamStatus(): LiveStreamStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "LiveStreamStatus"
+          },
+          "description": "Gets live streaming status."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/live-stream.d.ts"
+    ],
+    "declarationCount": 2
+  }
+}

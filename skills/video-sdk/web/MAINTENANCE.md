@@ -1,5 +1,19 @@
 # Skill Maintenance Guide
 
+## Current Upstream Snapshot
+
+- Repository: `https://github.com/zoom/videosdk-web`
+- SDK version: `2.5.0`
+- Source commit: `89881993332266b6ee87b448c8c5a270b194d874`
+- Source date: 2026-08-10
+- Build guidance: upstream `skill/`
+- AI type metadata: upstream `dist/types-json/`
+
+The upstream build skill is the primary implementation layer. Existing local
+concepts, examples, runbooks, and extended framework notes are complementary.
+Generated JSON belongs in `references/types-json/` and must be read on demand,
+not loaded wholesale into `SKILL.md`.
+
 ## How This Skill Was Created
 
 ### 1. Information Sources
@@ -123,6 +137,14 @@ Content...
    diff -r old-types/ types/
    ```
 
+   Also sync and compare the official AI metadata:
+
+   ```bash
+   git clone --depth 1 https://github.com/zoom/videosdk-web.git
+   diff -r skills/video-sdk/web/references/types-json \
+     videosdk-web/dist/types-json
+   ```
+
 3. **Fetch Latest Documentation**
 
    - Visit the official documentation URLs listed above
@@ -178,6 +200,13 @@ Please update skills/video-sdk/web/[FILE].md:
 ```
 
 ## Version History
+
+### v1.2.0 (2026-09-03)
+
+- Synchronized the official Video SDK Web 2.5.0 build skill and references.
+- Added the complete official AI JSON type-definition corpus with a selective-read index.
+- Made installed package declarations authoritative when application versions differ.
+- Preserved local architecture, examples, runbooks, and framework appendices.
 
 ### v1.1.0 (2026-06-24)
 

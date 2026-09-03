@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "broadcast-streaming",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/broadcast-streaming.d.ts",
+  "declarations": [
+    {
+      "kind": "enum",
+      "type": "BroadcastStreamingStatus",
+      "members": [
+        {
+          "name": "Init",
+          "value": "0",
+          "description": "Init status"
+        },
+        {
+          "name": "Pending",
+          "value": "1",
+          "description": "Attempting to connecting the broadcast streaming"
+        },
+        {
+          "name": "InProgress",
+          "value": "2",
+          "description": "Broadcast streaming is in progress"
+        },
+        {
+          "name": "Closing",
+          "value": "3",
+          "description": "Broadcast streaming is closing"
+        },
+        {
+          "name": "Closed",
+          "value": "4",
+          "description": "Broadcast streaming has ended"
+        }
+      ],
+      "description": "Status of broadcast streaming"
+    },
+    {
+      "kind": "namespace",
+      "type": "BroadcastStreamingClient",
+      "description": "The client of broadcast streaming",
+      "methods": [
+        {
+          "name": "startBroadcast",
+          "signature": "startBroadcast(): ExecutedResult | Promise<string>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult | Promise<string>"
+          },
+          "description": "Start broadcast streaming"
+        },
+        {
+          "name": "stopBroadcast",
+          "signature": "stopBroadcast(channelId?: string): ExecutedResult | Promise<string>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "channelId",
+              "type": "string",
+              "optional": true,
+              "description": "Optional.  Required only if the original host started the broadcast and then transferred the host role to another user. In this case, the new host needs to provide the channelId to stop the broadcast."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult | Promise<string>"
+          },
+          "description": "Stop broadcast streaming"
+        },
+        {
+          "name": "getBroadcastStreamingStatus",
+          "signature": "getBroadcastStreamingStatus(): { status: BroadcastStreamingStatus; channelId: string; }",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "{ status: BroadcastStreamingStatus; channelId: string; }"
+          },
+          "description": "Get the broadcast streaming status."
+        },
+        {
+          "name": "isBroadcastStreamingEnable",
+          "signature": "isBroadcastStreamingEnable(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Is broadcast streaming enabled."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/broadcast-streaming.d.ts"
+    ],
+    "declarationCount": 2
+  }
+}

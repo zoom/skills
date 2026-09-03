@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "preview",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/preview.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "TestSpeakerOption",
+      "description": "Interface for test speaker options.",
+      "properties": [
+        {
+          "name": "speakerId",
+          "type": "string",
+          "optional": true,
+          "description": "The speaker ID. If not specified, the SDK uses the default speaker."
+        },
+        {
+          "name": "sampleAudioUrl",
+          "type": "string",
+          "optional": true,
+          "description": "The sample audio file to play, usually an mp3 file. If not specified, the SDK uses the ring audio."
+        },
+        {
+          "name": "onAnalyseFrequency",
+          "type": "(averageFrequency: number) => void",
+          "optional": true,
+          "description": "The average frequency of the stream, usually used to create audio visualization."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "TestSpeakerReturn",
+      "description": "Interface for the test speaker return.",
+      "properties": [
+        {
+          "name": "stop",
+          "type": "() => void",
+          "optional": false,
+          "description": "Stops the tester."
+        },
+        {
+          "name": "destroy",
+          "type": "() => void",
+          "optional": false,
+          "description": "Destroys the tester."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "TestMicrophoneOption",
+      "description": "Interface for test microphone options.",
+      "properties": [
+        {
+          "name": "microphoneId",
+          "type": "string",
+          "optional": true,
+          "description": "The microphone ID. If not specified, the SDK uses the default microphone."
+        },
+        {
+          "name": "speakerId",
+          "type": "string",
+          "optional": true,
+          "description": "The speaker ID. The Speaker to play the recording."
+        },
+        {
+          "name": "recordAndPlay",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user needs to record and play an audio fragment to test the microphone."
+        },
+        {
+          "name": "maxRecordDuration",
+          "type": "number",
+          "optional": true,
+          "description": "The maximum seconds to record, the user needs to record. Default is 10 seconds."
+        },
+        {
+          "name": "onAnalyseFrequency",
+          "type": "(averageFrequency: number) => void",
+          "optional": true,
+          "description": "The average frequency of the stream, usually used to create audio visualization."
+        },
+        {
+          "name": "onStartRecording",
+          "type": "() => void",
+          "optional": true,
+          "description": "When to start recording."
+        },
+        {
+          "name": "onStopRecording",
+          "type": "() => void",
+          "optional": true,
+          "description": "When to stop recording."
+        },
+        {
+          "name": "onStartPlayRecording",
+          "type": "() => void",
+          "optional": true,
+          "description": "When to start playing the recording."
+        },
+        {
+          "name": "onStopPlayRecording",
+          "type": "() => void",
+          "optional": true,
+          "description": "When to stop playing the recording."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "TestMicrophoneReturn",
+      "description": "Interface for the test microphone return.",
+      "properties": [
+        {
+          "name": "stop",
+          "type": "() => void",
+          "optional": false,
+          "description": "Stops the tester."
+        },
+        {
+          "name": "stopRecording",
+          "type": "() => void",
+          "optional": false,
+          "description": "Stops recording audio."
+        },
+        {
+          "name": "destroy",
+          "type": "() => void",
+          "optional": false,
+          "description": "Destroys the tester."
+        }
+      ]
+    },
+    {
+      "kind": "callback_interface",
+      "type": "LocalVideoTrack",
+      "description": "Interface for starting or stopping local video capture.",
+      "methods": [
+        {
+          "name": "start",
+          "signature": "start(previewDOMElement: VideoPlayer | HTMLVideoElement | HTMLCanvasElement, virtualBackground?: { imageUrl: string; cropped?: boolean; }): Promise<void | Error>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "previewDOMElement",
+              "type": "VideoPlayer | HTMLVideoElement | HTMLCanvasElement",
+              "optional": false,
+              "description": "Video DOM element that will contain the video playback. Canvas and VideoPlayer Element will contain the video with virtual background. We recommend you use the VideoPlayer Element."
+            },
+            {
+              "name": "virtualBackground",
+              "type": "{ imageUrl: string; cropped?: boolean; }",
+              "optional": true,
+              "description": "virtual background setting"
+            }
+          ],
+          "returns": {
+            "type": "Promise<void | Error>"
+          },
+          "description": "Starts local video capture and plays it back."
+        },
+        {
+          "name": "stop",
+          "signature": "stop(): Promise<void | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<void | Error>"
+          },
+          "description": "Stops local video capture."
+        },
+        {
+          "name": "switchCamera",
+          "signature": "switchCamera(deviceId: string | MobileVideoFacingMode): Promise<void | Error>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "deviceId",
+              "type": "string | MobileVideoFacingMode",
+              "optional": false,
+              "description": "The ID of the camera to switch to or on mobile platform, using facingMode instead."
+            }
+          ],
+          "returns": {
+            "type": "Promise<void | Error>"
+          },
+          "description": "Switch camera."
+        },
+        {
+          "name": "updateVirtualBackground",
+          "signature": "updateVirtualBackground(imageUrl?: string, cropped?: boolean): Promise<void | Error>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "imageUrl",
+              "type": "string",
+              "optional": true,
+              "description": "Image URL for the virtual background."
+            },
+            {
+              "name": "cropped",
+              "type": "boolean",
+              "optional": true,
+              "description": "Determines whether to crop the background image to an appropriate aspect ratio (16/9), default is false."
+            }
+          ],
+          "returns": {
+            "type": "Promise<void | Error>"
+          },
+          "description": "Update the preview virtual background image."
+        }
+      ]
+    },
+    {
+      "kind": "callback_interface",
+      "type": "LocalAudioTrack",
+      "description": "Interface for managing local audio capture.",
+      "methods": [
+        {
+          "name": "start",
+          "signature": "start(): Promise<void | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<void | Error>"
+          },
+          "description": "Starts local audio capture with microphone muted."
+        },
+        {
+          "name": "unmute",
+          "signature": "unmute(): Promise<void | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<void | Error>"
+          },
+          "description": "Unmutes microphone if audio was started, and microphone is not already unmuted."
+        },
+        {
+          "name": "mute",
+          "signature": "mute(): Promise<void | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<void | Error>"
+          },
+          "description": "Mutes microphone if audio was started, and microphone is not already muted."
+        },
+        {
+          "name": "getCurrentVolume",
+          "signature": "getCurrentVolume(): number",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "number"
+          },
+          "description": "Returns the current volume of the local input device."
+        },
+        {
+          "name": "stop",
+          "signature": "stop(): Promise<void | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<void | Error>"
+          },
+          "description": "Stops local audio capture."
+        },
+        {
+          "name": "testSpeaker",
+          "signature": "testSpeaker(options?: TestSpeakerOption): TestSpeakerReturn | undefined",
+          "async": false,
+          "parameters": [
+            {
+              "name": "options",
+              "type": "TestSpeakerOption",
+              "optional": true,
+              "description": "The test speaker option."
+            }
+          ],
+          "returns": {
+            "type": "TestSpeakerReturn | undefined"
+          },
+          "description": "Tests the speaker, usually used to test the speaker before a meeting."
+        },
+        {
+          "name": "testMicrophone",
+          "signature": "testMicrophone(options?: TestMicrophoneOption): TestMicrophoneReturn | undefined",
+          "async": false,
+          "parameters": [
+            {
+              "name": "options",
+              "type": "TestMicrophoneOption",
+              "optional": true,
+              "description": "the test microphone option."
+            }
+          ],
+          "returns": {
+            "type": "TestMicrophoneReturn | undefined"
+          },
+          "description": "Tests the microphone, usually used to test the microphone before a meeting."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/preview.d.ts"
+    ],
+    "declarationCount": 6
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "zoomstreaming",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/zoomstreaming.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "StreamingWatermark",
+      "description": "Streaming watermark",
+      "properties": [
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false,
+          "description": "Watermark text"
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "optional": false,
+          "description": "Watermark opacity"
+        },
+        {
+          "name": "repeat",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether the watermark is repeat"
+        },
+        {
+          "name": "position",
+          "type": "'top' | 'bottom' | 'left' | 'middle' | 'right'",
+          "optional": false,
+          "description": "Watermark position"
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "ZoomBroadcastStreamingOptions",
+      "description": "Options of Zoom Broadcast streaming",
+      "properties": [
+        {
+          "name": "dependentAssets",
+          "type": "string",
+          "optional": true,
+          "description": "Optional.  The Zoom Video SDK uses web workers and web assembly to process the media stream.\n- `Global`: The default value. The dependent assets path will be `https://source.zoom.us/videosdk/{version}/lib/`\n- `CDN`: The dependent assets path will be `https://dmogdx0jrul3u.cloudfront.net/videosdk/{version}/lib/`\n- `CN`: Only applicable for China. The dependent assets path will be https://jssdk.zoomus.cn/videosdk/{version}/lib\n- `{FULL_ASSETS_PATH}`: The SDK will load the dependent assets specified by the developer."
+        },
+        {
+          "name": "alternativeNameForLiveVideo",
+          "type": "string",
+          "optional": true,
+          "description": "Optional. Alternative name for Zoom Live Video to avoid name conflict with any existing web components you may be using."
+        },
+        {
+          "name": "webEndpoint",
+          "type": "string",
+          "optional": true,
+          "description": "Optional. Specifies the web endpoint. The default is zoom.us."
+        },
+        {
+          "name": "watermark",
+          "type": "StreamingWatermark",
+          "optional": true,
+          "description": "Optional. Specifies the watermark."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_connection_change",
+      "signature": "event_connection_change(payload: { state: 'Connected' | 'Fail'; }): void",
+      "description": "Occurs when the connection is changed.",
+      "payloadType": "{ state: 'Connected' | 'Fail'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ state: 'Connected' | 'Fail'; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_video_statistic_data_change",
+      "signature": "event_video_statistic_data_change(payload: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; width: number; height: number; fps: number; bandwidth: number; bitrate: number; }): void",
+      "description": "Occurs when the video statistics data is changed;",
+      "payloadType": "{ avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; width: number; height: number; fps: number; bandwidth: number; bitrate: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; width: number; height: number; fps: number; bandwidth: number; bitrate: number; }",
+          "optional": false,
+          "description": "The event detail"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_audio_statistic_data_change",
+      "signature": "event_audio_statistic_data_change(payload: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; bandwidth: number; bitrate: number; }): void",
+      "description": "Occurs when the audio statistics data is changed;",
+      "payloadType": "{ avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; bandwidth: number; bitrate: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; bandwidth: number; bitrate: number; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_auto_play_audio_failed",
+      "signature": "event_auto_play_audio_failed(): void",
+      "description": "Occurs when the SDK tried and failed to auto play audio.\nThis is usually because the streaming was played without any prior user interaction with the page.\nIn this callback, you need to manually set the `muted` attribute of the live-video element to 'false'."
+    },
+    {
+      "kind": "enum",
+      "type": "VideoQuality",
+      "members": [
+        {
+          "name": "Video_90P",
+          "value": "0",
+          "description": "90P"
+        },
+        {
+          "name": "Video_180P",
+          "value": "1",
+          "description": "180P"
+        },
+        {
+          "name": "Video_360P",
+          "value": "2",
+          "description": "360P"
+        },
+        {
+          "name": "Video_720P",
+          "value": "3",
+          "description": "720P"
+        },
+        {
+          "name": "Video_1080P",
+          "value": "4",
+          "description": "1080P"
+        }
+      ],
+      "description": "Video Quality"
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/zoomstreaming.d.ts"
+    ],
+    "declarationCount": 7
+  }
+}

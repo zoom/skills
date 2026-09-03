@@ -33,7 +33,7 @@ Verified from the public changelog and package registries on 2026-07-10:
 | Android, iOS, Linux, macOS, Windows | `2.6.0` |
 | React Native | `2.5.10` |
 | Flutter | `2.5.10` |
-| Web | `2.4.5` |
+| Web | `2.5.0` |
 | Unity wrapper | `0.0.2` |
 
 Native `2.6.0` contains breaking changes. Read
@@ -135,7 +135,7 @@ callbacks, threading, role requirements, and object lifetime.
 | Linux | `Docs/videosdk/skills/zm-videosdk-linux-api/SKILL.md` |
 | React Native | `docs/ai-docs/skills/zm-videosdk-react-native-api/SKILL.md` |
 
-Flutter, Unity, and Web packages in this review do not include an equivalent bundled `SKILL.md`. The Web 2.4.5 archive is a React/Vite sample application; use [web/references/sample-app-2.4.5.md](web/references/sample-app-2.4.5.md) for its implementation map. Do not infer platform parity from another package; verify against that platform's exported API.
+Flutter and Unity packages in this review do not include an equivalent bundled `SKILL.md`. Web now includes an official build skill and AI-readable JSON type definitions; route Web work through [web/SKILL.md](web/SKILL.md) and use [web/references/type-definitions-json.md](web/references/type-definitions-json.md) for exact 2.5.0 API verification. The older React/Vite sample remains mapped in [web/references/sample-app-2.4.5.md](web/references/sample-app-2.4.5.md). Do not infer platform parity from another package; verify against that platform's exported API.
 
 ## Quick Start (Web)
 
@@ -159,7 +159,7 @@ await stream.startAudio();
 > **WARNING: Ad blockers block `source.zoom.us`**. Self-host the SDK to avoid issues.
 
 ```bash
-# Download SDK locally example VERSION=2.4.5
+# Download SDK locally example VERSION=2.5.0
 curl "https://source.zoom.us/videosdk/zoom-video-{VERSION}.min.js" -o js/zoom-video-sdk.min.js
 ```
 

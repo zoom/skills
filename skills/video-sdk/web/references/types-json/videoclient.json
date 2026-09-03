@@ -1,0 +1,2562 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "videoclient",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/videoclient.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "MediaCompatibility",
+      "description": "Checks system requirements result interface.",
+      "properties": [
+        {
+          "name": "audio",
+          "type": "boolean",
+          "optional": false,
+          "description": "If `audio` is `false`, the browser is not compatible with Voice over IP (VoIP)."
+        },
+        {
+          "name": "video",
+          "type": "boolean",
+          "optional": false,
+          "description": "If `video` if `false`, the browser is not compatible with the video feature."
+        },
+        {
+          "name": "screen",
+          "type": "boolean",
+          "optional": false,
+          "description": "If `screen` if `false`, the browser is not compatible with the share screen feature."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "SupportFeatures",
+      "description": "Interface for the result of `checkFeatureRequirements` information on a user's platform.\nIf a feature is in the `supportFeatures` array, it means the current platform supports this feature.\nIf a feature is in the `unSupportFeatures` array, means the current platform does not support this feature.",
+      "properties": [
+        {
+          "name": "platform",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "supportFeatures",
+          "type": "Array<string>",
+          "optional": false
+        },
+        {
+          "name": "unSupportFeatures",
+          "type": "Array<string>",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "SessionInfo",
+      "description": "Session info",
+      "properties": [
+        {
+          "name": "topic",
+          "type": "string",
+          "optional": false,
+          "description": "The session topic."
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "optional": false,
+          "description": "Password (if it exists)."
+        },
+        {
+          "name": "userName",
+          "type": "string",
+          "optional": false,
+          "description": "User name."
+        },
+        {
+          "name": "userId",
+          "type": "number",
+          "optional": false,
+          "description": "User ID."
+        },
+        {
+          "name": "isInMeeting",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether the user is in the session."
+        },
+        {
+          "name": "sessionId",
+          "type": "string",
+          "optional": false,
+          "description": "Session ID."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "InitOptions",
+      "description": "Initializes options of the `init` method.",
+      "properties": [
+        {
+          "name": "webEndpoint",
+          "type": "string",
+          "optional": true,
+          "description": "Optional\nSpecifies the web endpoint. The default is zoom.us."
+        },
+        {
+          "name": "enforceMultipleVideos",
+          "type": "| boolean | { disableRenderLimits?: boolean; }",
+          "optional": true,
+          "description": "Optional\nEnforces multiple videos if true (up to 3 videos of others and 1 video of self) on platform without SharedArrayBuffer.\nIf false, limits the view to one video.\nThis may result in high CPU and memory usage.\nTo increase the limit to up to 25 videos, set `disableRenderLimits` to `true`:\n`enforceMultipleVideos({ disableRenderLimits: true })`\nNote that the video quality may be poor and unreliable.\nSee [browser support](https://developers.zoom.us/docs/video-sdk/web/browser-support/) for details."
+        },
+        {
+          "name": "enforceVirtualBackground",
+          "type": "boolean",
+          "optional": true,
+          "description": "Optional\nEnforces virtual background on browser.\nThis may result in high CPU and memory usage.\nSee [browser support](https://developers.zoom.us/docs/video-sdk/web/browser-support/) for details."
+        },
+        {
+          "name": "skipJsMedia",
+          "type": "boolean",
+          "optional": true,
+          "description": "Optional\nDo not load dependent assets. Used to address specific edge-cases. Do not use for almost all use-cases."
+        },
+        {
+          "name": "stayAwake",
+          "type": "boolean",
+          "optional": true,
+          "description": "Prevents devices from dimming or locking the screen when in a session."
+        },
+        {
+          "name": "leaveOnPageUnload",
+          "type": "boolean",
+          "optional": true,
+          "description": "Quickly leave the session when refreshing or closing the page, instead of experiencing session failover.\n\n> ***Note**: Due to limitations in Firefox support, this feature is not available on the Firefox browser.\n\nCaveat for two scenarios:\n- PSTN: Phone user who is bound to the current user. The phone will hang up instead of staying connected.\n- Subsession: Users in a subsession need to be assigned again instead of having been assigned and auto-joining the subsession."
+        },
+        {
+          "name": "patchJsMedia",
+          "type": "boolean",
+          "optional": true,
+          "description": "Optional\nAutomatically apply the latest media dependency fixes. Default is `false`, but as a best practice, we recommend that you set it to `true`."
+        },
+        {
+          "name": "alternativeNameForVideoPlayer",
+          "type": "string",
+          "optional": true,
+          "description": "Alternative name for Zoom Video Player to avoid name conflict with existing web component."
+        },
+        {
+          "name": "isLogDetailed",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether to enable the detailed log report.\n> ***Note**: Default is true.\n\nIf enabled, the detailed log will be reported to the Zoom server when the session ends or the user leaves the session."
+        }
+      ]
+    },
+    {
+      "kind": "namespace",
+      "type": "VideoClient",
+      "description": "The video client is the core of the Video SDK.",
+      "methods": [
+        {
+          "name": "init",
+          "signature": "init(language: string, dependentAssets: string | 'CDN' | 'Global' | 'CN', options?: InitOptions): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "language",
+              "type": "string",
+              "optional": false,
+              "description": "The language of the Video SDK interface. Defaults to `en-US`."
+            },
+            {
+              "name": "dependentAssets",
+              "type": "string | 'CDN' | 'Global' | 'CN'",
+              "optional": false,
+              "description": "Specifies the source path for the SDK's dependent assets.\nThe Zoom Video SDK uses Web Workers and WebAssembly to process media streams. These\ncomponents are distributed separately from the SDK, and you must specify the path\nwhere they are hosted. Each SDK release includes these assets in the `lib` folder.\nYou can host the assets on your own server or use the paths provided by Zoom:\n- **`Global`** (default): Loads assets from\n`https://source.zoom.us/videosdk/{version}/lib/`.\nRecommended for most use cases.\n- **`CDN`**: Loads assets from\n`https://dmogdx0jrul3u.cloudfront.net/videosdk/{version}/lib/`.\nRecommended for global users when users include those in China.\n- **`CN`**: Loads assets from\n`https://jssdk.zoomus.cn/videosdk/{version}/lib`.\nRecommended if users are located exclusively in China.\n- **Custom path (`{FULL_ASSETS_PATH}`)**: Loads assets from a developer-specified path.\nNot recommended except for special deployment cases."
+            },
+            {
+              "name": "options",
+              "type": "InitOptions",
+              "optional": true,
+              "description": "Optional additional settings for SDK initialization."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "An `ExecutedResult` indicating whether initialization succeeded."
+          },
+          "description": "Initializes the Zoom Video SDK before join a session.\nThe Zoom Video SDK uses an [SDK key & secret](https://developers.zoom.us/docs/video-sdk/auth/) for authorization."
+        },
+        {
+          "name": "getMediaStream",
+          "signature": "getMediaStream(): typeof Stream",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof Stream"
+          },
+          "description": "Gets the media stream instance for managing the media.\n\nThis usually the first step of using media."
+        },
+        {
+          "name": "on",
+          "signature": "on(event: string, callback: (payload: any) => void): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "string",
+              "optional": false,
+              "description": "Event name."
+            },
+            {
+              "name": "callback",
+              "type": "(payload: any) => void",
+              "optional": false,
+              "description": "The event handler."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          },
+          "description": "Listens for events and handles them."
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'connection-change', listener: typeof event_connection_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'connection-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_connection_change",
+              "optional": false,
+              "description": "Details in {@link event_connection_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'user-added', listener: typeof event_user_add): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'user-added'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_user_add",
+              "optional": false,
+              "description": "Details in {@link event_user_add}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'user-updated', listener: typeof event_user_update): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'user-updated'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_user_update",
+              "optional": false,
+              "description": "Details in {@link event_user_update}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'user-removed', listener: typeof event_user_remove): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'user-removed'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_user_remove",
+              "optional": false,
+              "description": "Details in {@link event_user_remove}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'video-active-change', listener: typeof event_video_active_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'video-active-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_video_active_change",
+              "optional": false,
+              "description": "Details in {@link event_video_active_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'video-dimension-change', listener: typeof event_video_dimension_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'video-dimension-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_video_dimension_change",
+              "optional": false,
+              "description": "Details in {@link event_video_dimension_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'active-speaker', listener: typeof event_audio_active_speaker): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'active-speaker'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_audio_active_speaker",
+              "optional": false,
+              "description": "Details in {@link event_audio_active_speaker}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'host-ask-unmute-audio', listener: typeof event_host_ask_unmute_audio): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'host-ask-unmute-audio'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_host_ask_unmute_audio",
+              "optional": false,
+              "description": "Details in {@link event_audio_unmute_consent}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'current-audio-change', listener: typeof event_current_audio_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'current-audio-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_current_audio_change",
+              "optional": false,
+              "description": "Details in {@link event_current_audio_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'dialout-state-change', listener: typeof event_dial_out_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'dialout-state-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_dial_out_change",
+              "optional": false,
+              "description": "Details in {@link event_dial_out_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'audio-statistic-data-change', listener: typeof event_audio_statistic_data_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'audio-statistic-data-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_audio_statistic_data_change",
+              "optional": false,
+              "description": "Detail in {@link event_audio_statistic_data_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'video-statistic-data-change', listener: typeof event_video_statistic_data_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'video-statistic-data-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_video_statistic_data_change",
+              "optional": false,
+              "description": "Detail in {@link event_video_statistic_data_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'chat-on-message', listener: typeof event_chat_received_message): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'chat-on-message'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_chat_received_message",
+              "optional": false,
+              "description": "Details in {@link event_chat_received_message}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'chat-privilege-change', listener: typeof event_chat_privilege_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'chat-privilege-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_chat_privilege_change",
+              "optional": false,
+              "description": "Details in {@link event_chat_privilege_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'command-channel-status', listener: typeof event_command_channel_status): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'command-channel-status'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_command_channel_status",
+              "optional": false,
+              "description": "Details in {@link event_command_channel_status}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'command-channel-message', listener: typeof event_command_channel_message): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'command-channel-message'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_command_channel_message",
+              "optional": false,
+              "description": "Details in {@link event_command_channel_message}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'recording-change', listener: typeof event_recording_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'recording-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_recording_change",
+              "optional": false,
+              "description": "Details in {@link event_recording_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'individual-recording-change', listener: typeof event_individual_recording_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'individual-recording-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_individual_recording_change",
+              "optional": false,
+              "description": "Details in {@link event_iso_recording_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'auto-play-audio-failed', listener: typeof event_auto_play_audio_failed): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'auto-play-audio-failed'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_auto_play_audio_failed",
+              "optional": false,
+              "description": "Details in {@link event_auto_play_audio_failed}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'device-change', listener: typeof event_device_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'device-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_device_change",
+              "optional": false,
+              "description": "Details in {@link event_device_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'video-capturing-change', listener: typeof event_video_capturing_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'video-capturing-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_video_capturing_change",
+              "optional": false,
+              "description": "Details in {@link event_video_capturing_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'active-share-change', listener: typeof event_active_share_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'active-share-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_active_share_change",
+              "optional": false,
+              "description": "Details in {@link event_active_share_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'share-content-dimension-change', listener: typeof event_share_content_dimension_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'share-content-dimension-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_share_content_dimension_change",
+              "optional": false,
+              "description": "Details in {@link event_share_content_dimension_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'peer-share-state-change', listener: typeof event_peer_share_state_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'peer-share-state-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_peer_share_state_change",
+              "optional": false,
+              "description": "Details in {@link event_peer_share_state_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'share-privilege-change', listener: typeof event_share_privilege_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'share-privilege-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_share_privilege_change",
+              "optional": false,
+              "description": "Details in {@link event_share_privilege_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'passively-stop-share', listener: typeof event_passively_stop_share): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'passively-stop-share'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_passively_stop_share",
+              "optional": false,
+              "description": "Details in {@link event_passively_stop_share}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'share-content-change', listener: typeof event_share_content_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'share-content-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_share_content_change",
+              "optional": false,
+              "description": "Details in {@link event_share_content_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'peer-video-state-change', listener: typeof event_peer_video_state_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'peer-video-state-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_peer_video_state_change",
+              "optional": false,
+              "description": "Details in {@link event_peer_video_state_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'share-audio-change', listener: typeof event_share_audio_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'share-audio-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_share_audio_change",
+              "optional": false,
+              "description": "Details in{@link event_share_audio_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'subsession-invite-to-join', listener: typeof event_bo_invite_to_join): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'subsession-invite-to-join'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_bo_invite_to_join",
+              "optional": false,
+              "description": "Details in {@link event_bo_invite_to_join}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'subsession-countdown', listener: typeof event_bo_room_countdown): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'subsession-countdown'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_bo_room_countdown",
+              "optional": false,
+              "description": "Details in {@link event_bo_room_countdown}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'subsession-time-up', listener: typeof event_bo_room_time_up): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'subsession-time-up'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_bo_room_time_up",
+              "optional": false,
+              "description": "Details in {@link event_bo_room_time_up}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'closing-subsession-countdown', listener: typeof event_bo_closing_room_countdown): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'closing-subsession-countdown'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_bo_closing_room_countdown",
+              "optional": false,
+              "description": "Details in {@link event_bo_closing_room_countdown}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'subsession-broadcast-message', listener: typeof event_bo_broadcast_message): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'subsession-broadcast-message'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_bo_broadcast_message",
+              "optional": false,
+              "description": "Details in {@link event_bo_broadcast_message}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'subsession-ask-for-help', listener: typeof event_bo_ask_for_help): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'subsession-ask-for-help'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_bo_ask_for_help",
+              "optional": false,
+              "description": "Details in {@link event_bo_ask_for_help}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'subsession-ask-for-help-response', listener: typeof event_bo_ask_for_help_response): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'subsession-ask-for-help-response'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_bo_ask_for_help_response",
+              "optional": false,
+              "description": "Details in {@link event_bo_ask_for_help_response}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'subsession-state-change', listener: typeof event_bo_room_state_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'subsession-state-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_bo_room_state_change",
+              "optional": false,
+              "description": "Details in {@link event_bo_room_state_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'main-session-user-updated', listener: typeof event_bo_main_session_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'main-session-user-updated'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_bo_main_session_change",
+              "optional": false,
+              "description": "Details in {@link event_bo_main_session_change}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'video-virtual-background-preload-change', listener: typeof event_video_vb_preload_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'video-virtual-background-preload-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_video_vb_preload_change",
+              "optional": false,
+              "description": "Details in {@link event_video_vb_preload_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'media-sdk-change', listener: typeof event_media_sdk_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'media-sdk-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_media_sdk_change",
+              "optional": false,
+              "description": "Details in {@link event_media_sdk_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'video-detailed-data-change', listener: typeof event_video_cell_detailed_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'video-detailed-data-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_video_cell_detailed_change",
+              "optional": false,
+              "description": "Details in {@link event_video_cell_detailed_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'caption-status', listener: typeof event_caption_status): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'caption-status'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_caption_status",
+              "optional": false,
+              "description": "Details in {@link event_caption_status}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'caption-message', listener: typeof event_caption_message): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'caption-message'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_caption_message",
+              "optional": false,
+              "description": "Details in {@link event_caption_message}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'caption-enable', listener: typeof event_caption_enable): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'caption-enable'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_caption_enable",
+              "optional": false,
+              "description": "Details in {@link event_caption_enable}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'caption-language-lock', listener: typeof event_caption_language_lock): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'caption-language-lock'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_caption_language_lock",
+              "optional": false,
+              "description": "Details in {@link event_caption_language_lock}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'share-can-see-screen', listener: typeof event_share_can_see_screen): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'share-can-see-screen'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_share_can_see_screen",
+              "optional": false,
+              "description": "Details in {@link event_share_can_see_screen}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'far-end-camera-request-control', listener: typeof event_far_end_camera_request): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'far-end-camera-request-control'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_far_end_camera_request",
+              "optional": false,
+              "description": "Details in {@link event_far_end_camera_request}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'far-end-camera-response-control', listener: typeof event_far_end_camera_response): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'far-end-camera-response-control'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_far_end_camera_response",
+              "optional": false,
+              "description": "Details in {@link event_far_end_camera_response}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'far-end-camera-in-control-change', listener: typeof event_far_end_camera_in_control_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'far-end-camera-in-control-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_far_end_camera_in_control_change",
+              "optional": false,
+              "description": "Details in {@link event_far_end_camera_in_control_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'far-end-camera-capability-change', listener: typeof event_far_end_camera_capability_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'far-end-camera-capability-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_far_end_camera_capability_change",
+              "optional": false,
+              "description": "Details in {@link event_far_end_camera_capability_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'network-quality-change', listener: typeof event_network_quality_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'network-quality-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_network_quality_change",
+              "optional": false,
+              "description": "Details in {@link event_network_quality_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'share-statistic-data-change', listener: typeof event_share_statistic_data_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'share-statistic-data-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_share_statistic_data_change",
+              "optional": false,
+              "description": "Details in {@link event_share_statistic_data_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'caption-host-disable', listener: typeof event_caption_host_disable): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'caption-host-disable'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_caption_host_disable",
+              "optional": false,
+              "description": "Details in {@link event_caption_host_disable}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'remote-control-approved-change', listener: typeof event_remote_control_approved_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'remote-control-approved-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_remote_control_approved_change",
+              "optional": false,
+              "description": "Details in {@link event_remote_control_approved_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'remote-control-in-control-change', listener: typeof event_remote_control_in_control_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'remote-control-in-control-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_remote_control_in_control_change",
+              "optional": false,
+              "description": "Details in {@link event_remote_control_in_control_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'remote-control-clipboard-change', listener: typeof event_remote_control_clipboard_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'remote-control-clipboard-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_remote_control_clipboard_change",
+              "optional": false,
+              "description": "Details in {@link event_remote_control_clipboard_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'remote-control-request-change', listener: typeof event_remote_control_request_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'remote-control-request-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_remote_control_request_change",
+              "optional": false,
+              "description": "Details in {@link event_remote_control_request_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'remote-control-app-status-change', listener: typeof event_remote_control_app_status_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'remote-control-app-status-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_remote_control_app_status_change",
+              "optional": false,
+              "description": "Details in {@link event_remote_control_app_status_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'remote-control-controlled-status-change', listener: typeof event_remote_control_controlled_status_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'remote-control-controlled-status-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_remote_control_controlled_status_change",
+              "optional": false,
+              "description": "Details in {@link event_remote_control_controlled_status_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'live-stream-status', listener: typeof event_live_stream_status): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'live-stream-status'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_live_stream_status",
+              "optional": false,
+              "description": "Details in {@link event_live_stream_status}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'video-aspect-ratio-change', listener: typeof event_video_aspect_ratio_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'video-aspect-ratio-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_video_aspect_ratio_change",
+              "optional": false,
+              "description": "Details in {@link event_video_aspect_ratio_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'device-permission-change', listener: typeof event_device_permission_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'device-permission-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_device_permission_change",
+              "optional": false,
+              "description": "Details in {@link event_device_permission_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'chat-file-upload-progress', listener: typeof event_chat_file_upload_progress): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'chat-file-upload-progress'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_chat_file_upload_progress",
+              "optional": false,
+              "description": "Details in {@link event_chat_file_upload_progress}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'chat-file-download-progress', listener: typeof event_chat_file_download_progress): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'chat-file-download-progress'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_chat_file_download_progress",
+              "optional": false,
+              "description": "Details in {@link event_chat_file_download_progress}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'summary-status-change', listener: typeof event_smart_summary_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'summary-status-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_smart_summary_change",
+              "optional": false,
+              "description": "Details in {@link event_smart_summary_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'meeting-query-status-change', listener: typeof event_meeting_query_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'meeting-query-status-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_meeting_query_change",
+              "optional": false,
+              "description": "Details in {@link event_meeting_query_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'subsession-invite-back-to-main-session', listener: typeof event_subsession_invite_to_back_to_main_session): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'subsession-invite-back-to-main-session'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_subsession_invite_to_back_to_main_session",
+              "optional": false,
+              "description": "Details in {@link event_subsession_invite_to_back_to_main_session}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'subsession-user-update', listener: typeof event_subsession_user_update): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'subsession-user-update'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_subsession_user_update",
+              "optional": false,
+              "description": "Details in {@link event_subsession_user_update}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'subsession-broadcast-voice', listener: typeof event_subsession_broadcast_voice): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'subsession-broadcast-voice'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_subsession_broadcast_voice",
+              "optional": false,
+              "description": "Details in {@link event_subsession_broadcast_voice}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'crc-call-out-state-change', listener: typeof event_crc_device_call_state_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'crc-call-out-state-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_crc_device_call_state_change",
+              "optional": false,
+              "description": "Details in {@link event_crc_device_call_state_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'current-audio-level-change', listener: typeof event_current_audio_level_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'current-audio-level-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_current_audio_level_change",
+              "optional": false,
+              "description": "Details in {@link event_current_audio_level_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'active-media-failed', listener: typeof event_active_media_failed): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'active-media-failed'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_active_media_failed",
+              "optional": false,
+              "description": "Details in {@link event_active_media_failed}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'video-spotlight-change', listener: typeof event_video_spotlight_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'video-spotlight-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_video_spotlight_change",
+              "optional": false,
+              "description": "Details in {@link event_video_spotlight_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'video-screenshot-taken', listener: typeof event_video_screenshot_taken): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'video-screenshot-taken'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_video_screenshot_taken",
+              "optional": false,
+              "description": "Details in {@link event_video_screenshot_taken}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'share-content-screenshot-taken', listener: typeof event_share_content_screenshot_taken): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'share-content-screenshot-taken'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_share_content_screenshot_taken",
+              "optional": false,
+              "description": "Details in {@link event_share_content_screenshot_taken}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'annotation-privilege-change', listener: typeof event_annotation_privilege_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'annotation-privilege-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_annotation_privilege_change",
+              "optional": false,
+              "description": "Details in {@link event_annotation_privilege_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'annotation-redo-status', listener: typeof event_annotation_redo_status): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'annotation-redo-status'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_annotation_redo_status",
+              "optional": false,
+              "description": "Details in {@link event_annotation_redo_status}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'annotation-undo-status', listener: typeof event_annotation_undo_status): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'annotation-undo-status'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_annotation_undo_status",
+              "optional": false,
+              "description": "Details in {@link event_annotation_undo_status}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'annotation-viewer-draw-request', listener: typeof event_annotation_viewer_draw_request): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'annotation-viewer-draw-request'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_annotation_viewer_draw_request",
+              "optional": false,
+              "description": "Details in {@link event_annotation_viewer_draw_request}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'share-camera-request', listener: typeof event_share_camera_request): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'share-camera-request'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_share_camera_request",
+              "optional": false,
+              "description": "Details in {@link event_share_camera_request}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'share-camera-approve-change', listener: typeof event_share_camera_approve_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'share-camera-approve-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_share_camera_approve_change",
+              "optional": false,
+              "description": "Details in {@link event_share_camera_approve_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'share-camera-status', listener: typeof event_share_camera_status): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'share-camera-status'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_share_camera_status",
+              "optional": false,
+              "description": "Details in {@link event_share_camera_status}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'broadcast-streaming-status', listener: typeof event_broadcast_streaming_status): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'broadcast-streaming-status'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_broadcast_streaming_status",
+              "optional": false,
+              "description": "Details in {@link event_broadcast_streaming_status}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'real-time-media-streams-status-change', listener: typeof event_real_time_media_streams_status_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'real-time-media-streams-status-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_real_time_media_streams_status_change",
+              "optional": false,
+              "description": "Details in {@link event_real_time_media_streams_status_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'whiteboard-status-change', listener: typeof event_whiteboard_status_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'whiteboard-status-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_whiteboard_status_change",
+              "optional": false,
+              "description": "Details in {@link event_whiteboard_status_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'peer-whiteboard-state-change', listener: typeof event_peer_whiteboard_state_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'peer-whiteboard-state-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_peer_whiteboard_state_change",
+              "optional": false,
+              "description": "Details in {@link event_peer_whiteboard_state_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'speaking-while-muted', listener: typeof event_speaking_while_muted): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'speaking-while-muted'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_speaking_while_muted",
+              "optional": false,
+              "description": "Details in {@link event_speaking_while_muted}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'system-resource-usage-change', listener: typeof event_system_resource_usage_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'system-resource-usage-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_system_resource_usage_change",
+              "optional": false,
+              "description": "Details in {@link event_system_resource_usage_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'webrtc-stats-report-data-change', listener: typeof event_webrtc_stats_report_data_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'webrtc-stats-report-data-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_webrtc_stats_report_data_change",
+              "optional": false,
+              "description": "Details in {@link event_webrtc_statistic_data_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'voice-translator-started', listener: typeof event_voice_translator_started): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'voice-translator-started'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_voice_translator_started",
+              "optional": false,
+              "description": "Details in {@link event_voice_translator_started}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'voice-translator-unsupported-language-pair', listener: typeof event_voice_translator_unsupported_language_pair): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'voice-translator-unsupported-language-pair'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_voice_translator_unsupported_language_pair",
+              "optional": false,
+              "description": "Details in {@link event_voice_translator_unsupported_language_pair}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'incoming-live-stream-status', listener: typeof event_incoming_live_stream_status): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'incoming-live-stream-status'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_incoming_live_stream_status",
+              "optional": false,
+              "description": "Details in {@link event_incoming_live_stream_status}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "off",
+          "signature": "off(event: string, callback: (payload: any) => void): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "string",
+              "optional": false,
+              "description": "Event name."
+            },
+            {
+              "name": "callback",
+              "type": "(payload: any) => void",
+              "optional": false,
+              "description": "The event handler."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          },
+          "description": "Removes the event handler."
+        },
+        {
+          "name": "join",
+          "signature": "join(topic: string, token: string, userName: string, sessionPassword?: string, sessionIdleTimeoutMins?: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "topic",
+              "type": "string",
+              "optional": false,
+              "description": "Required. A session name of your choice or the name of the session you are joining (must match the SWK JWT `tpc` value)."
+            },
+            {
+              "name": "token",
+              "type": "string",
+              "optional": false,
+              "description": "Required. Your [Video SDK JWT](https://developers.zoom.us/docs/video-sdk/auth/), which you should generate on the server."
+            },
+            {
+              "name": "userName",
+              "type": "string",
+              "optional": false,
+              "description": "Required. A name for the user."
+            },
+            {
+              "name": "sessionPassword",
+              "type": "string",
+              "optional": true,
+              "description": "Optional, unless it was set with the host. A session password of your choice. If set with the host, all attendees must provide the same password value or they will fail to join the session."
+            },
+            {
+              "name": "sessionIdleTimeoutMins",
+              "type": "number",
+              "optional": true,
+              "description": "Optional. The number of minutes your session can idle before ending, with one user present and without cloud recording. The default is 40 minutes.\n> **Note**: This parameter only applies to the session host or original host; otherwise, the default value of 40 minutes will be used."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "an executed promise. Following are the possible error reasons:\n- `duplicated operation`: Duplicated invoking of the `join` method.\n- `invalid apiKey/sdkKey or signature`: API key, SDK key, or signature is not correct.\n- `invalid password`: Password is not correct.\n- `invalid parameters`: Can not join the session because of invalid parameters.\n- `internal error`: Internal error."
+          },
+          "description": "- Make sure to call the `init` method before joining."
+        },
+        {
+          "name": "leave",
+          "signature": "leave(end?: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "end",
+              "type": "boolean",
+              "optional": true,
+              "description": "Optional. Default is false. If true, the session ends. Only the host has the privilege to do this."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Leaves or ends the session."
+        },
+        {
+          "name": "changeName",
+          "signature": "changeName(name: string, userId?: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "name",
+              "type": "string",
+              "optional": false,
+              "description": "New display name."
+            },
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": true,
+              "description": "User ID of the user to rename."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Renames your name or another user's name.\n- Only the **host** or **manager** can rename others.\n- The host can set whether the user is allowed to rename themselves. See `client.isAllowToRename()` to get the value."
+        },
+        {
+          "name": "removeUser",
+          "signature": "removeUser(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Removes the participant.\n- Only the **host** or **manager** can remove others."
+        },
+        {
+          "name": "makeHost",
+          "signature": "makeHost(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Makes other participant the host.\n- Only the **host** can make someone else the host.\n- There is only one host in a session. Once the host makes another user the host, the original host will no longer be the host."
+        },
+        {
+          "name": "makeManager",
+          "signature": "makeManager(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Makes another participant a manager.\n- Only the **host** can make others into managers.\n- There may be multiple managers in session."
+        },
+        {
+          "name": "revokeManager",
+          "signature": "revokeManager(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Revokes the manager permission from the participant.\n- Only the **host** can revoke manager permissions."
+        },
+        {
+          "name": "reclaimHost",
+          "signature": "reclaimHost(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Reclaims the host privilege if the user is now the host.\n- Only the **original host** can do this."
+        },
+        {
+          "name": "getCurrentUserInfo",
+          "signature": "getCurrentUserInfo(): Participant",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Participant"
+          },
+          "description": "Gets the current user info."
+        },
+        {
+          "name": "getAllUser",
+          "signature": "getAllUser(): Array<Participant>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<Participant>"
+          },
+          "description": "Get the in-session participants of the session."
+        },
+        {
+          "name": "getUser",
+          "signature": "getUser(userId: number): Participant | undefined",
+          "async": false,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "Participant | undefined"
+          },
+          "description": "Gets the user by user ID."
+        },
+        {
+          "name": "getChatClient",
+          "signature": "getChatClient(): typeof ChatClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof ChatClient"
+          },
+          "description": "Gets the chat client."
+        },
+        {
+          "name": "getCommandClient",
+          "signature": "getCommandClient(): typeof CommandChannel",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof CommandChannel"
+          },
+          "description": "Gets the command client."
+        },
+        {
+          "name": "getRecordingClient",
+          "signature": "getRecordingClient(): typeof RecordingClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof RecordingClient"
+          },
+          "description": "Gets the recording client."
+        },
+        {
+          "name": "getSubsessionClient",
+          "signature": "getSubsessionClient(): typeof SubsessionClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof SubsessionClient"
+          },
+          "description": "Gets the subsession client."
+        },
+        {
+          "name": "getLiveTranscriptionClient",
+          "signature": "getLiveTranscriptionClient(): typeof LiveTranscriptionClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof LiveTranscriptionClient"
+          },
+          "description": "Gets the LiveTranscription client."
+        },
+        {
+          "name": "getLoggerClient",
+          "signature": "getLoggerClient(options?: LoggerInitOption): typeof LoggerClient",
+          "async": false,
+          "parameters": [
+            {
+              "name": "options",
+              "type": "LoggerInitOption",
+              "optional": true,
+              "description": "logger option"
+            }
+          ],
+          "returns": {
+            "type": "typeof LoggerClient"
+          },
+          "description": "Gets the logger client."
+        },
+        {
+          "name": "getLiveStreamClient",
+          "signature": "getLiveStreamClient(): typeof LiveStreamClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof LiveStreamClient"
+          },
+          "description": "Gets the AI client.\nGets the liveStream client."
+        },
+        {
+          "name": "getBroadcastStreamingClient",
+          "signature": "getBroadcastStreamingClient(): typeof BroadcastStreamingClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof BroadcastStreamingClient"
+          },
+          "description": "Gets the broadcast streaming client."
+        },
+        {
+          "name": "getRealTimeMediaStreamsClient",
+          "signature": "getRealTimeMediaStreamsClient(): typeof RealTimeMediaStreamsClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof RealTimeMediaStreamsClient"
+          },
+          "description": "Gets the real-time media streams client."
+        },
+        {
+          "name": "getWhiteboardClient",
+          "signature": "getWhiteboardClient(): typeof WhiteboardClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof WhiteboardClient"
+          },
+          "description": "Gets the whiteboard client."
+        },
+        {
+          "name": "getVoiceTranslatorClient",
+          "signature": "getVoiceTranslatorClient(): typeof VoiceTranslatorClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof VoiceTranslatorClient"
+          },
+          "description": "Gets the voiceTranslator client."
+        },
+        {
+          "name": "getIncomingLiveStreamClient",
+          "signature": "getIncomingLiveStreamClient(): typeof IncomingLiveStreamClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof IncomingLiveStreamClient"
+          },
+          "description": "Gets the incoming live stream client."
+        },
+        {
+          "name": "getSessionInfo",
+          "signature": "getSessionInfo(): SessionInfo",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "SessionInfo"
+          },
+          "description": "Gets the current session’s information."
+        },
+        {
+          "name": "isHost",
+          "signature": "isHost(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Determines whether the current user is the host."
+        },
+        {
+          "name": "getSessionHost",
+          "signature": "getSessionHost(): Participant | undefined",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Participant | undefined"
+          },
+          "description": "Gets the host of the session."
+        },
+        {
+          "name": "isManager",
+          "signature": "isManager(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Determines whether the current user is a manager."
+        },
+        {
+          "name": "isOriginalHost",
+          "signature": "isOriginalHost(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Determines whether the current user is the original host.\n`role_type` in JWT payload =1 is the original host."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/videoclient.d.ts"
+    ],
+    "declarationCount": 5
+  }
+}

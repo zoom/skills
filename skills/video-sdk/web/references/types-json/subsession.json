@@ -1,0 +1,477 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "subsession",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/subsession.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "Subsession",
+      "description": "Subsession interface.",
+      "properties": [
+        {
+          "name": "subsessionId",
+          "type": "string",
+          "optional": false,
+          "description": "Subsession ID."
+        },
+        {
+          "name": "subsessionName",
+          "type": "string",
+          "optional": false,
+          "description": "Subsession name."
+        },
+        {
+          "name": "userList",
+          "type": "Array< Pick<Participant, 'userId' | 'displayName' | 'avatar' | 'userGuid'> >",
+          "optional": false,
+          "description": "Subsession user list."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "Subsession2",
+      "description": "Subsession interface.",
+      "properties": [
+        {
+          "name": "subsessionId",
+          "type": "string",
+          "optional": false,
+          "description": "Subsession ID."
+        },
+        {
+          "name": "subsessionName",
+          "type": "string",
+          "optional": false,
+          "description": "Subsession name."
+        },
+        {
+          "name": "userList",
+          "type": "Array< Pick< Participant, 'userId' | 'displayName' | 'avatar' | 'userGuid' | 'userKey' > & { isInSubsession: boolean; } >",
+          "optional": false,
+          "description": "Subsession user list.\n\nEach entry is a subset of {@link Participant} fields plus `isInSubsession`,\nwhich indicates whether the user has actually joined the subsession\n(`true`) or has only been assigned to it (`false`)."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "SubsessionOption",
+      "description": "Subsession creation options.",
+      "properties": [
+        {
+          "name": "isAutoJoinSubsession",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether a participant should automatically join the subsession when assigned to one."
+        },
+        {
+          "name": "isBackToMainSessionEnabled",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether to allow participants in the subsession to return to the main session."
+        },
+        {
+          "name": "isTimerEnabled",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether to set a timer for the subsession."
+        },
+        {
+          "name": "timerDuration",
+          "type": "number",
+          "optional": true,
+          "description": "Duration of the timer."
+        },
+        {
+          "name": "isTimerAutoEnabled",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether to automatically return to the main session when time is up."
+        },
+        {
+          "name": "waitSeconds",
+          "type": "number",
+          "optional": true,
+          "description": "When the subsession is closing, the buffer time to leave the subsession."
+        },
+        {
+          "name": "isAutoMoveBackToMainSession",
+          "type": "boolean",
+          "optional": true,
+          "description": "Indicates whether a participant should automatically return to the main session when the host moves them back.\n\n- If `true`, the participant returns automatically without confirmation.\n- If `false`, the participant receives a `subsession-invite-back-to-main-session` event and must agree to return."
+        },
+        {
+          "name": "isSubsessionSelectionEnabled",
+          "type": "boolean",
+          "optional": true,
+          "description": "Indicates whether participants are allowed to select a subsession to join."
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "SubsessionAllocationPattern",
+      "members": [
+        {
+          "name": "Automatically",
+          "value": "1",
+          "description": "Automatically create and assign subsessions according to the user number."
+        },
+        {
+          "name": "Manually",
+          "value": "2",
+          "description": "Manually create the subsessions."
+        }
+      ],
+      "description": "Allocation pattern of the subsession."
+    },
+    {
+      "kind": "enum",
+      "type": "SubsessionUserStatus",
+      "members": [
+        {
+          "name": "Initial",
+          "value": "initial",
+          "description": "Unassigned."
+        },
+        {
+          "name": "Invited",
+          "value": "invited",
+          "description": "Assigned but not in subsession."
+        },
+        {
+          "name": "Joining",
+          "value": "joining",
+          "description": "Joining the subsession."
+        },
+        {
+          "name": "InSubsession",
+          "value": "in room",
+          "description": "In subsession."
+        },
+        {
+          "name": "Leaving",
+          "value": "leaving",
+          "description": "Leaving the subsession."
+        },
+        {
+          "name": "MainSession",
+          "value": "main session",
+          "description": "In the main session."
+        }
+      ],
+      "description": "User's subsession status."
+    },
+    {
+      "kind": "namespace",
+      "type": "SubsessionClient",
+      "description": "The `SubsessionClient` provides methods that define subsession functionalities, such as create subsession, join subsession, and leave subsession.",
+      "methods": [
+        {
+          "name": "createSubsessions",
+          "signature": "createSubsessions(data: number | string | Array<string>, pattern?: SubsessionAllocationPattern): Promise<Array<Subsession> | Error>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "data",
+              "type": "number | string | Array<string>",
+              "optional": false,
+              "description": "Accepts the following parameters:\n - number : the number of subsessions to create. The SDK will create the specified number of subsessions, automatically named.\n - string : the name of the subsession. The SDK will create a subsession with the specified name.\n - Array&lt;string&gt;: a list of named subsessions. The specified subsession will be created."
+            },
+            {
+              "name": "pattern",
+              "type": "SubsessionAllocationPattern",
+              "optional": true,
+              "description": "How to assign users to subsessions:\n- `SubsessionAllocationPattern.Automatically`: Distribute users evenly to each subsession.\n- `SubsessionAllocationPattern.Manually`: The users will be assigned manually later. This is the default."
+            }
+          ],
+          "returns": {
+            "type": "Promise<Array<Subsession> | Error>",
+            "description": "Promise&lt;Array&lt;Subsession&gt; | Error&gt;\n- Subsession List: success\n- Error\n- `INVALID_OPERATION` (Subsession has started!)\n- `INVALID_PARAMETERS` (Exceed maximum size): `maximum_size` = 50; if support big subsessions plan, up to 100"
+          },
+          "description": "Creates subsessions."
+        },
+        {
+          "name": "openSubsessions",
+          "signature": "openSubsessions(subsessions: Array<Subsession>, options?: SubsessionOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "subsessions",
+              "type": "Array<Subsession>",
+              "optional": false,
+              "description": "Subsession list required. Must include subsession ID and name."
+            },
+            {
+              "name": "options",
+              "type": "SubsessionOption",
+              "optional": true,
+              "description": "Subsession option; Default options =\n```javascript\n{\nisAutoJoinSubsession: false,\nisBackToMainSessionEnabled: true,\nisTimerEnabled: false,\ntimerDuration: 1800,\nisTimerAutoEnabled: false,\nwaitSeconds: 60,\n}\n```"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Opens the created subsessions."
+        },
+        {
+          "name": "joinSubsession",
+          "signature": "joinSubsession(subsessionId: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "subsessionId",
+              "type": "string",
+              "optional": false,
+              "description": "Subsession ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Joins a subsession.\n - Join only after the subsession is open."
+        },
+        {
+          "name": "leaveSubsession",
+          "signature": "leaveSubsession(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Leaves the subsession.\n- If the user is not allowed to leave the subsession, they cannot return to the main session."
+        },
+        {
+          "name": "askForHelp",
+          "signature": "askForHelp(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Asks the host to join the subsession to help, host can decline or postpone the request for help.\n- Only a user (not the host) can call this method."
+        },
+        {
+          "name": "postponeHelping",
+          "signature": "postponeHelping(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "User ID of the user who requested help."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Postpones the request for help."
+        },
+        {
+          "name": "broadcast",
+          "signature": "broadcast(content: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "content",
+              "type": "string",
+              "optional": false,
+              "description": "Content to broadcast."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Broadcasts content in the main session and all subsessions. Only available to the host."
+        },
+        {
+          "name": "assignUserToSubsession",
+          "signature": "assignUserToSubsession(userId: number, targetSubsessionId: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "User ID."
+            },
+            {
+              "name": "targetSubsessionId",
+              "type": "string",
+              "optional": false,
+              "description": "Subsession ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Assigns an unassigned participant to a subsession. Only available to the host."
+        },
+        {
+          "name": "moveUserToSubsession",
+          "signature": "moveUserToSubsession(userId: number, targetSubsessionId: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "User ID."
+            },
+            {
+              "name": "targetSubsessionId",
+              "type": "string",
+              "optional": false,
+              "description": "Subsession ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Moves a participant from one subsession to the specified subsession. Only available to the host."
+        },
+        {
+          "name": "closeAllSubsessions",
+          "signature": "closeAllSubsessions(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise"
+          },
+          "description": "Closes all the subsession. Only available to the host."
+        },
+        {
+          "name": "moveBackToMainSession",
+          "signature": "moveBackToMainSession(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "User ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise"
+          },
+          "description": "Move a participant back to the main session"
+        },
+        {
+          "name": "startBroadcastVoice",
+          "signature": "startBroadcastVoice(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise"
+          },
+          "description": "Starts broadcast voice to subsessions"
+        },
+        {
+          "name": "stopBroadcastVoice",
+          "signature": "stopBroadcastVoice(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise"
+          },
+          "description": "Stops broadcast voice to subsessions"
+        },
+        {
+          "name": "getUnassignedUserList",
+          "signature": "getUnassignedUserList(): Array<Participant>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<Participant>",
+            "description": "Executed promise."
+          },
+          "description": "Assigns participants to certain subsessions in advance. Available to the host when scheduling a session.\nLoads preset subsessions.\nGets the unassigned list of users."
+        },
+        {
+          "name": "getSubsessionList",
+          "signature": "getSubsessionList(): Array<Subsession2>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<Subsession2>"
+          },
+          "description": "Gets the list of subsessions.\nIf you are the host, will get all the subsessions.\nIf you are the participant, will get the assigned subsession.\n\n**Note:** The `userId` of each participant in `userList` is based on the **main session**.\nUser IDs are not shared across subsessions or between a subsession and the main session.\nEach session context assigns its own independent IDs. Because every participant has a join\nrecord in the main session, the `userId` exposed here always refers to that main-session identity.\nIf you need to track a user across session contexts, use `userGuid` instead, as it remains\nconstant regardless of which session the user is in."
+        },
+        {
+          "name": "getUserStatus",
+          "signature": "getUserStatus(): SubsessionUserStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "SubsessionUserStatus"
+          },
+          "description": "Gets the subsession status of the user."
+        },
+        {
+          "name": "getSubsessionStatus",
+          "signature": "getSubsessionStatus(): SubsessionStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "SubsessionStatus"
+          },
+          "description": "Gets the status of the subsession."
+        },
+        {
+          "name": "getCurrentSubsession",
+          "signature": "getCurrentSubsession(): { userStatus: SubsessionUserStatus; subsessionName: string; subsessionId: string; }",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "{ userStatus: SubsessionUserStatus; subsessionName: string; subsessionId: string; }"
+          },
+          "description": "Gets the current subsession information."
+        },
+        {
+          "name": "getSubsessionOptions",
+          "signature": "getSubsessionOptions(): SubsessionOption",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "SubsessionOption"
+          },
+          "description": "Get subsession options"
+        },
+        {
+          "name": "isSubsessionEnabled",
+          "signature": "isSubsessionEnabled(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Checks whether the subsessions are enabled."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/subsession.d.ts"
+    ],
+    "declarationCount": 6
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "incoming-live-stream",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/incoming-live-stream.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "IncomingLiveStreamStatus",
+      "description": "Status of the incoming live stream",
+      "properties": [
+        {
+          "name": "isRTMPConnected",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether the streaming software (OBS, vMix, etc.) has connected to the Zoom RTMP endpoint.\n- `false`: Streaming software hasn't connected yet. Check your RTMP URL and stream key configuration.\n- `true`: Connected to the Zoom RTMP endpoint."
+        },
+        {
+          "name": "isStreamPushed",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether the stream is active as a virtual participant in the session.\n- `false`: Streaming software is connected but `startIncomingLiveStream` has not yet been called (or has not completed).\n- `true`: Stream is active as a virtual participant. Call `stopIncomingLiveStream` to remove it."
+        },
+        {
+          "name": "streamId",
+          "type": "string",
+          "optional": false,
+          "description": "The stream key ID (`stream_id`) obtained from the Zoom OpenAPI.\nEmpty string if no stream is currently bound."
+        }
+      ]
+    },
+    {
+      "kind": "namespace",
+      "type": "IncomingLiveStreamClient",
+      "description": "The client for incoming live stream (RTMP ingest).\n\nThe Incoming LiveStream feature allows you to ingest external RTMP streams (such as from OBS, vMix,\nor other streaming software) into your Zoom Video SDK session as a special virtual participant.\nThis enables scenarios where pre-recorded content or external live sources can be shared in the session.\n\n## Prerequisites\n- Zoom Video SDK properly initialized and session joined\n- **Host privileges** in the session (only the session host can manage incoming livestreams)\n- A stream ingestion must be created via the Zoom OpenAPI before calling `bindIncomingLiveStream`\n- Currently, only **one incoming stream** is supported per session\n\n## Workflow\n\n### Step 1 — Create a Stream Ingestion via Zoom OpenAPI\n\nThe response contains:\n- `stream_id` — use as the `streamId` parameter in all SDK methods\n- `stream_url` — the RTMP server URL to configure in your streaming software\n- `stream_key` — the stream key to configure in your streaming software\n\n### Step 2 — Bind, Configure, and Start\n\n### Step 3 — Subscribe to the Stream\nOnce started, the stream appears as a virtual participant named **\"Incoming livestream\"**.\nSubscribe to its video/audio via the `user-added` event and the participant's video pipe.\n\n### Step 4 — Cleanup",
+      "examples": [
+        "POST https://api.zoom.us/v2/videosdk/stream_ingestions\nBody: { \"session_id\": \"your_session_id\", \"stream_name\": \"My Incoming Stream\" }",
+        "const incomingLiveStream = client.getIncomingLiveStreamClient();\n\n// 1. Bind the stream to the session\nawait incomingLiveStream.bindIncomingLiveStream(streamId);\n\n// 2. Configure your streaming software (OBS/vMix) with stream_url and stream_key\n//    and start pushing video\n\n// 3. Poll status or listen to 'incoming-live-stream-status' event\n//    until both isRTMPConnected and isStreamPushed are true\nconst status = incomingLiveStream.getIncomingLiveStreamStatus();\nif (status.isRTMPConnected && !status.isStreamPushed) {\n  // 4. Start the stream as a virtual participant\n  await incomingLiveStream.startIncomingLiveStream(streamId);\n}",
+        "await incomingLiveStream.stopIncomingLiveStream(streamId);\nawait incomingLiveStream.unbindIncomingLiveStream(streamId);"
+      ],
+      "methods": [
+        {
+          "name": "bindIncomingLiveStream",
+          "signature": "bindIncomingLiveStream(streamId: string): Promise<void>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "streamId",
+              "type": "string",
+              "optional": false,
+              "description": "The stream key ID (`stream_id`) obtained from the Zoom OpenAPI stream ingestion response."
+            }
+          ],
+          "returns": {
+            "type": "Promise<void>",
+            "description": "A promise that resolves when the stream is successfully bound."
+          },
+          "description": "Binds an incoming live stream to the current session using a stream key ID obtained from the Zoom OpenAPI.\n\n**Prerequisites:**\n- Must be the session host\n- Session must be active and joined\n- Cannot be called from within a breakout room\n- Cannot bind a new stream while the current stream is already RTMP-connected\n\n**Before calling this method**, create a stream ingestion via the Zoom OpenAPI:\n\nUse the `stream_id` from the response as the `streamId` parameter.\n\nAfter binding, configure your streaming software (OBS/vMix) with the `stream_url` and `stream_key`\nfrom the OpenAPI response and start pushing video before calling `startIncomingLiveStream`.",
+          "examples": [
+            "POST https://api.zoom.us/v2/videosdk/stream_ingestions\nBody: { \"session_id\": \"your_session_id\", \"stream_name\": \"My Incoming Stream\" }"
+          ]
+        },
+        {
+          "name": "unbindIncomingLiveStream",
+          "signature": "unbindIncomingLiveStream(streamId: string): Promise<void>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "streamId",
+              "type": "string",
+              "optional": false,
+              "description": "The stream key ID (`stream_id`) of the currently bound stream."
+            }
+          ],
+          "returns": {
+            "type": "Promise<void>",
+            "description": "A promise that resolves when the stream is successfully unbound."
+          },
+          "description": "Unbinds the currently bound incoming live stream and releases its resources.\n\n**Prerequisites:**\n- Must be the session host\n- Session must be active and joined\n- The `streamId` must match the currently bound stream\n- If the stream is active (`isStreamPushed: true`), call `stopIncomingLiveStream` first\n- **The streaming software must have stopped pushing** (`isRTMPConnected` must be `false`) before this method is called.\n  Stop the stream in your software (OBS, vMix, etc.) and wait for the `incoming-live-stream-status` event\n  to confirm `isRTMPConnected: false` before calling unbind."
+        },
+        {
+          "name": "startIncomingLiveStream",
+          "signature": "startIncomingLiveStream(streamId: string): Promise<void>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "streamId",
+              "type": "string",
+              "optional": false,
+              "description": "The stream key ID (`stream_id`) of the bound stream to start."
+            }
+          ],
+          "returns": {
+            "type": "Promise<void>",
+            "description": "A promise that resolves when the stream is successfully started as a virtual participant (i.e., `isStreamPushed` becomes `true`)."
+          },
+          "description": "Starts the bound incoming live stream as a virtual participant in the session.\n\n**Prerequisites:**\n- Must be the session host\n- Session must be active and joined\n- The stream must first be bound via `bindIncomingLiveStream`\n- Streaming software must be configured with the correct `stream_url` and `stream_key` and actively pushing video\n- `getIncomingLiveStreamStatus()` must return `isRTMPConnected: true` before calling this method\n\nOnce started, the stream appears as a special virtual participant named **\"Incoming livestream\"** in the session.\nOther participants can subscribe to this user's video/audio like any other participant.\nThe stream participant can be identified by checking `participant.isRtmpUser === true`."
+        },
+        {
+          "name": "stopIncomingLiveStream",
+          "signature": "stopIncomingLiveStream(streamId: string): Promise<void>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "streamId",
+              "type": "string",
+              "optional": false,
+              "description": "The stream key ID (`stream_id`) of the active stream to stop."
+            }
+          ],
+          "returns": {
+            "type": "Promise<void>",
+            "description": "A promise that resolves when the stream virtual participant is successfully removed (i.e., `isStreamPushed` becomes `false`)."
+          },
+          "description": "Stops the incoming live stream and removes it as a virtual participant from the session.\n\n**Prerequisites:**\n- Must be the session host\n- Session must be active and joined\n- The stream must be currently connected (`isRTMPConnected: true`)\n\nAfter stopping, the virtual participant is removed from the session. Call `unbindIncomingLiveStream`\nafterwards to fully release resources before leaving the session."
+        },
+        {
+          "name": "getIncomingLiveStreamStatus",
+          "signature": "getIncomingLiveStreamStatus(): IncomingLiveStreamStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "IncomingLiveStreamStatus",
+            "description": "The current status of the incoming live stream:\n- `isRTMPConnected`: whether streaming software is connected to the Zoom RTMP endpoint\n- `isStreamPushed`: whether video is actively being pushed into the session\n- `streamId`: the currently bound stream key ID, or empty string if no stream is bound"
+          },
+          "description": "Gets the current status of the incoming live stream.\n\nWhenever a stream is bound, calling this method always triggers an on-demand status refresh\nfrom the server. Listen to the `incoming-live-stream-status` event for real-time push\nnotifications of status changes.\n\n**Check stream readiness before starting:**",
+          "examples": [
+            "const status = incomingLiveStream.getIncomingLiveStreamStatus();\nif (status.isRTMPConnected && !status.isStreamPushed) {\n  // Streaming software is connected — ready to start as a virtual participant\n  await incomingLiveStream.startIncomingLiveStream(streamId);\n}"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/incoming-live-stream.d.ts"
+    ],
+    "declarationCount": 2
+  }
+}

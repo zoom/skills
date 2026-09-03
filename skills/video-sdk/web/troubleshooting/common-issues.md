@@ -7,32 +7,28 @@ When something isn't working, run through this checklist:
 1. **SDK Lifecycle**: Did you follow `createClient() → init() → join() → getMediaStream()`?
 2. **Stream Timing**: Did you call `getMediaStream()` AFTER `join()` completed?
 3. **Event Listeners**: Are you listening for `peer-video-state-change`?
-4. **Initial State**: After joining, did you reconcile `client.getAllUser()`, active video, and active screen share state?
-5. **attachVideo vs renderVideo**: Are you using `attachVideo()` (not deprecated `renderVideo()`)?
-6. **DOM Surface**: Is the returned `video-player` blocked by an old canvas/avatar/name overlay?
-7. **Custom Controls**: Did you manually implement device selectors, blur, stats, recording, captions, and share controls?
-8. **Browser Permissions**: Did the user grant camera/microphone access?
-9. **Browser Compatibility**: Is the browser supported (Chrome 80+, Firefox 75+, Safari 14+)?
+4. **attachVideo vs renderVideo**: Are you using `attachVideo()` (not deprecated `renderVideo()`)?
+5. **Browser Permissions**: Did the user grant camera/microphone access?
+6. **Browser Compatibility**: Is the browser supported (Chrome 80+, Firefox 75+, Safari 14+)?
 
 ---
 
 ## Most Common Issues
 
-### 1. getMediaStream() Returns undefined
+### 1. getMediaStream() Before join
 
-**Symptom**: `client.getMediaStream()` returns `undefined` or `null`
+**Symptom**: Confusion about whether `client.getMediaStream()` must wait for `join()`
 
-**Cause**: Called before `join()` completed
+**Cause**: The stream object can be created before `join()`, but most media operations still require the session to be joined first
 
 **Solution**:
 ```javascript
-// WRONG
-const stream = client.getMediaStream();  // undefined!
-await client.join(...);
+// Allowed: create the stream object whenever you need it
+const stream = client.getMediaStream();
 
-// CORRECT
+// Recommended: join before calling media actions such as startVideo()
 await client.join(...);
-const stream = client.getMediaStream();  // Works!
+await stream.startVideo();
 ```
 
 ### 2. Video Not Displaying
@@ -43,7 +39,8 @@ const stream = client.getMediaStream();  // Works!
 1. Not listening to `peer-video-state-change` event
 2. Using deprecated `renderVideo()` instead of `attachVideo()`
 3. Not appending returned element to DOM
-4. A legacy canvas/avatar/name overlay is covering the SDK's `video-player`
+4. Not setting width and height for the `video-player` custom element or its container
+5. Container CSS causes SDK-inserted elements to render outside the expected tile
 
 **Solution**:
 ```javascript
@@ -64,155 +61,72 @@ client.on('peer-video-state-change', async (payload) => {
 });
 ```
 
-### 2A. Video Appears Briefly, Then Is Blocked by Name/Avatar Layer
-
-**Symptom**: You can briefly see remote or self video after starting/showing video, then it becomes black or only a few pixels remain visible. Browser inspection shows elements such as `.avatar`, `.avatar-list`, `.center-name`, `.video-canvas`, or old tile wrappers over/around the returned `video-player`.
-
-**Cause**: A layout migrated from `renderVideo(canvas, ...)` still renders the old placeholder/name layer. With `attachVideo()`, the SDK returns a `video-player` custom element that should be the visible tile itself.
-
-**Fix**:
-- Render a normal-flow `video-player-container`.
-- Append only SDK-returned `video-player` children for video tiles.
-- Remove old canvas/avatar/name overlays from the video path.
-- Do not use `z-index`, transparency, or `pointer-events` as the fix; the competing layer should not exist.
-
 ```css
+/* The custom video elements do not have a useful default size */
 video-player-container {
-  display: grid !important;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 10px;
-}
-
-video-player-container:has(> :nth-child(2)) {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  height: 1000px;
 }
 
 video-player {
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
-  display: block;
 }
-```
 
-**DOM check**:
-```javascript
-console.table({
-  players: document.querySelectorAll('video-player').length,
-  legacyOverlays: document.querySelectorAll('.avatar,.avatar-list,.center-name,.video-canvas,.self-video').length
-});
-```
-
-### 2B. Duplicate Self or Remote Video Tiles
-
-**Symptom**: Starting camera shows two copies of your own video, or another participant appears twice in a 1:M gallery.
-
-**Causes**:
-1. The local user is attached once for self preview and again as a remote gallery participant.
-2. Multiple reconcile paths overlap, such as initial join reconciliation, delayed `setTimeout` reconciliation, and `peer-video-state-change`; each path calls `attachVideo()` before the first call stores the rendered element.
-
-**Fix**:
-- If the UI has a dedicated local preview, attach `client.getCurrentUserInfo().userId` only in that self container.
-- Exclude `client.getCurrentUserInfo().userId` from the remote gallery filter.
-- Track in-flight `attachVideo()` promises by `userId` in addition to rendered elements, and skip or await duplicates.
-- When detaching, pass the specific returned element when available: `stream.detachVideo(userId, element)`.
-
-```javascript
-const renderedUsers = new Map();
-const renderingUsers = new Map();
-
-async function renderRemoteUserOnce(user) {
-  const selfId = client.getCurrentUserInfo().userId;
-  if (user.userId === selfId || !user.bVideoOn) return;
-  if (renderedUsers.has(user.userId)) return;
-  if (renderingUsers.has(user.userId)) return renderingUsers.get(user.userId);
-
-  const promise = (async () => {
-    const player = await stream.attachVideo(user.userId, VideoQuality.Video_360P);
-    const stillWanted = client.getAllUser().some((latestUser) =>
-      latestUser.userId === user.userId &&
-      latestUser.userId !== client.getCurrentUserInfo().userId &&
-      latestUser.bVideoOn
-    );
-    if (!stillWanted || renderedUsers.has(user.userId)) {
-      await stream.detachVideo(user.userId, player).catch(console.warn);
-      player.remove();
-      return;
-    }
-    container.appendChild(player);
-    renderedUsers.set(user.userId, player);
-  })();
-
-  renderingUsers.set(user.userId, promise);
-  return promise.finally(() => renderingUsers.delete(user.userId));
+video-player-container video-player,
+video-player-container canvas,
+video-player-container video {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 ```
 
 ### 3. Other Participants' Video Not Showing on Mid-Session Join
 
-**Symptom**: Join mid-session, only your video shows, not others'
+**Symptom**:
+- Join mid-session, only your video shows, not others'
+- The session appears to contain two copies of the same user after a reconnect
 
-**Cause**: Existing participants' videos don't auto-render
+**Causes**:
+1. Existing participants' videos don't auto-render
+2. A disconnected user may remain in the session temporarily during failover detection, so others can still see the stale participant until the server removes them
 
 **Solution**:
 ```javascript
-// After joining, manually render existing participants
+// After joining, render any remote videos that are already active
 async function renderExistingParticipants() {
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  const users = client.getAllUser();
+  const container = document.querySelector('video-player-container');
   const currentUserId = client.getCurrentUserInfo().userId;
-  
-  for (const user of users) {
+
+  for (const user of client.getAllUser()) {
     if (user.bVideoOn && user.userId !== currentUserId) {
       const element = await stream.attachVideo(user.userId, VideoQuality.Video_360P);
-      document.getElementById(`video-${user.userId}`).appendChild(element);
+      container.appendChild(element);
     }
   }
 }
 ```
 
-### 3A. Custom Toolbar Controls Missing or Do Nothing
-
-**Symptom**: The app joins a session, but users cannot select microphone/camera/speaker, toggle blur, view audio/video statistics, start/stop recording, enable captions, or share screen.
-
-**Cause**: Video SDK Web is a custom UI SDK. It does not provide a full toolbar unless you use a prebuilt wrapper/toolkit. PureJS/React/Vue/Angular apps must wire each control to the relevant client or `MediaStream` API.
-
-**Fix**:
-- Device selectors: populate from `stream.getMicList()`, `stream.getSpeakerList()`, and `stream.getCameraList()`; refresh on `device-change` and `device-permission-change`.
-- Device switching: call `stream.switchMicrophone(deviceId)`, `stream.switchSpeaker(deviceId)`, and `stream.switchCamera(deviceId)`.
-- Blur: check `stream.isSupportVirtualBackground()` and call `stream.updateVirtualBackgroundImage('blur')`, or pass `{ virtualBackground: { imageUrl: 'blur' } }` to `startVideo`.
-- Statistics: call `subscribeAudioStatisticData`, `subscribeVideoStatisticData`, and optionally `subscribeShareStatisticData`; render the corresponding `*-statistic-data-change` events.
-- Recording/captions: use `client.getRecordingClient()` and `client.getLiveTranscriptionClient()` and handle host/account privilege failures.
-
-### 3B. Screen Share Not Shown When Joining Late
-
-**Symptom**: Participant joins after another user has already started sharing, but no share view appears.
-
-**Cause**: The app only listens for future `active-share-change` events and never checks current share state.
-
-**Fix**:
 ```javascript
-async function reconcileShare() {
-  const selfId = client.getCurrentUserInfo().userId;
-  const userId =
-    stream.getActiveShareUserId() ||
-    stream.getShareUserList().find((user) => user.userId !== selfId)?.userId ||
-    client.getAllUser().find((user) => user.userId !== selfId && user.sharerOn)?.userId ||
-    0;
-
-  if (userId) {
-    const element = await stream.attachShareView(userId);
-    document.getElementById('share-container').replaceChildren(element);
-  }
-}
-
-await reconcileShare();
-client.on('active-share-change', reconcileShare);
-client.on('peer-share-state-change', reconcileShare);
-client.on('share-content-change', reconcileShare);
-client.on('user-updated', reconcileShare);
+// Track reconnecting or stale participants and avoid treating them as active users
+client.on('user-updated', (payload) => {
+  payload.forEach((user) => {
+    if (user.isInFailover) {
+      // Show reconnecting state in the UI and avoid rendering this user as active
+      stream.detachVideo(user.userId);
+      markUserAsReconnecting(user.userId);
+    } else {
+      clearReconnectingState(user.userId);
+    }
+  });
+});
 ```
+
+If `isInFailover` is `true`, the participant is disconnected and may stay in the
+session for up to about two minutes before the server removes them. Treat that
+user as reconnecting in your UI instead of as a second active participant.
 
 ### 4. "ZoomVideo is not defined" or "WebVideoSDK is not defined"
 
@@ -220,7 +134,7 @@ client.on('user-updated', reconcileShare);
 
 **Causes**:
 1. Network/ad blocker blocking `source.zoom.us` CDN
-2. ES module loading before SDK script
+2. SDK script is injected dynamically or loaded asynchronously before access
 
 **Solutions**:
 
@@ -228,14 +142,14 @@ client.on('user-updated', reconcileShare);
 ```bash
 # If your environment blocks `source.zoom.us`, you can mirror/self-host as a fallback
 # only if permitted and you can keep versions in sync with the SDK you target.
-curl "https://source.zoom.us/videosdk/zoom-video-2.4.5.min.js" -o public/js/zoom-video-sdk.min.js
+curl "https://source.zoom.us/videosdk/zoom-video-2.4.0.min.js" -o public/js/zoom-video-sdk.min.js
 ```
 
 ```html
 <script src="js/zoom-video-sdk.min.js"></script>
 ```
 
-**Solution 2 - Wait for SDK to load**:
+**Solution 2 - Wait for SDK to load when it is injected dynamically**:
 ```javascript
 function waitForSDK(timeout = 10000) {
   return new Promise((resolve, reject) => {
@@ -301,13 +215,20 @@ const client = ZoomVideo.createClient();
 
 **Solution**:
 ```javascript
-// Check permissions before starting
+// Check permission-related errorCode values instead of relying on error.type
 try {
   await stream.startVideo();
 } catch (error) {
-  if (error.type === 'INSUFFICIENT_PRIVILEGES') {
-    // Permission denied - guide user
+  if (error.errorCode === ExceptionCode.VIDEO_CAMERA_PERMISSION_DENIED) {
     alert('Please allow camera access in browser settings');
+  }
+}
+
+try {
+  await stream.startAudio();
+} catch (error) {
+  if (error.errorCode === ExceptionCode.AUDIO_CAPTURE_FAILED) {
+    alert('Please allow microphone access in browser settings');
   }
 }
 ```
@@ -317,28 +238,41 @@ try {
 **Symptom**: Video quality stays at 360p despite `{ hd: true }`
 
 **Causes**:
-1. SharedArrayBuffer not available
-2. Browser doesn't support HD
-3. Network conditions
+1. Network conditions are not good enough for 720p
+2. The camera or device cannot reliably capture HD video
+3. The account, CPU load, or current session conditions do not support HD video
+4. SharedArrayBuffer or cross-origin isolation settings may affect some advanced browser capabilities, but they are usually not the primary reason 720p is unavailable
 
 **Solution**:
 ```javascript
-// Check HD support
+// Check whether the current account and session conditions support HD
 if (stream.isSupportHDVideo()) {
   await stream.startVideo({ hd: true });
 } else {
-  console.warn('HD not supported');
+  console.warn('720p is not available in the current environment');
   await stream.startVideo();
 }
 
-// Check SharedArrayBuffer
-const sabAvailable = typeof SharedArrayBuffer === 'function';
-if (!sabAvailable) {
-  console.warn('SharedArrayBuffer not available - add COOP/COEP headers');
-}
+// Check how many higher-quality videos the current environment can render
+console.log(stream.getMaxRenderableVideos());
 ```
 
-**Server Headers for SharedArrayBuffer**:
+Use `stream.isSupportHDVideo()` to decide whether to request 720p, and treat
+network quality and camera/device capability as the first things to verify.
+If you need to confirm what resolution is actually being received, subscribe to
+video statistics and inspect the height value.
+
+```javascript
+stream.subscribeVideoStatisticData();
+
+client.on('video-statistic-data-change', (payload) => {
+  console.log(payload.height); // 360, 720, or 1080
+});
+```
+
+If you are specifically debugging browser isolation issues, then also verify
+your SharedArrayBuffer-related headers:
+
 ```
 Cross-Origin-Opener-Policy: same-origin
 Cross-Origin-Embedder-Policy: require-corp
@@ -372,167 +306,203 @@ if (stream.isStartShareScreenWithVideoElement()) {
 
 **Solution**: Ignore these errors. They're telemetry-related and don't affect functionality.
 
+### 11. Video Stops Rendering After Navigating / Toggling Layout
+
+**Symptom**:
+- Video renders fine at first, then goes black or stops rendering after switching
+  routes/tabs, opening and closing the video view several times, or toggling a
+  layout repeatedly.
+- May surface as `active-media-failed` with `WebGlContextInvalid`, or console
+  warnings about too many active WebGL contexts.
+
+**Cause**: The `video-player-container` is being unmounted and recreated (e.g.
+conditional rendering in React/Vue, route changes, or recreating the element on
+every layout change). The container holds the shared rendering surface for the
+videos under it, and the browser caps how many such surfaces can exist.
+Destroy/recreate cycles churn these surfaces and eventually exhaust the limit.
+
+**Solution**:
+- Mount `video-player-container` once and keep it for the session lifetime.
+- Do not place it behind conditional rendering that destroys it; keep it mounted
+  and toggle visibility with CSS (`display: none` / `visibility: hidden`).
+- Individual `video-player` elements can still be freely added/removed via
+  `attachVideo()` / `detachVideo()` — only the container must stay stable.
+
+```javascript
+// Anti-pattern: container destroyed whenever `inSession` flips
+// {inSession && <video-player-container />}
+
+// Better: container always mounted, hidden with CSS when not in use
+// <video-player-container style={{ display: inSession ? 'flex' : 'none' }} />
+```
+
 ---
 
-## Error Types Reference
+## Error Handling Reference
 
-| Error Type | Meaning | Common Cause |
-|------------|---------|--------------|
-| `INVALID_OPERATION` | Duplicated operation | Calling same method twice |
-| `INTERNAL_ERROR` | Service unavailable | Network issues |
-| `OPERATION_TIMEOUT` | Timed out | Slow connection |
-| `INSUFFICIENT_PRIVILEGES` | Need host/manager | Not authorized |
-| `IMPROPER_MEETING_STATE` | Not in meeting | Wrong lifecycle stage |
-| `INVALID_PARAMETERS` | Wrong params | Bad user ID, etc. |
-| `OPERATION_LOCKED` | Property locked | Feature disabled |
+Use `error.errorCode` for precise troubleshooting, and use `error.type` only as
+a coarse category. See [../references/error-codes.md](../references/error-codes.md)
+for the full `ExceptionCode` and `ActiveMediaFailedCode` reference.
+
+Common examples:
+
+| Scenario | Check |
+|----------|-------|
+| Camera permission denied | `ExceptionCode.VIDEO_CAMERA_PERMISSION_DENIED` |
+| Microphone capture or permission failure | `ExceptionCode.AUDIO_CAPTURE_FAILED` |
+| API called before join completes | `ExceptionCode.STREAM_SESSION_JOIN_REQUIRED` |
+| Wrong render element type | `ExceptionCode.STREAM_MISMATCH_RENDER_ELEMENT` |
+| Duplicate join call | `ExceptionCode.CLIENT_DUPLICATED_JOIN` |
 
 ---
 
 ## Browser-Specific Issues
 
-### Safari
+For the current feature matrix, use [../references/browser-support.md](../references/browser-support.md).
 
-| Issue | Solution |
-|-------|----------|
-| Virtual background not supported | Use alternative (blur not available) |
-| Screen sharing requires macOS 15+ | Use Chrome/Firefox |
-| Some audio issues | Enable `patchJsMedia: true` |
+Common browser-specific checks:
 
-### Firefox
-
-| Issue | Solution |
-|-------|----------|
-| Virtual background requires 90+ | Update Firefox |
-| Some WebRTC issues | Use Chrome if critical |
-
-### Mobile Browsers
-
-| Issue | Solution |
-|-------|----------|
-| Limited screen share | Use desktop for sharing |
-| Performance issues | Lower video quality |
-| Camera switching | Use `MobileVideoFacingMode` enum |
+| Issue | Check |
+|-------|-------|
+| Mobile users cannot start screen share | Expected: iOS/iPadOS and Android browsers can receive screen share but cannot send it |
+| Firefox WebRTC video behaves differently | Expected: WebRTC video is not currently listed as supported on Firefox |
+| Virtual background fails on Firefox or Safari | Check whether the app is using WebAssembly video and whether `SharedArrayBuffer` / cross-origin isolation is available |
+| 1080p does not work outside Chrome/Edge | Expected: 1080p send/receive is currently listed only for Chrome and Edge |
+| Edge shows a purple background while receiving video | Check Edge's "Enhance your security on the web" strict mode or add the site to an exception list |
+| Mobile browser support differs by browser name on iOS | Expected: all iOS/iPadOS browsers use WebKit, so support is OS-version based |
 
 ---
 
 ## Debugging Tips
 
-### 1. Enable SDK Logging
+### 1. Capture the failing API result
 
 ```javascript
-const loggerClient = client.getLoggerClient({
-  level: 'debug'
-});
-```
-
-### 2. Check Event Flow
-
-```javascript
-// Log all events
-['connection-change', 'user-added', 'user-removed', 'peer-video-state-change'].forEach(event => {
-  client.on(event, (payload) => {
-    console.log(`Event: ${event}`, payload);
+try {
+  await stream.startVideo();
+} catch (error) {
+  console.table({
+    type: error.type,
+    reason: error.reason,
+    errorCode: error.errorCode,
   });
+}
+```
+
+Use `error.errorCode` first, then look up the code in [../references/error-codes.md](../references/error-codes.md).
+
+### 2. Trace session and participant state
+
+```javascript
+client.on('connection-change', (payload) => {
+  console.log('[connection-change]', payload);
+});
+
+client.on('user-added', (payload) => {
+  console.log('[user-added]', payload);
+});
+
+client.on('user-updated', (payload) => {
+  console.log('[user-updated]', payload);
+});
+
+client.on('user-removed', (payload) => {
+  console.log('[user-removed]', payload);
+});
+
+client.on('peer-video-state-change', (payload) => {
+  console.log('[peer-video-state-change]', payload);
 });
 ```
 
-### 3. Check Participant State
+For stale users or reconnect issues, inspect `isInFailover` from `user-updated`.
+
+### 3. Capture media failures that happen after media starts
 
 ```javascript
-const users = client.getAllUser();
-console.table(users.map(u => ({
-  userId: u.userId,
-  name: u.displayName,
-  videoOn: u.bVideoOn,
-  muted: u.muted,
-  audio: u.audio
-})));
+client.on('active-media-failed', (payload) => {
+  console.log('[active-media-failed]', payload.code, payload.message);
+});
 ```
 
-### 4. Check Stream State
+This catches cases like camera/microphone permission reset, interrupted streams,
+WebGL issues, and WebAssembly out-of-memory events.
+
+### 4. Collect quality data only when needed
 
 ```javascript
-console.log('Active camera:', stream.getActiveCamera());
-console.log('Active mic:', stream.getActiveMicrophone());
-console.log('Capturing video:', stream.isCapturingVideo());
-console.log('Audio muted:', stream.isAudioMuted());
-console.log('HD supported:', stream.isSupportHDVideo());
-console.log('Max quality:', stream.getVideoMaxQuality());
+stream.subscribeVideoStatisticData();
+client.on('video-statistic-data-change', (payload) => {
+  console.log('[video-statistic-data-change]', payload);
+});
+
+stream.subscribeAudioStatisticData();
+client.on('audio-statistic-data-change', (payload) => {
+  console.log('[audio-statistic-data-change]', payload);
+});
 ```
+
+Use this for network, FPS, resolution, packet loss, or HD quality issues. For
+layout problems, inspect the DOM and CSS first.
+
+### 5. Prepare a Zoom-investigable report
+
+Do not expect application developers to interpret raw SDK internal logs. For
+reproducible connection, crash, or media quality issues, keep detailed telemetry
+enabled and include a tracking ID that Zoom can use to find the client report.
+
+```javascript
+await client.init('en-US', 'Global', {
+  // true by default; keep it enabled unless your privacy requirements differ
+  isLogDetailed: true,
+});
+```
+
+Add `telemetry_tracking_id` to the Video SDK JWT payload. Use a unique UUID per
+session or user report, then include that ID when escalating the issue to Zoom.
+
+```json
+{
+  "telemetry_tracking_id": "a8b7f844-1d32-4eeb-93a4-785a77f49428"
+}
+```
+
+If you collect post-session quality feedback, send it through
+`client.getLoggerClient().reportRating(score, feedback)` so low-quality sessions
+can be correlated with telemetry.
 
 ---
 
 ## Real-World Integration Pitfalls (Custom Waiting Room Flows)
 
-These came up in production-style waiting-room to main-session transfers.
+These are specific to custom flows that move users from a waiting session into a main session.
 
-### A) Joined, but no audio/video works on Firefox
-
-**Symptom**: Session joins, but media pipeline is flaky or blank.
-
-**Cause**: CSP blocks WebAssembly execution used by `js_media.min.js`.
-
-**Fix**: Ensure CSP `script-src` includes:
-
-```text
-'wasm-unsafe-eval' 'unsafe-eval'
-```
-
-Also keep required Zoom domains in `script-src` and allow `worker-src blob:`.
-
-### B) Transfer works, but customer remote video never appears
+### A) Transfer works, but customer remote video never appears
 
 **Symptom**: Customer reaches main session but does not see advisor video.
 
 **Likely causes**:
 1. Advisor is not publishing video (`bVideoOn` is false)
-2. Event listener race during waiting->main rejoin
-3. Attach attempted too early during stream readiness
+2. Event listeners were registered against the previous waiting session state
+3. The main-session render pass only waits for future events and never renders users already in the session
 
 **Fix pattern**:
 - Bind listeners once and gate logic by current session mode.
-- On main join, do both:
-  - immediate `getAllUser()` render pass
-  - short retry/poll window for late stream availability
-- Handle `peer-video-state-change`, `user-added`, and `user-updated`.
+- After joining the main session, immediately run `client.getAllUser()` and attach any users with `bVideoOn`.
+- Handle `peer-video-state-change`, `user-added`, and `user-updated` for subsequent state changes.
+- Skip users marked `isInFailover`; show a reconnecting state instead of rendering them as active.
 
-### C) Self video appears at wrong page position
-
-**Symptom**: Self video renders far down the page instead of in tile.
-
-**Cause**: Container CSS/DOM mismatch for SDK inserted elements.
-
-**Fix**:
-- Use `video-player-container` for SDK video mounts.
-- Ensure child elements are explicitly sized:
-
-```css
-video-player-container video-player,
-video-player-container canvas,
-video-player-container video {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-```
-
-### D) Command channel transfer message is "missed"
+### B) Command channel transfer message is missed
 
 **Symptom**: Admit clicked, but customer does not transfer.
 
-**Cause**: Command channel does not replay history. If customer wasn't fully in waiting session yet, message is missed.
+**Cause**: Command channel is session-scoped and does not replay history. It is available after `client.join()` and `client.getCommandClient()`. If the customer is not fully joined to the waiting session, or if the app expects the command to survive a session transition, the message can be missed.
 
 **Fix**:
-- Keep backend transfer state and allow customer to fetch transfer details after join.
-- Consider one-time transfer lookup on customer waiting join as race guard.
-
-### E) Repeated CORS errors to `log-external-gateway.zoom.us`
-
-**Symptom**: Console spam with CORS 531 errors.
-
-**Impact**: Usually telemetry-only; does not block core session/media.
-
-**Action**: Treat as noise unless accompanied by actual join or media API failures.
+- Treat command channel as a best-effort in-session signal, not durable transfer state.
+- Keep backend transfer state and let the customer fetch transfer details after joining the waiting session.
+- Initialize command channel only after join, then register `command-channel-message` handlers.
+- Add a one-time transfer-state lookup on customer waiting-session join as the race guard.
 
 ---
 

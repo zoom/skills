@@ -1,0 +1,971 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "live-transcription",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/live-transcription.d.ts",
+  "declarations": [
+    {
+      "kind": "enum",
+      "type": "LiveTranscriptionMessageSource",
+      "members": [
+        {
+          "name": "Unspecified",
+          "value": "0",
+          "description": "Unspecified."
+        },
+        {
+          "name": "InMeetingManual",
+          "value": "1",
+          "description": "User-typed caption in the meeting."
+        },
+        {
+          "name": "ExternalCaptioner",
+          "value": "2",
+          "description": "Using the external captioner."
+        },
+        {
+          "name": "ASR",
+          "value": "4",
+          "description": "Automatic speech recognition."
+        }
+      ],
+      "description": "Source of the live transcription message."
+    },
+    {
+      "kind": "enum",
+      "type": "LiveTranscriptionLanguageCode",
+      "members": [
+        {
+          "name": "English",
+          "value": "0",
+          "description": "English"
+        },
+        {
+          "name": "'Chinese (Simplified)'",
+          "value": "1",
+          "description": "Chinese (Simplified)"
+        },
+        {
+          "name": "Japanese",
+          "value": "2",
+          "description": "Japanese"
+        },
+        {
+          "name": "German",
+          "value": "3",
+          "description": "German"
+        },
+        {
+          "name": "French",
+          "value": "4",
+          "description": "French"
+        },
+        {
+          "name": "Russian",
+          "value": "5",
+          "description": "Russian"
+        },
+        {
+          "name": "Portuguese",
+          "value": "6",
+          "description": "Portuguese"
+        },
+        {
+          "name": "Spanish",
+          "value": "7",
+          "description": "Spanish"
+        },
+        {
+          "name": "Korean",
+          "value": "8",
+          "description": "Korean"
+        },
+        {
+          "name": "Italian",
+          "value": "9",
+          "description": "Italian"
+        },
+        {
+          "name": "Reserved",
+          "value": "10",
+          "description": "Reserved"
+        },
+        {
+          "name": "Vietnamese",
+          "value": "11",
+          "description": "Vietnamese"
+        },
+        {
+          "name": "Dutch",
+          "value": "12",
+          "description": "Dutch"
+        },
+        {
+          "name": "Ukrainian",
+          "value": "13",
+          "description": "Ukrainian"
+        },
+        {
+          "name": "Arabic",
+          "value": "14",
+          "description": "Arabic"
+        },
+        {
+          "name": "Bengali",
+          "value": "15",
+          "description": "Bengali"
+        },
+        {
+          "name": "'Chinese (Traditional)'",
+          "value": "16",
+          "description": "Chinese (Traditional)'"
+        },
+        {
+          "name": "Czech",
+          "value": "17",
+          "description": "Czech"
+        },
+        {
+          "name": "Estonian",
+          "value": "18",
+          "description": "Estonian"
+        },
+        {
+          "name": "Finnish",
+          "value": "19",
+          "description": "Finnish"
+        },
+        {
+          "name": "Greek",
+          "value": "20",
+          "description": "Greek"
+        },
+        {
+          "name": "Hebrew",
+          "value": "21",
+          "description": "Hebrew"
+        },
+        {
+          "name": "Hindi",
+          "value": "22",
+          "description": "Hindi"
+        },
+        {
+          "name": "Hungarian",
+          "value": "23",
+          "description": "Hungarian"
+        },
+        {
+          "name": "Indonesian",
+          "value": "24",
+          "description": "Indonesian"
+        },
+        {
+          "name": "Malay",
+          "value": "25",
+          "description": "Malay"
+        },
+        {
+          "name": "Persian",
+          "value": "26",
+          "description": "Persian"
+        },
+        {
+          "name": "Polish",
+          "value": "27",
+          "description": "Polish"
+        },
+        {
+          "name": "Romanian",
+          "value": "28",
+          "description": "Romanian"
+        },
+        {
+          "name": "Swedish",
+          "value": "29",
+          "description": "Swedish"
+        },
+        {
+          "name": "Tamil",
+          "value": "30",
+          "description": "Tamil"
+        },
+        {
+          "name": "Telugu",
+          "value": "31",
+          "description": "Telugu"
+        },
+        {
+          "name": "Tagalog",
+          "value": "32",
+          "description": "Tagalog"
+        },
+        {
+          "name": "Turkish",
+          "value": "33",
+          "description": "Turkish"
+        },
+        {
+          "name": "'French (Canada)'",
+          "value": "34",
+          "description": "French (Canada)"
+        },
+        {
+          "name": "Danish",
+          "value": "35",
+          "description": "Danish"
+        },
+        {
+          "name": "Norwegian",
+          "value": "36",
+          "description": "Norwegian"
+        },
+        {
+          "name": "Thai",
+          "value": "37",
+          "description": "Thai"
+        },
+        {
+          "name": "Welsh",
+          "value": "38",
+          "description": "Welsh"
+        },
+        {
+          "name": "'Spanish (Mexico)'",
+          "value": "39",
+          "description": "Spanish (Mexico)"
+        },
+        {
+          "name": "'Portuguese (Brazil)'",
+          "value": "40",
+          "description": "Portuguese (Brazil)"
+        },
+        {
+          "name": "'English (New Zealand)'",
+          "value": "41",
+          "description": "English (New Zealand)"
+        },
+        {
+          "name": "'English (Australia)'",
+          "value": "42",
+          "description": "English (Australia)"
+        },
+        {
+          "name": "'English (United Kingdom)'",
+          "value": "43",
+          "description": "English (United Kingdom)"
+        },
+        {
+          "name": "Cantonese",
+          "value": "44",
+          "description": "Cantonese"
+        },
+        {
+          "name": "Somali",
+          "value": "45",
+          "description": "Somali"
+        },
+        {
+          "name": "Urdu",
+          "value": "46",
+          "description": "Urdu"
+        },
+        {
+          "name": "'Portuguese (European)'",
+          "value": "47",
+          "description": "Portuguese (European)"
+        },
+        {
+          "name": "Catalan",
+          "value": "48",
+          "description": "Catalan"
+        },
+        {
+          "name": "Afrikaans",
+          "value": "49",
+          "description": "Afrikaans"
+        },
+        {
+          "name": "'Arabic (Gulf)'",
+          "value": "50",
+          "description": "Arabic (Gulf)"
+        },
+        {
+          "name": "Croatian",
+          "value": "51",
+          "description": "Croatian"
+        },
+        {
+          "name": "'English (Indian)'",
+          "value": "52",
+          "description": "English (Indian)"
+        },
+        {
+          "name": "'English (Ireland)'",
+          "value": "53",
+          "description": "English (Ireland)"
+        },
+        {
+          "name": "'English (Scotland)'",
+          "value": "54",
+          "description": "English (Scotland)"
+        },
+        {
+          "name": "'English (South Africa)'",
+          "value": "55",
+          "description": "English (South Africa)"
+        },
+        {
+          "name": "Galician",
+          "value": "56",
+          "description": "Galician"
+        },
+        {
+          "name": "'German (Switzerland)'",
+          "value": "57",
+          "description": "German (Switzerland)"
+        },
+        {
+          "name": "Latvian",
+          "value": "58",
+          "description": "Latvian"
+        },
+        {
+          "name": "Serbian",
+          "value": "59",
+          "description": "Serbian"
+        },
+        {
+          "name": "Slovak",
+          "value": "60",
+          "description": "Slovak"
+        },
+        {
+          "name": "Zulu",
+          "value": "61",
+          "description": "Zulu"
+        },
+        {
+          "name": "'English (Welsh)'",
+          "value": "62",
+          "description": "English (Welsh)"
+        },
+        {
+          "name": "NoTranslation",
+          "value": "400",
+          "description": "No translation"
+        },
+        {
+          "name": "DefaultManualInput",
+          "value": "401",
+          "description": "manual caption"
+        }
+      ],
+      "description": "Language code of the live transcription."
+    },
+    {
+      "kind": "enum",
+      "type": "LiveTranscriptionLanguage",
+      "members": [
+        {
+          "name": "English",
+          "value": "en",
+          "description": "English"
+        },
+        {
+          "name": "'Chinese (Simplified)'",
+          "value": "zh",
+          "description": "Chinese (Simplified)"
+        },
+        {
+          "name": "Japanese",
+          "value": "ja",
+          "description": "Japanese"
+        },
+        {
+          "name": "German",
+          "value": "de",
+          "description": "German"
+        },
+        {
+          "name": "French",
+          "value": "fr",
+          "description": "French"
+        },
+        {
+          "name": "Russian",
+          "value": "ru",
+          "description": "Russian"
+        },
+        {
+          "name": "Portuguese",
+          "value": "pt",
+          "description": "Portuguese"
+        },
+        {
+          "name": "Spanish",
+          "value": "es",
+          "description": "Spanish"
+        },
+        {
+          "name": "Korean",
+          "value": "ko",
+          "description": "Korean"
+        },
+        {
+          "name": "Italian",
+          "value": "it",
+          "description": "Italian"
+        },
+        {
+          "name": "Reserved",
+          "value": "en1",
+          "description": "Reserved"
+        },
+        {
+          "name": "Vietnamese",
+          "value": "vi",
+          "description": "Vietnamese"
+        },
+        {
+          "name": "Dutch",
+          "value": "nl",
+          "description": "Dutch"
+        },
+        {
+          "name": "Ukrainian",
+          "value": "uk",
+          "description": "Ukrainian"
+        },
+        {
+          "name": "Arabic",
+          "value": "ar",
+          "description": "Arabic"
+        },
+        {
+          "name": "'Chinese (Traditional)'",
+          "value": "zh-Hant",
+          "description": "Chinese (Traditional)"
+        },
+        {
+          "name": "Czech",
+          "value": "cs",
+          "description": "Czech"
+        },
+        {
+          "name": "Estonian",
+          "value": "et",
+          "description": "Estonian"
+        },
+        {
+          "name": "Finnish",
+          "value": "fi",
+          "description": "Finnish"
+        },
+        {
+          "name": "Hebrew",
+          "value": "he",
+          "description": "Hebrew"
+        },
+        {
+          "name": "Hindi",
+          "value": "hi",
+          "description": "Hindi"
+        },
+        {
+          "name": "Hungarian",
+          "value": "hu",
+          "description": "Hungarian"
+        },
+        {
+          "name": "Indonesian",
+          "value": "id",
+          "description": "Indonesian"
+        },
+        {
+          "name": "Malay",
+          "value": "ms",
+          "description": "Malay"
+        },
+        {
+          "name": "Persian",
+          "value": "fa",
+          "description": "Persian"
+        },
+        {
+          "name": "Polish",
+          "value": "pl",
+          "description": "Polish"
+        },
+        {
+          "name": "Romanian",
+          "value": "ro",
+          "description": "Romanian"
+        },
+        {
+          "name": "Swedish",
+          "value": "sv",
+          "description": "Swedish"
+        },
+        {
+          "name": "Tamil",
+          "value": "ta",
+          "description": "Tamil"
+        },
+        {
+          "name": "Telugu",
+          "value": "te",
+          "description": "Telugu"
+        },
+        {
+          "name": "Tagalog",
+          "value": "tl",
+          "description": "Tagalog"
+        },
+        {
+          "name": "Turkish",
+          "value": "tr",
+          "description": "Turkish"
+        },
+        {
+          "name": "'French (Canada)'",
+          "value": "fr-ca",
+          "description": "French (Canada)"
+        },
+        {
+          "name": "Danish",
+          "value": "da",
+          "description": "Danish"
+        },
+        {
+          "name": "Thai",
+          "value": "th",
+          "description": "Thai"
+        },
+        {
+          "name": "Cantonese",
+          "value": "zh-yue",
+          "description": "Cantonese"
+        },
+        {
+          "name": "Catalan",
+          "value": "ca",
+          "description": "Catalan"
+        },
+        {
+          "name": "Bengali",
+          "value": "bn",
+          "description": "Bengali"
+        },
+        {
+          "name": "Greek",
+          "value": "el",
+          "description": "Greek"
+        },
+        {
+          "name": "Norwegian",
+          "value": "no",
+          "description": "Norwegian"
+        },
+        {
+          "name": "Somali",
+          "value": "so",
+          "description": "Somali"
+        },
+        {
+          "name": "Afrikaans",
+          "value": "af",
+          "description": "Afrikaans"
+        },
+        {
+          "name": "'Arabic (Gulf)'",
+          "value": "ar-gulf",
+          "description": "Arabic (Gulf)"
+        },
+        {
+          "name": "Croatian",
+          "value": "hr",
+          "description": "Croatian"
+        },
+        {
+          "name": "Galician",
+          "value": "gl",
+          "description": "Galician"
+        },
+        {
+          "name": "'German (Switzerland)'",
+          "value": "de-ch",
+          "description": "German (Switzerland)"
+        },
+        {
+          "name": "Latvian",
+          "value": "lv",
+          "description": "Latvian"
+        },
+        {
+          "name": "Serbian",
+          "value": "sr",
+          "description": "Serbian"
+        },
+        {
+          "name": "Slovak",
+          "value": "sk",
+          "description": "Slovak"
+        },
+        {
+          "name": "Zulu",
+          "value": "zu",
+          "description": "Zulu"
+        },
+        {
+          "name": "Welsh",
+          "value": "cy",
+          "description": "Welsh"
+        },
+        {
+          "name": "'Spanish (Mexico)'",
+          "value": "es-mx",
+          "description": "Spanish (Mexico)"
+        },
+        {
+          "name": "'Portuguese (Brazil)'",
+          "value": "pt-br",
+          "description": "Portuguese (Brazil)"
+        },
+        {
+          "name": "'English (New Zealand)'",
+          "value": "en-nz",
+          "description": "English (New Zealand)"
+        },
+        {
+          "name": "'English (Australia)'",
+          "value": "en-au",
+          "description": "English (Australia)"
+        },
+        {
+          "name": "'English (United Kingdom)'",
+          "value": "en-gb",
+          "description": "English (United Kingdom)"
+        },
+        {
+          "name": "Urdu",
+          "value": "ur",
+          "description": "Urdu"
+        },
+        {
+          "name": "'Portuguese (European)'",
+          "value": "pt-pt",
+          "description": "Portuguese (European)"
+        },
+        {
+          "name": "'English (Indian)'",
+          "value": "en-in",
+          "description": "English (Indian)"
+        },
+        {
+          "name": "'English (Ireland)'",
+          "value": "en-ie",
+          "description": "English (Ireland)"
+        },
+        {
+          "name": "'English (Scotland)'",
+          "value": "en-scot",
+          "description": "English (Scotland)"
+        },
+        {
+          "name": "'English (South Africa)'",
+          "value": "en-za",
+          "description": "English (South Africa)"
+        },
+        {
+          "name": "'English (Welsh)'",
+          "value": "en-cy",
+          "description": "English (Welsh)"
+        }
+      ],
+      "description": "Live transcription language."
+    },
+    {
+      "kind": "enum",
+      "type": "TranscriptionMode",
+      "members": [
+        {
+          "name": "Individual",
+          "value": "individual",
+          "description": "Individual mode — each user sets their own transcription language."
+        },
+        {
+          "name": "Session",
+          "value": "session",
+          "description": "Session mode — the transcription language is set for the entire session."
+        }
+      ],
+      "description": "Specifies the transcription mode."
+    },
+    {
+      "kind": "interface",
+      "type": "LiveTranscriptionMessage",
+      "description": "Live transcription message.",
+      "properties": [
+        {
+          "name": "msgId",
+          "type": "string",
+          "optional": false,
+          "description": "Message ID."
+        },
+        {
+          "name": "userId",
+          "type": "number",
+          "optional": false,
+          "description": "User ID of the message."
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "optional": false,
+          "description": "Display name."
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false,
+          "description": "Text content."
+        },
+        {
+          "name": "source",
+          "type": "LiveTranscriptionMessageSource",
+          "optional": false,
+          "description": "Source of the live transcription message."
+        },
+        {
+          "name": "language",
+          "type": "LiveTranscriptionLanguageCode",
+          "optional": false,
+          "description": "Language code of the live translation."
+        },
+        {
+          "name": "timestamp",
+          "type": "number",
+          "optional": false,
+          "description": "Timestamp."
+        },
+        {
+          "name": "done",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the sentence is over."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "LiveTranscriptionStatus",
+      "description": "Status of live transcription.",
+      "properties": [
+        {
+          "name": "isLiveTranscriptionEnabled",
+          "type": "boolean",
+          "optional": false,
+          "description": "Is live transcription enabled?"
+        },
+        {
+          "name": "isLiveTranslationEnabled",
+          "type": "boolean",
+          "optional": false,
+          "description": "Is live translation enabled?"
+        },
+        {
+          "name": "isHostDisableCaptions",
+          "type": "boolean",
+          "optional": false,
+          "description": "Has the host disabled captions?"
+        },
+        {
+          "name": "isHostLockTranscriptionLanguage",
+          "type": "boolean",
+          "optional": false,
+          "description": "Indicates whether the host has locked the transcription language."
+        },
+        {
+          "name": "isManualCaptionerEnabled",
+          "type": "boolean",
+          "optional": false,
+          "description": "Are manual captions enabled?"
+        },
+        {
+          "name": "transcriptionLanguage",
+          "type": "string",
+          "optional": false,
+          "description": "Supported transcription language, separated by semicolons."
+        },
+        {
+          "name": "translationLanguage",
+          "type": "Array<{ speakingLanguage: string; translatedToLanguage: string; }>",
+          "optional": false,
+          "description": "Supported translation language, a list of speaking language and supported translation language pairs."
+        }
+      ]
+    },
+    {
+      "kind": "namespace",
+      "type": "LiveTranscriptionClient",
+      "description": "The client of live transcription.",
+      "methods": [
+        {
+          "name": "startLiveTranscription",
+          "signature": "startLiveTranscription(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Start live transcription.\n\n``` javascript\nzmClient.on('caption-message',(payload)=>{\n console.log(`receive new transcription:${payload.text}`)\n});\n\nconst lttClient = zmClient.getLiveTranscriptionClient();\nlttClient.startLiveTranscription();\n```"
+        },
+        {
+          "name": "setSpeakingLanguage",
+          "signature": "setSpeakingLanguage(language: LiveTranscriptionLanguage, options?: { mode: TranscriptionMode }): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "language",
+              "type": "LiveTranscriptionLanguage",
+              "optional": false,
+              "description": "- The language to set for speech transcription."
+            },
+            {
+              "name": "options",
+              "type": "{ mode: TranscriptionMode }",
+              "optional": true,
+              "description": "- Optional configuration."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "An {@link ExecutedResult} indicating the success or failure of the operation."
+          },
+          "description": "Sets the speaking language."
+        },
+        {
+          "name": "setTranslationLanguage",
+          "signature": "setTranslationLanguage(language?: LiveTranscriptionLanguage): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "language",
+              "type": "LiveTranscriptionLanguage",
+              "optional": true,
+              "description": "Undefined is no translation."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Set translation language.\nNotes:\n - Check the `translatedSetting` from the `getLiveTranscriptionStatus` to verify whether the language is in the supported list.\n - Need to start live transcription before calling this function."
+        },
+        {
+          "name": "disableCaptions",
+          "signature": "disableCaptions(disable: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "disable",
+              "type": "boolean",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Disable or enable captions. Only the host can call this function."
+        },
+        {
+          "name": "lockTranscriptionLanguage",
+          "signature": "lockTranscriptionLanguage(isLock: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "isLock",
+              "type": "boolean",
+              "optional": false,
+              "description": "- `true` to lock, `false` to unlock the transcription language."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "An {@link ExecutedResult} indicating the success or failure of the operation."
+          },
+          "description": "Locks or unlocks the transcription language during a session.\n**Note:** Only the host can call this function."
+        },
+        {
+          "name": "getLiveTranscriptionStatus",
+          "signature": "getLiveTranscriptionStatus(): LiveTranscriptionStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "LiveTranscriptionStatus"
+          },
+          "description": "Get the live transcription status."
+        },
+        {
+          "name": "getCurrentTranscriptionLanguage",
+          "signature": "getCurrentTranscriptionLanguage(): Language | null",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Language | null"
+          },
+          "description": "Get the current transcription language."
+        },
+        {
+          "name": "getCurrentTranslationLanguage",
+          "signature": "getCurrentTranslationLanguage(): Language | null",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Language | null"
+          },
+          "description": "Get the current translation language."
+        },
+        {
+          "name": "getLatestTranscription",
+          "signature": "getLatestTranscription(): string",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "string"
+          },
+          "description": "Get the latest transcription message."
+        },
+        {
+          "name": "getLatestTranslation",
+          "signature": "getLatestTranslation(): string",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "string"
+          },
+          "description": "Get the latest translation message."
+        },
+        {
+          "name": "getFullTranscriptionHistory",
+          "signature": "getFullTranscriptionHistory(): | Array<LiveTranscriptionMessage> | Promise<Array<LiveTranscriptionMessage>>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "| Array<LiveTranscriptionMessage> | Promise<Array<LiveTranscriptionMessage>>"
+          },
+          "description": "Get the full records of live transcription.\nUsually the return value is an array type, when the number of records exceeds 100,000, it will be an Promise type."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/live-transcription.d.ts"
+    ],
+    "declarationCount": 7
+  }
+}

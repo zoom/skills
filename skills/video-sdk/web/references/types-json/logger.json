@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "logger",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/logger.d.ts",
+  "declarations": [
+    {
+      "kind": "namespace",
+      "type": "LoggerClient",
+      "description": "The logger client enabled to report client side issues to Zoom. This helps increase visibility into any client side connection issues, crashes, etc, allowing Zoom to investigate and fix any issues quickly.",
+      "methods": [
+        {
+          "name": "reportToGlobalTracing",
+          "signature": "reportToGlobalTracing(): Promise<void>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<void>"
+          },
+          "description": "Reports to global tracing.\nGlobalTracing is Zoom's internal log system."
+        },
+        {
+          "name": "reportRating",
+          "signature": "reportRating(rating: number, feedback?: string): Promise<void>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "rating",
+              "type": "number",
+              "optional": false,
+              "description": "subjective rating scale from 1-5, 1:poor, 5:good."
+            },
+            {
+              "name": "feedback",
+              "type": "string",
+              "optional": true,
+              "description": "Text-based feedback."
+            }
+          ],
+          "returns": {
+            "type": "Promise<void>"
+          },
+          "description": "Report subjective rating to Zoom."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/logger.d.ts"
+    ],
+    "declarationCount": 1
+  }
+}

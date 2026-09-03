@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "command",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/command.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "CommandChannelMsg",
+      "description": "Command channel message object.",
+      "properties": [
+        {
+          "name": "senderId",
+          "type": "number",
+          "optional": false,
+          "description": "Sender ID."
+        },
+        {
+          "name": "senderName",
+          "type": "string",
+          "optional": true,
+          "description": "Sender name."
+        },
+        {
+          "name": "senderGuid",
+          "type": "string",
+          "optional": true,
+          "description": "Sender Guid."
+        },
+        {
+          "name": "receiverId",
+          "type": "number",
+          "optional": true,
+          "description": "Receiver ID. When sent to all, there is no `receiverId`."
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "optional": false,
+          "description": "Message content."
+        },
+        {
+          "name": "timestamp",
+          "type": "number",
+          "optional": false,
+          "description": "Timestamp."
+        },
+        {
+          "name": "msgid",
+          "type": "string",
+          "optional": true,
+          "description": "Message ID."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "CommandChannelDirectTarget",
+      "description": "Address a specific recipient of a command channel message.\n\n`userKey` and `userGuid` can locate the same user across the main session and\nsubsessions, so they can be used to message a user in a different session.\nA recipient and a broadcast {@link CommandChannelBroadcastTarget | scope} are\nmutually exclusive.",
+      "properties": [
+        {
+          "name": "userKey",
+          "type": "string",
+          "optional": true,
+          "description": "The developer-supplied external key of the recipient (the `userIdentity`\npassed when the user joined). Stable while the user stays in the session."
+        },
+        {
+          "name": "userGuid",
+          "type": "string",
+          "optional": true,
+          "description": "The SDK-internal global id of the recipient (`userGUID`). Stable across the\nmain session and all subsessions."
+        },
+        {
+          "name": "scope",
+          "type": "never",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "CommandChannelBroadcastTarget",
+      "description": "Broadcast a command channel message when no specific recipient is given.",
+      "properties": [
+        {
+          "name": "scope",
+          "type": "'currentSession' | 'all'",
+          "optional": false,
+          "description": "- `'currentSession'`: broadcast within the current session only.\n- `'all'`: broadcast to the main session and all subsessions."
+        }
+      ]
+    },
+    {
+      "kind": "type_alias",
+      "type": "CommandChannelTarget",
+      "definition": "| number | CommandChannelDirectTarget | CommandChannelBroadcastTarget",
+      "description": "The target of a command channel message.\n\n- `number`: a recipient `userId` in the current session.\n- {@link CommandChannelDirectTarget}: a recipient addressed by `userKey` or `userGuid`, which may be in a different session.\n- {@link CommandChannelBroadcastTarget}: a broadcast scope."
+    },
+    {
+      "kind": "namespace",
+      "type": "CommandChannel",
+      "description": "Use the `getCommandClient` method for the `VideoClient` to access the command channel client.",
+      "methods": [
+        {
+          "name": "send",
+          "signature": "send(text: string, target?: CommandChannelTarget): Promise<ExecutedFailure | CommandChannelMsg>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "text",
+              "type": "string",
+              "optional": false,
+              "description": "The text to send."
+            },
+            {
+              "name": "target",
+              "type": "CommandChannelTarget",
+              "optional": true,
+              "description": "The recipient or broadcast scope. If omitted, the message is broadcast to the current session."
+            }
+          ],
+          "returns": {
+            "type": "Promise<ExecutedFailure | CommandChannelMsg>",
+            "description": "ExecutedResult"
+          },
+          "description": "Send a string text through the command channel.\n#### example only work to VideoSDK",
+          "examples": [
+            " const cmdChannel = client.getCommandClient();\n // send to a user in the current session\n cmdChannel.send('test', userId)\n // send to a user by external key / guid (may be in another session)\n cmdChannel.send('test', { userKey: 'my-key' })\n cmdChannel.send('test', { userGuid: 'xxxx' })\n // broadcast to the main session and all subsessions\n cmdChannel.send('test', { scope: 'all' })\n .then(() => {\n     // success\n })\n    .catch(v => {\n     // fail\n     console.log(v)\n })"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/command.d.ts"
+    ],
+    "declarationCount": 5
+  }
+}

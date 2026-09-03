@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "summary",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/summary.d.ts",
+  "declarations": [
+    {
+      "kind": "namespace",
+      "type": "AIClient",
+      "description": "The `AIClient` class provides methods that define the behaviors of a AIClient object, such as start/stop smart summary/meeting query.",
+      "methods": [
+        {
+          "name": "startSummary",
+          "signature": "startSummary(): Promise<'' | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<'' | Error>",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Start smart summary."
+        },
+        {
+          "name": "stopSummary",
+          "signature": "stopSummary(): Promise<'' | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<'' | Error>",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Stop smart summary."
+        },
+        {
+          "name": "getSummaryStatus",
+          "signature": "getSummaryStatus(): SummaryStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "SummaryStatus"
+          },
+          "description": "Get status of smart summary"
+        },
+        {
+          "name": "isSummaryEnabled",
+          "signature": "isSummaryEnabled(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Whether the smart summary is enabled."
+        },
+        {
+          "name": "startMeetingQuery",
+          "signature": "startMeetingQuery(): Promise<'' | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<'' | Error>",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Start meeting query."
+        },
+        {
+          "name": "stopMeetingQuery",
+          "signature": "stopMeetingQuery(): Promise<'' | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<'' | Error>",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Stop meeting query."
+        },
+        {
+          "name": "getMeetingQueryStatus",
+          "signature": "getMeetingQueryStatus(): MeetingQueryStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "MeetingQueryStatus"
+          },
+          "description": "Get status of meeting query"
+        },
+        {
+          "name": "isMeetingQueryEnabled",
+          "signature": "isMeetingQueryEnabled(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Whether the meeting query is enabled."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/summary.d.ts"
+    ],
+    "declarationCount": 1
+  }
+}

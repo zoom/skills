@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "voice-translator",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/voice-translator.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "VoiceTimbre",
+      "description": "Voice timbre configuration",
+      "properties": [
+        {
+          "name": "timbreIndex",
+          "type": "number",
+          "optional": false,
+          "description": "Timbre index ID."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false,
+          "description": "Timbre display name."
+        },
+        {
+          "name": "voiceUrl",
+          "type": "string",
+          "optional": false,
+          "description": "Sample audio URL for this voice timbre."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "VoiceTranslatorStatus",
+      "description": "Status of voice translator.",
+      "properties": [
+        {
+          "name": "isVoiceTranslatorEnabled",
+          "type": "boolean",
+          "optional": false,
+          "description": "Is voice translator feature enabled in the account setting."
+        },
+        {
+          "name": "isVoiceTranslatorOn",
+          "type": "boolean",
+          "optional": false,
+          "description": "Is voice translator currently running for current user."
+        },
+        {
+          "name": "voiceTranslatorLanguage",
+          "type": "string",
+          "optional": false,
+          "description": "Supported languages for voice translator, separated by semicolons."
+        },
+        {
+          "name": "voiceTranslatorVoiceTimberList",
+          "type": "Array<VoiceTimbre>",
+          "optional": false,
+          "description": "Available voice timbre list for translated voice."
+        },
+        {
+          "name": "voiceTranslatorLanguagePair",
+          "type": "Array<{ speakingLanguage: string; translatedToLanguage: string; }>",
+          "optional": false,
+          "description": "Supported translation language, a list of speaking language and supported translation language pairs."
+        }
+      ]
+    },
+    {
+      "kind": "namespace",
+      "type": "VoiceTranslatorClient",
+      "description": "The client of voice translator.",
+      "methods": [
+        {
+          "name": "startVoiceTranslator",
+          "signature": "startVoiceTranslator(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Start voice translator.\n\n``` javascript\nzmClient.on('voice-translator-started',(payload)=>{\n console.log('Voice translator started receiving audio')\n});\n\nconst vtClient = zmClient.getVoiceTranslatorClient();\nvtClient.startVoiceTranslator();\n```"
+        },
+        {
+          "name": "stopVoiceTranslator",
+          "signature": "stopVoiceTranslator(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Stop voice translator.\n\n``` javascript\nconst vtClient = zmClient.getVoiceTranslatorClient();\nvtClient.stopVoiceTranslator();\n```"
+        },
+        {
+          "name": "setSpeakingLanguage",
+          "signature": "setSpeakingLanguage(language: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "language",
+              "type": "string",
+              "optional": false,
+              "description": "- The speaking language code (e.g., 'en', 'zh', 'ja')."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Set speaking language (the language you are speaking).\n\nNote:\n - Check the `voiceTranslatorLanguage` from `getVoiceTranslatorStatus` to verify the language is supported.\n\n``` javascript\nconst vtClient = zmClient.getVoiceTranslatorClient();\nvtClient.setSpeakingLanguage('en'); // Set speaking language to English\n```"
+        },
+        {
+          "name": "setListeningLanguage",
+          "signature": "setListeningLanguage(language: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "language",
+              "type": "string",
+              "optional": false,
+              "description": "- The target language code to translate audio into (e.g., 'en', 'zh', 'ja')."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Set listening language (the language you want to hear).\n\nNote:\n - Voice translator must be started before calling this function.\n - Check the `voiceTranslatorLanguage` from `getVoiceTranslatorStatus` to verify the language is supported.\n\n``` javascript\nconst vtClient = zmClient.getVoiceTranslatorClient();\nvtClient.setListeningLanguage('zh'); // Set listening language to Chinese\n```"
+        },
+        {
+          "name": "setOriginalAudioBalance",
+          "signature": "setOriginalAudioBalance(balance: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "balance",
+              "type": "number",
+              "optional": false,
+              "description": "- Balance value between 0 and 1 (inclusive)."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Set original audio balance.\n\nControls the volume balance between original audio and translated audio.\n- 0: Only translated audio.\n- 0.5: Equal mix of original and translated audio.\n- 1: Only original audio.\n\nNote:\n - Voice translator must be started before calling this function.\n\n``` javascript\nconst vtClient = zmClient.getVoiceTranslatorClient();\nvtClient.setOriginalAudioBalance(0.3); // Mostly translated audio with some original\n```"
+        },
+        {
+          "name": "setTranslatedVoiceStyle",
+          "signature": "setTranslatedVoiceStyle(timbreId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "timbreId",
+              "type": "number",
+              "optional": false,
+              "description": "- The timbre index ID from the available voice timbre list."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Set translated voice style (timbre).\n\nNote:\n - Voice translator must be started before calling this function.\n - Check the `voiceTranslatorVoiceTimberList` from `getVoiceTranslatorStatus` to get available timbre IDs.\n\n``` javascript\nconst vtClient = zmClient.getVoiceTranslatorClient();\nconst status = vtClient.getVoiceTranslatorStatus();\nconst timbreId = status.voiceTranslatorVoiceTimberList[0].timbreIndex;\nvtClient.setTranslatedVoiceStyle(timbreId);\n```"
+        },
+        {
+          "name": "getVoiceTranslatorStatus",
+          "signature": "getVoiceTranslatorStatus(): VoiceTranslatorStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "VoiceTranslatorStatus",
+            "description": "Voice translator status information."
+          },
+          "description": "Get voice translator status.\n\n``` javascript\nconst vtClient = zmClient.getVoiceTranslatorClient();\nconst status = vtClient.getVoiceTranslatorStatus();\nconsole.log('Is enabled:', status.isVoiceTranslatorEnabled);\nconsole.log('Is running:', status.isVoiceTranslatorOn);\nconsole.log('Supported languages:', status.voiceTranslatorLanguage);\n```"
+        },
+        {
+          "name": "getCurrentSpeakingLanguage",
+          "signature": "getCurrentSpeakingLanguage(): Language | null",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Language | null",
+            "description": "Current speaking language or null if not set."
+          },
+          "description": "Get the current speaking language.\n\n``` javascript\nconst vtClient = zmClient.getVoiceTranslatorClient();\nconst language = vtClient.getCurrentSpeakingLanguage();\nif (language) {\n  console.log(`Speaking: ${language.name} (${language.code})`);\n}\n```"
+        },
+        {
+          "name": "getCurrentListeningLanguage",
+          "signature": "getCurrentListeningLanguage(): Language | null",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Language | null",
+            "description": "Current listening language or null if not set."
+          },
+          "description": "Get current listening language.\n\n``` javascript\nconst vtClient = zmClient.getVoiceTranslatorClient();\nconst language = vtClient.getCurrentListeningLanguage();\nif (language) {\n  console.log(`Listening: ${language.name} (${language.code})`);\n}\n```"
+        },
+        {
+          "name": "getCurrentTimbre",
+          "signature": "getCurrentTimbre(): VoiceTimbre | null",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "VoiceTimbre | null",
+            "description": "Current voice timbre configuration or null if not set."
+          },
+          "description": "Get current voice timbre.\n\n``` javascript\nconst vtClient = zmClient.getVoiceTranslatorClient();\nconst timbre = vtClient.getCurrentTimbre();\nif (timbre) {\n  console.log(`Current voice: ${timbre.name}`);\n  console.log(`Sample URL: ${timbre.voiceUrl}`);\n}\n```"
+        },
+        {
+          "name": "getOriginalAudioBalance",
+          "signature": "getOriginalAudioBalance(): number | null",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "number | null"
+          },
+          "description": "Get original audio balance."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/voice-translator.d.ts"
+    ],
+    "declarationCount": 3
+  }
+}

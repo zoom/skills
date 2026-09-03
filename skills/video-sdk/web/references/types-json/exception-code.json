@@ -1,0 +1,935 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "exception-code",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/exception-code.d.ts",
+  "declarations": [
+    {
+      "kind": "enum",
+      "type": "ExceptionCode",
+      "members": [
+        {
+          "name": "OPERATION_TIMEOUT",
+          "value": "1",
+          "description": "Operation timeout\n> This type of error is caused by a Zoom service issue. If you encounter this error, please report it to Zoom."
+        },
+        {
+          "name": "INTERNAL_ERROR",
+          "value": "2",
+          "description": "Internal error\n> This type of error is caused by a Zoom service issue. If you encounter this error, please report it to Zoom."
+        },
+        {
+          "name": "OPERATION_CANCELLED",
+          "value": "3",
+          "description": "Operation was cancelled due to session state changes\n> This occurs when an ongoing operation is interrupted by:\n> - Session termination (LEAVING_MEETING)\n> - Failed session join (JOIN_MEETING_FAILED)\n> - Session reconnection process (RECONNECTING_MEETING)\n> The operation promise will be rejected with this error code when meeting state changes make the operation invalid"
+        },
+        {
+          "name": "SESSION_FETCH_INFO_ERROR",
+          "value": "200",
+          "description": "Session creation or retrieval error—this is usually caused by an incorrect field value in the JWT token.\n- connection error\n- The token has expired, is over 2 days old, or is ineffective\n- Password max of 10 characters\n- This account does not exist or does not belong to you\n- Verify JWT failed\n- invalid session key"
+        },
+        {
+          "name": "SESSION_IN_ANOTHER_SESSION",
+          "value": "3000"
+        },
+        {
+          "name": "SESSION_INCORRECT_PASSCODE",
+          "value": "3004",
+          "description": "The session passcode is incorrect."
+        },
+        {
+          "name": "SESSION_NOT_STARTED",
+          "value": "3008"
+        },
+        {
+          "name": "SESSION_USER_REMOVED",
+          "value": "3009",
+          "description": "The user was removed by the session host and is prevented from rejoining the same session."
+        },
+        {
+          "name": "SESSION_ROLE_TYPE_ERROR",
+          "value": "3010",
+          "description": "The role type in jwt token is incorrect."
+        },
+        {
+          "name": "SESSION_WEBINAR_USER_REMOVED",
+          "value": "3620"
+        },
+        {
+          "name": "SESSION_INVALID_PARAMETER",
+          "value": "4003",
+          "description": "Incorrect parameters for connecting to the Zoom server. If you encounter this issue, please report it to Zoom."
+        },
+        {
+          "name": "SESSION_ENDED",
+          "value": "4004",
+          "description": "The session has been ended."
+        },
+        {
+          "name": "SESSION_EXCEED_CAPACITY",
+          "value": "4005",
+          "description": "The number of users in the session exceeds the capacity."
+        },
+        {
+          "name": "SESSION_LOCKED",
+          "value": "4006"
+        },
+        {
+          "name": "SESSION_IB_BLOCKED",
+          "value": "4007"
+        },
+        {
+          "name": "SESSION_PARTICIPANT_EXIST",
+          "value": "4008"
+        },
+        {
+          "name": "CLIENT_PLATFORM_UNSUPPORTED",
+          "value": "5000",
+          "description": "Occur in the `client.init` method because the platform does not meet the basic WebRTC requirements."
+        },
+        {
+          "name": "CLIENT_DEPENDENT_ASSETS_INACCESSIBLE",
+          "value": "5001",
+          "description": "Occur in the `client.init` method, due to the inability to access self-deployed dependent assets"
+        },
+        {
+          "name": "CLIENT_SESSION_STATE_CLOSED",
+          "value": "5002",
+          "description": "Called a function that requires the user to be in a session, but the session is closed."
+        },
+        {
+          "name": "CLIENT_SESSION_STATE_RECONNECTING",
+          "value": "5003",
+          "description": "Called a function that requires the user to be in a session, but the session is reconnecting."
+        },
+        {
+          "name": "CLIENT_SESSION_STATE_ON_HOLD",
+          "value": "5004"
+        },
+        {
+          "name": "CLIENT_SESSION_NOT_WEBINAR",
+          "value": "5005"
+        },
+        {
+          "name": "CLIENT_HOST_OR_MANAGER_PERMISSION_REQUIRED",
+          "value": "5006",
+          "description": "Operation requires host or manager permission"
+        },
+        {
+          "name": "CLIENT_HOST_PERMISSION_REQUIRED",
+          "value": "5007",
+          "description": "Operation requires host permission."
+        },
+        {
+          "name": "CLIENT_ORIGIN_HOST_PERMISSION_REQUIRED",
+          "value": "5008",
+          "description": "Operation requires origin host or manager permission."
+        },
+        {
+          "name": "CLIENT_ATTENDEE_APPLICABLE_ONLY",
+          "value": "5009"
+        },
+        {
+          "name": "CLIENT_PARTICIPANT_APPLICABLE_ONLY",
+          "value": "5010"
+        },
+        {
+          "name": "CLIENT_MISMATCH_USER",
+          "value": "5011",
+          "description": "User ID doesn't match"
+        },
+        {
+          "name": "CLIENT_DUPLICATED_JOIN",
+          "value": "5012",
+          "description": "Occurs in `client.join` method due to a duplicate call while the user is already in a session."
+        },
+        {
+          "name": "CLIENT_INVALID_JOIN_PARAMETER",
+          "value": "5013",
+          "description": "Occurs in `client.join` method due to the parameter is incorrect.\n- invalid  signature\n- Topic, token and userName must be string and required\n- The maximum length of topic is 200\n- The maximum length of username is 200\n- The maximum length of password is 10"
+        },
+        {
+          "name": "CLIENT_HOST_DISALLOW_RENAME",
+          "value": "5014",
+          "description": "Occurs in `client.changeName` method due to the host disallowing users from changing their names themselves."
+        },
+        {
+          "name": "STREAM_MISMATCH_DEVICE",
+          "value": "6000",
+          "description": "The device ID (microphone, audio speaker, camera) does not match any device in the list."
+        },
+        {
+          "name": "STREAM_MISMATCH_USER",
+          "value": "6001",
+          "description": "User ID doesn't match"
+        },
+        {
+          "name": "STREAM_SESSION_JOIN_REQUIRED",
+          "value": "6002",
+          "description": "Occurs when a method is called before the `client.join` method has resolved."
+        },
+        {
+          "name": "STREAM_MISMATCH_RENDER_ELEMENT",
+          "value": "6003",
+          "description": "Occurs in video or sharing-related functions when the target element does not match the required render element type."
+        },
+        {
+          "name": "AUDIO_CAPTURE_FAILED",
+          "value": "6010",
+          "description": "Occurs in `stream.startAudio` method, the sub reason as follows:\n- 1- Permission denied by user\n- 2- Permission denied by system\n- 3- Device in use\n- 4- No device found\n- 5- Unknown reason\n- 6- Constraint violation\n- 7- Permission dismissed by user"
+        },
+        {
+          "name": "AUDIO_CAPTURE_LOADING",
+          "value": "6011",
+          "description": "Occurs in `stream.startAudio` or `stream.stopAudio` method, the audio capture is in loading"
+        },
+        {
+          "name": "AUDIO_IN_PSTN",
+          "value": "6012",
+          "description": "Occurs in `stream.startAudio` method, the audio is already connected by a PSTN call."
+        },
+        {
+          "name": "AUDIO_ENCODING_REQUIRED",
+          "value": "6013",
+          "description": "Occurs in stream.startAudio method, only occurs on legacy Safari browser, the audio decoding/encoding is required.\n> Legacy Safari Only"
+        },
+        {
+          "name": "AUDIO_SHARE_AUDIO_CONFLICT",
+          "value": "6014",
+          "description": "Occurs in `stream.stopAudio` method, only occurs on legacy Chrome browsers when sharing tab audio or system audio.\n> Legacy Chrome Only"
+        },
+        {
+          "name": "AUDIO_NOT_STARTED",
+          "value": "6015",
+          "description": "Occurs in the `stream.mute/unmuteAudio` or `stream.mute/unmuteShareAudio` methods when audio or shared audio has not been started."
+        },
+        {
+          "name": "AUDIO_ATTENDEE_NOT_ALLOWED",
+          "value": "6016"
+        },
+        {
+          "name": "SECONDARY_AUDIO_UNSUPPORTED",
+          "value": "6017",
+          "description": "Occurs in `stream.startSecondaryAudio` method due to the platform being unsupported."
+        },
+        {
+          "name": "SECONDARY_AUDIO_DEVICE_CONFLICT",
+          "value": "6018",
+          "description": "Occurs in `stream.startSecondaryAudio` method due to the microphone ID being used for session audio."
+        },
+        {
+          "name": "SECONDARY_AUDIO_SCREEN_SHARING_CONFLICT",
+          "value": "6019",
+          "description": "Occurs in `stream.startSecondaryAudio` method due to screen sharing being in progress."
+        },
+        {
+          "name": "SECONDARY_AUDIO_NOT_STARTED",
+          "value": "6020",
+          "description": "Occurs in `stream.stopSecondaryAudio` method, due to the secondary audio not being started."
+        },
+        {
+          "name": "PSTN_MISMATCH_COUNTRY_CODE",
+          "value": "6021",
+          "description": "Occurs in `stream.inviteByPhone` method due to the country code does not match any code in the list."
+        },
+        {
+          "name": "PSTN_NOT_CONNECTED",
+          "value": "6022",
+          "description": "Occurs in `stream.hangup` method due to the PSTN being not being connected."
+        },
+        {
+          "name": "CRC_NOT_CONNECTED",
+          "value": "6023",
+          "description": "Occurs in `stream.cancelCallCRCDevice` method due to the CRC device not being connected."
+        },
+        {
+          "name": "AUDIO_ALLOW_TALK_UNSUPPORTED",
+          "value": "6024"
+        },
+        {
+          "name": "AUDIO_ALLOW_TALK_MISMATCH_USER",
+          "value": "6025"
+        },
+        {
+          "name": "AUDIO_PROCESSOR_UNSUPPORTED",
+          "value": "6026",
+          "description": "Occurs in the `stream.createProcessor` method due to the platform not supporting the audio processor."
+        },
+        {
+          "name": "AUDIO_PROCESSOR_DUPLICATE_CREATE",
+          "value": "6027",
+          "description": "Occurs in the `stream.createProcessor` method due to the creation of a duplicate audio processor."
+        },
+        {
+          "name": "AUDIO_PROCESSOR_MISMATCH_PROCESSOR",
+          "value": "6028",
+          "description": "Occurs in the `stream.addProcessor` and `stream.removeProcessor` methods when unable to find the target processor."
+        },
+        {
+          "name": "AUDIO_PROCESSOR_LIMIT_EXCEED",
+          "value": "6029",
+          "description": "Error that occurs when calling `stream.addProcessor` with a processor that has already been added."
+        },
+        {
+          "name": "VIDEO_CAMERA_PERMISSION_DENIED",
+          "value": "6100",
+          "description": "Occurs in `stream.startVideo` method due to the user denied camera permission."
+        },
+        {
+          "name": "VIDEO_NO_CAMERA",
+          "value": "6101",
+          "description": "Occurs in `stream.startVideo` method due to no camera."
+        },
+        {
+          "name": "VIDEO_MISMATCH_CAMERA",
+          "value": "6102",
+          "description": "Occurs in `stream.startVideo` method due to the camera does not match the device list."
+        },
+        {
+          "name": "VIDEO_CAMERA_TAKEN",
+          "value": "6103",
+          "description": "Occurs in `stream.startVideo` method due to the camera is taken by another program."
+        },
+        {
+          "name": "VIDEO_VB_INITIALIZE_ERROR",
+          "value": "6104",
+          "description": "Occurs in `stream.startVideo` method due to the virtual background initialization error."
+        },
+        {
+          "name": "VIDEO_CAPTURE_LOADING",
+          "value": "6105",
+          "description": "Occurs in `stream.startVideo` or `stream.stopVideo` method due to the video capture is in loading."
+        },
+        {
+          "name": "VIDEO_MUTED_BY_HOST",
+          "value": "6106"
+        },
+        {
+          "name": "VIDEO_VB_UNSUPPORTED",
+          "value": "6107",
+          "description": "Occurs in `stream.startVideo` method due to the virtual background is not supported on the platform."
+        },
+        {
+          "name": "VIDEO_VB_PROCESSOR_CONFLICT",
+          "value": "6108",
+          "description": "Occurs in `stream.startVideo` method due to the virtual processor is in progress."
+        },
+        {
+          "name": "VIDEO_MISMATCH_STATE",
+          "value": "6109",
+          "description": "Occurs in `stream.startVideo` or `stream.stopVideo` method due to the video state is not matched."
+        },
+        {
+          "name": "VIDEO_ESTABLISH_STREAM_ERROR",
+          "value": "6110",
+          "description": "Occurs in `stream.startVideo` method due to the video stream establish error."
+        },
+        {
+          "name": "VIDEO_RENDER_LIMIT_EXCEED",
+          "value": "6111",
+          "description": "Occurs in `stream.renderVideo` or `stream.attachVideo` method due to number of rendered video exceed the limit."
+        },
+        {
+          "name": "VIDEO_METHOD_DEPRECATED",
+          "value": "6112",
+          "description": "Occurs in `stream.renderVideo`  method due to the method is not applicable for WebRTC video."
+        },
+        {
+          "name": "VIDEO_VB_IMAGE_INACCESSIBLE",
+          "value": "6113",
+          "description": "Occurs in `stream.previewVirtualBackgroundmethod` due to the virtual background image is inaccessible."
+        },
+        {
+          "name": "VIDEO_VB_MISMATCH_STATE",
+          "value": "6114",
+          "description": "Occurs in `stream.previewVirtualBackground` method due to the virtual background state is not matched."
+        },
+        {
+          "name": "VIDEO_MASK_IMAGE_INACCESSIBLE",
+          "value": "6115",
+          "description": "Occurs in `stream.previewMask` due to the mask image is inaccessible."
+        },
+        {
+          "name": "VIDEO_MASK_PROCESSOR_CONFLICT",
+          "value": "6116",
+          "description": "Occurs in `stream.previewMask` method due to the virtual processor is in progress."
+        },
+        {
+          "name": "VIDEO_SPOTLIGHT_MISMATCH_STATE",
+          "value": "6117",
+          "description": "Occurs in `stream.spotlightVideo` method due to video not been started or been spotlighted."
+        },
+        {
+          "name": "VIDEO_SPOTLIGHT_MULTI_CONFLICT",
+          "value": "6118",
+          "description": "Occurs in `stream.removeSpotlightedVideo` method due to multiple spotlighted videos cannot be removed."
+        },
+        {
+          "name": "VIDEO_PROCESSOR_UNSUPPORTED",
+          "value": "6119",
+          "description": "Occurs in `stream.createProcessor` method due to video processor being unsupported on the platform."
+        },
+        {
+          "name": "VIDEO_PROCESSOR_LIMIT_EXCEED",
+          "value": "6120",
+          "description": "Occurs in `stream.addProcessor` method due to adding more than 1 video processor at the same time."
+        },
+        {
+          "name": "VIDEO_PROCESSOR_DUPLICATE_CREATE",
+          "value": "6121",
+          "description": "Occurs in `stream.createProcessor` method due to a duplicate video processor creation."
+        },
+        {
+          "name": "VIDEO_PROCESSOR_MISMATCH_PROCESSOR",
+          "value": "6122",
+          "description": "Occurs in the `stream.addProcessor` and `stream.removeProcessor` methods when unable to find the target processor."
+        },
+        {
+          "name": "FAR_END_CAMERA_CONTROL_DEVICE_UNSUPPORTED",
+          "value": "6150",
+          "description": "Occurs in `stream.controlCamera` or `stream.controlFarEndCamera` or `stream.requestFarEndCameraControl` methods due to camera control being unsupported on the platform."
+        },
+        {
+          "name": "FAR_END_CAMERA_CONTROL_MISMATCH_STATE",
+          "value": "6151",
+          "description": "Occurs in `stream.requestFarEndCameraControl` or `stream.approveFarEndCameraControl` or `stream.declineFarEndCameraControl` or `stream.giveUpFarEndCameraControl` or `stream.controlCamera` methods due to the camera control is mismatch."
+        },
+        {
+          "name": "FAR_END_CAMERA_PERMISSION_REQUIRED",
+          "value": "6152",
+          "description": "Occurs in `stream.controlFarEndCamera` method because the camera control permission is not granted."
+        },
+        {
+          "name": "FAR_END_CAMERA_INVALID_RANGE",
+          "value": "6153",
+          "description": "Occurs in `stream.controlFarEndCamera` method because the range is invalid."
+        },
+        {
+          "name": "FAR_END_CAMERA_RATE_LIMIT",
+          "value": "6154",
+          "description": "Occurs in `stream.controlFarEndCamera` method because the method call rate has exceeded the limit."
+        },
+        {
+          "name": "SCREEN_SHARE_USER_DENIED",
+          "value": "6200",
+          "description": "Occurs in `stream.startShareScreen` method because the user denied the screen share."
+        },
+        {
+          "name": "SCREEN_SHARE_SYSTEM_DENIED",
+          "value": "6201",
+          "description": "Occurs in `stream.startShareScreen` method because the permission in the system setting is not allowed."
+        },
+        {
+          "name": "SCREEN_SHARE_UNSUPPORTED",
+          "value": "6202",
+          "description": "Occurs in `stream.startShareScreen` method because the platform does not support getDisplayMedia method."
+        },
+        {
+          "name": "SCREEN_SHARE_SUBSESSION_CONFLICT",
+          "value": "6203",
+          "description": "Occurs in `stream.startShareScreen` method because the user attempted to share their screen to subsessions while already in a subsession."
+        },
+        {
+          "name": "SCREEN_SHARE_HOST_PRIVILEGE_REQUIRED",
+          "value": "6204",
+          "description": "Occurs in `stream.startShareScreen` method because only the host has the share privilege"
+        },
+        {
+          "name": "SCREEN_SHARE_MISMATCH_STATE",
+          "value": "6205",
+          "description": "Occurs in `stream.startShareScreen` or `stream.shareToBreakoutRoom` or `stream.enableOptimizeForSharedVideo` or `stream.muteOthersScreenShare` methods because the screen share state does not match."
+        },
+        {
+          "name": "SCREEN_SHARE_OPTIMIZE_VIDEO_UNSUPPORTED",
+          "value": "6206",
+          "description": "Occurs in `stream.startShareScreen` or `stream.enableOptimizeForSharedVideo` methods because the platform does not support the video share."
+        },
+        {
+          "name": "SCREEN_SHARE_OPTIMIZE_VIDEO_CONFLICT",
+          "value": "6207",
+          "description": "Occurs in `stream.enableOptimizeForSharedVideo` method because multiple screen sharing is being enabled."
+        },
+        {
+          "name": "SCREEN_SHARE_INVALID_PRIVILEGE",
+          "value": "6208",
+          "description": "Occurs in `stream.setScreenSharePrivilege` method because privilege is invalid."
+        },
+        {
+          "name": "SCREEN_SHARE_IB_DENIED",
+          "value": "6209"
+        },
+        {
+          "name": "SCREEN_SHARE_ANNOTATION_ACCOUNT_DISABLE",
+          "value": "6210",
+          "description": "Share annotation exception\nOccurs in the `stream.startAnnotation` method when the account doesn't support annotation."
+        },
+        {
+          "name": "SCREEN_SHARE_ANNOTATION_NO_ACTIVE_SHARE",
+          "value": "6211",
+          "description": "Occurs in the `stream.startAnnotation` method when there is no active sharing session."
+        },
+        {
+          "name": "SCREEN_SHARE_ANNOTATION_PRESENTER_DISABLED",
+          "value": "6212",
+          "description": "Occurs in the `stream.startAnnotation` method when the share presenter disables the annotation by using the `stream.changeAnnotationPrivilege` method."
+        },
+        {
+          "name": "SCREEN_SHARE_ANNOTATION_DUPLICATE_START",
+          "value": "6213",
+          "description": "Occurs in the `stream.startAnnotation` method when annotation has already been started."
+        },
+        {
+          "name": "SCREEN_SHARE_ANNOTATION_START_ERROR",
+          "value": "6214",
+          "description": "Occurs in the `stream.startAnnotation` method when failing to start annotation."
+        },
+        {
+          "name": "SCREEN_SHARE_ANNOTATION_INCORRECT_PARAMETER",
+          "value": "6215",
+          "description": "Occurs in the `stream.getAnnotationController().clear` or `stream.getAnnotationController().setToolType` method when the method parameter is invalid."
+        },
+        {
+          "name": "SCREEN_SHARE_ANNOTATION_NOT_SUPPORT",
+          "value": "6216",
+          "description": "Occurs in the `stream.startAnnotation` method when the current configuration doesn't support the annotation feature."
+        },
+        {
+          "name": "SCREEN_SHARE_ANNOTATION_NOT_START",
+          "value": "6217",
+          "description": "Occurs in the `stream.stopAnnotation` method when the annotation hasn't been started."
+        },
+        {
+          "name": "SCREEN_SHARE_LIMIT_EXCEED",
+          "value": "6218",
+          "description": "Error that occurs when calling `stream.attachShareView` and the number of rendered share views exceeds the limit."
+        },
+        {
+          "name": "SHARED_PROCESSOR_UNSUPPORTED",
+          "value": "6223",
+          "description": "Error that occurs when calling `stream.createProcessor` and the platform does not support share processors."
+        },
+        {
+          "name": "SHARED_PROCESSOR_DUPLICATE_CREATE",
+          "value": "6224",
+          "description": "Error that occurs when calling `stream.createProcessor` with a share processor that has already been created."
+        },
+        {
+          "name": "SHARED_PROCESSOR_MISMATCH_PROCESSOR",
+          "value": "6225",
+          "description": "Error that occurs when calling `stream.addProcessor` or `stream.removeProcessor` and the target processor cannot be found."
+        },
+        {
+          "name": "SHARED_PROCESSOR_LIMIT_EXCEED",
+          "value": "6226",
+          "description": "Error that occurs when calling `stream.addProcessor` with more than one share processor at the same time."
+        },
+        {
+          "name": "REMOTE_CONTROL_ACCOUNT_DISABLE",
+          "value": "6300",
+          "description": "Remote control exception"
+        },
+        {
+          "name": "REMOTE_CONTROL_MISMATCH_STATE",
+          "value": "6301"
+        },
+        {
+          "name": "REMOTE_CONTROL_PERMISSION_REQUIRED",
+          "value": "6302"
+        },
+        {
+          "name": "REMOTE_CONTROL_MISMATCH_DISPLAY_SURFACE",
+          "value": "6303"
+        },
+        {
+          "name": "REMOTE_CONTROL_INVALID_LAUNCH_SCHEME",
+          "value": "6304"
+        },
+        {
+          "name": "CHAT_EMPTY_MESSAGE",
+          "value": "7000",
+          "description": "Occurs in `chat.send` method because the message is empty."
+        },
+        {
+          "name": "CHAT_MISMATCH_USER",
+          "value": "7001",
+          "description": "Occurs in `chat.send` method because the user does not match."
+        },
+        {
+          "name": "CHAT_INSUFFICIENT_PRIVILEGE",
+          "value": "7002",
+          "description": "Occurs in `chat.send` method because the privilege is not allowed."
+        },
+        {
+          "name": "CHAT_INVALID_PRIVILEGE",
+          "value": "7003",
+          "description": "Occurs in `chat.setPrivilege` method because only the host or manager can set the privilege."
+        },
+        {
+          "name": "CHAT_SUBSESSION_CONFLICT",
+          "value": "7004",
+          "description": "Occurs in `chat.setPrivilege` or `chat.sendFile` methods because the user is in a subsession."
+        },
+        {
+          "name": "CHAT_EMPTY_FILE",
+          "value": "7005",
+          "description": "Occurs in `chat.sendFile` method because the file is empty."
+        },
+        {
+          "name": "CHAT_INVALID_RETRY_TOKEN",
+          "value": "7006",
+          "description": "Occurs in `chat.sendFile` method because the retry token is invalid."
+        },
+        {
+          "name": "CHAT_MISMATCH_FILE_TYPE",
+          "value": "7007",
+          "description": "Occurs in `chat.sendFile` method because the file is not in the allowed file type. Refer to the account setting update the allowed file types."
+        },
+        {
+          "name": "CHAT_EXCEED_FILE_SIZE",
+          "value": "7008",
+          "description": "Occurs in `chat.sendFile` method because the file size exceed the max size. Refer to the account setting update the file size limit."
+        },
+        {
+          "name": "CHAT_INVALID_MSG_ID_OR_URL",
+          "value": "7009",
+          "description": "Occurs in `chat.downloadFile` method because the message ID or file URL is invalid."
+        },
+        {
+          "name": "CHAT_FILE_ACCOUNT_DISABLE",
+          "value": "7010",
+          "description": "Occurs in `chat.sendFile` method because the file transfer function is disabled in the account."
+        },
+        {
+          "name": "CHAT_DELETE_ACCOUNT_DISABLE",
+          "value": "7011",
+          "description": "Occurs in `chat.deleteMessage` method because the delete chat message is disabled in the account."
+        },
+        {
+          "name": "CMD_EMPTY_MESSAGE",
+          "value": "7100",
+          "description": "Occurs in `cmd.send` method because the message is empty."
+        },
+        {
+          "name": "CMD_MISMATCH_USER",
+          "value": "7101",
+          "description": "Occurs in `cmd.send` method because the user does not match."
+        },
+        {
+          "name": "CMD_INVALID_MESSAGE_TYPE",
+          "value": "7102",
+          "description": "Occurs in `cmd.send` method because the message type is not a string."
+        },
+        {
+          "name": "CMD_EXCEED_MESSAGE_LENGTH",
+          "value": "7103",
+          "description": "Occurs in `cmd.send` method because the message length exceed the max length(512 bytes)."
+        },
+        {
+          "name": "CMD_CHANNEL_NOT_READY",
+          "value": "7104",
+          "description": "Occurs in `cmd.send` method because the channel is not ready."
+        },
+        {
+          "name": "RECORDING_ACCOUNT_DISABLE",
+          "value": "7200",
+          "description": "Occurs in `recording.startCloudRecording` method because the cloud recording is not enabled in the account setting."
+        },
+        {
+          "name": "RECORDING_STOP_FORBIDDEN",
+          "value": "7201",
+          "description": "Occurs in `recording.startCloudRecording` method because pausing/stopping  cloud recording is forbidden in the account setting."
+        },
+        {
+          "name": "RECORDING_MISMATCH_STATE",
+          "value": "7202",
+          "description": "Occurs in `recording.startCloudRecording` method because the recording state does not match."
+        },
+        {
+          "name": "RECORDING_ISO_DISABLE",
+          "value": "7203",
+          "description": "Occurs in `recording.acceptIndividualRecording` method because the individual recording is not enabled."
+        },
+        {
+          "name": "RECORDING_IQ_DISABLE",
+          "value": "7204"
+        },
+        {
+          "name": "RECORDING_IQ_PERMISSION_REQUIRED",
+          "value": "7205"
+        },
+        {
+          "name": "RECORDING_IQ_MISMATCH_STATE",
+          "value": "7206"
+        },
+        {
+          "name": "LOCAL_RECORDING_ACCOUNT_DISABLE",
+          "value": "7207"
+        },
+        {
+          "name": "LOCAL_RECORDING_INVALID_VALUE",
+          "value": "7208"
+        },
+        {
+          "name": "LOCAL_RECORDING_MISMATCH_STATE",
+          "value": "7209"
+        },
+        {
+          "name": "TRANSCRIPTION_ACCOUNT_DISABLE",
+          "value": "7300",
+          "description": "Occurs in `liveTranscription.startLiveTranscription` method because the feature is disabled in the account."
+        },
+        {
+          "name": "TRANSCRIPTION_FEATURE_DISABLE",
+          "value": "7301",
+          "description": "Occurs in `liveTranscription.startLiveTranscription` method because the feature is disabled by the session host."
+        },
+        {
+          "name": "TRANSCRIPTION_LANGUAGE_UNSUPPORTED",
+          "value": "7302",
+          "description": "Occurs in `liveTranscription.setSpeakingLanguage` method because the language is not supported."
+        },
+        {
+          "name": "TRANSCRIPTION_MISMATCH_STATE",
+          "value": "7303",
+          "description": "Occurs in `liveTranscription.setSpeakingLanguage` or `liveTranscription.setTranslationLanguage` methods because the transcription has not been supported."
+        },
+        {
+          "name": "TRANSLATION_ACCOUNT_DISABLE",
+          "value": "7304",
+          "description": "Occurs in `liveTranscription.setTranslationLanguage`  method because the feature is disabled in the account."
+        },
+        {
+          "name": "TRANSLATION_LANGUAGE_UNSUPPORTED",
+          "value": "7305",
+          "description": "Occurs in `liveTranscription.setTranslationLanguage` method because the translation language is not supported."
+        },
+        {
+          "name": "MANUAL_CAPTION_ACCOUNT_DISABLE",
+          "value": "7306"
+        },
+        {
+          "name": "MANUAL_CAPTION_FEATURE_DISABLE",
+          "value": "7307"
+        },
+        {
+          "name": "MANUAL_CAPTION_MISMATCH_USER",
+          "value": "7308"
+        },
+        {
+          "name": "MANUAL_CAPTION_INSUFFICIENT_PRIVILEGE",
+          "value": "7309"
+        },
+        {
+          "name": "TRANSCRIPTION_LANGUAGE_LOCKED",
+          "value": "7310",
+          "description": "Error that occurs when calling `liveTranscription.lockTranscriptionLanguage` while the transcription language is already locked by the host."
+        },
+        {
+          "name": "LIVE_STREAM_ACCOUNT_DISABLE",
+          "value": "7400",
+          "description": "Occurs in `liveStream.startLiveStream` method because the live stream is disabled in the account."
+        },
+        {
+          "name": "LIVE_STREAM_INVALID_PARAMETER",
+          "value": "7401",
+          "description": "Occurs in `liveStream.startLiveStream` method because the parameter is invalid."
+        },
+        {
+          "name": "LIVE_STREAM_MISMATCH_STATE",
+          "value": "7402",
+          "description": "Occurs in `liveStream.startLiveStream` method because the live stream is in progress."
+        },
+        {
+          "name": "SUBSESSION_ACCOUNT_DISABLE",
+          "value": "7500",
+          "description": "Occurs in `subsession.createSubsessions` method because the subsession function is disabled in the account."
+        },
+        {
+          "name": "SUBSESSION_EXCEED_CAPACITY",
+          "value": "7501",
+          "description": "Occurs in `subsession.createSubsessions` method because the number of created subsessions has exceeded the maximum limit(100)."
+        },
+        {
+          "name": "SUBSESSION_MISMATCH_ID",
+          "value": "7502",
+          "description": "Occurs in `subsession.openSubsessions` or `subsession.joinSubsession` or `subsession.assignUserToSubsession` or `subsession.moveUserToSubsession` methods because the subsession ID is incorrect."
+        },
+        {
+          "name": "SUBSESSION_MISMATCH_USER",
+          "value": "7503",
+          "description": "Occurs in `subsession.openSubsessions` or `subsession.moveBackToMainSession` or `subsession.assignUserToSubsession` or `subsession.moveUserToSubsession` methods because the user ID is incorrect."
+        },
+        {
+          "name": "SUBSESSION_MISMATCH_STATE",
+          "value": "7504",
+          "description": "Occurs in `subsession.openSubsessions` or other methods because the subsession status is not correct."
+        },
+        {
+          "name": "SUBSESSION_EXIT_RESTRICTED",
+          "value": "7505",
+          "description": "Occurs in `subsession.leaveSubsession` because the host restricts users from leaving the subsession."
+        },
+        {
+          "name": "SUBSESSION_BROADCAST_DISABLE",
+          "value": "7506",
+          "description": "Occurs in `subsession.broadcast` because broadcast message function is disabled in the account."
+        },
+        {
+          "name": "SUBSESSION_BROADCAST_INVALID_CONTENT",
+          "value": "7507",
+          "description": "Occurs in `subsession.broadcast` because the message is empty or an invalid string."
+        },
+        {
+          "name": "SUBSESSION_BROADCAST_VOICE_DISABLE",
+          "value": "7508",
+          "description": "Occurs in `subsession.startBroadcastVoice` because broadcast voice is disabled in the account."
+        },
+        {
+          "name": "SUBSESSION_BROADCAST_VOICE_RESTRICTED",
+          "value": "7509",
+          "description": "Occurs in `subsession.startBroadcastVoice` because the host cannot broadcast voice with in a subsession."
+        },
+        {
+          "name": "SUBSESSION_BROADCAST_VOICE_MISMATCH_STATE",
+          "value": "7510",
+          "description": "Occurs in `subsession.startBroadcastVoice` because the host cannot broadcast voice without an active audio connection during the session."
+        },
+        {
+          "name": "REACTION_ACCOUNT_DISABLE",
+          "value": "7600"
+        },
+        {
+          "name": "REACTION_INVALID_PARAMETER",
+          "value": "7601"
+        },
+        {
+          "name": "SUMMARY_ACCOUNT_DISABLE",
+          "value": "7700"
+        },
+        {
+          "name": "QA_INVALID_PARAMETER",
+          "value": "7800"
+        },
+        {
+          "name": "QA_INSUFFICIENT_PRIVILEGE",
+          "value": "7801"
+        },
+        {
+          "name": "BROADCAST_STREAMING_ACCOUNT_DISABLE",
+          "value": "7900",
+          "description": "Broadcast streaming exception\nOccurs in `broadcastStreamingClient.startBroadcast()` method because the feature is disabled in the account setting."
+        },
+        {
+          "name": "BROADCAST_STREAMING_MISMATCH_STATE",
+          "value": "7901",
+          "description": "Occurs in `broadcastStreamingClient.startBroadcast()` method because the status is incorrect."
+        },
+        {
+          "name": "BROADCAST_STREAMING_INVALID_CHANNEL_ID",
+          "value": "7902",
+          "description": "Occurs in `broadcastStreamingClient.stopBroadcast()` method because the channel ID in current case is required."
+        },
+        {
+          "name": "WHITEBOARD_ACCOUNT_DISABLE",
+          "value": "8000",
+          "description": "Whiteboard exception\nOccurs in `whiteboard.startWhiteboardScreen` method because the whiteboard feature is not enabled in the account setting."
+        },
+        {
+          "name": "WHITEBOARD_UNSUPPORTED",
+          "value": "8001",
+          "description": "Occurs in `whiteboard.startWhiteboardScreen` method because the whiteboard feature is not supported on the current platform (mobile browsers)."
+        },
+        {
+          "name": "WHITEBOARD_SCREEN_SHARE_CONFLICT",
+          "value": "8002",
+          "description": "Occurs in `whiteboard.startWhiteboardScreen` method because screen sharing is currently in progress."
+        },
+        {
+          "name": "WHITEBOARD_MISMATCH_STATE",
+          "value": "8003",
+          "description": "Occurs in `whiteboard.startWhiteboardScreen` or `whiteboard.exportWhiteboard` methods because the whiteboard state does not match the required state."
+        },
+        {
+          "name": "WHITEBOARD_HOST_PRIVILEGE_REQUIRED",
+          "value": "8004",
+          "description": "Occurs in `whiteboard.startWhiteboardScreen` or `whiteboard.stopWhiteboardScreen` or `whiteboard.setWhiteboardPermission` methods because only the host or manager has permission to perform this action."
+        },
+        {
+          "name": "WHITEBOARD_INVALID_PARAMETER",
+          "value": "8005",
+          "description": "Occurs in `whiteboard.startWhiteboardScreen` or `whiteboard.stopWhiteboardScreen` or `whiteboard.startWhiteboardView` methods because the parameter is invalid (e.g., invalid document ID, template ID, or presenter ID)."
+        },
+        {
+          "name": "WHITEBOARD_EXPORT_DISABLE",
+          "value": "8006",
+          "description": "Occurs in `whiteboard.exportWhiteboard` method because the whiteboard export feature has been disabled for the current session."
+        },
+        {
+          "name": "REAL_TIME_MEDIA_STREAMS_NOT_ENABLED",
+          "value": "8100",
+          "description": "Real-time media streams exception\nOccurs in `realTimeMediaStreamsClient.startRealTimeMediaStreams` method because the real-time media streams feature is not enabled in the account setting."
+        },
+        {
+          "name": "REAL_TIME_MEDIA_STREAMS_INVALID_STATE",
+          "value": "8101",
+          "description": "Occurs in `realTimeMediaStreamsClient.startRealTimeMediaStreams` or `realTimeMediaStreamsClient.stopRealTimeMediaStreams` methods because the real-time media streams state does not match the required state."
+        },
+        {
+          "name": "REAL_TIME_MEDIA_STREAMS_NOT_SUPPORTED_IN_BREAKOUT_ROOM",
+          "value": "8102",
+          "description": "Occurs in `realTimeMediaStreamsClient.startRealTimeMediaStreams` method because real-time media streams is not supported in breakout rooms."
+        },
+        {
+          "name": "VOICE_TRANSLATOR_ACCOUNT_DISABLE",
+          "value": "8200",
+          "description": "Voice translator exception\nOccurs in `voiceTranslatorClient.startVoiceTranslator` or `voiceTranslatorClient.setSpeakingLanguage` methods because the voice translator feature is not enabled in the account setting."
+        },
+        {
+          "name": "VOICE_TRANSLATOR_NO_AVAILABLE_LANGUAGE_LIST",
+          "value": "8201",
+          "description": "Occurs in `voiceTranslatorClient.setSpeakingLanguage` method because the voice translator language list is not available."
+        },
+        {
+          "name": "VOICE_TRANSLATOR_MISMATCH_STATE",
+          "value": "8202",
+          "description": "Occurs in `voiceTranslatorClient.setListeningLanguage` or `voiceTranslatorClient.setOriginalAudioBalance` or `voiceTranslatorClient.setTranslatedVoiceStyle` methods because the voice translator must be started before performing the action."
+        },
+        {
+          "name": "VOICE_TRANSLATOR_LANGUAGE_UNSUPPORTED",
+          "value": "8203",
+          "description": "Occurs in `voiceTranslatorClient.setSpeakingLanguage` or `voiceTranslatorClient.setListeningLanguage` methods because the specified language is not supported."
+        },
+        {
+          "name": "VOICE_TRANSLATOR_INCORRECT_BALANCE_RANGE",
+          "value": "8204",
+          "description": "Occurs in `voiceTranslatorClient.setOriginalAudioBalance` method because the balance value is not within the valid range (0 to 1)."
+        },
+        {
+          "name": "VOICE_TRANSLATOR_INCORRECT_TIMBRE",
+          "value": "8205",
+          "description": "Occurs in `voiceTranslatorClient.setTranslatedVoiceStyle` method because the specified voice timbre ID is invalid or not found."
+        },
+        {
+          "name": "INCOMING_LIVE_STREAM_INVALID_PARAMETER",
+          "value": "7450",
+          "description": "Incoming live stream exception\nOccurs in incoming live stream methods when the `streamId` parameter is empty or does not match the currently bound stream."
+        },
+        {
+          "name": "INCOMING_LIVE_STREAM_MISMATCH_STATE",
+          "value": "7451",
+          "description": "Occurs in incoming live stream methods when a state mismatch is detected.\nFor example:\n- Calling `bindIncomingLiveStream` from within a breakout room\n- Binding a new stream while the current stream is already RTMP-connected\n- Calling `startIncomingLiveStream` when `isRTMPConnected` is `false`\n- Calling `stopIncomingLiveStream` when `isRTMPConnected` is `false`"
+        }
+      ],
+      "description": "Definition of exception code"
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/exception-code.d.ts"
+    ],
+    "declarationCount": 1
+  }
+}

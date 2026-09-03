@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "recording",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/recording.d.ts",
+  "declarations": [
+    {
+      "kind": "enum",
+      "type": "RecordingStatus",
+      "members": [
+        {
+          "name": "Recording",
+          "value": "Recording",
+          "description": "Recording."
+        },
+        {
+          "name": "Paused",
+          "value": "Paused",
+          "description": "Recording paused."
+        },
+        {
+          "name": "Stopped",
+          "value": "Stopped",
+          "description": "Recording stopped."
+        },
+        {
+          "name": "Ask",
+          "value": "Ask",
+          "description": "When to start ISO recording."
+        },
+        {
+          "name": "Accept",
+          "value": "Accept",
+          "description": "When user accepts ISO recording."
+        },
+        {
+          "name": "Decline",
+          "value": "Decline",
+          "description": "When user declines ISO recording."
+        }
+      ],
+      "description": "Cloud recording status."
+    },
+    {
+      "kind": "namespace",
+      "type": "RecordingClient",
+      "description": "The `RecordingClient` class provides methods that define the behaviors of a `RecordingClient` object, such as starting or stopping cloud recording.\n\nUse the `getRecordingClient` method for a `ZoomVideo` instance to access the `RecordingClient` object.",
+      "methods": [
+        {
+          "name": "startCloudRecording",
+          "signature": "startCloudRecording(): Promise<'' | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<'' | Error>",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Start cloud recording."
+        },
+        {
+          "name": "stopCloudRecording",
+          "signature": "stopCloudRecording(): Promise<'' | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<'' | Error>",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Stops cloud recording."
+        },
+        {
+          "name": "pauseCloudRecording",
+          "signature": "pauseCloudRecording(): Promise<'' | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<'' | Error>",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Pauses cloud recording."
+        },
+        {
+          "name": "resumeCloudRecording",
+          "signature": "resumeCloudRecording(): Promise<'' | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<'' | Error>"
+          },
+          "description": "Resumes cloud recording."
+        },
+        {
+          "name": "getCloudRecordingStatus",
+          "signature": "getCloudRecordingStatus(): RecordingStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "RecordingStatus"
+          },
+          "description": "Gets the status of cloud recording."
+        },
+        {
+          "name": "canStartRecording",
+          "signature": "canStartRecording(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Determines whether the session enabled cloud recording."
+        },
+        {
+          "name": "acceptIndividualRecording",
+          "signature": "acceptIndividualRecording(): Promise<'' | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<'' | Error>",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Accepts individual cloud recording."
+        },
+        {
+          "name": "declineIndividualRecording",
+          "signature": "declineIndividualRecording(): Promise<'' | Error>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<'' | Error>",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Declines individual cloud recording."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/recording.d.ts"
+    ],
+    "declarationCount": 2
+  }
+}

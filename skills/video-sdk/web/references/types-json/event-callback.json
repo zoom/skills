@@ -1,0 +1,1831 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "event-callback",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/event-callback.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "ParticipantPropertiesPayload",
+      "description": "Interface of a ParticipantPropertiesPayload.",
+      "properties": [
+        {
+          "name": "userId",
+          "type": "number",
+          "optional": false,
+          "description": "User ID."
+        },
+        {
+          "name": "avatar",
+          "type": "string",
+          "optional": true,
+          "description": "User's avatar."
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "optional": true,
+          "description": "User's display name."
+        },
+        {
+          "name": "audio",
+          "type": "'' | 'computer' | 'phone'",
+          "optional": true,
+          "description": "User's audio state.\n- `''`: No audio.\n- `computer`: Joined by computer audio.\n- `phone`: Joined by phone."
+        },
+        {
+          "name": "isHost",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user is the host."
+        },
+        {
+          "name": "isManager",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user is a manager."
+        },
+        {
+          "name": "muted",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the audio is muted."
+        },
+        {
+          "name": "bVideoOn",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user started video."
+        },
+        {
+          "name": "sharerOn",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user started sharing."
+        },
+        {
+          "name": "sharerPause",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether sharing is paused."
+        },
+        {
+          "name": "bVideoShare",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the share is optimized for video."
+        },
+        {
+          "name": "bShareAudioOn",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the sharer is also sharing the tab's audio."
+        },
+        {
+          "name": "bShareToSubsession",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the sharer is also sharing to the subsession."
+        },
+        {
+          "name": "isPhoneUser",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user joined via a phone call."
+        },
+        {
+          "name": "userGuid",
+          "type": "string",
+          "optional": true,
+          "description": "The unified ID of a user within the main session or subsessions."
+        },
+        {
+          "name": "isAllowIndividualRecording",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether to allow individual recordings."
+        },
+        {
+          "name": "isVideoConnect",
+          "type": "boolean",
+          "optional": true
+        },
+        {
+          "name": "userIdentity",
+          "type": "string",
+          "optional": true,
+          "description": "The `user_identity` from the JWT payload, not the in-session user ID."
+        },
+        {
+          "name": "isSpeakerOnly",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user is only connected to the audio speaker, not the microphone."
+        },
+        {
+          "name": "phoneNumber",
+          "type": "string",
+          "optional": true,
+          "description": "The phone number if the user is a call out user.\nFor the privacy concern, only the calling user has this property."
+        },
+        {
+          "name": "subsessionId",
+          "type": "string",
+          "optional": true,
+          "description": "Subsession ID.\nIt's available if the user is in a subsession."
+        },
+        {
+          "name": "isInFailover",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user is in a failover process."
+        },
+        {
+          "name": "isVoiceTranslatorOn",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the voice translator is on."
+        },
+        {
+          "name": "voiceTimbre",
+          "type": "number",
+          "optional": true,
+          "description": "The selected voice timbre of the user if the voice translator is on."
+        },
+        {
+          "name": "voiceListeningLanguageCode",
+          "type": "number",
+          "optional": true,
+          "description": "The selected listening language of the user if the voice translator is on."
+        },
+        {
+          "name": "voiceSpeakingLanguageCode",
+          "type": "number",
+          "optional": true,
+          "description": "The selected speaking language of the user if the voice translator is on."
+        },
+        {
+          "name": "isRtmpUser",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether this user is an RTMP user"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "ConnectionState",
+      "members": [
+        {
+          "name": "Connected",
+          "value": "Connected",
+          "description": "Connected."
+        },
+        {
+          "name": "Reconnecting",
+          "value": "Reconnecting",
+          "description": "Reconnecting (usually occurs in failover)."
+        },
+        {
+          "name": "Closed",
+          "value": "Closed",
+          "description": "Closed."
+        },
+        {
+          "name": "Fail",
+          "value": "Fail",
+          "description": "Failed."
+        }
+      ],
+      "description": "The session's connection state."
+    },
+    {
+      "kind": "enum",
+      "type": "VideoActiveState",
+      "members": [
+        {
+          "name": "Active",
+          "value": "Active",
+          "description": "Active."
+        },
+        {
+          "name": "Inactive",
+          "value": "Inactive",
+          "description": "Inactive."
+        }
+      ],
+      "description": "The video state."
+    },
+    {
+      "kind": "enum",
+      "type": "VideoCapturingState",
+      "members": [
+        {
+          "name": "Started",
+          "value": "Started",
+          "description": "Started."
+        },
+        {
+          "name": "Stopped",
+          "value": "Stopped",
+          "description": "Stopped."
+        },
+        {
+          "name": "Failed",
+          "value": "Failed",
+          "description": "Failed."
+        }
+      ],
+      "description": "The current user's video capture state."
+    },
+    {
+      "kind": "enum",
+      "type": "PassiveStopShareReason",
+      "members": [
+        {
+          "name": "PrivilegeChange",
+          "value": "PrivilegeChange",
+          "description": "Privilege change or another user started sharing."
+        },
+        {
+          "name": "StopScreenCapture",
+          "value": "StopScreenCapture",
+          "description": "User clicked stop share on the browser control bar."
+        }
+      ],
+      "description": "Reason for passively stopping screen sharing."
+    },
+    {
+      "kind": "type_alias",
+      "type": "ClosedReason",
+      "definition": "'kicked by host' | 'ended by host' | 'expeled by host'",
+      "description": "Reason for closing the meeting.\n- `kicked by host`: User kicked off by the host.\n- `ended by host`: Meeting ended by the host.\n- `expeled by host`: User expeled by the host."
+    },
+    {
+      "kind": "interface",
+      "type": "ConnectionChangePayload",
+      "description": "Connection changed payload interface.",
+      "properties": [
+        {
+          "name": "state",
+          "type": "ConnectionState",
+          "optional": false,
+          "description": "Connection state."
+        },
+        {
+          "name": "reason",
+          "type": "ReconnectReason | ClosedReason",
+          "optional": true,
+          "description": "Reason for the change."
+        },
+        {
+          "name": "subsessionName",
+          "type": "string",
+          "optional": true,
+          "description": "If the reason is `JoinSubsession` or `MoveToSubsession`, this is the subsession name."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "ActiveSpeaker",
+      "description": "Interface of active speaker in meeting.",
+      "properties": [
+        {
+          "name": "userId",
+          "type": "number",
+          "optional": false,
+          "description": "User ID."
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "optional": true,
+          "description": "User's display name."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "MediaSDKEncDecPayload",
+      "description": "Media worker's status.",
+      "properties": [
+        {
+          "name": "action",
+          "type": "'encode' | 'decode'",
+          "optional": false,
+          "description": "Encode or decode."
+        },
+        {
+          "name": "type",
+          "type": "'audio' | 'video' | 'share'",
+          "optional": false,
+          "description": "Type of worker."
+        },
+        {
+          "name": "result",
+          "type": "'success' | 'fail'",
+          "optional": false,
+          "description": "Result of initialization."
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "ApprovedState",
+      "members": [
+        {
+          "name": "Approved",
+          "value": "Approved",
+          "description": "Approved"
+        },
+        {
+          "name": "Rejected",
+          "value": "Rejected",
+          "description": "Rejected"
+        }
+      ],
+      "description": "Remote control approved state"
+    },
+    {
+      "kind": "enum",
+      "type": "RemoteControlAppStatus",
+      "members": [
+        {
+          "name": "Unknown",
+          "value": "unknown",
+          "description": "Unknown"
+        },
+        {
+          "name": "Uninstalled",
+          "value": "uninstalled",
+          "description": "Uninstalled"
+        },
+        {
+          "name": "Installed",
+          "value": "installed",
+          "description": "Installed"
+        },
+        {
+          "name": "Unlaunched",
+          "value": "unlaunched",
+          "description": "Unlaunched"
+        },
+        {
+          "name": "Launched",
+          "value": "launched",
+          "description": "Launched"
+        }
+      ],
+      "description": "Remote control app status"
+    },
+    {
+      "kind": "enum",
+      "type": "RemoteControlSessionStatus",
+      "members": [
+        {
+          "name": "Started",
+          "value": "started",
+          "description": "Started"
+        },
+        {
+          "name": "Ended",
+          "value": "ended",
+          "description": "Ended"
+        }
+      ],
+      "description": "Remote control session status"
+    },
+    {
+      "kind": "event",
+      "type": "event_connection_change",
+      "signature": "event_connection_change(payload: ConnectionChangePayload): void",
+      "description": "Occurs when the connection is changed.",
+      "payloadType": "ConnectionChangePayload",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "ConnectionChangePayload",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_user_add",
+      "signature": "event_user_add(payload: Array<ParticipantPropertiesPayload>): void",
+      "event": "user-added",
+      "description": "Occurs when a new participant joins the session.",
+      "payloadType": "Array<ParticipantPropertiesPayload>",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "Array<ParticipantPropertiesPayload>",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ],
+      "examples": [
+        "client.on('user-added',(payload)=>{\n // You can refresh the participants when\n const participants = client.getParticipantsList();\n})"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_user_update",
+      "signature": "event_user_update(payload: Array<ParticipantPropertiesPayload>): void",
+      "description": "Occurs when the properties of the participant are updated.",
+      "payloadType": "Array<ParticipantPropertiesPayload>",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "Array<ParticipantPropertiesPayload>",
+          "optional": false,
+          "description": "The event detail"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_user_remove",
+      "signature": "event_user_remove(payload: Array<ParticipantPropertiesPayload>): void",
+      "description": "Occurs when the participant leaves the session.",
+      "payloadType": "Array<ParticipantPropertiesPayload>",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "Array<ParticipantPropertiesPayload>",
+          "optional": false,
+          "description": "The event detail"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_video_active_change",
+      "signature": "event_video_active_change(payload: { state: VideoActiveState; userId: number; }): void",
+      "event": "video-active-change",
+      "description": "Occurs when the remote video stream changes.",
+      "payloadType": "{ state: VideoActiveState; userId: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ state: VideoActiveState; userId: number; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ],
+      "examples": [
+        "client.on(\"video-active-change\", async (payload) => {\n try {\n   if (payload.state === \"Active\") {\n     const element = await stream.attachVideo(userId, VideoQuality.Video_720P);\n     container.appendChild(element);\n   } else {\n     const elements = await stream.detachVideo(userId);\n     if (Array.isArray(elements)) {\n       elements.forEach((e) => e.remove());\n     } else {\n       elements.remove();\n     }\n   }\n } catch (error) {\n   console.log(error);\n }\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_video_capturing_change",
+      "signature": "event_video_capturing_change(payload: { state: VideoCapturingState; }): void",
+      "event": "video-capturing-change",
+      "description": "Occurs when the local video capture stream changes.",
+      "payloadType": "{ state: VideoCapturingState; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ state: VideoCapturingState; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ],
+      "examples": [
+        "client.on('video-capturing-change', (payload) => {\n  try {\n    if (payload.state === 'Started') {\n      console.log('Capture started');\n    } else if (payload.state === 'Stopped') {\n      console.log('Capture stopped');\n    } else {\n      console.log('Stop capturing Failed');\n    }\n  } catch (error) {\n    console.log(error);\n  }\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_video_dimension_change",
+      "signature": "event_video_dimension_change(payload: { width: number; height: number; type: 'received'; }): void",
+      "event": "video-dimension-change",
+      "description": "Occurs when the received video content dimension changes.",
+      "payloadType": "{ width: number; height: number; type: 'received'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ width: number; height: number; type: 'received'; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on('video-dimension-change', payload=>{\n viewportElement.style.width = `${payload.width}px`;\n viewportElement.style.height = `${payload.height}px`;\n})"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_peer_video_state_change",
+      "signature": "event_peer_video_state_change(payload: { action: 'Start' | 'Stop'; userId: number; }): void",
+      "event": "peer-video-state-change",
+      "description": "Occurs when other participants start or stop video.",
+      "payloadType": "{ action: 'Start' | 'Stop'; userId: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ action: 'Start' | 'Stop'; userId: number; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on(\"peer-video-state-change\", async (payload) => {\n if (payload.action === \"Start\") {\n   const element = await stream.attachVideo(userId, VideoQuality.Video_720P);\n   container.appendChild(element);\n } else if (payload.action === \"Stop\") {\n   const elements = await stream.detachVideo(userId);\n   if (Array.isArray(elements)) {\n     elements.forEach((e) => e.remove());\n   } else {\n     elements.remove();\n   }\n }\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_audio_active_speaker",
+      "signature": "event_audio_active_speaker(payload: Array<ActiveSpeaker>): void",
+      "event": "active-speaker",
+      "description": "Occurs when some participants in the session are talking.",
+      "payloadType": "Array<ActiveSpeaker>",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "Array<ActiveSpeaker>",
+          "optional": false,
+          "description": "Active user.\n- Distinguish activity level by volume, the largest is the first element."
+        }
+      ],
+      "examples": [
+        "client.on('active-speaker', (payload) => {\n   console.log(`Active user:`,payload);\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_host_ask_unmute_audio",
+      "signature": "event_host_ask_unmute_audio(payload: { reason: 'Unmute'; }): void",
+      "description": "Occurs when the host asks you to unmute audio.",
+      "payloadType": "{ reason: 'Unmute'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ reason: 'Unmute'; }",
+          "optional": false,
+          "description": "The event detail.\n- Reason:\n- `Spotlight`: Host spotlighted you. If you are muted, you will receive the consent message.\n- `Unmute`: Host asks you to unmute audio.\n- `Allow to talk`: You are an attendee of a webinar, the host allowed you to talk.\n\n```javascript\nclient.on('host-ask-unmute-audio', (payload) => {\nconsole.log(payload.reason);\n});\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_current_audio_change",
+      "signature": "event_current_audio_change(payload: { action: AudioChangeAction; type?: 'phone' | 'computer'; source?: MutedSource | LeaveAudioSource; }): void",
+      "description": "Occurs when current audio is changed.",
+      "payloadType": "{ action: AudioChangeAction; type?: 'phone' | 'computer'; source?: MutedSource | LeaveAudioSource; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ action: AudioChangeAction; type?: 'phone' | 'computer'; source?: MutedSource | LeaveAudioSource; }",
+          "optional": false,
+          "description": "The event detail.\n- Action:\n- `join`: Join audio. Refer to the `type` attribute for details.\n- `leave`: Leave audio.\n- `muted`: Audio muted, refer to the `source` attribute for details.\n- `unmuted`: Audio unmuted, refer to the `source` attribute for details.\n- Type:\n- `computer': Join by computer audio.\n- `phone`: Join by phone.\n- Source:\n- `active`: User active action.\n- `passive(mute all)`: Muted due to the host muting all.\n- `passive(mute one)`: Muted due to the host muting you.\n- `passive`: Umnuted due to the host unmuting you.\n\n```javascript\nclient.on('current-audio-change', (payload) => {\nif(payload.action==='join'){\nconsole.log('Joined by ',payload.type);\n}\n});\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_auto_play_audio_failed",
+      "signature": "event_auto_play_audio_failed(): void",
+      "event": "auto-play-audio-failed",
+      "description": "Occurs when the SDK tried and failed to auto play audio. This may occur when invoking `stream.startAudio()` immediately after joining the session.",
+      "examples": [
+        "client.on('auto-play-audio-failed',()=>{\n console.log('auto play audio failed, waiting user's interaction');\n})"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_chat_received_message",
+      "signature": "event_chat_received_message(payload: ChatMessage): void",
+      "description": "Occurs when receiving a chat.",
+      "payloadType": "ChatMessage",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "ChatMessage",
+          "optional": false,
+          "description": "The event details.\n```javascript\nclient.on('chat-on-message',payload=>{\nconsole.log('from %s, message:%s',payload.sender.name,payload.message);\n})\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_chat_privilege_change",
+      "signature": "event_chat_privilege_change(payload: { chatPrivilege: ChatPrivilege; }): void",
+      "description": "Occurs when a message is deleted.\nOccurs when the host changes the chat privileges.",
+      "payloadType": "{ chatPrivilege: ChatPrivilege; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ chatPrivilege: ChatPrivilege; }",
+          "optional": false,
+          "description": "The event detail.\n```javascript\nclient.on('chat-privilege-change',payload=>{\nconsole.log(payload.chatPrivilege);\n})\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_command_channel_status",
+      "signature": "event_command_channel_status(payload: ConnectionState): void",
+      "description": "Occurs when the command channel status changes.",
+      "payloadType": "ConnectionState",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "ConnectionState",
+          "optional": false,
+          "description": "```javascript\nclient.on('command-channel-status',payload=>{\n console.log('from %s, message:%s',payload);\n})\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_command_channel_message",
+      "signature": "event_command_channel_message(payload: { senderId: string; senderName: string; senderGuid: string; senderUserKey: string; text: string; timestamp: number; msgid: string; }): void",
+      "description": "Occurs when command channel receives a message.",
+      "payloadType": "{ senderId: string; senderName: string; senderGuid: string; senderUserKey: string; text: string; timestamp: number; msgid: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ senderId: string; senderName: string; senderGuid: string; senderUserKey: string; text: string; timestamp: number; msgid: string; }",
+          "optional": false,
+          "description": "The event details.\n```javascript\nclient.on('command-channel-message',payload=>{\nconsole.log('from %s, message:%s',payload.senderId, payload.text, payload.timestamp);\n})\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_recording_change",
+      "signature": "event_recording_change(payload: RecordingStatus): void",
+      "description": "Occurs when the cloud recording status changes.",
+      "payloadType": "RecordingStatus",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "RecordingStatus",
+          "optional": false,
+          "description": "The recording status."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_individual_recording_change",
+      "signature": "event_individual_recording_change(payload: { status: RecordingStatus; userId?: number; }): void",
+      "description": "Occurs when the individual cloud recording status changes.\n- Ask: When the host starts individual cloud recording, ask the user to accept or decline recording.\n- Accept: When the user accepts individual cloud recording.\n- Decline: When the user declines individual cloud recording.",
+      "payloadType": "{ status: RecordingStatus; userId?: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ status: RecordingStatus; userId?: number; }",
+          "optional": false,
+          "description": "The individual recording status."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_device_change",
+      "signature": "event_device_change(): void",
+      "description": "Occurs when adding or removing the microphone, speaker, or camera."
+    },
+    {
+      "kind": "event",
+      "type": "event_media_sdk_change",
+      "signature": "event_media_sdk_change(payload: MediaSDKEncDecPayload): void",
+      "payloadType": "MediaSDKEncDecPayload",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "MediaSDKEncDecPayload",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_active_share_change",
+      "signature": "event_active_share_change(payload: { state: 'Active' | 'Inactive'; userId: number; }): void",
+      "event": "active-share-change",
+      "description": "Occurs when some participant starts screen sharing.",
+      "payloadType": "{ state: 'Active' | 'Inactive'; userId: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ state: 'Active' | 'Inactive'; userId: number; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on('active-share-change',payload=>{\n if(payload.state==='Active'){\n  stream.startShareView(canvas,payload.userId);\n }else if(payload.state==='Inactive'){\n  stream.stopShareView();\n }\n})"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_share_content_dimension_change",
+      "signature": "event_share_content_dimension_change(payload: { type: 'sended' | 'received'; width: number; height: number; userId: number; }): void",
+      "event": "share-content-dimension-change",
+      "description": "Occurs when shared content dimensions change.",
+      "payloadType": "{ type: 'sended' | 'received'; width: number; height: number; userId: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ type: 'sended' | 'received'; width: number; height: number; userId: number; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on('share-content-dimension-change',payload=>{\n viewportElement.style.width = `${payload.width}px`;\n viewportElement.style.height = `${payload.height}px`;\n})"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_passively_stop_share",
+      "signature": "event_passively_stop_share(payload: PassiveStopShareReason): void",
+      "description": "Occurs when current sharing is passively stopped.",
+      "payloadType": "PassiveStopShareReason",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "PassiveStopShareReason",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_peer_share_state_change",
+      "signature": "event_peer_share_state_change(payload: { userId: number; action: 'Start' | 'Stop'; }): void",
+      "event": "peer-share-state-change",
+      "description": "Occurs when some participant starts or stops screen sharing.",
+      "payloadType": "{ userId: number; action: 'Start' | 'Stop'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; action: 'Start' | 'Stop'; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on('peer-share-state-change',payload=>{\n if(payload.action==='Start'){\n  console.log(`user:${payload.userId} starts share`);\n }else if(payload.action==='Stop'){\n console.log(`user:${payload.userId} stops share`);\n }\n})"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_share_content_change",
+      "signature": "event_share_content_change(payload: { userId: number; }): void",
+      "description": "Occurs when received shared content automatically changes.\n- For example, if the host start new sharing, received shared content will be automatically changed.",
+      "payloadType": "{ userId: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_share_privilege_change",
+      "signature": "event_share_privilege_change(payload: { privilege: SharePrivilege; }): void",
+      "description": "Occurs when the host changes the share privileges.",
+      "payloadType": "{ privilege: SharePrivilege; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ privilege: SharePrivilege; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_dial_out_change",
+      "signature": "event_dial_out_change(payload: { code: DialoutState; phoneNumber: string; uuid: string; userId?: number; }): void",
+      "event": "dialout-state-change",
+      "description": "Occurs when the dial-out state changes.",
+      "payloadType": "{ code: DialoutState; phoneNumber: string; uuid: string; userId?: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ code: DialoutState; phoneNumber: string; uuid: string; userId?: number; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on('dialout-state-change', (payload) => {\n   console.log(payload.code);\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_share_audio_change",
+      "signature": "event_share_audio_change(payload: { state: 'on' | 'off'; }): void",
+      "description": "Occurs when the share audio state changes. Usually used to cooperatively change the state of computer audio.",
+      "payloadType": "{ state: 'on' | 'off'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ state: 'on' | 'off'; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_video_vb_preload_change",
+      "signature": "event_video_vb_preload_change(payload: { isReady: boolean; }): void",
+      "description": "Occurs when the virtual background (VB) is enabled and the VB model is loaded.",
+      "payloadType": "{ isReady: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ isReady: boolean; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_audio_statistic_data_change",
+      "signature": "event_audio_statistic_data_change(payload: { data: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; bandwidth: number; bitrate: number; }; type: 'AUDIO_QOS_DATA'; }): void",
+      "description": "Occurs when the audio statistics data is changed; decode (received).",
+      "payloadType": "{ data: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; bandwidth: number; bitrate: number; }; type: 'AUDIO_QOS_DATA'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ data: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; bandwidth: number; bitrate: number; }; type: 'AUDIO_QOS_DATA'; }",
+          "optional": false,
+          "description": "The event detail.\n- `data`\n- `encoding`: If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.\n- `avg_loss`: Audio's average package loss.\n- `jitter`: Audio's jitter.\n- `max_loss`: Audio's maximum package loss.\n- `rtt`: Audio's round trip time.\n- `sample_rate`: Audio's sample rate.\n- `type` : String `AUDIO_QOS_DATA`\n```javascript\nclient.on('audio-statistic-data-change', (payload) => {\nconsole.log('emit', payload);\n});\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_video_statistic_data_change",
+      "signature": "event_video_statistic_data_change(payload: { data: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; width: number; height: number; fps: number; bandwidth: number; bitrate: number; }; type: 'VIDEO_QOS_DATA'; }): void",
+      "description": "Occurs when the video statistics data is changed; decode (received).",
+      "payloadType": "{ data: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; width: number; height: number; fps: number; bandwidth: number; bitrate: number; }; type: 'VIDEO_QOS_DATA'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ data: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; width: number; height: number; fps: number; bandwidth: number; bitrate: number; }; type: 'VIDEO_QOS_DATA'; }",
+          "optional": false,
+          "description": "The event detail\n- `data`\n- `encoding`: If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.\n- `avg_loss`: Video's average package loss.\n- `jitter`: Video's jitter.\n- `max_loss`: Video's maximum package loss.\n- `rtt`: Video's round trip time.\n- `sample_rate`: Video's sample rate.\n- `width`: Video's width.\n- `height`: Video's height.\n- `fps`: Video's frame rate in frames per second (FPS).\n- `type` : String `VIDEO_QOS_DATA`\n\n```javascript\nclient.on('video-statistic-data-change', (payload) => {\nconsole.log('emit', payload);\n});\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_video_cell_detailed_change",
+      "signature": "event_video_cell_detailed_change(payload: { userId: number; width?: number; height?: number; quality?: VideoQuality; fps?: number; }): void",
+      "description": "Occurs on video cell statistic data changes.",
+      "payloadType": "{ userId: number; width?: number; height?: number; quality?: VideoQuality; fps?: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; width?: number; height?: number; quality?: VideoQuality; fps?: number; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_bo_invite_to_join",
+      "signature": "event_bo_invite_to_join(payload: { subsessionId: string; subsessionName: string; }): void",
+      "description": "Subsession start.\n\nOccurs when the host assigns you to a subsession. You can decide whether to join the subsession or not.\nUse `SubsessionClient.joinSubsession(subsessionId)` to join the subsession.",
+      "payloadType": "{ subsessionId: string; subsessionName: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ subsessionId: string; subsessionName: string; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_bo_room_countdown",
+      "signature": "event_bo_room_countdown(payload: { countdown: number; }): void",
+      "description": "Occurs when the subsession has a countdown. This event will be triggered every second until time is up.",
+      "payloadType": "{ countdown: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ countdown: number; }",
+          "optional": false,
+          "description": " - Countdown: seconds remaining."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_bo_room_time_up",
+      "signature": "event_bo_room_time_up(): void",
+      "description": "Occurs when the countdown is over."
+    },
+    {
+      "kind": "event",
+      "type": "event_bo_closing_room_countdown",
+      "signature": "event_bo_closing_room_countdown(payload: { countdown: number; }): void",
+      "description": "Occurs when there is a buffer countdown when the subsession is about to be closed.\nThis event will be triggered every second until the countdown is over.",
+      "payloadType": "{ countdown: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ countdown: number; }",
+          "optional": false,
+          "description": " - Countdown: seconds remaining."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_bo_broadcast_message",
+      "signature": "event_bo_broadcast_message(payload: { message: string; }): void",
+      "description": "Occurs when the host broadcasts content to all in the subsession.",
+      "payloadType": "{ message: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ message: string; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_bo_ask_for_help",
+      "signature": "event_bo_ask_for_help(payload: { userId: number; displayName: string; subsessionName: string; subsessionId: string; }): void",
+      "description": "Occurs when the host receives a request for help from a user in a subsession.",
+      "payloadType": "{ userId: number; displayName: string; subsessionName: string; subsessionId: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; displayName: string; subsessionName: string; subsessionId: string; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "AskHostHelpResponse",
+      "members": [
+        {
+          "name": "Received",
+          "value": "0",
+          "description": "Received."
+        },
+        {
+          "name": "Busy",
+          "value": "1",
+          "description": "Busy, host is helping other users."
+        },
+        {
+          "name": "Ignore",
+          "value": "2",
+          "description": "Host postpones the request."
+        },
+        {
+          "name": "AlreadyInRoom",
+          "value": "3",
+          "description": "Host already in the room."
+        }
+      ],
+      "description": "Host's response to request for help."
+    },
+    {
+      "kind": "event",
+      "type": "event_bo_ask_for_help_response",
+      "signature": "event_bo_ask_for_help_response(payload: { result: AskHostHelpResponse; }): void",
+      "description": "Occurs when the attendee received the response for the request for help.",
+      "payloadType": "{ result: AskHostHelpResponse; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ result: AskHostHelpResponse; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_bo_room_state_change",
+      "signature": "event_bo_room_state_change(payload: { status: SubsessionStatus; }): void",
+      "description": "Occurs when the status of the subsession changes.",
+      "payloadType": "{ status: SubsessionStatus; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ status: SubsessionStatus; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_bo_main_session_change",
+      "signature": "event_bo_main_session_change(payload: any): void",
+      "description": "Occurs when the host is in the subsession and the main session user changed.",
+      "payloadType": "any",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "any",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_caption_status",
+      "signature": "event_caption_status(payload: { autoCaption: boolean; lang?: number; language?: string; sessionLang?: number; sessionLanguage?: string; translationStarted?: boolean; }): void",
+      "description": "Subsession end\nOccurs when the live transcription status changes.",
+      "payloadType": "{ autoCaption: boolean; lang?: number; language?: string; sessionLang?: number; sessionLanguage?: string; translationStarted?: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ autoCaption: boolean; lang?: number; language?: string; sessionLang?: number; sessionLanguage?: string; translationStarted?: boolean; }",
+          "optional": false,
+          "description": "the event detail\n```javascript\nclient.on('caption-status',payload=>{\nconsole.log(payload);\n})\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_caption_message",
+      "signature": "event_caption_message(payload: LiveTranscriptionMessage): void",
+      "description": "Occurs when the SDK receives the live transcription, live translation, or manual captions message.",
+      "payloadType": "LiveTranscriptionMessage",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "LiveTranscriptionMessage",
+          "optional": false,
+          "description": "the event detail\n```javascript\nclient.on('caption-message',payload=>{\nconsole.log(payload);\n})\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_caption_enable",
+      "signature": "event_caption_enable(payload: boolean): void",
+      "description": "Occurs if the automatic live transcription enable status changes.",
+      "payloadType": "boolean",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "boolean",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_share_can_see_screen",
+      "signature": "event_share_can_see_screen(): void",
+      "description": "Occurs when the `requestReadReceipt` option is true in the `startShareScreen` method. The sharer can receive the event if someone can see the shared screen."
+    },
+    {
+      "kind": "event",
+      "type": "event_far_end_camera_request",
+      "signature": "event_far_end_camera_request(payload: { userId: number; displayName: string; currentControllingUserId?: number; currentControllingDisplayName?: string; }): void",
+      "description": "Occurs when the SDK received the far end camera request.",
+      "payloadType": "{ userId: number; displayName: string; currentControllingUserId?: number; currentControllingDisplayName?: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; displayName: string; currentControllingUserId?: number; currentControllingDisplayName?: string; }",
+          "optional": false,
+          "description": "the event detail"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_far_end_camera_response",
+      "signature": "event_far_end_camera_response(payload: { isApproved: boolean; userId: number; displayName: string; reason?: FarEndCameraControlDeclinedReason; }): void",
+      "description": "Occurs when the SDK received the far end camera response.",
+      "payloadType": "{ isApproved: boolean; userId: number; displayName: string; reason?: FarEndCameraControlDeclinedReason; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ isApproved: boolean; userId: number; displayName: string; reason?: FarEndCameraControlDeclinedReason; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_far_end_camera_in_control_change",
+      "signature": "event_far_end_camera_in_control_change(payload: { isControlled: boolean; userId?: number; }): void",
+      "description": "Occurs when the camera in control status changes.",
+      "payloadType": "{ isControlled: boolean; userId?: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ isControlled: boolean; userId?: number; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_far_end_camera_capability_change",
+      "signature": "event_far_end_camera_capability_change(payload: { userId: number; ptz: PTZCameraCapability; }): void",
+      "description": "Occurs when camera capability changes.",
+      "payloadType": "{ userId: number; ptz: PTZCameraCapability; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; ptz: PTZCameraCapability; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_network_quality_change",
+      "signature": "event_network_quality_change(payload: { userId: number; type: 'uplink' | 'downlink'; level: number; }): void",
+      "description": "Occurs when network quality changes.\nThe network quality reflects the video quality, so only when the user starts video, the data will broadcast to all users.",
+      "payloadType": "{ userId: number; type: 'uplink' | 'downlink'; level: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; type: 'uplink' | 'downlink'; level: number; }",
+          "optional": false,
+          "description": "the network quality"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_share_statistic_data_change",
+      "signature": "event_share_statistic_data_change(payload: { data: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; width: number; height: number; fps: number; bandwidth: number; bitrate: number; }; type: 'VIDEOSHARE_QOS_DATA'; }): void",
+      "description": "Occurs when the share statistics data is changed during decoding (received) or encoding (sent)",
+      "payloadType": "{ data: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; width: number; height: number; fps: number; bandwidth: number; bitrate: number; }; type: 'VIDEOSHARE_QOS_DATA'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ data: { avg_loss: number; encoding: boolean; jitter: number; max_loss: number; rtt: number; sample_rate: number; width: number; height: number; fps: number; bandwidth: number; bitrate: number; }; type: 'VIDEOSHARE_QOS_DATA'; }",
+          "optional": false,
+          "description": "the event detail\n- `data`\n- `encoding`: If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.\n- `avg_loss`: average package loss for video\n- `jitter`: jitter for video\n- `max_loss`: max package loss for video\n- `rtt`: round trip time for video\n- `sample_rate`: sample rate video\n- `width`: width for video\n- `height`: height for video\n- `fps`: Frames per second (FPS) for video\n- `type` : string \"VIDEOSHARE_QOS_DATA\"\n\n```javascript\nclient.on('share-statistic-data-change', (payload) => {\nconsole.log('emit', payload);\n});\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_caption_host_disable",
+      "signature": "event_caption_host_disable(payload: boolean): void",
+      "description": "Occurs when the host disables caption.",
+      "payloadType": "boolean",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "boolean",
+          "optional": false,
+          "description": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_remote_control_approved_change",
+      "signature": "event_remote_control_approved_change(payload: { state: ApprovedState; }): void",
+      "event": "remote-control-approved-change",
+      "description": "Occurs when the controlled user approved or rejected the remote control request",
+      "payloadType": "{ state: ApprovedState; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ state: ApprovedState; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on(\"remote-control-approved-change\", (payload) => {\n  if (payload.state === ApprovedState.Approved) {\n    stream.startRemoteControl(viewport);\n  }else{\n   // prompt a dialog to retry\n }\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_remote_control_in_control_change",
+      "signature": "event_remote_control_in_control_change(payload: { isControlling: boolean; }): void",
+      "event": "remote-control-in-control-change",
+      "description": "Occurs when the remote sharing user can regain access to control the screen.",
+      "payloadType": "{ isControlling: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ isControlling: boolean; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on(\"remote-control-in-control-change\", (payload) => {\n  if (payload.isControlling) {\n    console.log(\"You are controlling the shared content\");\n  } else {\n    console.log(\"You lost the control\");\n  }\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_remote_control_clipboard_change",
+      "signature": "event_remote_control_clipboard_change(payload: { content: string; x: number; y: number; error?: string; }): void",
+      "event": "remote-control-clipboard-change",
+      "description": "Occurs when the controlling user copies some text during the remote control period.",
+      "payloadType": "{ content: string; x: number; y: number; error?: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ content: string; x: number; y: number; error?: string; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "copyButtonElement.addEventListener(\"click\", (event) => {\n  event.preventDefault();\n  // use copy-to-clipboard\n  copyToClipboard(copyButtonElement.dataset.dataContent);\n});\n\nclient.on(\"remote-control-clipboard-change\", (payload) => {\n  copyButtonElement.style.left = payload.x;\n  copyButtonElement.style.top = payload.x;\n  copyButtonElement.dataset.dataContent = payload.content;\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_remote_control_request_change",
+      "signature": "event_remote_control_request_change(payload: { userId: number; displayName: string; isSharingEntireScreen: boolean; }): void",
+      "description": "Occurs when the controlled user receives the remote control request",
+      "payloadType": "{ userId: number; displayName: string; isSharingEntireScreen: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; displayName: string; isSharingEntireScreen: boolean; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_remote_control_app_status_change",
+      "signature": "event_remote_control_app_status_change(payload: RemoteControlAppStatus): void",
+      "description": "Occurs when the remote control app status changes",
+      "payloadType": "RemoteControlAppStatus",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "RemoteControlAppStatus",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_remote_control_controlled_status_change",
+      "signature": "event_remote_control_controlled_status_change(payload: RemoteControlSessionStatus): void",
+      "description": "Occurs when the remote control session status changes",
+      "payloadType": "RemoteControlSessionStatus",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "RemoteControlSessionStatus",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_live_stream_status",
+      "signature": "event_live_stream_status(status: LiveStreamStatus): void",
+      "description": "Occurs when live stream status changes.",
+      "payloadType": "LiveStreamStatus",
+      "parameters": [
+        {
+          "name": "status",
+          "type": "LiveStreamStatus",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_video_aspect_ratio_change",
+      "signature": "event_video_aspect_ratio_change(payload: { userId: number; aspectRatio: number; }): void",
+      "event": "video-aspect-ratio-change",
+      "description": "Occurs when the SDK detects that the rendered video aspect ratio is not the same as the actual video aspect ratio.\nTo correct the aspect ratio, update `aspect-ratio` CSS style to correct the ratio.",
+      "payloadType": "{ userId: number; aspectRatio: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; aspectRatio: number; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on(\"video-aspect-ratio-change\", (payload) => {\n const { userId, aspectRatio } = payload;\n const videoPlayerElement = // look up the video-player element by userId\n videoPlayerElement.style.aspectRatio = aspectRatio;\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_device_permission_change",
+      "signature": "event_device_permission_change(payload: { name: 'microphone' | 'camera'; state: 'denied' | 'granted' | 'prompt'; }): void",
+      "description": "Occurs when the SDK detects that the device permission has changed.",
+      "payloadType": "{ name: 'microphone' | 'camera'; state: 'denied' | 'granted' | 'prompt'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ name: 'microphone' | 'camera'; state: 'denied' | 'granted' | 'prompt'; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_chat_file_upload_progress",
+      "signature": "event_chat_file_upload_progress(payload: { fileName: string; fileSize: number; receiverId: number; receiverGuid?: string; progress: number; status: ChatFileUploadStatus; retryToken?: string; }): void",
+      "description": "Occurs when the upload file progress has changed",
+      "payloadType": "{ fileName: string; fileSize: number; receiverId: number; receiverGuid?: string; progress: number; status: ChatFileUploadStatus; retryToken?: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ fileName: string; fileSize: number; receiverId: number; receiverGuid?: string; progress: number; status: ChatFileUploadStatus; retryToken?: string; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_chat_file_download_progress",
+      "signature": "event_chat_file_download_progress(payload: { id: string; fileName: string; fileSize: number; fileUrl: string; fileBlob?: Blob; senderId: number; senderGuid?: string; progress: number; status: ChatFileDownloadStatus; }): void",
+      "description": "Occurs when the download file progress changes",
+      "payloadType": "{ id: string; fileName: string; fileSize: number; fileUrl: string; fileBlob?: Blob; senderId: number; senderGuid?: string; progress: number; status: ChatFileDownloadStatus; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ id: string; fileName: string; fileSize: number; fileUrl: string; fileBlob?: Blob; senderId: number; senderGuid?: string; progress: number; status: ChatFileDownloadStatus; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_smart_summary_change",
+      "signature": "event_smart_summary_change(payload: { support?: boolean; status?: SummaryStatus; }): void",
+      "payloadType": "{ support?: boolean; status?: SummaryStatus; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ support?: boolean; status?: SummaryStatus; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_meeting_query_change",
+      "signature": "event_meeting_query_change(payload: { support?: boolean; status?: MeetingQueryStatus; }): void",
+      "payloadType": "{ support?: boolean; status?: MeetingQueryStatus; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ support?: boolean; status?: MeetingQueryStatus; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_subsession_invite_to_back_to_main_session",
+      "signature": "event_subsession_invite_to_back_to_main_session(payload: { inviterId: number; inviterGuid: string; inviterName: string; }): void",
+      "description": "Occurs when the user is invited to back to the main session.",
+      "payloadType": "{ inviterId: number; inviterGuid: string; inviterName: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ inviterId: number; inviterGuid: string; inviterName: string; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_subsession_user_update",
+      "signature": "event_subsession_user_update(payload: { userId: number; userGuid: string; subsessionId: string; subsessionName: string; audio: string; muted: boolean; bVideoOn: boolean; sharerOn: boolean; bShareAudioOn: boolean; isTalking?: boolean; }): void",
+      "description": "Occurs when there is a change in the status of users in the subsession.",
+      "payloadType": "{ userId: number; userGuid: string; subsessionId: string; subsessionName: string; audio: string; muted: boolean; bVideoOn: boolean; sharerOn: boolean; bShareAudioOn: boolean; isTalking?: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; userGuid: string; subsessionId: string; subsessionName: string; audio: string; muted: boolean; bVideoOn: boolean; sharerOn: boolean; bShareAudioOn: boolean; isTalking?: boolean; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_subsession_broadcast_voice",
+      "signature": "event_subsession_broadcast_voice(payload: { status: boolean; }): void",
+      "description": "Occurs when the broadcasted voice's status changes.",
+      "payloadType": "{ status: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ status: boolean; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_crc_device_call_state_change",
+      "signature": "event_crc_device_call_state_change(payload: { code: CRCReturnCode; ip: string; protocol: CRCProtocol; uuid: string; }): void",
+      "event": "crc-call-out-state-change",
+      "description": "Occurs when the CRC (Cloud Room Connector) device call state changes.",
+      "payloadType": "{ code: CRCReturnCode; ip: string; protocol: CRCProtocol; uuid: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ code: CRCReturnCode; ip: string; protocol: CRCProtocol; uuid: string; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on('crc-call-out-state-change', (payload) => {\n   console.log(payload.code);\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_current_audio_level_change",
+      "signature": "event_current_audio_level_change(payload: { level: number; }): void",
+      "description": "Occurs when the current audio volume changes.",
+      "payloadType": "{ level: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ level: number; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_active_media_failed",
+      "signature": "event_active_media_failed(payload: { code: ActiveMediaFailedCode; message: string; type: 'audio' | 'video' | 'sharing'; }): void",
+      "description": "Occurs when there is a media internal error, such as an unexpected interruption in media capture or insufficient memory.\nWhen receiving this event, we recommend refreshing the page or restarting the browser to resolve the issue.\nSince the user must do this, we recommend that you provide a popup to guide the user, such as 'We detected an issue with the media stream that we cannot resolve. Please refresh the page to try to fix it.' With two buttons: 'Refresh' and 'Cancel'.",
+      "payloadType": "{ code: ActiveMediaFailedCode; message: string; type: 'audio' | 'video' | 'sharing'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ code: ActiveMediaFailedCode; message: string; type: 'audio' | 'video' | 'sharing'; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_video_spotlight_change",
+      "signature": "event_video_spotlight_change(payload: { spotlightList: Array<{ userId: number }>; }): void",
+      "event": "video-spotlight-change",
+      "description": "Occurs when the host or manager spotlights a user.",
+      "payloadType": "{ spotlightList: Array<{ userId: number }>; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ spotlightList: Array<{ userId: number }>; }",
+          "optional": false
+        }
+      ],
+      "examples": [
+        "client.on('video-spotlight-change', (payload) => {\n console.log(payload.spotlightList);\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_video_screenshot_taken",
+      "signature": "event_video_screenshot_taken(payload: { userId: number; displayName: string; }): void",
+      "description": "Occurs when someone in the meeting takes a screenshot of the video",
+      "payloadType": "{ userId: number; displayName: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; displayName: string; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_share_content_screenshot_taken",
+      "signature": "event_share_content_screenshot_taken(payload: { userId: number; displayName: string; }): void",
+      "description": "Occurs when someone in the meeting takes a screenshot of the screen share",
+      "payloadType": "{ userId: number; displayName: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; displayName: string; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_annotation_privilege_change",
+      "signature": "event_annotation_privilege_change(payload: { userId: number; isAnnotationEnabled: boolean; }): void",
+      "description": "Occurs when the sharer changes the annotation privilege of his share session.",
+      "payloadType": "{ userId: number; isAnnotationEnabled: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; isAnnotationEnabled: boolean; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_annotation_redo_status",
+      "signature": "event_annotation_redo_status(payload: { status: boolean; presenterId: number; }): void",
+      "description": "Occurs when the availability status of the redo option changes.",
+      "payloadType": "{ status: boolean; presenterId: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ status: boolean; presenterId: number; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_annotation_undo_status",
+      "signature": "event_annotation_undo_status(payload: { status: boolean; presenterId: number; }): void",
+      "description": "Occurs when the availability status of the undo option changes.",
+      "payloadType": "{ status: boolean; presenterId: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ status: boolean; presenterId: number; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_annotation_viewer_draw_request",
+      "signature": "event_annotation_viewer_draw_request(payload: { userId: number; }): void",
+      "description": "Occurs for the presenter when the viewer calls the startAnnotation() function to draw on sharing content.",
+      "payloadType": "{ userId: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_broadcast_streaming_status",
+      "signature": "event_broadcast_streaming_status(payload: { status: BroadcastStreamingStatus; }): void",
+      "description": "Occurs when the status of the broadcast streaming changes.",
+      "payloadType": "{ status: BroadcastStreamingStatus; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ status: BroadcastStreamingStatus; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_real_time_media_streams_status_change",
+      "signature": "event_real_time_media_streams_status_change(payload: { status: RealTimeMediaStreamsStatus; }): void",
+      "description": "Occurs when the status of the real-time media stream changes.",
+      "payloadType": "{ status: RealTimeMediaStreamsStatus; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ status: RealTimeMediaStreamsStatus; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_share_camera_request",
+      "signature": "event_share_camera_request(payload: { requestId: string; userId: number; shareSource: MobileVideoFacingMode; startAnnotation: boolean; }): void",
+      "description": "Occurs when the receive the request invoke by requestShareCamera().",
+      "payloadType": "{ requestId: string; userId: number; shareSource: MobileVideoFacingMode; startAnnotation: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ requestId: string; userId: number; shareSource: MobileVideoFacingMode; startAnnotation: boolean; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_share_camera_approve_change",
+      "signature": "event_share_camera_approve_change(payload: { requestId: string; userId: number; status: ShareCameraResponse; }): void",
+      "description": "Occurs when the approve or decline the share camera request.",
+      "payloadType": "{ requestId: string; userId: number; status: ShareCameraResponse; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ requestId: string; userId: number; status: ShareCameraResponse; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_share_camera_status",
+      "signature": "event_share_camera_status(payload: { requestId: string; userId: number; status: ShareCameraRemoteStatus; }): void",
+      "description": "Occurs when calling the informShareCameraStatus() about the status of the share camera request.",
+      "payloadType": "{ requestId: string; userId: number; status: ShareCameraRemoteStatus; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ requestId: string; userId: number; status: ShareCameraRemoteStatus; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_caption_language_lock",
+      "signature": "event_caption_language_lock(payload: boolean): void",
+      "description": "Occurs when the host locks or unlocks the transcription language during a session.",
+      "payloadType": "boolean",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "boolean",
+          "optional": false,
+          "description": "- `true` if the transcription language is locked, `false` if unlocked."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_speaking_while_muted",
+      "signature": "event_speaking_while_muted(): void",
+      "event": "speaking-while-muted",
+      "description": "Occurs when the user is detected speaking while their audio is muted.\nThis event provides a notification to prompt the user to unmute their audio for better communication.\n\n**Use Case:**\nThis event helps improve meeting experience by alerting users when they are trying to speak\nbut their microphone is muted, preventing communication gaps and confusion.\n\n**Example Usage:**",
+      "examples": [
+        "client.on('speaking-while-muted', () => {\n  // Show unmute reminder to user\n  showUnmuteReminder();\n\n  // Or automatically prompt user to unmute\n  if (confirm('You are speaking while muted. Would you like to unmute?')) {\n    stream.unmuteAudio();\n  }\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_system_resource_usage_change",
+      "signature": "event_system_resource_usage_change(payload: { cpu_usage: { system_cpu_pressure_level: SystemCPUPressureLevel }; }): void",
+      "description": "Occurs when system resource usage changes, particularly CPU pressure levels.\nThis event can be used to monitor system performance and adjust application behavior accordingly.",
+      "payloadType": "{ cpu_usage: { system_cpu_pressure_level: SystemCPUPressureLevel }; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ cpu_usage: { system_cpu_pressure_level: SystemCPUPressureLevel }; }",
+          "optional": false,
+          "description": "The event detail containing system resource usage information"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_webrtc_stats_report_data_change",
+      "signature": "event_webrtc_stats_report_data_change(payload: StatsReport): void",
+      "event": "webrtc-stats-report-data-change",
+      "description": "Occurs when WebRTC statistics report data changes.\nThis event provides comprehensive native WebRTC statistics similar to browser's `RTCPeerConnection.getStats()` API.\n\n**Statistics Types**\n- **RTP Streams**: `inbound-rtp`, `outbound-rtp`, `remote-inbound-rtp`, `remote-outbound-rtp`\n- **Media Sources**: `media-source` for audio/video input devices\n- **Network**: `candidate-pair`, `transport` for connection statistics\n\n**Key Metrics**\n- Network: RTT, jitter, packet loss, bandwidth\n- Video: Resolution, FPS, bitrate, dropped frames\n- Audio: Audio levels, sample rates, jitter buffer\n\n**Example**",
+      "payloadType": "StatsReport",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "StatsReport",
+          "optional": false,
+          "description": "WebRTC statistics report as a Map of statistic IDs to extended RTCStats objects"
+        }
+      ],
+      "examples": [
+        "client.on('webrtc-stats-report-data-change', (statsReport) => {\n  for (const [id, stats] of statsReport.entries()) {\n    if (stats.type === 'inbound-rtp' && stats.kind === 'video') {\n      console.log(`Video: ${stats.frameWidth}x${stats.frameHeight} @ ${stats.framesPerSecond}fps`);\n    }\n  }\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_whiteboard_status_change",
+      "signature": "event_whiteboard_status_change(status: WhiteboardStatus): void",
+      "description": "Occurs when the whiteboard session status changes.\nThis event is triggered when a whiteboard session starts, is in progress, or closes.\n\n**Status Values:**\n- `Closed`: Whiteboard session is closed or not started\n- `Pending`: Whiteboard is initializing\n- `InProgress`: Whiteboard session is active",
+      "payloadType": "WhiteboardStatus",
+      "parameters": [
+        {
+          "name": "status",
+          "type": "WhiteboardStatus",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_peer_whiteboard_state_change",
+      "signature": "event_peer_whiteboard_state_change(payload: { action: 'Start' | 'Stop'; userId: number; }): void",
+      "event": "peer-whiteboard-state-change",
+      "description": "Occurs when another participant starts or stops presenting a whiteboard.\nThis event allows you to automatically view whiteboards presented by others.\n\n**Actions:**\n- `Start`: Another user started presenting a whiteboard\n- `Stop`: The presenter stopped sharing their whiteboard",
+      "payloadType": "{ action: 'Start' | 'Stop'; userId: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ action: 'Start' | 'Stop'; userId: number; }",
+          "optional": false,
+          "description": "The event detail"
+        }
+      ],
+      "examples": [
+        "client.on('peer-whiteboard-state-change', async (payload) => {\n  const { action, userId } = payload;\n\n  if (action === 'Start') {\n    console.log(`User ${userId} started presenting whiteboard`);\n    await whiteboardClient.startWhiteboardView(whiteboardElement, userId);\n  } else if (action === 'Stop') {\n    console.log(`User ${userId} stopped presenting whiteboard`);\n    await whiteboardClient.stopWhiteboardView();\n  }\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_whiteboard_permission_change",
+      "signature": "event_whiteboard_permission_change(payload: { sharePermission: WhiteboardSharePermissionCode; initiatePermission: WhiteboardInitiatePermissionCode; }): void",
+      "description": "Occurs when the whiteboard permission settings change.\nThis event is triggered when the host modifies who can start or control whiteboards.\n\n**Permission Types:**\n- **Share Permission**: Controls who can start/grab whiteboard control\n  - `LockShare (0)`: Only host/co-host can start\n  - `HostGrab (1)`: Host can grab control from others\n  - `LockShareSecurity (2)`: Locked with enhanced security\n  - `AnyoneGrab (3)`: Any participant can grab control\n\n- **Initiate Permission**: Controls who can create new whiteboards\n  - `HostOnly (0)`: Only host/co-host can create\n  - `InternalUsers (1)`: Internal users only\n  - `AllParticipants (2)`: Everyone can create",
+      "payloadType": "{ sharePermission: WhiteboardSharePermissionCode; initiatePermission: WhiteboardInitiatePermissionCode; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ sharePermission: WhiteboardSharePermissionCode; initiatePermission: WhiteboardInitiatePermissionCode; }",
+          "optional": false,
+          "description": "The event detail containing new permission codes"
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_passively_stop_whiteboard",
+      "signature": "event_passively_stop_whiteboard(payload: { reason: 'string'; }): void",
+      "description": "Occurs when the current user's whiteboard session is passively stopped.\nThis happens when the host changes permissions or another action forces the whiteboard to close.\n\n**Common Scenarios:**\n- Host changes share permissions to lock whiteboard\n- Host ends the whiteboard session for all\n- Permission change makes current user ineligible to present",
+      "payloadType": "{ reason: 'string'; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ reason: 'string'; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_voice_translator_started",
+      "signature": "event_voice_translator_started(payload: { language: string; timbreIndex: number; }): void",
+      "description": "Occurs when the voice translator receives the first frame of translated audio.\nThis indicates that the voice translation service has successfully started.",
+      "payloadType": "{ language: string; timbreIndex: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ language: string; timbreIndex: number; }",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_voice_translator_unsupported_language_pair",
+      "signature": "event_voice_translator_unsupported_language_pair(payload: { userId: number; displayName: string; speakingLanguage: string; listeningLanguage: string; }): void",
+      "event": "voice-translator-unsupported-language-pair",
+      "description": "Occurs when the active speaker's speaking language cannot be translated to the current user's listening language.\nThis event is triggered when the language pair is not supported by the voice translator service.",
+      "payloadType": "{ userId: number; displayName: string; speakingLanguage: string; listeningLanguage: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; displayName: string; speakingLanguage: string; listeningLanguage: string; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ],
+      "examples": [
+        "client.on('voice-translator-unsupported-language-pair', (payload) => {\n  console.log(`User ${payload.displayName} is speaking ${payload.speakingLanguage}, but cannot be translated to ${payload.listeningLanguage}`);\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_incoming_live_stream_status",
+      "signature": "event_incoming_live_stream_status(payload: { isRTMPConnected: boolean; isStreamPushed: boolean; streamId: string; }): void",
+      "event": "incoming-live-stream-status",
+      "description": "Occurs when the incoming live stream status changes (RTMP connection or video push state).\n\nMonitor this event after binding a stream to track when it is ready to start, and during\nstreaming to detect disconnections or state changes.",
+      "payloadType": "{ isRTMPConnected: boolean; isStreamPushed: boolean; streamId: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ isRTMPConnected: boolean; isStreamPushed: boolean; streamId: string; }",
+          "optional": false,
+          "description": "The updated stream status"
+        }
+      ],
+      "examples": [
+        "client.on('incoming-live-stream-status', (payload) => {\n  const { isRTMPConnected, isStreamPushed, streamId } = payload;\n  if (isRTMPConnected && !isStreamPushed) {\n    // Streaming software is connected but not yet pushing video into the session —\n    // safe to call startIncomingLiveStream to make it a virtual participant\n    await incomingLiveStreamClient.startIncomingLiveStream(streamId);\n  } else if (isRTMPConnected && isStreamPushed) {\n    // Stream is already active as a virtual participant\n  } else if (!isRTMPConnected) {\n    // Streaming software disconnected\n  }\n});"
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/event-callback.d.ts"
+    ],
+    "declarationCount": 107
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "schema.json",
+  "title": "Zoom Video SDK (Web) type metadata",
+  "type": "object",
+  "required": [
+    "module",
+    "declarations"
+  ],
+  "properties": {
+    "module": {
+      "type": "string"
+    },
+    "package": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string"
+    },
+    "platform": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "sourceFile": {
+      "type": "string"
+    },
+    "declarations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "type"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "namespace",
+              "interface",
+              "callback_interface",
+              "enum",
+              "type_alias",
+              "event",
+              "function"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "examples": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "methods": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "signature"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "signature": {
+                  "type": "string"
+                },
+                "async": {
+                  "type": "boolean"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "parameters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "type"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "optional": {
+                        "type": "boolean"
+                      },
+                      "rest": {
+                        "type": "boolean"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "returns": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "type"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "optional": {
+                  "type": "boolean"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "definition": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

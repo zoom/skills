@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "real-time-media-streams",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/real-time-media-streams.d.ts",
+  "declarations": [
+    {
+      "kind": "enum",
+      "type": "RealTimeMediaStreamsStatus",
+      "members": [
+        {
+          "name": "NoSubscription",
+          "value": "-2",
+          "description": "Real-time media streams is stopped for no subscription"
+        },
+        {
+          "name": "StartFailed",
+          "value": "-1",
+          "description": "Real-time media streams failed to start"
+        },
+        {
+          "name": "None",
+          "value": "0",
+          "description": "Real-time media streams is not initialized"
+        },
+        {
+          "name": "Start",
+          "value": "1",
+          "description": "Real-time media streams is started"
+        },
+        {
+          "name": "Pause",
+          "value": "2",
+          "description": "Real-time media streams is paused"
+        },
+        {
+          "name": "Stop",
+          "value": "3",
+          "description": "Real-time media streams is stopped"
+        }
+      ],
+      "description": "Status of real-time media streams"
+    },
+    {
+      "kind": "namespace",
+      "type": "RealTimeMediaStreamsClient",
+      "description": "The real-time media streams client.",
+      "methods": [
+        {
+          "name": "isSupportRealTimeMediaStreams",
+          "signature": "isSupportRealTimeMediaStreams(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "boolean"
+          },
+          "description": "Is your meeting support real-time media streams"
+        },
+        {
+          "name": "canStartRealTimeMediaStreams",
+          "signature": "canStartRealTimeMediaStreams(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "boolean"
+          },
+          "description": "Can start real-time media streams,\n- Only the **host** can start real-time media streams.\n- Can not start real-time media streams in breakout room"
+        },
+        {
+          "name": "startRealTimeMediaStreams",
+          "signature": "startRealTimeMediaStreams(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Start real-time media streams"
+        },
+        {
+          "name": "pauseRealTimeMediaStreams",
+          "signature": "pauseRealTimeMediaStreams(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Pause real-time media streams"
+        },
+        {
+          "name": "resumeRealTimeMediaStreams",
+          "signature": "resumeRealTimeMediaStreams(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Resume real-time media streams"
+        },
+        {
+          "name": "stopRealTimeMediaStreams",
+          "signature": "stopRealTimeMediaStreams(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Stop real-time media streams"
+        },
+        {
+          "name": "getRealTimeMediaStreamsStatus",
+          "signature": "getRealTimeMediaStreamsStatus(): RealTimeMediaStreamsStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "RealTimeMediaStreamsStatus"
+          },
+          "description": "Get the real-time media streams status"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/real-time-media-streams.d.ts"
+    ],
+    "declarationCount": 2
+  }
+}

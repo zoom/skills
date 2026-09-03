@@ -1,244 +1,152 @@
-# Browser Support & SharedArrayBuffer
+<!-- Source: https://developers.zoom.us/docs/video-sdk/web/browser-support.md -->
+<!-- Fetched: 2026-07-17 -->
 
-## Supported Browsers
+# Browser support
 
-SDK supports browsers within **2 versions** of current release.
 
-### Desktop Browsers
+The Zoom Video SDK for web [supports browsers](#check-device-or-browser-support) on this page within two (2) versions of their current version. The following table shows the features supported by browser. See the numbered feature support [footnotes](#footnotes) and [Mobile and tablet browser support](#mobile-and-tablet-browser-support) for details.
 
-| Browser | Video | Audio | Screen Share | Virtual BG | 1080p |
-|---------|:-----:|:-----:|:------------:|:----------:|:-----:|
-| Chrome | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Edge | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Firefox | ✅ | ✅ | ✅ | ✅* | ❌ |
-| Safari | ✅ | ✅ | ✅ | ✅* | ❌ |
+| Feature                                        | Chrome               | Firefox              | Safari               | Edge                 | [iOS/iPadOS](#mobile-and-tablet-browser-support) | [Android](#mobile-and-tablet-browser-support) |
+| ---------------------------------------------- | -------------------- | -------------------- | -------------------- | -------------------- | ------------------------------------------------ | --------------------------------------------- |
+| 1080p video (receive)                          | ✔                   | ✘                    | ✘                    | ✔                   | ✘                                                | ✘                                             |
+| 1080p video (send) [(1)](#footnotes)           | ✔                   | ✘                    | ✘                    | ✔                   | ✘                                                | ✘                                             |
+| 720p video (receive)                           | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| 720p video (send) [(2)](#footnotes)            | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Audio (receive)                                | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Audio (send)                                   | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Background noise suppression [(3)](#footnotes) | ✔                   | ✔                   | ✔                   | ✔                   | ✘                                                | ✘                                             |
+| Call out (PSTN)                                | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Chat                                           | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Chat - send file                               | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Closed captioning                              | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Cloud recording                                | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Command channel                                | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Encryption [(4)](#footnotes)                   | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| End-to-end encryption (E2EE) [(5)](#footnotes) | ✘                    | ✘                    | ✘                    | ✘                    | ✘                                                | ✘                                             |
+| Live transcription                             | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Live translation                               | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Render multiple videos                         | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| RTMP live streaming                            | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Screen share (receive)                         | ✔                   | ✔                   | ✔                   | ✔ [(6)](#footnotes) | ✔                                               | ✔                                            |
+| Screen share (send)                            | ✔                   | ✔                   | ✔                   | ✔                   | ✘                                                | ✘                                             |
+| Share second camera                            | ✔                   | ✔                   | ✔                   | ✔                   | ✘                                                | ✘                                             |
+| Share tab audio                                | ✔                   | ✘                    | ✘                    | ✔                   | ✘                                                | ✘                                             |
+| Video (receive)                                | ✔                   | ✔                   | ✔                   | ✔ [(6)](#footnotes) | ✔                                               | ✔                                            |
+| Video (send)                                   | ✔                   | ✔                   | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Virtual background                             | ✔ [(7)](#footnotes) | ✔ [(7)](#footnotes) | ✔ [(7)](#footnotes) | ✔                   | ✘                                                | ✘                                             |
+| WebRTC video [(8)](#footnotes)                 | ✔                   | ✘                    | ✔                   | ✔                   | ✔                                               | ✔                                            |
+| Share system audio [(9)](#footnotes)           | ✔                   | ✘                    | ✘                    | ✔                   | ✘                                                | ✘                                             |
 
-*Requires SharedArrayBuffer
+## Footnotes
 
-### Mobile Browsers
+1. [1080p video (send)](/docs/video-sdk/web/video/#send-1080p-video) requires WebAssembly and Chromium browser and machines with at least 8 cores, a GPU or hardware acceleration, [`SharedArrayBuffer`](/docs/video-sdk/web/sharedarraybuffer/), and quality network connections. It is not supported by WebRTC video. See [Navigator: hardwareConcurrency property](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/hardwareConcurrency), [webcodecs support](https://caniuse.com/webcodecs), and [HD Video](/docs/video-sdk/web/video/#hd-video) for details.
+2. [720p video (send)](/docs/video-sdk/web/video/#send-720p-video) requires [`SharedArrayBuffer`](/docs/video-sdk/web/sharedarraybuffer/) for WebAssembly video, but not for WebRTC video. It's supported in landscape mode on mobile browsers on iOS >= 16.4 and Android Chrome >= 112.
+3. Background noise suppression requires [`SharedArrayBuffer`](/docs/video-sdk/web/sharedarraybuffer/) for WebAssembly audio, but not for WebRTC audio.
+4. The Zoom Video SDK uses TLS 1.2 and 256-bit AES-GCM Encryption. See the [Zoom Encryption whitepaper](https://explore.zoom.us/docs/doc/Zoom%20Encryption%20Whitepaper.pdf) for details.
+5. [End-to-end encryption (E2EE)](https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0065408) is **not** supported on any browser.
+6. Known issue: On desktop browsers using Microsoft Edge, users may see a purple background around text when receiving video. This is due to the [Microsoft 'Enhance your security on the web' feature, in strict mode](https://support.microsoft.com/en-us/microsoft-edge/enhance-your-security-on-the-web-with-microsoft-edge-b8199f13-b21b-4a08-a806-daed31a1929d). The user can switch this feature off or change to Balanced mode, or you can add your URL needs to an exception list to properly display the video. See [the link](https://support.microsoft.com/en-us/microsoft-edge/enhance-your-security-on-the-web-with-microsoft-edge-b8199f13-b21b-4a08-a806-daed31a1929d) for details.
+7. Virtual background requires [SharedArrayBuffer](/docs/video-sdk/web/sharedarraybuffer/) (SAB) for Firefox and Safari for WebAssembly video, but not for WebRTC video. Only supported on desktop browsers. For Chrome, use the [`enforceVirtualBackground`](https://marketplacefront.zoom.us/sdk/custom/web/interfaces/ZoomVideo.InitOptions.html#enforceVirtualBackground) `init` option to use virtual background without SAB.
+8. WebRTC video supported on:
+    - Chrome on Windows, macOS, Android (with some model-specific exceptions), iOS, and ChromeOS
+    - Edge on Windows
+    - Safari on macOS
+    - Mobile Safari and other WebKit-based browsers on iOS
+    - _**Support for additional browsers and OS platforms is being gradually expanded.**_
+9. Share tab audio and share system audio require [SharedArrayBuffer](/docs/video-sdk/web/sharedarraybuffer/) for WebAssembly (WASM) audio, but not for WebRTC audio. When sharing with a Chrome or Edge browser, users can share a tab, window, or entire screen. If they share a tab, they can also share the tab audio. If they share a window or the entire screen, they can share the system audio. Developers control this with the [`systemAudio`](https://marketplacefront.zoom.us/sdk/custom/web/interfaces/ZoomVideo.ScreenShareOption.html#controls) option in `ZoomVideo.ScreenShareOption`. Non-Chromium browsers can only share the window or entire screen and microphone audio, but no computer audio as these browsers do not support audio capture in [`getDisplayMedia`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia#browser_compatibility).
 
-| Platform | Video | Audio | Screen Share | 720p |
-|----------|:-----:|:-----:|:------------:|:----:|
-| iOS Safari | ✅ | ✅ | ❌ | ✅ (iOS 16.4+) |
-| iOS Chrome | ✅ | ✅ | ❌ | ✅ (iOS 16.4+) |
-| Android Chrome | ✅ | ✅ | ❌ | ✅ (Chrome 112+) |
+## Check device or browser support
 
-**Note**: All iOS browsers use WebKit engine regardless of browser name.
+As browser vendors release new versions, the minimum supported browser version will increase up to two (2) versions behind the new version. For example:
 
-### Feature Availability
+-   If the current version of Chrome is 139, the SDK will support versions 137, 138, and 139.
+-   When the current version increases to 140, the SDK will support versions 138, 139, and 140.
 
-| Feature | All Browsers | Limitations |
-|---------|:------------:|-------------|
-| Audio send/receive | ✅ | None |
-| Video send/receive | ✅ | 720p max on mobile |
-| Chat & file sharing | ✅ | None |
-| Cloud recording | ✅ | None |
-| Live transcription | ✅ | None |
-| RTMP streaming | ✅ | None |
-| Screen sharing | Desktop only | Not available on mobile |
-| Virtual background | Desktop only | SAB required for Firefox/Safari |
-| 1080p video | Chrome/Edge only | Desktop only |
-| Noise suppression | SAB required | WebAssembly mode |
-| End-to-end encryption | ❌ | Not supported on any browser |
+As a best practice, before calling the `init` function, we recommend that you check whether the device supports the core feature you are building for, like `video`, `audio`, or `screen` (screen sharing), by calling the `ZoomVideo.checkSystemRequirements()` function. For example:
 
-## Checking Browser Support
-
-```typescript
-// Check basic compatibility BEFORE init
-const { audio, video, screen } = ZoomVideo.checkSystemRequirements();
-
-if (!audio) {
-  console.error('Audio not supported');
-}
-if (!video) {
-  console.error('Video not supported');
-}
-if (!screen) {
-  console.log('Screen sharing not supported');
-}
-
-// Check detailed feature support
-const features = ZoomVideo.checkFeatureRequirements();
-console.log('Platform:', features.platform);
-console.log('Supported:', features.supportFeatures);
-console.log('Unsupported:', features.unSupportFeatures);
-```
-
-## SharedArrayBuffer (SAB)
-
-### What is SharedArrayBuffer?
-
-SharedArrayBuffer enables shared memory in JavaScript, improving performance for WebAssembly-based features:
-- Multiple video rendering
-- Virtual background
-- Background noise suppression
-
-### Is SAB Required?
-
-**No** - The SDK works without SAB using WebRTC fallback, but with limitations:
-- Max 4 concurrent videos (vs 25 with SAB)
-- No virtual background on Firefox/Safari
-- No noise suppression in WebAssembly mode
-
-### Checking SAB Support
-
-```typescript
-// In browser console
-console.log('SAB available:', typeof SharedArrayBuffer === 'function');
-console.log('Cross-origin isolated:', crossOriginIsolated);
-```
-
-### Enabling SAB (COOP/COEP Headers)
-
-Add these HTTP headers to your server:
-
-```
-Cross-Origin-Embedder-Policy: require-corp
-Cross-Origin-Opener-Policy: same-origin
-```
-
-Or use credentialless mode:
-
-```
-Cross-Origin-Embedder-Policy: credentialless
-Cross-Origin-Opener-Policy: same-origin
-```
-
-### Server Configuration Examples
-
-**Nginx:**
-```nginx
-add_header Cross-Origin-Opener-Policy same-origin;
-add_header Cross-Origin-Embedder-Policy require-corp;
-```
-
-**Apache:**
-```apache
-Header set Cross-Origin-Opener-Policy "same-origin"
-Header set Cross-Origin-Embedder-Policy "require-corp"
-```
-
-**Express.js:**
 ```javascript
-app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-  next();
-});
+import ZoomVideo from "@zoom/videosdk";
+const client = ZoomVideo.createClient();
+
+let stream;
+
+if (
+    ZoomVideo.checkSystemRequirements().video &&
+    ZoomVideo.checkSystemRequirements().audio
+) {
+    client
+        .init("en-US", "Global", { patchJsMedia: true })
+        .then(() => {
+            client
+                .join(topic, token, userName, password)
+                .then(() => {
+                    stream = client.getMediaStream();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
 ```
 
-### Workarounds Without Server Headers
+```jsx
+import ZoomVideo from "@zoom/videosdk";
+const client = ZoomVideo.createClient();
 
-#### 1. Service Worker (e.g., GitHub Pages)
+let stream;
 
-Use [coi-serviceworker](https://github.com/nickelow/coi-serviceworker):
+if (
+    ZoomVideo.checkSystemRequirements().video &&
+    ZoomVideo.checkSystemRequirements().audio
+) {
+    await client.init("en-US", "Global", { patchJsMedia: true });
 
-```html
-<script src="coi-serviceworker.js"></script>
+    await client.join(topic, token, userName, password);
+
+    stream = client.getMediaStream();
+}
 ```
 
-#### 2. Document-Isolation-Policy (Chrome 137+)
+## Mobile and tablet browser support
 
-```
-Document-Isolation-Policy: isolate-and-require-corp
-```
+-   **iOS and iPadOS** - All browsers on iOS and iPadOS use the same underlying [WebKit](https://en.wikipedia.org/wiki/WebKit) engine (including Safari and Chrome). Because of this, supported features are based on the OS version, rather than individual browser versions.
 
-Or:
-```
-Document-Isolation-Policy: isolate-and-credentialless
-```
+-   **Android**
 
-This allows third-party iframes while maintaining isolation.
+    -   Most Android browsers are based on [Chromium Blink](<https://en.wikipedia.org/wiki/Blink_(browser_engine)>) and generally follow its versioning.
+    -   Samsung Internet is also Chromium-based but uses its [own versioning scheme](https://en.wikipedia.org/wiki/Samsung_Internet#History), which maps to specific Chromium versions.
+    -   For simplicity, supported features are listed by Android OS version, as the SDK offers the same capabilities across all supported Android browsers.
+    -   **Android Firefox is not supported** because it uses [GeckoView](<https://en.wikipedia.org/wiki/Gecko_(software)>), a different rendering engine, and different versioning.
 
-#### 3. Chrome Origin Trial (Temporary)
+-   **Microsoft Tablets** - Microsoft tablets run Windows, so browser support matches the same browsers on Windows desktops.
 
-Register at [Chrome Origin Trials](https://developer.chrome.com/origintrials/) for temporary SAB access without headers. Requires renewal every 3 months.
+-   **Chromebooks** - Chromebooks run ChromeOS and support the same features as desktop browsers.
 
-### Without SAB: Init Options
+In general, mobile and tablet browser support follows OS versions currently supported by [Apple](https://en.wikipedia.org/wiki/IOS_version_history#Overview) and [Android](https://en.wikipedia.org/wiki/Android_version_history#Overview), including Samsung devices.
 
-```typescript
-await client.init('en-US', 'Global', {
-  // Enable multiple videos without SAB
-  enforceMultipleVideos: true,
+The Meeting SDK for web component view is designed specifically for desktop browser widget use cases and is not supported on mobile or tablet browsers. For mobile and tablet use cases, use [client view](/docs/meeting-sdk/web/client-view/).
 
-  // Enable > 4 videos (use carefully - high CPU)
-  enforceMultipleVideos: { disableRenderLimits: true },
+## Content Security Policy header
 
-  // Enable virtual background without SAB
-  enforceVirtualBackground: true,
-});
+If you're using Content Security Policy (CSP) on your browsers and want to use any Zoom SDK for web, you must configure your web server to return the Content-Security-Policy header. For example, using the [Nginx `add_header` directive](https://nginx.org/en/docs/http/ngx_http_headers_module.html).
+
+```plaintext
+add_header 'Content-Security-Policy' "default-src 'self';base-uri 'self';worker-src blob:;style-src 'self' 'unsafe-inline';script-src 'self' 'unsafe-inline' 'unsafe-eval' https://zoom.us *.zoom.us dmogdx0jrul3u.cloudfront.net blob:;connect-src 'self' https://zoom.us https://*.zoom.us wss://*.zoom.us;img-src 'self' https:;media-src 'self' https:;font-src 'self' https:;"
 ```
 
-## Content Security Policy (CSP)
+> **Warning**
+>
+> When `script-src-elem` is present in your CSP configuration, be sure its value matches the `script-src` directive.
 
-Allow Zoom SDK resources in your CSP:
+For more on CSP, see the [Mozilla](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), [web.dev](https://web.dev/csp/), or [W3C](https://www.w3.org/TR/CSP3/) documentation.
 
-```
-Content-Security-Policy:
-  script-src 'self' https://source.zoom.us 'wasm-unsafe-eval';
-  worker-src 'self' blob:;
-  connect-src 'self' https://*.zoom.us wss://*.zoom.us;
-```
+You'll need to add this if you see something like this error in the browser console.
 
-**Note**: `wasm-unsafe-eval` or `unsafe-eval` required for WebAssembly compilation.
-
-## Known Issues
-
-### Edge Purple Background
-
-Microsoft Edge may show purple backgrounds when receiving video due to enhanced security features.
-
-**Solutions:**
-- User can disable "Enhance your security on the web" in Edge settings
-- Add your domain to Edge's exceptions list
-
-### Safari Auto-Play
-
-Safari blocks audio auto-play more strictly:
-
-```typescript
-await stream.startAudio({
-  autoStartAudioInSafari: true,  // For macOS 15.2 - 16.0
-});
+```plaintext
+CompileError: WebAssembly.instantiate(): Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self' 'strict-dynamic' 'nonce-LxlpktY6Sou9E-ZC46OlZA' blob: https: 'unsafe-inline'"
+at 3afbd0c1-54af-4f01-9d3f-8ffb8dcb31cf:1:22144
 ```
 
-### Firefox leaveOnPageUnload
-
-The `leaveOnPageUnload` option doesn't work in Firefox due to browser limitations.
-
-## Mobile Considerations
-
-### iOS Landscape for 720p
-
-720p video on iOS requires:
-- iOS 16.4 or later
-- Landscape orientation
-
-### Android Camera Switching
-
-Use `MobileVideoFacingMode` instead of device IDs:
-
-```typescript
-// Front camera
-await stream.switchCamera(MobileVideoFacingMode.User);
-
-// Back camera
-await stream.switchCamera(MobileVideoFacingMode.Environment);
-```
-
-## Performance Recommendations
-
-1. **Enable SAB** when possible for best performance
-2. **Use appropriate video quality** based on network/device
-3. **Limit concurrent videos** on low-powered devices
-4. **Preload assets** with `preloadDependentAssets()`
-5. **Monitor system resources** via `system-resource-usage-change` event
-
-```typescript
-client.on('system-resource-usage-change', (payload) => {
-  // payload.level: SystemCPUPressureLevel
-  if (payload.level >= SystemCPUPressureLevel.Serious) {
-    // Reduce video quality or disable features
-  }
-});
-```
+Note: If your browser supports it, you can use `wasm-unsafe-eval` instead of `unsafe-eval`. However, not all browsers support this. See the mdn web docs for [CSP: script-src: Unsafe WebAssembly execution](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#unsafe_webassembly_execution) for details.

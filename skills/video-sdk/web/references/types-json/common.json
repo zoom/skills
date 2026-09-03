@@ -1,0 +1,1091 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "common",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/common.d.ts",
+  "declarations": [
+    {
+      "kind": "type_alias",
+      "type": "ErrorTypes",
+      "definition": "| 'INVALID_OPERATION' | 'INTERNAL_ERROR' | 'OPERATION_TIMEOUT' | 'INSUFFICIENT_PRIVILEGES' | 'IMPROPER_MEETING_STATE' | 'INVALID_PARAMETERS' | 'OPERATION_LOCKED'",
+      "description": "Definition of error types for operations.\n- INVALID_OPERATION: The operation is invalid, perhaps caused by duplicated operations.\n- INTERNAL_ERROR: The remote service is temporarily unavailable.\n- INSUFFICIENT_PRIVILEGES: The operation is only applicable for a host or manager.\n- OPERATION_TIMEOUT: The operation timed out, try again later.\n- IMPROPER_MEETING_STATE: The user is not in a meeting, see the reason for details.\n - `closed`: The meeting is not joined.\n - `on hold`: The user is on hold.\n - `reconnecting`: The meeting is reconnecting.\n- INVALID_PARAMETERS: The parameters passed to the method are invalid, perhaps the wrong user ID or value, see the reason for details.\n- OPERATION_LOCKED: The operation can not be completed because the relevant property is locked, see the reason for details."
+    },
+    {
+      "kind": "interface",
+      "type": "ExecutedFailure",
+      "description": "Failure reason for async operation.",
+      "properties": [
+        {
+          "name": "type",
+          "type": "ErrorTypes",
+          "optional": false,
+          "description": "Error type."
+        },
+        {
+          "name": "reason",
+          "type": "string",
+          "optional": false,
+          "description": "Error reason."
+        },
+        {
+          "name": "errorCode",
+          "type": "number",
+          "optional": false,
+          "description": "Error code."
+        }
+      ]
+    },
+    {
+      "kind": "type_alias",
+      "type": "ExecutedResult",
+      "definition": "Promise<'' | ExecutedFailure>",
+      "description": "The result of an asynchronous operation. It is a promise object.\n- '': Success\n- ExecutedFailure: Failure. Use `.catch(error=>{})` or `try{ *your code* }catch(error){}` to handle the errors."
+    },
+    {
+      "kind": "interface",
+      "type": "Participant",
+      "description": "The participant interface.",
+      "properties": [
+        {
+          "name": "userId",
+          "type": "number",
+          "optional": false,
+          "description": "User ID."
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "optional": false,
+          "description": "User's display name."
+        },
+        {
+          "name": "audio",
+          "type": "'' | 'computer' | 'phone'",
+          "optional": false,
+          "description": "User's audio state.\n- `''`: No audio.\n- `computer`: Joined by computer audio.\n- `phone`: Joined by phone."
+        },
+        {
+          "name": "muted",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether audio is muted.\nIf the user is not joined to audio (not connected to the microphone), the value is undefined"
+        },
+        {
+          "name": "isHost",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether the user is the host."
+        },
+        {
+          "name": "isManager",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether the user is a manager."
+        },
+        {
+          "name": "avatar",
+          "type": "string",
+          "optional": true,
+          "description": "User's avatar.\nUsers can set their avatar in their [web profile](https://zoom.us/profile)."
+        },
+        {
+          "name": "bVideoOn",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether the user started video."
+        },
+        {
+          "name": "sharerOn",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether the user started sharing."
+        },
+        {
+          "name": "sharerPause",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether the share is paused."
+        },
+        {
+          "name": "bVideoShare",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the share is optimized for video."
+        },
+        {
+          "name": "bShareAudioOn",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the sharer is also sharing the tab audio."
+        },
+        {
+          "name": "bShareToSubsession",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the sharer is also sharing to the subsession."
+        },
+        {
+          "name": "isPhoneUser",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user connected via the phone."
+        },
+        {
+          "name": "userGuid",
+          "type": "string",
+          "optional": true,
+          "description": "The unified ID of a user among the main session or subsession."
+        },
+        {
+          "name": "isAllowIndividualRecording",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether to allow individual recording."
+        },
+        {
+          "name": "isVideoConnect",
+          "type": "boolean",
+          "optional": false
+        },
+        {
+          "name": "userIdentity",
+          "type": "string",
+          "optional": true,
+          "description": "The `user_identity` from the JWT payload."
+        },
+        {
+          "name": "userKey",
+          "type": "string",
+          "optional": true,
+          "description": "The `user_key` from the JWT payload."
+        },
+        {
+          "name": "isSpeakerOnly",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user is only connected to the audio speaker, not the microphone."
+        },
+        {
+          "name": "phoneNumber",
+          "type": "string",
+          "optional": true,
+          "description": "The phone number if the user is a public switched telephone network (PSTN) call out user.\nFor privacy concerns, only the calling user has this property."
+        },
+        {
+          "name": "isInFailover",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user is in a failover process."
+        },
+        {
+          "name": "subsessionId",
+          "type": "string",
+          "optional": true,
+          "description": "Subsession ID.\nAvailable if the user is in a subsession."
+        },
+        {
+          "name": "isVoiceTranslatorOn",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the voice translator is on."
+        },
+        {
+          "name": "voiceTimbre",
+          "type": "number",
+          "optional": true,
+          "description": "The selected voice timbre of the user if the voice translator is on."
+        },
+        {
+          "name": "voiceListeningLanguage",
+          "type": "string",
+          "optional": true,
+          "description": "The selected listening language of the user if the voice translator is on."
+        },
+        {
+          "name": "voiceSpeakingLanguage",
+          "type": "string",
+          "optional": true,
+          "description": "The selected speaking language of the user if the voice translator is on."
+        },
+        {
+          "name": "dialType",
+          "type": "string",
+          "optional": true,
+          "description": "How the phone user joined the session. Only present when the user is a phone user.\n- 'dial in': User dialed into the session.\n- 'dial out': User was invited by the session user."
+        },
+        {
+          "name": "isRtmpUser",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether this user is an RTMP user"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "SubsessionStatus",
+      "members": [
+        {
+          "name": "NotStarted",
+          "value": "1",
+          "description": "Subsession is not open."
+        },
+        {
+          "name": "InProgress",
+          "value": "2",
+          "description": "Subsession is open."
+        },
+        {
+          "name": "Closing",
+          "value": "3",
+          "description": "Subsession is closing, there may be a closing countdown."
+        },
+        {
+          "name": "Closed",
+          "value": "4",
+          "description": "Subsession is closed."
+        }
+      ],
+      "description": "Subsession's status."
+    },
+    {
+      "kind": "enum",
+      "type": "DialoutState",
+      "members": [
+        {
+          "name": "Calling",
+          "value": "1",
+          "description": "Calling."
+        },
+        {
+          "name": "Ringing",
+          "value": "2",
+          "description": "Ringing."
+        },
+        {
+          "name": "Accepted",
+          "value": "3",
+          "description": "User accepted the call."
+        },
+        {
+          "name": "Busy",
+          "value": "4",
+          "description": "Busy."
+        },
+        {
+          "name": "NotAvailable",
+          "value": "5",
+          "description": "Service unavailable."
+        },
+        {
+          "name": "HangUp",
+          "value": "6",
+          "description": "User hung up the call."
+        },
+        {
+          "name": "Fail",
+          "value": "7",
+          "description": "Call failed."
+        },
+        {
+          "name": "Success",
+          "value": "8",
+          "description": "Call succeeded."
+        },
+        {
+          "name": "Timeout",
+          "value": "9",
+          "description": "Timeout."
+        },
+        {
+          "name": "Canceling",
+          "value": "10",
+          "description": "Canceling the call."
+        },
+        {
+          "name": "Canceled",
+          "value": "11",
+          "description": "Canceled the call."
+        },
+        {
+          "name": "CancelFailed",
+          "value": "12",
+          "description": "Failed to cancel the call."
+        },
+        {
+          "name": "NoAnswer",
+          "value": "13",
+          "description": "Phone rang but no one answered, a missed call"
+        },
+        {
+          "name": "AnsweredByMachine",
+          "value": "17",
+          "description": "Answered by machine"
+        }
+      ],
+      "description": "Dial out state.\n\nNormal process: Calling-> Ringing->Accepted->Success\n\nBusy process: Calling->Busy"
+    },
+    {
+      "kind": "enum",
+      "type": "MutedSource",
+      "members": [
+        {
+          "name": "Active",
+          "value": "active",
+          "description": "User actively muted."
+        },
+        {
+          "name": "PassiveByMuteOne",
+          "value": "passive(mute one)",
+          "description": "The host muted the user."
+        },
+        {
+          "name": "PassiveByMuteAll",
+          "value": "passive(mute all)",
+          "description": "The host muted all users."
+        }
+      ],
+      "description": "Payload audio muted source type for current-audio-change event."
+    },
+    {
+      "kind": "enum",
+      "type": "LeaveAudioSource",
+      "members": [
+        {
+          "name": "Active",
+          "value": "active",
+          "description": "User actively left audio."
+        },
+        {
+          "name": "Failover",
+          "value": "failover",
+          "description": "Left audio due to failover."
+        },
+        {
+          "name": "EndedBySystem",
+          "value": "audio stream is ended by system",
+          "description": "Left audio due to system ending audio stream."
+        },
+        {
+          "name": "Pstn",
+          "value": "pstn",
+          "description": "Left audio as audio was connected to a phone call."
+        },
+        {
+          "name": "MicrophoneError",
+          "value": "microphone error",
+          "description": "Left audio due to microphone error."
+        }
+      ],
+      "description": "The reason for leaving audio for the current-audio-change event."
+    },
+    {
+      "kind": "enum",
+      "type": "AudioChangeAction",
+      "members": [
+        {
+          "name": "Join",
+          "value": "join",
+          "description": "Join the audio."
+        },
+        {
+          "name": "Leave",
+          "value": "leave",
+          "description": "Leave the audio."
+        },
+        {
+          "name": "Muted",
+          "value": "muted",
+          "description": "Muted."
+        },
+        {
+          "name": "Unmuted",
+          "value": "unmuted",
+          "description": "Unmuted."
+        }
+      ],
+      "description": "Payload for action type of current audio change."
+    },
+    {
+      "kind": "enum",
+      "type": "ReconnectReason",
+      "members": [
+        {
+          "name": "Failover",
+          "value": "failover",
+          "description": "Meeting failover."
+        },
+        {
+          "name": "JoinSubsession",
+          "value": "join breakout room",
+          "description": "Join the breakout subsession."
+        },
+        {
+          "name": "MoveToSubsession",
+          "value": "move to breakout room",
+          "description": "Move among the breakout subsessions."
+        },
+        {
+          "name": "BackToMainSession",
+          "value": "back to main session",
+          "description": "Back to the main session."
+        }
+      ],
+      "description": "The reconnecting reason for the connection-change payload."
+    },
+    {
+      "kind": "enum",
+      "type": "VideoQuality",
+      "members": [
+        {
+          "name": "Video_90P",
+          "value": "0",
+          "description": "90P"
+        },
+        {
+          "name": "Video_180P",
+          "value": "1",
+          "description": "180P"
+        },
+        {
+          "name": "Video_360P",
+          "value": "2",
+          "description": "360P"
+        },
+        {
+          "name": "Video_720P",
+          "value": "3",
+          "description": "720P"
+        },
+        {
+          "name": "Video_1080P",
+          "value": "4",
+          "description": "1080P"
+        }
+      ],
+      "description": "Enumeration of video quality."
+    },
+    {
+      "kind": "enum",
+      "type": "ShareViewQuality",
+      "members": [
+        {
+          "name": "Original",
+          "value": "0",
+          "description": "Original resolution"
+        },
+        {
+          "name": "Low",
+          "value": "1",
+          "description": "Low resolution"
+        },
+        {
+          "name": "Medium",
+          "value": "2",
+          "description": "Medium resolution"
+        },
+        {
+          "name": "High",
+          "value": "3",
+          "description": "High resolution"
+        }
+      ],
+      "description": "Enumeration of share view quality"
+    },
+    {
+      "kind": "enum",
+      "type": "MobileVideoFacingMode",
+      "members": [
+        {
+          "name": "User",
+          "value": "user",
+          "description": "The video source is facing toward the user, such as a front-facing camera on a mobile device."
+        },
+        {
+          "name": "Environment",
+          "value": "environment",
+          "description": "The video source is facing away from the user, such as the back camera on a mobile device facing the user's environment."
+        },
+        {
+          "name": "Left",
+          "value": "left",
+          "description": "The video source is facing toward the user but to their left, such as a camera aimed toward the user but over their left shoulder."
+        },
+        {
+          "name": "Right",
+          "value": "right",
+          "description": "The video source is facing toward the user but to their right, such as a camera aimed toward the user but over their right shoulder."
+        }
+      ],
+      "description": "`facingMode` for mobile browser, see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/facingMode."
+    },
+    {
+      "kind": "enum",
+      "type": "CameraControlCmd",
+      "members": [
+        {
+          "name": "ZoomIn",
+          "value": "2",
+          "description": "Zoom in."
+        },
+        {
+          "name": "ZoomOut",
+          "value": "3",
+          "description": "Zoom out."
+        },
+        {
+          "name": "Left",
+          "value": "4",
+          "description": "Pan left."
+        },
+        {
+          "name": "Right",
+          "value": "5",
+          "description": "Pan right."
+        },
+        {
+          "name": "Up",
+          "value": "6",
+          "description": "Tilt up."
+        },
+        {
+          "name": "Down",
+          "value": "7",
+          "description": "Tilt down."
+        },
+        {
+          "name": "SwitchCamera",
+          "value": "8",
+          "description": "Switch camera."
+        }
+      ],
+      "description": "Enumeration of camera control command."
+    },
+    {
+      "kind": "interface",
+      "type": "PTZCameraCapability",
+      "description": "Capability of camera.",
+      "properties": [
+        {
+          "name": "pan",
+          "type": "boolean",
+          "optional": false,
+          "description": "Pan"
+        },
+        {
+          "name": "tilt",
+          "type": "boolean",
+          "optional": false,
+          "description": "Tilt"
+        },
+        {
+          "name": "zoom",
+          "type": "boolean",
+          "optional": false,
+          "description": "Zoom"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "FarEndCameraControlDeclinedReason",
+      "members": [
+        {
+          "name": "None",
+          "value": "0",
+          "description": "Normal."
+        },
+        {
+          "name": "ApproveAnother",
+          "value": "3",
+          "description": "Approved another user."
+        },
+        {
+          "name": "Stop",
+          "value": "5",
+          "description": "User withdrew the control."
+        }
+      ],
+      "description": "Reasons for refusal to control far-end camera."
+    },
+    {
+      "kind": "type_alias",
+      "type": "LogLevelLabel",
+      "definition": "'debug' | 'log' | 'info' | 'print' | 'warn' | 'error'",
+      "description": "Log level"
+    },
+    {
+      "kind": "type_alias",
+      "type": "LogLevelDetail",
+      "definition": "{ debug: boolean; log: boolean; info: boolean; print: boolean; warn: boolean; error: boolean; }",
+      "description": "Log level object"
+    },
+    {
+      "kind": "interface",
+      "type": "LoggerInitOption",
+      "description": "Logger init option",
+      "properties": [
+        {
+          "name": "debugMode",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether in debug mode or not. In debug mode, the log prints to console."
+        },
+        {
+          "name": "trackingId",
+          "type": "string",
+          "optional": true,
+          "description": "The external tracking ID."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "MediaPlaybackFile",
+      "description": "Media playback file for audio or video input",
+      "properties": [
+        {
+          "name": "url",
+          "type": "string",
+          "optional": false,
+          "description": "Media playback file URL."
+        },
+        {
+          "name": "currentTime",
+          "type": "number",
+          "optional": true,
+          "description": "Start time of file playback."
+        },
+        {
+          "name": "loop",
+          "type": "boolean",
+          "optional": true,
+          "description": "Is loop"
+        },
+        {
+          "name": "playback",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether to play the audio file locally"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "ChatFileUploadStatus",
+      "members": [
+        {
+          "name": "Init",
+          "value": "0",
+          "description": "Init"
+        },
+        {
+          "name": "InProgress",
+          "value": "1",
+          "description": "InProgress"
+        },
+        {
+          "name": "Success",
+          "value": "2",
+          "description": "Success"
+        },
+        {
+          "name": "Fail",
+          "value": "3",
+          "description": "Fail"
+        },
+        {
+          "name": "Cancel",
+          "value": "4",
+          "description": "Cancel"
+        },
+        {
+          "name": "Complete",
+          "value": "5",
+          "description": "Complete"
+        }
+      ],
+      "description": "File transfer upload status"
+    },
+    {
+      "kind": "enum",
+      "type": "ChatFileDownloadStatus",
+      "members": [
+        {
+          "name": "InProgress",
+          "value": "1",
+          "description": "InProgress"
+        },
+        {
+          "name": "Success",
+          "value": "2",
+          "description": "Success"
+        },
+        {
+          "name": "Fail",
+          "value": "3",
+          "description": "Fail"
+        },
+        {
+          "name": "Cancel",
+          "value": "4",
+          "description": "Cancel"
+        }
+      ],
+      "description": "File transfer download status"
+    },
+    {
+      "kind": "enum",
+      "type": "SummaryStatus",
+      "members": [
+        {
+          "name": "Start",
+          "value": "Start",
+          "description": "Summary started."
+        },
+        {
+          "name": "Paused",
+          "value": "Paused",
+          "description": "Summary paused."
+        },
+        {
+          "name": "Stopped",
+          "value": "Stopped",
+          "description": "Summary stopped."
+        },
+        {
+          "name": "Default",
+          "value": "",
+          "description": "default"
+        }
+      ],
+      "description": "Summary status."
+    },
+    {
+      "kind": "enum",
+      "type": "MeetingQueryStatus",
+      "members": [
+        {
+          "name": "Start",
+          "value": "Start",
+          "description": "Meeting query started."
+        },
+        {
+          "name": "Paused",
+          "value": "Paused",
+          "description": "Meeting query paused."
+        },
+        {
+          "name": "Stopped",
+          "value": "Stopped",
+          "description": "Meeting query stopped."
+        },
+        {
+          "name": "Default",
+          "value": "",
+          "description": "default"
+        }
+      ],
+      "description": "Meeting query status."
+    },
+    {
+      "kind": "function",
+      "type": "registerProcessor",
+      "name": "registerProcessor",
+      "signature": "registerProcessor(name: string, processor: typeof VideoProcessor | typeof AudioProcessor | typeof ShareProcessor): void",
+      "async": false,
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false,
+          "description": "The name of the processor"
+        },
+        {
+          "name": "processor",
+          "type": "typeof VideoProcessor | typeof AudioProcessor | typeof ShareProcessor",
+          "optional": false,
+          "description": "The processor class"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "description": "Registers a custom processor class.\n> ***Note***: Only available in the processor worker."
+    },
+    {
+      "kind": "enum",
+      "type": "CRCReturnCode",
+      "members": [
+        {
+          "name": "Success",
+          "value": "0",
+          "description": "Success"
+        },
+        {
+          "name": "Ringing",
+          "value": "1",
+          "description": "Ringing"
+        },
+        {
+          "name": "Timeout",
+          "value": "2",
+          "description": "Timeout"
+        },
+        {
+          "name": "Busy",
+          "value": "101",
+          "description": "Busy"
+        },
+        {
+          "name": "Fail",
+          "value": "104",
+          "description": "Fail"
+        },
+        {
+          "name": "Unreachable",
+          "value": "111",
+          "description": "Unreachable"
+        }
+      ],
+      "description": "CRC device call out return code"
+    },
+    {
+      "kind": "enum",
+      "type": "CRCProtocol",
+      "members": [
+        {
+          "name": "H323",
+          "value": "1",
+          "description": "H323"
+        },
+        {
+          "name": "SIP",
+          "value": "2",
+          "description": "SIP"
+        }
+      ],
+      "description": "CRC device protocol"
+    },
+    {
+      "kind": "enum",
+      "type": "ActiveMediaFailedCode",
+      "members": [
+        {
+          "name": "AudioConnectionFailed",
+          "value": "101",
+          "description": "Failed to establish the audio data channel."
+        },
+        {
+          "name": "AudioStreamEnded",
+          "value": "102",
+          "description": "Audio track ended."
+        },
+        {
+          "name": "MicrophonePermissionReset",
+          "value": "103",
+          "description": "Microphone permission denied."
+        },
+        {
+          "name": "AudioStreamFailed",
+          "value": "104",
+          "description": "Failed to get audio data from the stream."
+        },
+        {
+          "name": "MicrophoneMuted",
+          "value": "105",
+          "description": "Microphone muted in the system."
+        },
+        {
+          "name": "AudioStreamMuted",
+          "value": "106",
+          "description": "Sent audio playback was interrupted."
+        },
+        {
+          "name": "AudioPlaybackInterrupted",
+          "value": "107",
+          "description": "Remote audio playback was interrupted."
+        },
+        {
+          "name": "VideoConnectionFailed",
+          "value": "201",
+          "description": "Failed to establish the video data channel."
+        },
+        {
+          "name": "VideoStreamEnded",
+          "value": "202",
+          "description": "Video track ended."
+        },
+        {
+          "name": "CameraPermissionReset",
+          "value": "203",
+          "description": "Camera permission denied."
+        },
+        {
+          "name": "WebGlContextInvalid",
+          "value": "204",
+          "description": "WebGL context invalid."
+        },
+        {
+          "name": "WasmOutOfMemory",
+          "value": "205",
+          "description": "Out of memory"
+        },
+        {
+          "name": "VideoStreamFailed",
+          "value": "206",
+          "description": "Failed to get video data from the stream."
+        },
+        {
+          "name": "VideoStreamMuted",
+          "value": "207",
+          "description": "Video stream was interrupted."
+        },
+        {
+          "name": "SharingStreamFailed",
+          "value": "301",
+          "description": "Failed to get sharing data from the stream."
+        }
+      ],
+      "description": "Active media failed error code"
+    },
+    {
+      "kind": "type_alias",
+      "type": "MediaType",
+      "definition": "'audio' | 'video' | 'share'",
+      "description": "Processor type"
+    },
+    {
+      "kind": "interface",
+      "type": "Processor",
+      "description": "Processor instance",
+      "properties": [
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false,
+          "description": "Processor name"
+        },
+        {
+          "name": "type",
+          "type": "MediaType",
+          "optional": false,
+          "description": "Processor type"
+        },
+        {
+          "name": "port",
+          "type": "MessagePort",
+          "optional": false,
+          "description": "Communication interface with processor"
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "ProcessorParams",
+      "description": "Defines the parameters required to initialize a media processor.",
+      "properties": [
+        {
+          "name": "url",
+          "type": "string",
+          "optional": false,
+          "description": "Absolute URL of the processor script.\nThe script must be hosted on the same origin or have CORS enabled to allow cross-origin loading."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false,
+          "description": "Unique name of the processor.\nUsed to identify and register the processor implementation."
+        },
+        {
+          "name": "type",
+          "type": "MediaType",
+          "optional": false,
+          "description": "Specifies the processor category.\nDetermines which media pipeline the processor integrates with:\n- `video`: Processes camera frames before encoding or transmission.\n- `audio`: Processes microphone input or playback streams.\n- `share`: Processes screen-share frames before distribution."
+        },
+        {
+          "name": "options",
+          "type": "| { needFixedCaptureRate?: boolean; [key: string]: any; } | any",
+          "optional": true,
+          "description": "Parameters to pass into the processor constructor"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "SystemCPUPressureLevel",
+      "members": [
+        {
+          "name": "Nominal",
+          "value": "0",
+          "description": "Nominal - Low CPU usage (under 30% load)\nSystem is running smoothly with plenty of available resources."
+        },
+        {
+          "name": "Fair",
+          "value": "1",
+          "description": "Fair - Moderate CPU usage (30-60% load)\nSystem is handling workload well but resources are being utilized."
+        },
+        {
+          "name": "Serious",
+          "value": "2",
+          "description": "Serious - High CPU usage (60-90% load)\nSystem is under significant load, may need to reduce processing quality."
+        },
+        {
+          "name": "Critical",
+          "value": "3",
+          "description": "Critical - Very high CPU usage (90% or higher)\nSystem is under severe stress, immediate action recommended to prevent performance degradation."
+        }
+      ],
+      "description": "System CPU pressure level indicating current CPU usage intensity.\nUsed to monitor system performance and adjust media processing accordingly."
+    },
+    {
+      "kind": "interface",
+      "type": "Language",
+      "description": "Language.",
+      "properties": [
+        {
+          "name": "code",
+          "type": "string",
+          "optional": false,
+          "description": "Language code."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false,
+          "description": "Language name."
+        }
+      ]
+    },
+    {
+      "kind": "type_alias",
+      "type": "RTCStatsTypes",
+      "definition": "| RTCInboundRtpStreamStats | RTCOutboundRtpStreamStats | RTCRemoteInboundRtpStreamStats | RTCRemoteOutboundRtpStreamStats | RTCAudioSourceStats | RTCVideoSourceStats"
+    },
+    {
+      "kind": "type_alias",
+      "type": "RTCStatsExtended",
+      "definition": "RTCStatsTypes & { nodeId: string; isSharing: boolean; }"
+    },
+    {
+      "kind": "type_alias",
+      "type": "StatsReport",
+      "definition": "Map<string, RTCStatsExtended>",
+      "description": "Statistics report for WebRTC statistics"
+    },
+    {
+      "kind": "namespace",
+      "type": "global",
+      "description": "Extended WebRTC statistics interfaces for newer RTCStats types\nThese types might not be available in all TypeScript DOM definitions\nStatistics for remote inbound RTP streams (remote side receiving our data)\nProvides metrics about how the remote peer is receiving our transmitted data"
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/common.d.ts"
+    ],
+    "declarationCount": 37
+  }
+}

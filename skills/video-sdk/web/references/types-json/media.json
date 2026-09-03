@@ -1,0 +1,4034 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "media",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/media.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "MediaDevice",
+      "description": "Media device interface.",
+      "properties": [
+        {
+          "name": "label",
+          "type": "string",
+          "optional": false,
+          "description": "Device label."
+        },
+        {
+          "name": "deviceId",
+          "type": "string",
+          "optional": false,
+          "description": "Device ID."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "PhoneCallCountry",
+      "description": "Phone call country interface.",
+      "properties": [
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false,
+          "description": "Country name."
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "optional": false,
+          "description": "Country code."
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "MaskRectangle",
+      "description": "Mask shape - Rectangle.",
+      "properties": [
+        {
+          "name": "type",
+          "type": "'rectangle'",
+          "optional": false,
+          "description": "Type."
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "optional": false,
+          "description": "Width, in pixels."
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "optional": false,
+          "description": "Height, in pixels."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "MaskSquare",
+      "description": "Mask shape - Square.",
+      "properties": [
+        {
+          "name": "type",
+          "type": "'square'",
+          "optional": false,
+          "description": "Type."
+        },
+        {
+          "name": "length",
+          "type": "number",
+          "optional": false,
+          "description": "Length for each side of the square, in pixels."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "MaskCircle",
+      "description": "Mask shape - Circle.",
+      "properties": [
+        {
+          "name": "type",
+          "type": "'circle'",
+          "optional": false,
+          "description": "Type."
+        },
+        {
+          "name": "radius",
+          "type": "number",
+          "optional": false,
+          "description": "Radius of the circle, in pixels."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "MaskSVG",
+      "description": "Mask shape- SVG.",
+      "properties": [
+        {
+          "name": "type",
+          "type": "'svg'",
+          "optional": false,
+          "description": "Type."
+        },
+        {
+          "name": "svg",
+          "type": "string",
+          "optional": false,
+          "description": "SVG's URL"
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "optional": false,
+          "description": "Width, in pixels."
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "optional": false,
+          "description": "Height, in pixels."
+        }
+      ]
+    },
+    {
+      "kind": "type_alias",
+      "type": "MaskShape",
+      "definition": "MaskRectangle | MaskSquare | MaskCircle | MaskSVG",
+      "description": "Mask shape."
+    },
+    {
+      "kind": "type_alias",
+      "type": "MaskClip",
+      "definition": "{ x: number; y: number; } & MaskShape",
+      "description": "Mask clip."
+    },
+    {
+      "kind": "interface",
+      "type": "MaskOption",
+      "description": "Mask option.",
+      "properties": [
+        {
+          "name": "imageUrl",
+          "type": "string | null",
+          "optional": true,
+          "description": "Background image URL."
+        },
+        {
+          "name": "cropped",
+          "type": "boolean",
+          "optional": true,
+          "description": "Determines whether to crop the background image to an appropriate aspect ratio (16/9), default is false."
+        },
+        {
+          "name": "rootWidth",
+          "type": "number",
+          "optional": true,
+          "description": "Width of clip canvas, default is 1280."
+        },
+        {
+          "name": "rootHeight",
+          "type": "number",
+          "optional": true,
+          "description": "Height of clip canvas, default is 720."
+        },
+        {
+          "name": "clip",
+          "type": "MaskClip | Array<MaskClip>",
+          "optional": true,
+          "description": "Clip."
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "SharePrivilege",
+      "members": [
+        {
+          "name": "Unlocked",
+          "value": "0",
+          "description": "One participant can share at a time, only the host or manager can start sharing when someone else is sharing."
+        },
+        {
+          "name": "Locked",
+          "value": "1",
+          "description": "Only the host or manager can share."
+        },
+        {
+          "name": "MultipleShare",
+          "value": "3",
+          "description": "Multiple participants can share simultaneously."
+        }
+      ],
+      "description": "Share privilege."
+    },
+    {
+      "kind": "interface",
+      "type": "AudioOption",
+      "description": "Start audio option interface.",
+      "properties": [
+        {
+          "name": "speakerOnly",
+          "type": "boolean",
+          "optional": true,
+          "description": "Join audio only with the audio speaker, the microphone is not connected."
+        },
+        {
+          "name": "autoStartAudioInSafari",
+          "type": "boolean",
+          "optional": true,
+          "description": "Start audio automatically in Safari.\n\nIn the Safari browser, when calling `startAudio` automatically or programmatically without any gesture\n(such as a click or touch on the document), the value of `autoStartAudioInSafari` should be `true`.\nOther than that, the value should always be `false` or unset.\n\n> ***Note***: Use this option only if you are auto starting audio without a user click for Desktop Safari running macOS 15.2 to 16.0."
+        },
+        {
+          "name": "mute",
+          "type": "boolean",
+          "optional": true,
+          "description": "Join audio with microphone muted."
+        },
+        {
+          "name": "backgroundNoiseSuppression",
+          "type": "boolean",
+          "optional": true,
+          "description": "Suppress some kinds of background noise (e.g. dog barking,lawn mower,clapping, fans, pen tapping).\n> ***Note***: Enabling this option may increase CPU utilization.\n> It requires SharedArrayBuffer for WebAssembly audio, but not for WebRTC audio."
+        },
+        {
+          "name": "syncButtonsOnHeadset",
+          "type": "boolean",
+          "optional": true,
+          "description": "Sync mute or unmute state for the audio devices made by these manufactures: AVer, Crestron, Jabra, Logitech, Plantronics, Polycom, Shure, Yamaha, and Yealink."
+        },
+        {
+          "name": "mediaFile",
+          "type": "MediaPlaybackFile",
+          "optional": true,
+          "description": "Specify a media file as the audio input. It can be an audio file or a video file.\n - If you need to use a video file (mp4) for both video and audio input, make sure the URL is exactly the same and start video first."
+        },
+        {
+          "name": "originalSound",
+          "type": "| boolean | { hifi?: boolean; stereo?: boolean; }",
+          "optional": true,
+          "description": "Support original sound\n> ***Note***: `originalsound` and `backgroundNoiseSuppression` conflict with each other. If `originalSound` is enabled, `backgroundNoiseSuppression` will be disabled.\n\nYou can set the original sound for hifi, stereo, or both:\n- hifi: high fidelity audio\n- stereo: stereo audio"
+        },
+        {
+          "name": "microphoneId",
+          "type": "string",
+          "optional": true,
+          "description": "Microphone ID for the microphone capturing the audio, if not specified, use system default."
+        },
+        {
+          "name": "speakerId",
+          "type": "string",
+          "optional": true,
+          "description": "Audio speaker ID to play audio, if not specified, use system default."
+        },
+        {
+          "name": "highBitrate",
+          "type": "boolean",
+          "optional": true,
+          "description": "128 kbps bitrate"
+        },
+        {
+          "name": "customAudioConstraints",
+          "type": "MediaTrackConstraints",
+          "optional": true,
+          "description": "Specifies custom audio constraints for the microphone.\n- When set, these constraints override other options such as `microphoneId`, `backgroundNoiseSuppression`, `originalSound`, etc.\n- **Use this option only in specific scenarios.** Normally, the SDK automatically optimizes the constraints.\n- **This applies only to the current microphone.** Switching microphones using `stream.switchMicrophone` will not carry over `customAudioConstraints`, as different microphones may have different capabilities.\n- Enabling `backgroundNoiseSuppression` or `originalSound` after setting this option will remove the custom constraints."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "DialOutOption",
+      "description": "Dial out option interface.",
+      "properties": [
+        {
+          "name": "callMe",
+          "type": "boolean",
+          "optional": true,
+          "description": "Determines whether phone audio is bound to current user."
+        },
+        {
+          "name": "greeting",
+          "type": "boolean",
+          "optional": true,
+          "description": "Determines whether to require a greeting before being connected."
+        },
+        {
+          "name": "pressingOne",
+          "type": "boolean",
+          "optional": true,
+          "description": "Determines whether to require pressing 1 before being connected."
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "optional": true,
+          "description": "The language of the phone welcome message"
+        },
+        {
+          "name": "identifier",
+          "type": "string",
+          "optional": true,
+          "description": "The identifier of the phone welcome message"
+        },
+        {
+          "name": "detectMachine",
+          "type": "number",
+          "optional": true,
+          "description": "Determines whether to detect voicemail."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "CaptureVideoOption",
+      "description": "Capture video option interface.",
+      "properties": [
+        {
+          "name": "cameraId",
+          "type": "typeof MobileVideoFacingMode | string",
+          "optional": true,
+          "description": "Camera ID for the camera capturing the video, if not specified, use system default."
+        },
+        {
+          "name": "captureWidth",
+          "type": "number",
+          "optional": true,
+          "description": "Customized width of capture.\n> ***Note***: Only applicable for specifying the custom width for cameras with resolutions that are not in the standard 16:9 or 4:3 aspect ratios.\n> If you need HD (720P) or full HD (1080P) resolution, use the `hd` or `fullHd` options."
+        },
+        {
+          "name": "captureHeight",
+          "type": "number",
+          "optional": true,
+          "description": "Customized height of capture.\n> ***Note***: Only applicable for specifying the custom height for cameras with resolutions that are not in the standard 16:9 or 4:3 aspect ratios.\n> If you need HD (720P) or full HD (1080P) resolution, use the `hd` or `fullHd` options."
+        },
+        {
+          "name": "mirrored",
+          "type": "boolean",
+          "optional": true,
+          "description": "Determines whether self video is mirrored."
+        },
+        {
+          "name": "videoElement",
+          "type": "HTMLVideoElement",
+          "optional": true
+        },
+        {
+          "name": "hd",
+          "type": "boolean",
+          "optional": true,
+          "description": "Determines whether capture 720p video is enabled."
+        },
+        {
+          "name": "fullHd",
+          "type": "boolean",
+          "optional": true,
+          "description": "Determines whether capture 1080p video is enabled."
+        },
+        {
+          "name": "virtualBackground",
+          "type": "{ imageUrl: string | 'blur' | undefined; cropped?: boolean; }",
+          "optional": true,
+          "description": "Virtual background options."
+        },
+        {
+          "name": "mask",
+          "type": "MaskOption",
+          "optional": true,
+          "description": "Mask option. Virtual background and mask are mutually exclusive, you can enable either virtual background or mask, not both."
+        },
+        {
+          "name": "originalRatio",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether to capture the video in the original ratio, the default is to crop the ratio to 16:9."
+        },
+        {
+          "name": "ptz",
+          "type": "boolean",
+          "optional": true,
+          "description": "Determines whether to enable Pan-Tilt-Zoom (PTZ) when capturing video."
+        },
+        {
+          "name": "mediaFile",
+          "type": "MediaPlaybackFile",
+          "optional": true,
+          "description": "Specify a media file as the video input.\n- If you need to use the same playback as audio and video input, when you stop video, the audio output will also be paused."
+        },
+        {
+          "name": "fps",
+          "type": "number",
+          "optional": true,
+          "description": "Specify the maximum frames per second (FPS) limitation. This is limited to between 10-30 FPS (inclusive). The default is 24 FPS."
+        },
+        {
+          "name": "customVideoConstraints",
+          "type": "MediaTrackConstraints",
+          "optional": true,
+          "description": "Specifies custom video constraints for the camera.\n- When set, these constraints override other options such as `cameraId`, `captureWidth`, `captureHeight`, `fps`, etc.\n- **Use this option only in specific scenarios.** Normally, the SDK automatically optimizes the constraints.\n- **This applies only to the current camera.** Switching cameras using `stream.switchCamera` will not carry over `customVideoConstraints`, as different cameras may have different capabilities."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "AudioQosData",
+      "description": "Audio QoS data interface.",
+      "properties": [
+        {
+          "name": "sample_rate",
+          "type": "number",
+          "optional": false,
+          "description": "Audio sample rate."
+        },
+        {
+          "name": "rtt",
+          "type": "number",
+          "optional": false,
+          "description": "Audio round trip time."
+        },
+        {
+          "name": "jitter",
+          "type": "number",
+          "optional": false,
+          "description": "Audio jitter."
+        },
+        {
+          "name": "avg_loss",
+          "type": "number",
+          "optional": false,
+          "description": "Audio average loss."
+        },
+        {
+          "name": "max_loss",
+          "type": "number",
+          "optional": false,
+          "description": "Audio maximum loss."
+        },
+        {
+          "name": "bandwidth",
+          "type": "number",
+          "optional": false,
+          "description": "Bandwidth, measured in bits per second (bps)"
+        },
+        {
+          "name": "bitrate",
+          "type": "number",
+          "optional": false,
+          "description": "Bit rate, measured in bits per second (bps)"
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "StatisticOption",
+      "description": "Statistic option interface.",
+      "properties": [
+        {
+          "name": "encode",
+          "type": "boolean",
+          "optional": true,
+          "description": "Subscribe or unsubscribe to encoding data (sending)."
+        },
+        {
+          "name": "decode",
+          "type": "boolean",
+          "optional": true,
+          "description": "Subscribe or unsubscribe to decoding data (receiving)."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "ScreenShareOption",
+      "description": "Share screen option interface.",
+      "properties": [
+        {
+          "name": "broadcastToSubsession",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the sharing is broadcast to subsessions. Only host or co-host have this privilege."
+        },
+        {
+          "name": "requestReadReceipt",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the screen sharing user can receive the 'share-can-see-screen' event."
+        },
+        {
+          "name": "secondaryCameraId",
+          "type": "string",
+          "optional": true,
+          "description": "Secondary camera ID. Share a secondary camera connected to your computer.\nFor example, a document camera or the integrated camera on your laptop."
+        },
+        {
+          "name": "captureWidth",
+          "type": "number",
+          "optional": true,
+          "description": "The capture with of the share video. Only enabled when the value of `secondaryCameraId` is not undefined."
+        },
+        {
+          "name": "captureHeight",
+          "type": "number",
+          "optional": true,
+          "description": "The capture height of share video. Only enabled when the value of `secondaryCameraId` is not undefined."
+        },
+        {
+          "name": "hideShareAudioOption",
+          "type": "boolean",
+          "optional": true,
+          "description": "Option to show (default, false) or hide (true) the \"Share Audio\" checkbox when sharing a Chrome tab."
+        },
+        {
+          "name": "optimizedForSharedVideo",
+          "type": "boolean",
+          "optional": true,
+          "description": "Optimized for video share.\nIf sharing a video file that is stored locally on the computer, we recommend using the video share feature, which will provide better quality due to decreased CPU usage."
+        },
+        {
+          "name": "displaySurface",
+          "type": "string",
+          "optional": true,
+          "description": "Specifies the types of display surface that the user may select.\nSee for details: https://developer.chrome.com/docs/web-platform/screen-sharing-controls/#displaySurface"
+        },
+        {
+          "name": "sourceId",
+          "type": "string",
+          "optional": true,
+          "description": "Specify the sourceId of the selected screen. This is used for the electron or nw.js application.\nSee for details:\nelectron https://www.electronjs.org/docs/latest/api/desktop-capturer\nnw.js https://docs.nwjs.io/en/latest/References/Screen/#screenchoosedesktopmedia-sources-callback"
+        },
+        {
+          "name": "simultaneousShareView",
+          "type": "boolean",
+          "optional": true,
+          "description": "Enables the ability to view other users' screen shares while sharing your own.\n> **Note:** If you share a screen that includes the session window itself (showing both your screen and the other person's share), you may encounter a \"Hall of Mirrors\" effect, a repeating visual loop where the shared content reflects itself recursively."
+        },
+        {
+          "name": "controls",
+          "type": "{ monitorTypeSurfaces?: 'include' | 'exclude'; surfaceSwitching?: 'include' | 'exclude'; selfBrowserSurface?: 'include' | 'exclude'; systemAudio?: 'include' | 'exclude'; preferCurrentTab?: boolean; }",
+          "optional": true,
+          "description": "Privacy-preserving screen sharing controls\nSee for details:\nhttps://developer.chrome.com/docs/web-platform/screen-sharing-controls"
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "ShareAudioStatus",
+      "description": "Share audio status interface.",
+      "properties": [
+        {
+          "name": "isShareAudioEnabled",
+          "type": "boolean",
+          "optional": false,
+          "description": "Determines whether share audio is enabled for the current share."
+        },
+        {
+          "name": "isShareAudioMuted",
+          "type": "boolean",
+          "optional": false,
+          "description": "Determines whether share audio is muted for the current share."
+        },
+        {
+          "name": "isSharingAudio",
+          "type": "boolean",
+          "optional": false,
+          "description": "Determines whether share audio is on for the current share."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "UnderlyingColor",
+      "description": "Underlying color interface.",
+      "properties": [
+        {
+          "name": "R",
+          "type": "number",
+          "optional": false,
+          "description": "Decimal, red/255."
+        },
+        {
+          "name": "G",
+          "type": "number",
+          "optional": false,
+          "description": "Decimal, green/255."
+        },
+        {
+          "name": "B",
+          "type": "number",
+          "optional": false,
+          "description": "Decimal, black/255."
+        },
+        {
+          "name": "A",
+          "type": "number",
+          "optional": true,
+          "description": "Decimal, 1 - opaque, 0 - transparent."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "VideoQosData",
+      "description": "Video QoS data interface.",
+      "properties": [
+        {
+          "name": "sample_rate",
+          "type": "number",
+          "optional": false,
+          "description": "Video sample rate."
+        },
+        {
+          "name": "rtt",
+          "type": "number",
+          "optional": false,
+          "description": "Video round trip time."
+        },
+        {
+          "name": "jitter",
+          "type": "number",
+          "optional": false,
+          "description": "Video jitter."
+        },
+        {
+          "name": "avg_loss",
+          "type": "number",
+          "optional": false,
+          "description": "Video average loss."
+        },
+        {
+          "name": "max_loss",
+          "type": "number",
+          "optional": false,
+          "description": "Video maximum loss."
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "optional": false,
+          "description": "Video width."
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "optional": false,
+          "description": "Video height."
+        },
+        {
+          "name": "fps",
+          "type": "number",
+          "optional": false,
+          "description": "Video frame rate, in frames per second (fps)."
+        },
+        {
+          "name": "bandwidth",
+          "type": "number",
+          "optional": false,
+          "description": "Bandwidth, measured in bits per second (bps)"
+        },
+        {
+          "name": "bitrate",
+          "type": "number",
+          "optional": false,
+          "description": "Bit rate, measured in bits per second (bps)"
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "VideoStatisticOption",
+      "description": "Video statistic option interface.",
+      "properties": [
+        {
+          "name": "encode",
+          "type": "boolean",
+          "optional": true,
+          "description": "Subscribe or unsubscribe to encoding data (sending video)."
+        },
+        {
+          "name": "decode",
+          "type": "boolean",
+          "optional": true,
+          "description": "Subscribe or subscribe to decoding data (receiving video)."
+        },
+        {
+          "name": "detailed",
+          "type": "boolean",
+          "optional": true,
+          "description": "Get the detailed data of each received video, such as frames per second, or resolution."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "VirtualBackgroundStatus",
+      "description": "Status of virtual background.",
+      "properties": [
+        {
+          "name": "isVBPreloadReady",
+          "type": "boolean | undefined",
+          "optional": true,
+          "description": "Determines whether the virtual background model is ready."
+        },
+        {
+          "name": "isVBConfigured",
+          "type": "boolean | undefined",
+          "optional": true,
+          "description": "Determines whether the virtual background is configured."
+        },
+        {
+          "name": "imageSrc",
+          "type": "string | undefined",
+          "optional": true,
+          "description": "The current virtual background image."
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "ShareStatus",
+      "members": [
+        {
+          "name": "Sharing",
+          "value": "sharing",
+          "description": "Sharing."
+        },
+        {
+          "name": "Paused",
+          "value": "paused",
+          "description": "Sharing paused."
+        },
+        {
+          "name": "End",
+          "value": "ended",
+          "description": "Sharing ended."
+        }
+      ],
+      "description": "Share status."
+    },
+    {
+      "kind": "enum",
+      "type": "ShareCameraSource",
+      "members": [
+        {
+          "name": "FrontCamera",
+          "value": "frontCam"
+        },
+        {
+          "name": "RearCamera",
+          "value": "rearCam"
+        }
+      ],
+      "description": "Share camera source"
+    },
+    {
+      "kind": "enum",
+      "type": "ShareCameraResponse",
+      "members": [
+        {
+          "name": "Approved",
+          "value": "0"
+        },
+        {
+          "name": "Declined",
+          "value": "1"
+        },
+        {
+          "name": "NotEnabled",
+          "value": "2",
+          "description": "The remote user doesn't support share camera feature."
+        }
+      ],
+      "description": "Response to share camera request."
+    },
+    {
+      "kind": "enum",
+      "type": "ShareCameraRemoteStatus",
+      "members": [
+        {
+          "name": "Success",
+          "value": "0"
+        },
+        {
+          "name": "Failed",
+          "value": "1"
+        }
+      ],
+      "description": "Share camera remote user implementation status."
+    },
+    {
+      "kind": "type_alias",
+      "type": "LocalCameraControlCmd",
+      "definition": "Exclude< CameraControlCmd, CameraControlCmd.SwitchCamera >",
+      "description": "Local camera control command."
+    },
+    {
+      "kind": "interface",
+      "type": "CameraControlOption",
+      "description": "Local camera control option interface.",
+      "properties": [
+        {
+          "name": "cmd",
+          "type": "LocalCameraControlCmd",
+          "optional": false,
+          "description": "Control command."
+        },
+        {
+          "name": "range",
+          "type": "number",
+          "optional": false,
+          "description": "The range of this operation.Total range is 100."
+        },
+        {
+          "name": "reset",
+          "type": "boolean",
+          "optional": true,
+          "description": "Is reset?"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "AnnotationToolType",
+      "members": [
+        {
+          "name": "None",
+          "value": "0"
+        },
+        {
+          "name": "Pen",
+          "value": "1"
+        },
+        {
+          "name": "Highlighter",
+          "value": "2"
+        },
+        {
+          "name": "Spotlight",
+          "value": "3",
+          "description": "Only the share presenter can apply a spotlight.\nChanging the spotlight color won't affect other tool colors."
+        },
+        {
+          "name": "Arrow",
+          "value": "4"
+        },
+        {
+          "name": "Eraser",
+          "value": "7"
+        },
+        {
+          "name": "Line",
+          "value": "11"
+        },
+        {
+          "name": "Arrow1",
+          "value": "12"
+        },
+        {
+          "name": "Rectangle",
+          "value": "14"
+        },
+        {
+          "name": "RectangleSemiFill",
+          "value": "15"
+        },
+        {
+          "name": "Ellipse",
+          "value": "18"
+        },
+        {
+          "name": "EllipseSemiFill",
+          "value": "19"
+        },
+        {
+          "name": "DoubleArrow",
+          "value": "20"
+        },
+        {
+          "name": "RectangleFill",
+          "value": "21"
+        },
+        {
+          "name": "EllipseFill",
+          "value": "23"
+        },
+        {
+          "name": "Diamond",
+          "value": "24"
+        },
+        {
+          "name": "StampArrow",
+          "value": "25"
+        },
+        {
+          "name": "StampCheck",
+          "value": "26"
+        },
+        {
+          "name": "StampX",
+          "value": "27"
+        },
+        {
+          "name": "StampStar",
+          "value": "31"
+        },
+        {
+          "name": "StampHeart",
+          "value": "32"
+        },
+        {
+          "name": "StampQuestionMark",
+          "value": "33"
+        },
+        {
+          "name": "FadePen",
+          "value": "36"
+        },
+        {
+          "name": "VanishingPen",
+          "value": "36"
+        },
+        {
+          "name": "DiamondSemiFill",
+          "value": "37"
+        },
+        {
+          "name": "DiamondFill",
+          "value": "38"
+        },
+        {
+          "name": "VanishingArrow",
+          "value": "43"
+        },
+        {
+          "name": "VanishingDoubleArrow",
+          "value": "44"
+        },
+        {
+          "name": "VanishingDiamond",
+          "value": "45"
+        },
+        {
+          "name": "VanishingEllipse",
+          "value": "46"
+        },
+        {
+          "name": "VanishingRectangle",
+          "value": "47"
+        }
+      ],
+      "description": "Annotation tool type"
+    },
+    {
+      "kind": "enum",
+      "type": "AnnotationClearType",
+      "members": [
+        {
+          "name": "Mine",
+          "value": "0"
+        },
+        {
+          "name": "Viewer",
+          "value": "1"
+        },
+        {
+          "name": "All",
+          "value": "2"
+        }
+      ],
+      "description": "Annotation clear type"
+    },
+    {
+      "kind": "interface",
+      "type": "AnnotationControllerType",
+      "description": "Annotation controller type",
+      "properties": [
+        {
+          "name": "setToolType",
+          "type": "(toolType: AnnotationToolType) => ExecutedResult",
+          "optional": false,
+          "description": "Set the annotation tool type. Default is None = 0."
+        },
+        {
+          "name": "setToolColor",
+          "type": "(color: number) => ExecutedResult",
+          "optional": false,
+          "description": "Set the annotation tool color. Default is black (0xff000000)."
+        },
+        {
+          "name": "setToolWidth",
+          "type": "(width: number) => ExecutedResult",
+          "optional": false,
+          "description": "Set the annotation tool width. Default is 8px."
+        },
+        {
+          "name": "getToolType",
+          "type": "() => AnnotationToolType",
+          "optional": false,
+          "description": "Get the annotation tool type."
+        },
+        {
+          "name": "getToolColor",
+          "type": "() => number",
+          "optional": false,
+          "description": "Get the annotation tool color."
+        },
+        {
+          "name": "getToolWidth",
+          "type": "() => number",
+          "optional": false,
+          "description": "Get the annotation tool width."
+        },
+        {
+          "name": "redo",
+          "type": "() => ExecutedResult",
+          "optional": false,
+          "description": "Redo the annotation operation.\nListen to the 'annotation-redo-status' event to check if the redo operation is available."
+        },
+        {
+          "name": "undo",
+          "type": "() => ExecutedResult",
+          "optional": false,
+          "description": "Undo the annotation operation.\nListen to the 'annotation-undo-status' event to check if the undo operation is available."
+        },
+        {
+          "name": "clear",
+          "type": "(clearType: AnnotationClearType) => ExecutedResult",
+          "optional": false,
+          "description": "Clear the annotation on the shared content.\nThe viewer can clear their content with Mine = 0.\nThe host can clear their content with Mine = 0, or all content with All = 2.\nThe presenter can clear their content with Mine = 0, viewer content with Viewer = 1, or all content with All = 2."
+        },
+        {
+          "name": "setVanishingToolTimer",
+          "type": "(vanishingToolTimer: { displayTime?: number; vanishingTime?: number; }) => ExecutedResult",
+          "optional": false,
+          "description": "Set the display time and vanishing time for the vanishing tool types. It only work for the screen share sender. After the value is set, the screen share sender and receiver annotation will follow the same timer."
+        },
+        {
+          "name": "getVanishingToolTimer",
+          "type": "() => { displayTime: number; vanishingTime: number }",
+          "optional": false,
+          "description": "Get the vanishing tool displayTime and vanishingTime."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "FarEndCameraControlOption",
+      "description": "Far end camera control command.",
+      "properties": [
+        {
+          "name": "cmd",
+          "type": "CameraControlCmd",
+          "optional": false,
+          "description": "Control command."
+        },
+        {
+          "name": "userId",
+          "type": "number",
+          "optional": false,
+          "description": "Controlling user ID."
+        },
+        {
+          "name": "range",
+          "type": "number",
+          "optional": true,
+          "description": "The range of this operation."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "NetworkQuality",
+      "description": "Network quality interface.",
+      "properties": [
+        {
+          "name": "uplink",
+          "type": "number",
+          "optional": true,
+          "description": "Uplink level:\n0,1: bad\n2: normal\n3,4,5: good"
+        },
+        {
+          "name": "downlink",
+          "type": "number",
+          "optional": true,
+          "description": "Downlink level:\n0,1: bad\n2: normal\n3,4,5: good"
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "DialInNumber",
+      "description": "Interface of dialin number",
+      "properties": [
+        {
+          "name": "number",
+          "type": "string",
+          "optional": false,
+          "description": "Toll number."
+        },
+        {
+          "name": "country",
+          "type": "string",
+          "optional": false,
+          "description": "Country code."
+        },
+        {
+          "name": "countryName",
+          "type": "string",
+          "optional": false,
+          "description": "Country name."
+        },
+        {
+          "name": "displayNumber",
+          "type": "string",
+          "optional": false,
+          "description": "Display of toll number."
+        },
+        {
+          "name": "countryId",
+          "type": "string",
+          "optional": false,
+          "description": "Country ID"
+        },
+        {
+          "name": "free",
+          "type": "boolean",
+          "optional": true,
+          "description": "Is a toll-free number."
+        },
+        {
+          "name": "dc",
+          "type": "string",
+          "optional": false,
+          "description": "Data center"
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "CallInInfo",
+      "description": "Interface of dial in information.",
+      "properties": [
+        {
+          "name": "meetingId",
+          "type": "string",
+          "optional": false,
+          "description": "Meeting ID."
+        },
+        {
+          "name": "participantId",
+          "type": "number",
+          "optional": true,
+          "description": "Participant ID. Optional. Use to bind a user in session."
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "optional": true,
+          "description": "Password."
+        },
+        {
+          "name": "tollNumbers",
+          "type": "Array<DialInNumber>",
+          "optional": false,
+          "description": "Toll numbers."
+        }
+      ]
+    },
+    {
+      "kind": "namespace",
+      "type": "Stream",
+      "description": "The stream interface provides methods that define the behaviors of a stream object, such as mute audio or capture video.\n\nThe stream object is created by the `getMediaStream` method.",
+      "methods": [
+        {
+          "name": "startAudio",
+          "signature": "startAudio(options?: AudioOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "options",
+              "type": "AudioOption",
+              "optional": true
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise. Possible error reasons:\n- type = `INSUFFICIENT_PRIVILEGES`,reason = `AUDIO_CAPTURE_FAILED`: The user has blocked accesses to the microphone from the SDK. Try to grant the privilege and rejoin the session."
+          },
+          "description": "Joins audio by microphone and speaker.\n- If the participant has joined audio by phone, they cannot join using computer audio.",
+          "examples": [
+            "await client.init();\nawait client.join(topic, signature, username, password);\nconst stream = client.getMediaStream();\nawait stream.startAudio();"
+          ]
+        },
+        {
+          "name": "stopAudio",
+          "signature": "stopAudio(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Leaves computer audio."
+        },
+        {
+          "name": "muteAudio",
+          "signature": "muteAudio(userId?: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": true,
+              "description": "Default `undefined`."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Mutes audio.\n- If `userId` is not specified, this will mute self.\n- Only the **host** or **manager** can mute others.\n- If a participant is allowed to talk, the host can also mute them."
+        },
+        {
+          "name": "unmuteAudio",
+          "signature": "unmuteAudio(userId?: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": true,
+              "description": "Default `undefined`."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Unmutes audio.\n- If `userId` is not specified, this will unmute self.\n- For privacy and security concerns, the host can not unmute the participant's audio directly, instead, the participant will receive an unmute audio consent message.",
+          "examples": [
+            "// unmute myself\n await stream.unmuteAudio();\n\n// host unmute others\nawait stream.unmuteAudio(userId);\n// participant side\nclient.on('host-ask-unmute-audio',(payload)=>{\n console.log('Host ask me to unmute');\n})"
+          ]
+        },
+        {
+          "name": "inviteByPhone",
+          "signature": "inviteByPhone(countryCode: string, phoneNumber: string, name: string, options?: DialOutOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "countryCode",
+              "type": "string",
+              "optional": false,
+              "description": "Country code."
+            },
+            {
+              "name": "phoneNumber",
+              "type": "string",
+              "optional": false,
+              "description": "Phone number."
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "optional": false,
+              "description": "Name."
+            },
+            {
+              "name": "options",
+              "type": "DialOutOption",
+              "optional": true
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Invites a user to join by phone.\n\nYou can join a Zoom session by means of teleconferencing or audio conferencing (using a traditional phone). This is useful when:\n- You do not have a microphone or speaker on your PC or macOS machine.\n- You do not have a smartphone (iOS or Android) while on the road.\n- You cannot connect to a network for video and VoIP (computer audio).\n\nIf a number is not listed or has asterisks (***) in place of some of the numbers, it means that number is not available on the account that you're currently logged into.\nCheck the `stream.getSupportCountryInfo()` method to get available countries.\n\n- This method will trigger the `dialout-state-change` event, add a listener to get the latest value.",
+          "examples": [
+            "const countryCode = '+1'\nconst phoneNumber ='8801'\nif(stream.getSupportCountryInfo().findIndex(country=>country.code===countryCode)>-1){\n await stream.inviteByPhone(countryCode,phoneNumber,name);\n}\nclient.on('dialout-state-change',({code})=>{\n console.log('dial out stats:',code);\n});"
+          ]
+        },
+        {
+          "name": "cancelInviteByPhone",
+          "signature": "cancelInviteByPhone(countryCode: string, phoneNumber: string, options?: { callMe?: boolean }): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "countryCode",
+              "type": "string",
+              "optional": false,
+              "description": "Country code."
+            },
+            {
+              "name": "phoneNumber",
+              "type": "string",
+              "optional": false,
+              "description": "Phone number."
+            },
+            {
+              "name": "options",
+              "type": "{ callMe?: boolean }",
+              "optional": true
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Cancels the dial out request before it is complete."
+        },
+        {
+          "name": "hangup",
+          "signature": "hangup(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Hangs up the phone. Only used when the current audio was joined by phone."
+        },
+        {
+          "name": "getCurrentSessionCallinInfo",
+          "signature": "getCurrentSessionCallinInfo(): CallInInfo",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "CallInInfo"
+          },
+          "description": "Get call in info"
+        },
+        {
+          "name": "muteShareAudio",
+          "signature": "muteShareAudio(userId?: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": true,
+              "description": "Optional empty value will mute self share audio."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Mutes self share audio or other's share audio locally.\nIf `userId` is empty, will mute share audio. Other participants will not be able to hear the share audio.\nIf `userId` is set, will mute share audio locally, other participants are not affected."
+        },
+        {
+          "name": "unmuteShareAudio",
+          "signature": "unmuteShareAudio(userId?: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": true,
+              "description": "Optional empty value will unmute self share audio."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Unmutes self share audio or other's share audio locally.\nIf `userId` is empty, will unmute share audio, other participants will be able to hear the share audio.\nIf `userId` is set, will unmute share audio locally, other participants are not affected."
+        },
+        {
+          "name": "switchMicrophone",
+          "signature": "switchMicrophone(microphoneId: string | MediaPlaybackFile): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "microphoneId",
+              "type": "string | MediaPlaybackFile",
+              "optional": false,
+              "description": "Device ID of the microphone or an audio playback file."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Switches the microphone.",
+          "examples": [
+            " const microphones = stream.getMicList();\n const microphone = // choose another microphone\n await switchMicrophone(microphone.deviceId);"
+          ]
+        },
+        {
+          "name": "switchSpeaker",
+          "signature": "switchSpeaker(speakerId: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "speakerId",
+              "type": "string",
+              "optional": false,
+              "description": "Device ID of the speaker."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Switches the audio speaker.\n\n> ***Note**: Due to Safari browser limitations, this method will fail if you are using WASM audio on Safari 18.4."
+        },
+        {
+          "name": "subscribeAudioStatisticData",
+          "signature": "subscribeAudioStatisticData(type?: StatisticOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "type",
+              "type": "StatisticOption",
+              "optional": true,
+              "description": "Optional. `Object { encode: Boolean, decode: Boolean }` can specify which type of audio to subscribe to."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Subscribes to audio statistic data based on the type parameter.\nClient will receive audio quality data every second.\n\n**Note**\n  If type is not specified, this will subscribe to both encode and decode audio statistics.\n   - Client only handles the encode (send) audio statistic data when:\n     1. Current user's audio is connected.\n     2. Current user is not muted.\n     3. There is another participant who is listening to the current user's audio.\n   - Client only handles the decode (receive) audio statistic data when:\n     1. Current user's audio is connected.\n     2. There is another participant who is sending audio.\n\n**Example**",
+          "examples": [
+            "try{\n  await stream.subscribeAudioStatisticData();\n} catch (error)  {\n  console.log(error);\n}"
+          ]
+        },
+        {
+          "name": "unsubscribeAudioStatisticData",
+          "signature": "unsubscribeAudioStatisticData(type?: StatisticOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "type",
+              "type": "StatisticOption",
+              "optional": true,
+              "description": "Optional. `Object { encode: Boolean, decode: Boolean }` can specify which type of audio to unsubscribe to."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "* - `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Unsubscribes to audio statistic data based on the type parameter.\n\n**Note**\n   If type is not specified, this will unsubscribe to both encode and decode audio statistics.\n**Example**",
+          "examples": [
+            "try{\n  await stream.unsubscribeAudioStatisticData();\n} catch (error)  {\n  console.log(error);\n}"
+          ]
+        },
+        {
+          "name": "muteUserAudioLocally",
+          "signature": "muteUserAudioLocally(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "User ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "* - `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Mutes someone's audio locally. This operation doesn't affect other participants' audio."
+        },
+        {
+          "name": "unmuteUserAudioLocally",
+          "signature": "unmuteUserAudioLocally(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "User ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "* - `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Unmutes someone's audio locally. This operation doesn't affect other participants' audio."
+        },
+        {
+          "name": "adjustUserAudioVolumeLocally",
+          "signature": "adjustUserAudioVolumeLocally(userId: number, volume: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "User ID."
+            },
+            {
+              "name": "volume",
+              "type": "number",
+              "optional": false,
+              "description": "The volume, an integer between 0-100."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Adjusts someone's audio locally. This operation doesn't affect other participants' audio."
+        },
+        {
+          "name": "enableBackgroundNoiseSuppression",
+          "signature": "enableBackgroundNoiseSuppression(enabled: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "enabled",
+              "type": "boolean",
+              "optional": false,
+              "description": "enabled"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Enables or disables background suppression.\n> ***Note***: Enabling this option may increase CPU utilization."
+        },
+        {
+          "name": "enableSyncButtonsOnHeadset",
+          "signature": "enableSyncButtonsOnHeadset(enabled: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "enabled",
+              "type": "boolean",
+              "optional": false,
+              "description": "enabled"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Enables or disables sync mute or unmute state on headset.\n> Only supported on Chromium-like browsers."
+        },
+        {
+          "name": "muteAllUserAudioLocally",
+          "signature": "muteAllUserAudioLocally(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Mute all users' audio locally, this operation doesn't affect other users' audio"
+        },
+        {
+          "name": "unmuteAllUserAudioLocally",
+          "signature": "unmuteAllUserAudioLocally(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Unute all users' audio locally, this operation doesn't affect other users' audio"
+        },
+        {
+          "name": "enableOriginalSound",
+          "signature": "enableOriginalSound(enable: | boolean | { hifi?: boolean; stereo?: boolean; }): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "enable",
+              "type": "| boolean | { hifi?: boolean; stereo?: boolean; }",
+              "optional": false,
+              "description": "enabled"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Enable or disable original sound."
+        },
+        {
+          "name": "callCRCDevice",
+          "signature": "callCRCDevice(ipAddress: string, protocol: CRCProtocol): ExecutedResult | Promise<string>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "ipAddress",
+              "type": "string",
+              "optional": false,
+              "description": "IP Address"
+            },
+            {
+              "name": "protocol",
+              "type": "CRCProtocol",
+              "optional": false,
+              "description": "Protocol H323|SIP"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult | Promise<string>"
+          },
+          "description": "Call out CRC (Cloud Room Connector) device",
+          "examples": [
+            "client.on('crc-call-out-state-change',(payload)=>{\n console.log('crc device call out status:',payload.code)\n})"
+          ]
+        },
+        {
+          "name": "cancelCallCRCDevice",
+          "signature": "cancelCallCRCDevice(ipAddress: string, protocol: CRCProtocol): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "ipAddress",
+              "type": "string",
+              "optional": false,
+              "description": "IP Address"
+            },
+            {
+              "name": "protocol",
+              "type": "CRCProtocol",
+              "optional": false,
+              "description": "Protocol H323|SIP"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Cancel the CRC (Cloud Room Connector) call out request before it is complete."
+        },
+        {
+          "name": "startSecondaryAudio",
+          "signature": "startSecondaryAudio(deviceId: string, constraints?: Pick< MediaTrackConstraints, 'autoGainControl' | 'noiseSuppression' | 'sampleRate' | 'echoCancellation' >): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "deviceId",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "constraints",
+              "type": "Pick< MediaTrackConstraints, 'autoGainControl' | 'noiseSuppression' | 'sampleRate' | 'echoCancellation' >",
+              "optional": true,
+              "description": "audio track contraints"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Start audio with the secondary microphone.\nThis is typically used when a user needs to share additional audio input after joining the audio.\nPlease note that simultaneous screen sharing is not supported in this scenario."
+        },
+        {
+          "name": "stopSecondaryAudio",
+          "signature": "stopSecondaryAudio(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Stop secondary audio"
+        },
+        {
+          "name": "muteAllAudio",
+          "signature": "muteAllAudio(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "executed promise."
+          },
+          "description": "Mute all users' audio\n - Only the **host** or **manager** can do this.",
+          "examples": [
+            "// host side\nawait stream.muteAllAudio();\n// other user side\nclient.on('current-audio-change',payload=>{\n if(payload.action==='muted' && payload.source==='passive(mute all)'){\n   console.log('host muted all');\n }\n})"
+          ]
+        },
+        {
+          "name": "unmuteAllAudio",
+          "signature": "unmuteAllAudio(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "executed promise."
+          },
+          "description": "Unmute all users' audio\n- Only the **host** or **manager** can do this.\n- For privacy and security concerns, the host can not unmute the participant's audio directly, instead, the participant will receive an unmute audio consent message."
+        },
+        {
+          "name": "muteAudioUponStartAudio",
+          "signature": "muteAudioUponStartAudio(enable?: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "enable",
+              "type": "boolean",
+              "optional": true,
+              "description": "boolean default `true`"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "executed promise."
+          },
+          "description": "The host can set to mute users when they start audio.\n- Only the **host** or **manager** can do this."
+        },
+        {
+          "name": "allowAudioUnmutedBySelf",
+          "signature": "allowAudioUnmutedBySelf(enable: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "enable",
+              "type": "boolean",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "executed promise."
+          },
+          "description": "The host can set to allow users to unmute themselves.\n- Only the **host** or **manager** can do this."
+        },
+        {
+          "name": "isAudioMuted",
+          "signature": "isAudioMuted(userId?: number): boolean",
+          "async": false,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": true,
+              "description": "Default `undefined`"
+            }
+          ],
+          "returns": {
+            "type": "boolean",
+            "description": "boolean"
+          },
+          "description": "Determines whether the user is muted.\n- If the user ID is not specified, gets the muted status of the current user."
+        },
+        {
+          "name": "getMicList",
+          "signature": "getMicList(): Array<MediaDevice>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<MediaDevice>",
+            "description": "Microphone list."
+          },
+          "description": "Gets the available microphones."
+        },
+        {
+          "name": "getSpeakerList",
+          "signature": "getSpeakerList(): Array<MediaDevice>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<MediaDevice>",
+            "description": "Speaker list."
+          },
+          "description": "Gets the available audio speakers."
+        },
+        {
+          "name": "getActiveMicrophone",
+          "signature": "getActiveMicrophone(): string",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "string",
+            "description": "Device ID."
+          },
+          "description": "Gets the active device ID of the microphone."
+        },
+        {
+          "name": "getActiveSpeaker",
+          "signature": "getActiveSpeaker(): string",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "string",
+            "description": "Device ID."
+          },
+          "description": "Gets the active device of the audio speaker."
+        },
+        {
+          "name": "isSupportPhoneFeature",
+          "signature": "isSupportPhoneFeature(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "Boolean."
+          },
+          "description": "Determines whether the phone call feature is supported."
+        },
+        {
+          "name": "getSupportCountryInfo",
+          "signature": "getSupportCountryInfo(): Array<PhoneCallCountry>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<PhoneCallCountry>",
+            "description": "Supported phone call countries."
+          },
+          "description": "Get supported countries."
+        },
+        {
+          "name": "getInviteByPhoneStatus",
+          "signature": "getInviteByPhoneStatus(): DialoutState",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "DialoutState",
+            "description": "Phone call status."
+          },
+          "description": "Gets phone call status."
+        },
+        {
+          "name": "getShareAudioStatus",
+          "signature": "getShareAudioStatus(): ShareAudioStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "ShareAudioStatus",
+            "description": "Share audio status."
+          },
+          "description": "Gets the share audio status."
+        },
+        {
+          "name": "isOthersShareAudioMutedLocally",
+          "signature": "isOthersShareAudioMutedLocally(userId: number): boolean",
+          "async": false,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "User ID."
+            }
+          ],
+          "returns": {
+            "type": "boolean",
+            "description": "Boolean."
+          },
+          "description": "Determines whether share audio is muted locally. Refers to the audio shared by other participants."
+        },
+        {
+          "name": "getAudioStatisticData",
+          "signature": "getAudioStatisticData(): { encode: AudioQosData; decode: AudioQosData }",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "{ encode: AudioQosData; decode: AudioQosData }"
+          },
+          "description": "Gets the audio statistic data."
+        },
+        {
+          "name": "isUserAudioMutedLocally",
+          "signature": "isUserAudioMutedLocally(userId: number): boolean",
+          "async": false,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "User ID."
+            }
+          ],
+          "returns": {
+            "type": "boolean",
+            "description": "Boolean."
+          },
+          "description": "Determines whether someone's audio is muted locally."
+        },
+        {
+          "name": "getUserVolumeLocally",
+          "signature": "getUserVolumeLocally(userId: number): number",
+          "async": false,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "- The unique identifier of the user."
+            }
+          ],
+          "returns": {
+            "type": "number",
+            "description": "The user’s current local volume level as a number."
+          },
+          "description": "Retrieves the local audio volume level for a specific user."
+        },
+        {
+          "name": "isSupportMicrophoneAndShareAudioSimultaneously",
+          "signature": "isSupportMicrophoneAndShareAudioSimultaneously(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "`boolean` — `true` if simultaneous audio capture is supported; otherwise, `false`."
+          },
+          "description": "Checks whether the platform supports simultaneous use of microphone audio and shared tab audio (or shared system audio).\n\n> **Note:** This method should be called again whenever the share\n> source changes, as the return value may vary depending on the\n> type of share source."
+        },
+        {
+          "name": "getAudioMediaPlaybackController",
+          "signature": "getAudioMediaPlaybackController(): | (Pick< HTMLAudioElement, 'play' | 'pause' | 'paused' | 'muted' | 'currentTime' | 'loop' > & { playback: boolean; }) | null",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "| (Pick< HTMLAudioElement, 'play' | 'pause' | 'paused' | 'muted' | 'currentTime' | 'loop' > & { playback: boolean; }) | null"
+          },
+          "description": "Get the audio media file playback controller.\nOnly available when using the media file as an audio source, otherwise, it returns null."
+        },
+        {
+          "name": "isAllowAudioUnmutedBySelf",
+          "signature": "isAllowAudioUnmutedBySelf(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "Boolean."
+          },
+          "description": "Determines whether users are allowed to unmute their audio themselves."
+        },
+        {
+          "name": "getSessionSIPAddress",
+          "signature": "getSessionSIPAddress(): string",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "string",
+            "description": "sip address"
+          },
+          "description": "Get the sip address of the session"
+        },
+        {
+          "name": "isSupportBackgroundNoiseSuppression",
+          "signature": "isSupportBackgroundNoiseSuppression(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "`boolean` — `true` if background noise suppression is supported; otherwise, `false`."
+          },
+          "description": "Checks whether background noise suppression is supported on the current platform."
+        },
+        {
+          "name": "getPhoneWelcomeMessageInfoList",
+          "signature": "getPhoneWelcomeMessageInfoList(): Array<{ language: string; identifier: string; languageName: string; }>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<{ language: string; identifier: string; languageName: string; }>",
+            "description": "audio list"
+          },
+          "description": "Get the phone welcome message info list"
+        },
+        {
+          "name": "startVideo",
+          "signature": "startVideo(option?: CaptureVideoOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "option",
+              "type": "CaptureVideoOption",
+              "optional": true,
+              "description": "Optional options for starting video capture."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Errors besides {@link ErrorTypes} that may be returned include the following:\n  - `CAN_NOT_DETECT_CAMERA`: Cannot detect camera device.\n  - `CAN_NOT_FIND_CAMERA`: The provided camera device ID is not included in the camera device list.\n  - `VIDEO_USER_FORBIDDEN_CAPTURE`: The user has forbidden the use of the camera. They can allow camera and rejoin the session.\n  - `VIDEO_ESTABLISH_STREAM_ERROR`: Video WebSocket is broken.\n  - `VIDEO_CAMERA_IS_TAKEN`: User's camera is taken by other programs."
+          },
+          "description": "Starts capturing video from a specified camera.\n\n**Note**\n- It may take the user some time to allow browser access to the camera device. Therefore there is no default timeout.\n\n**Example**",
+          "examples": [
+            "try {\n  await stream.startVideo();\n} catch (error) {\n  console.log(error);\n}"
+          ]
+        },
+        {
+          "name": "stopVideo",
+          "signature": "stopVideo(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Stops current video capturing.\n\n**Example**",
+          "examples": [
+            "try{\n  await stream.stopVideo();\n} catch (error) {\n  console.log(error);\n}"
+          ]
+        },
+        {
+          "name": "switchCamera",
+          "signature": "switchCamera(cameraDeviceId: string | typeof MobileVideoFacingMode | MediaPlaybackFile): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "cameraDeviceId",
+              "type": "string | typeof MobileVideoFacingMode | MediaPlaybackFile",
+              "optional": false,
+              "description": "Camera device ID or a video playback file.\n- {@link Stream.getCameraList} Can be used to get a list of currently accessible camera devices."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Changes camera device for capturing video.\n\n**Note**\n- The camera device ID is accessible only after the user allows the browser to access camera devices.\n- If the using on the mobile devices, using the {@link MobileVideoFacingMode} as the camera ID.\n\n**Example**",
+          "examples": [
+            "try{\n  const cameras = stream.getCameraList();\n  const camera =  // choose your camera\n  await stream.switchCamera(camera.deviceId);\n} catch (error) {\n  console.log(error);\n}"
+          ]
+        },
+        {
+          "name": "renderVideo",
+          "signature": "renderVideo(canvas: HTMLCanvasElement | HTMLVideoElement, userId: number, width: number | undefined, height: number | undefined, x: number | undefined, y: number | undefined, videoQuality: VideoQuality, additionalUserKey?: string): Promise<'' | Error>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "canvas",
+              "type": "HTMLCanvasElement | HTMLVideoElement",
+              "optional": false,
+              "description": "Required. The canvas or video to render the video. If `userId` is the current user and `stream.isRenderSelfViewWithVideoElement()` returns `true`, you need to use a video tag for rendering."
+            },
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "Required. The user ID which to render the video."
+            },
+            {
+              "name": "width",
+              "type": "number | undefined",
+              "optional": false,
+              "description": "Required. Video width. `undefined` if the canvas parameter is a video tag"
+            },
+            {
+              "name": "height",
+              "type": "number | undefined",
+              "optional": false,
+              "description": "Required. Video height. `undefined` if the canvas parameter is a video tag\n\n** Note **\n\nThe origin of the coordinates is in the lower left corner of the canvas."
+            },
+            {
+              "name": "x",
+              "type": "number | undefined",
+              "optional": false,
+              "description": "Required. Coordinate x of video. `undefined` if the canvas parameter is a video tag"
+            },
+            {
+              "name": "y",
+              "type": "number | undefined",
+              "optional": false,
+              "description": "Required. Coordinate y of video. `undefined` if the canvas parameter is a video tag"
+            },
+            {
+              "name": "videoQuality",
+              "type": "VideoQuality",
+              "optional": false,
+              "description": "Required. Video quality: 90p, 180p, 360p, 720p. Currently supports up to 720p."
+            },
+            {
+              "name": "additionalUserKey",
+              "type": "string",
+              "optional": true,
+              "description": "Optional. Used to render the same video on different coordinates of the canvas."
+            }
+          ],
+          "returns": {
+            "type": "Promise<'' | Error>",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          }
+        },
+        {
+          "name": "stopRenderVideo",
+          "signature": "stopRenderVideo(canvas: HTMLCanvasElement | HTMLVideoElement, userId: number, additionalUserKey?: string, underlyingColor?: UnderlyingColor | string, isKeepLastFrame?: boolean, replacedUserId?: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "canvas",
+              "type": "HTMLCanvasElement | HTMLVideoElement",
+              "optional": false,
+              "description": "Required. The canvas or video to render the video. If `userId` is the current user and `stream.isRenderSelfViewWithVideoElement()` returns `true`, you need to use a video tag for stopping rendering."
+            },
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "Required. The user ID which to render the video."
+            },
+            {
+              "name": "additionalUserKey",
+              "type": "string",
+              "optional": true,
+              "description": "Optional. Must be paired with `renderVideo`."
+            },
+            {
+              "name": "underlyingColor",
+              "type": "UnderlyingColor | string",
+              "optional": true,
+              "description": "Optional. Underlying color when video is stopped. Default is transparent."
+            },
+            {
+              "name": "isKeepLastFrame",
+              "type": "boolean",
+              "optional": true,
+              "description": "Optional. Determines whether to keep the last frame when stopping the video."
+            },
+            {
+              "name": "replacedUserId",
+              "type": "number",
+              "optional": true,
+              "description": "Optional. Whether to replace the rendered user at the same coordinate position. The benefit of specifying the next user can reduce the gap time between switching two users' videos. Only one user's video can be preloaded at the same time."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          }
+        },
+        {
+          "name": "updateVideoCanvasDimension",
+          "signature": "updateVideoCanvasDimension(canvas: HTMLCanvasElement, width: number, height: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "canvas",
+              "type": "HTMLCanvasElement",
+              "optional": false,
+              "description": "Required. The canvas to render the video."
+            },
+            {
+              "name": "width",
+              "type": "number",
+              "optional": false,
+              "description": "Required. Canvas's new width."
+            },
+            {
+              "name": "height",
+              "type": "number",
+              "optional": false,
+              "description": "Required. Canvas's new height.\n\n*"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          }
+        },
+        {
+          "name": "adjustRenderedVideoPosition",
+          "signature": "adjustRenderedVideoPosition(canvas: HTMLCanvasElement | HTMLVideoElement, userId: number, width?: number, height?: number, x?: number, y?: number, additionalUserKey?: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "canvas",
+              "type": "HTMLCanvasElement | HTMLVideoElement",
+              "optional": false,
+              "description": "Required. The canvas to render the video."
+            },
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "Required. The user ID which to render the video."
+            },
+            {
+              "name": "width",
+              "type": "number",
+              "optional": true,
+              "description": "Optional. Video width. `undefined` if the canvas parameter is a video tag"
+            },
+            {
+              "name": "height",
+              "type": "number",
+              "optional": true,
+              "description": "Optional. Video height. `undefined` if the canvas parameter is a video tag"
+            },
+            {
+              "name": "x",
+              "type": "number",
+              "optional": true,
+              "description": "Optional. Coordinate x of video. `undefined` if the canvas parameter is a video tag"
+            },
+            {
+              "name": "y",
+              "type": "number",
+              "optional": true,
+              "description": "Optional. Coordinate y of video. `undefined` if the canvas parameter is a video tag"
+            },
+            {
+              "name": "additionalUserKey",
+              "type": "string",
+              "optional": true,
+              "description": "Optional. Must be paired with `renderVideo`."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          }
+        },
+        {
+          "name": "clearVideoCanvas",
+          "signature": "clearVideoCanvas(canvas: HTMLCanvasElement, underlyingColor?: UnderlyingColor | string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "canvas",
+              "type": "HTMLCanvasElement",
+              "optional": false,
+              "description": "Required. The canvas to render the video."
+            },
+            {
+              "name": "underlyingColor",
+              "type": "UnderlyingColor | string",
+              "optional": true,
+              "description": "Optional. Underlying color when video is stopped. Default is transparent.\n\n*"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Clears the canvas."
+        },
+        {
+          "name": "mirrorVideo",
+          "signature": "mirrorVideo(mirrored: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "mirrored",
+              "type": "boolean",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Mirrors current video."
+        },
+        {
+          "name": "enableHardwareAcceleration",
+          "signature": "enableHardwareAcceleration(enable: boolean | { encode?: boolean; decode?: boolean }): Promise<boolean>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "enable",
+              "type": "boolean | { encode?: boolean; decode?: boolean }",
+              "optional": false,
+              "description": "boolean or specific encode or decode."
+            }
+          ],
+          "returns": {
+            "type": "Promise<boolean>",
+            "description": "Promise&lt;boolean&gt; true: success, false: fail."
+          },
+          "description": "Tries to enable hardware acceleration."
+        },
+        {
+          "name": "previewVirtualBackground",
+          "signature": "previewVirtualBackground(previewDOMElement: VideoPlayer | HTMLCanvasElement, imageUrl: string | 'blur' | undefined, cropped?: boolean, cameraId?: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "previewDOMElement",
+              "type": "VideoPlayer | HTMLCanvasElement",
+              "optional": false
+            },
+            {
+              "name": "imageUrl",
+              "type": "string | 'blur' | undefined",
+              "optional": false,
+              "description": "Virtual background image."
+            },
+            {
+              "name": "cropped",
+              "type": "boolean",
+              "optional": true,
+              "description": "Cropped to 16/9 aspect ratio. Default is false."
+            },
+            {
+              "name": "cameraId",
+              "type": "string",
+              "optional": true,
+              "description": "cameraId, default is active camera"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Previews the virtual background. If the video is on, preview virtual background applies to the current video."
+        },
+        {
+          "name": "updateVirtualBackgroundImage",
+          "signature": "updateVirtualBackgroundImage(imageUrl: string | 'blur' | undefined, cropped?: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "imageUrl",
+              "type": "string | 'blur' | undefined",
+              "optional": false,
+              "description": "Virtual background image."
+            },
+            {
+              "name": "cropped",
+              "type": "boolean",
+              "optional": true,
+              "description": "Cropped to 16/9 aspect ratio. Default is false."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Updates the virtual background image."
+        },
+        {
+          "name": "stopPreviewVirtualBackground",
+          "signature": "stopPreviewVirtualBackground(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Stops previewing the virtual background."
+        },
+        {
+          "name": "previewVideoMask",
+          "signature": "previewVideoMask(canvas: HTMLCanvasElement, option: MaskOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "canvas",
+              "type": "HTMLCanvasElement",
+              "optional": false
+            },
+            {
+              "name": "option",
+              "type": "MaskOption",
+              "optional": false,
+              "description": "Mask option."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Preview the video mask, if the video is on, preview mask will apply to current video."
+        },
+        {
+          "name": "updateVideoMask",
+          "signature": "updateVideoMask(option: MaskOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "option",
+              "type": "MaskOption",
+              "optional": false,
+              "description": "mask option"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Update the option of video mask. You can update each option individually."
+        },
+        {
+          "name": "stopPreviewVideoMask",
+          "signature": "stopPreviewVideoMask(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Stop previewing the video mask."
+        },
+        {
+          "name": "subscribeVideoStatisticData",
+          "signature": "subscribeVideoStatisticData(type?: VideoStatisticOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "type",
+              "type": "VideoStatisticOption",
+              "optional": true,
+              "description": "Optional. `Object { encode: Boolean, decode: Boolean }` can specify which type of audio should be subscribed to."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Subscribes to video statistic data based on the type parameter.\nClient will receive video quality data every second.\n\n**Note**\n  If type is not specified, this subscribes to both encode and decode video statistics.\n  - Client only handles the encode (send) video statistic data when:\n     - 1. Current user turns on video.\n     - 2. There is other participant watching the current user's video.\n  - Client only handles the decode (receive) video statistic data when:\n     - 1. There is other participant sending video.\n\n**Example**",
+          "examples": [
+            "try{\n  await stream.subscribeVideoStatisticData();\n} catch (error)  {\n  console.log(error);\n}"
+          ]
+        },
+        {
+          "name": "unsubscribeVideoStatisticData",
+          "signature": "unsubscribeVideoStatisticData(type?: VideoStatisticOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "type",
+              "type": "VideoStatisticOption",
+              "optional": true,
+              "description": "Optional. `Object { encode: Boolean, decode: Boolean }` can specify which type of audio should be unsubscribed to."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Unsubscribes to video statistic data based on the type parameter.\n\n**Note**\n  If type is not specified, this will unsubscribe to both encode and decode audio statistics.\n**Example**",
+          "examples": [
+            "try{\n  await stream.unsubscribeVideoStatisticData();\n} catch (error)  {\n  console.log(error);\n}"
+          ]
+        },
+        {
+          "name": "attachVideo",
+          "signature": "attachVideo(userId: number, videoQuality: VideoQuality, element?: string | VideoPlayer): Promise<VideoPlayer | ExecutedFailure>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "Required. The user ID which to render the video."
+            },
+            {
+              "name": "videoQuality",
+              "type": "VideoQuality",
+              "optional": false,
+              "description": "Required. Quality of the video. One of the following: 90P/180P/360P/720P/1080P."
+            },
+            {
+              "name": "element",
+              "type": "string | VideoPlayer",
+              "optional": true,
+              "description": "Optional. Empty value: create a new element; String value: VideoPlayer element selector specified by document.querySelector; VideoPlayer Element value: Specified element"
+            }
+          ],
+          "returns": {
+            "type": "Promise<VideoPlayer | ExecutedFailure>"
+          },
+          "description": "Create a VideoPlayer or reuse the existing VideoPlayer and attach the video stream to it.\n> **Note** the returned video-player{@link VideoPlayer} element must be a child node of the video-player-container {@link VideoPlayerContainer}.",
+          "examples": [
+            "<video-player-container>\n <div class=\"video-tile\"></div>\n</video-player-container>",
+            "const element = await stream.attachVideo(userId,VideoQuality.Video_720P);\ndocument.querySelector('.video-tile').appendChild(element);"
+          ]
+        },
+        {
+          "name": "detachVideo",
+          "signature": "detachVideo(userId: number, element?: string | VideoPlayer): Promise<VideoPlayer | Array<VideoPlayer>>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "Required. The user ID which to render the video."
+            },
+            {
+              "name": "element",
+              "type": "string | VideoPlayer",
+              "optional": true,
+              "description": "Optional. Empty value: detach all video streams. String value:VideoPlayer element selector specified by document.querySelector; VideoPlayer Element value: Specified element"
+            }
+          ],
+          "returns": {
+            "type": "Promise<VideoPlayer | Array<VideoPlayer>>"
+          },
+          "description": "Detach the video stream from all previously attached VideoPlayer elements or specific elements.",
+          "examples": [
+            "const elements = await stream.detachVideo(userId);\nif (Array.isArray(elements)) {\n elements.forEach((e) => e.remove());\n} else {\n elements.remove();\n}`"
+          ]
+        },
+        {
+          "name": "spotlightVideo",
+          "signature": "spotlightVideo(userId: number, isReplaced?: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "Required. Id of user to spotlight."
+            },
+            {
+              "name": "isReplaced",
+              "type": "boolean",
+              "optional": true,
+              "description": "Optional. Host can spotlight multiple users, if true, replace all spotlighted users, otherwise, add as a new spotlighted user."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Spotlight specific user's video. Available to host or manager.\n\n> ***Note***:Spotlighting a video affects the behavior of the `video-active-change` event. The spotlighted user remains the active user, regardless of whether they are speaking.\n> This also impacts the behavior in the recording file; when the 'Record active speaker' option is selected, the recording will always show the spotlighted user's video."
+        },
+        {
+          "name": "removeSpotlightedVideo",
+          "signature": "removeSpotlightedVideo(userId?: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": true,
+              "description": "Optional.\n- If it is empty, remove the spotlighted tag from the current user's video.\n- Otherwise, remove the spotlighted tag from the specific user's video. Available to host or manager."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Remove a user's video from being spotlighted."
+        },
+        {
+          "name": "removeAllSpotlightedVideos",
+          "signature": "removeAllSpotlightedVideos(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Remove all spotlighted videos. Available to host."
+        },
+        {
+          "name": "screenshotVideo",
+          "signature": "screenshotVideo(userId: number): Promise<Blob | ExecutedFailure>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "Required. The user ID which to screenshot the video."
+            }
+          ],
+          "returns": {
+            "type": "Promise<Blob | ExecutedFailure>",
+            "description": "- Blob.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Take a screenshot of the specified user's video stream.\nOnce the screenshot is taken, triggers a `video-screenshot-taken` event on the target user of the screenshot."
+        },
+        {
+          "name": "subscribeSystemResourceUsage",
+          "signature": "subscribeSystemResourceUsage(): Promise<''>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<''>",
+            "description": "- `''`: Success - System resource monitoring started\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Subscribe to system resource usage monitoring to receive real-time CPU and memory usage statistics.\nOnce subscribed, the client will receive `system-resource-usage-change` events with resource usage data.\n\n**Event Data Format**\n\n**CPU Pressure Levels**\n- `0` (Nominal): Low CPU usage (under 30% load) - System running smoothly\n- `1` (Fair): Moderate CPU usage (30-60% load) - Resources being utilized\n- `2` (Serious): High CPU usage (60-90% load) - May need to reduce processing quality\n- `3` (Critical): Very high CPU usage (90%+ load) - Immediate action recommended\n\n**Usage Example**",
+          "examples": [
+            "// Event payload structure\n{\n  cpu_usage: {\n    system_cpu_pressure_level: 0  // SystemCPUPressureLevel enum value (0-3)\n  }\n}",
+            "// Subscribe to system resource monitoring\nawait stream.subscribeSystemResourceUsage();\n\n// Listen for resource usage changes\nclient.on('system-resource-usage-change', (event) => {\n  const { cpu_usage } = event;\n  console.log('CPU Pressure Level:', cpu_usage.system_cpu_pressure_level);\n\n  // Adjust video quality based on CPU pressure\n  if (cpu_usage.system_cpu_pressure_level >= 2) {\n    // Reduce video quality to help system performance\n  }\n});"
+          ]
+        },
+        {
+          "name": "unsubscribeSystemResourceUsage",
+          "signature": "unsubscribeSystemResourceUsage(): Promise<''>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<''>",
+            "description": "- `''`: Success - System resource monitoring stopped\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Unsubscribe from system resource usage monitoring to stop receiving resource usage events.\nThis will stop the `system-resource-usage-change` events from being emitted.\n\n**Usage Example**",
+          "examples": [
+            "// Stop receiving system resource usage updates\nawait stream.unsubscribeSystemResourceUsage();"
+          ]
+        },
+        {
+          "name": "subscribeWebRTCStatsReportData",
+          "signature": "subscribeWebRTCStatsReportData(): Promise<''>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<''>",
+            "description": "- `''`: Success - WebRTC statistics subscription started\n- `Error`: Failure. Details in {@link ErrorTypes}"
+          },
+          "description": "Subscribe to WebRTC statistics report data to receive detailed network and media transmission statistics.\nOnce subscribed, the client will receive `webrtc-stats-report-data-change` events with comprehensive WebRTC statistics.",
+          "examples": [
+            "// Subscribe to WebRTC statistics\nawait stream.subscribeWebRTCStatsReportData();\n\n// Listen for WebRTC statistics events\nclient.on('webrtc-stats-report-data-change', (statsReport) => {\n  console.log('WebRTC Statistics Report:', statsReport);\n\n  // Access specific statistics\n  for (const [id, stats] of statsReport.entries()) {\n    if (stats.type === 'inbound-rtp' && stats.kind === 'video') {\n      console.log(`Video reception - Bitrate: ${stats.bytesReceived}, FPS: ${stats.framesDecoded}`);\n    }\n    if (stats.type === 'outbound-rtp' && stats.kind === 'audio') {\n      console.log(`Audio transmission - Packets sent: ${stats.packetsSent}, RTT: ${stats.roundTripTime}`);\n    }\n  }\n});"
+          ]
+        },
+        {
+          "name": "unsubscribeWebRTCStatsReportData",
+          "signature": "unsubscribeWebRTCStatsReportData(): Promise<''>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<''>",
+            "description": "- `''`: Success - WebRTC statistics subscription stopped\n- `Error`: Failure. Details in {@link ErrorTypes}"
+          },
+          "description": "Unsubscribe from WebRTC statistics report data to stop receiving WebRTC statistics events.\nThis will stop the `webrtc-stats-report-data-change` events from being emitted.",
+          "examples": [
+            "// Stop receiving WebRTC statistics updates\nawait stream.unsubscribeWebRTCStatsReportData();\n\n// Remove event listener (optional cleanup)\nclient.off('webrtc-stats-report-data-change', statisticsHandler);"
+          ]
+        },
+        {
+          "name": "isCapturingVideo",
+          "signature": "isCapturingVideo(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "- `true`: The stream object is capturing video.\n- `false`: The stream object is not capturing video or the video flag is `false` in media constraints."
+          },
+          "description": "Gets the `isCapturingVideo` flag status."
+        },
+        {
+          "name": "isCameraTaken",
+          "signature": "isCameraTaken(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "- `true`: The camera is taken by another program.\n- `false`: The camera is taken by another program or the video flag is `false` in media constraints."
+          },
+          "description": "Gets the `isCameraTaken` flag status."
+        },
+        {
+          "name": "isCaptureForbidden",
+          "signature": "isCaptureForbidden(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "- `true`: The capture is forbidden by the user.\n- `false`: The capture is not forbidden by user or the video flag is `false` in media constraints."
+          },
+          "description": "Gets the `isCaptureForbidden` flag status."
+        },
+        {
+          "name": "getCameraList",
+          "signature": "getCameraList(): Array<MediaDevice>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<MediaDevice>",
+            "description": "- `[]`: The video flag is `false` in media constraints.\n- `Array<CameraDevice>`: A CameraDevice interface has following property:\n  - `label: string`: The label of camera device.\n  - `deviceId: string`: The string of camera device."
+          },
+          "description": "Gets the current camera devices list.\n\n**Note**\n- This camera device list is collected from the browser's `navigator.mediaDevices` object and maintained by the stream object.\n- If the user does not allow permission to access the camera, this list will have a default `CameraDevice` object with all properties set to empty strings."
+        },
+        {
+          "name": "getActiveCamera",
+          "signature": "getActiveCamera(): string",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "string",
+            "description": "- `''`: The video flag is `false` in media constraints.\n- `'default'`: No camera device ID is passed to `startCaptureVideo` and it will use system default camera.\n- `string`: Recently active camera devices ID."
+          },
+          "description": "Gets the recently active camera devices ID."
+        },
+        {
+          "name": "getActiveVideoId",
+          "signature": "getActiveVideoId(): number",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "number",
+            "description": "- `0`: No video is active or the video flag is `false` in media constraints.\n- `number`: ID of current active video."
+          },
+          "description": "Gets the recently active video ID."
+        },
+        {
+          "name": "getVideoMaxQuality",
+          "signature": "getVideoMaxQuality(): number",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "number",
+            "description": "Highest video quality. See the definition {@link VideoQuality}"
+          },
+          "description": "Gets the maximum quality of video."
+        },
+        {
+          "name": "getReceivedVideoDimension",
+          "signature": "getReceivedVideoDimension(): { height: number; width: number }",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "{ height: number; width: number }",
+            "description": "Received video dimension."
+          },
+          "description": "Gets the dimension of received video.\nNote this is only available when multi-video rendering is not supported.\n For the case of multi-video rendering, get each video's resolution from the `video-detailed-data-change` event"
+        },
+        {
+          "name": "isSupportMultipleVideos",
+          "signature": "isSupportMultipleVideos(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "Whether the current platform supports multiple videos."
+          },
+          "description": "Determines whether the browser can support multiple videos. If this returns false, we recommend that you render self-view in a separate video-player-container."
+        },
+        {
+          "name": "getMaxRenderableVideos",
+          "signature": "getMaxRenderableVideos(): number",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "number",
+            "description": "The number of simultaneous video renders, typically affected by GPU/CPU/ShareArrayBuffer capabilities."
+          },
+          "description": "Get the maximum concurrent remote video renders supported by the current device."
+        },
+        {
+          "name": "isSupportHDVideo",
+          "signature": "isSupportHDVideo(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "Whether the current account supports sending 720p video."
+          },
+          "description": "Determines whether HD video is supported."
+        },
+        {
+          "name": "isSupportVirtualBackground",
+          "signature": "isSupportVirtualBackground(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "Whether the current platform supports virtual backgrounds."
+          },
+          "description": "Determines whether the current platform supports virtual backgrounds."
+        },
+        {
+          "name": "getVirtualbackgroundStatus",
+          "signature": "getVirtualbackgroundStatus(): VirtualBackgroundStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "VirtualBackgroundStatus",
+            "description": "Status of the virtual background. {@link VirtualBackgroundStatus}"
+          },
+          "description": "Gets the status of the virtual backgrounds."
+        },
+        {
+          "name": "getVideoStatisticData",
+          "signature": "getVideoStatisticData(): { encode: VideoQosData; decode: VideoQosData }",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "{ encode: VideoQosData; decode: VideoQosData }",
+            "description": "Video statistic date. {@link VideoQosData}"
+          },
+          "description": "Gets the video statistic data."
+        },
+        {
+          "name": "isRenderSelfViewWithVideoElement",
+          "signature": "isRenderSelfViewWithVideoElement(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "Boolean."
+          },
+          "description": "Determines whether to use video element to render self-view."
+        },
+        {
+          "name": "getNetworkQuality",
+          "signature": "getNetworkQuality(userId?: number): NetworkQuality",
+          "async": false,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": true,
+              "description": "optional, default is current user"
+            }
+          ],
+          "returns": {
+            "type": "NetworkQuality"
+          },
+          "description": "Gets network quality. Only the network quality of users who start video is meaningful."
+        },
+        {
+          "name": "getCapturedVideoResolution",
+          "signature": "getCapturedVideoResolution(): { height: number; width: number }",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "{ height: number; width: number }"
+          },
+          "description": "Gets captured video resolution."
+        },
+        {
+          "name": "getVideoMaskStatus",
+          "signature": "getVideoMaskStatus(): MaskOption",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "MaskOption"
+          },
+          "description": "Gets video mask status."
+        },
+        {
+          "name": "isVideoMirrored",
+          "signature": "isVideoMirrored(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Whether the self video is mirrored"
+        },
+        {
+          "name": "getSpotlightedUserList",
+          "signature": "getSpotlightedUserList(): Array<Participant>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<Participant>"
+          },
+          "description": "Get a list of spotlighted users."
+        },
+        {
+          "name": "getVideoMediaPlaybackController",
+          "signature": "getVideoMediaPlaybackController(): Pick< HTMLAudioElement, 'play' | 'pause' | 'paused' | 'muted' | 'currentTime' | 'loop' > | null",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Pick< HTMLAudioElement, 'play' | 'pause' | 'paused' | 'muted' | 'currentTime' | 'loop' > | null"
+          },
+          "description": "Get the video media file playback controller.\nOnly available when using a media file as a video source, otherwise, it returns null."
+        },
+        {
+          "name": "getWebRTCStatsReportData",
+          "signature": "getWebRTCStatsReportData(): StatsReport",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "StatsReport",
+            "description": "Current WebRTC statistics report as a Map of statistic IDs to extended RTCStats objects"
+          },
+          "description": "Get the current WebRTC statistics report data synchronously.\nReturns a comprehensive snapshot of current WebRTC connection statistics."
+        },
+        {
+          "name": "startShareView",
+          "signature": "startShareView(canvas: HTMLCanvasElement, activeUserId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "canvas",
+              "type": "HTMLCanvasElement",
+              "optional": false,
+              "description": "Required. The canvas to render the share content."
+            },
+            {
+              "name": "activeUserId",
+              "type": "number",
+              "optional": false,
+              "description": "Required. Active share user ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          }
+        },
+        {
+          "name": "stopShareView",
+          "signature": "stopShareView(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          }
+        },
+        {
+          "name": "attachShareView",
+          "signature": "attachShareView(userId: number, element?: string | VideoPlayer): Promise<VideoPlayer | ExecutedFailure>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "- The ID of the user whose share view will be attached."
+            },
+            {
+              "name": "element",
+              "type": "string | VideoPlayer",
+              "optional": true,
+              "description": "- Optional. Specifies the target element for the share view:\n- `undefined` (default): The SDK creates a new `VideoPlayer` element automatically.\n- `string`: A CSS selector passed to `document.querySelector` to find the container element.\n- `VideoPlayer`: A pre-created `VideoPlayer` element to use directly."
+            }
+          ],
+          "returns": {
+            "type": "Promise<VideoPlayer | ExecutedFailure>",
+            "description": "A `Promise` resolving to the attached `VideoPlayer` or an `ExecutedFailure`."
+          },
+          "description": "Attaches the share view to a specified element.\n> The returned {@link VideoPlayer} element must be a child node of a {@link VideoPlayerContainer}.\n> The container used for share view cannot be the same as the one used for `attachVideo`; the two must not be mixed.",
+          "examples": [
+            "<video-player-container class=\"share-container\">\n <div class=\"share-tile\"></div>\n</video-player-container>",
+            "const element = stream.attachShareView(userId);\ndocument.querySelector('.share-tile').appendChild(element);"
+          ]
+        },
+        {
+          "name": "detachShareView",
+          "signature": "detachShareView(userId: number, element?: string | VideoPlayer): Promise<VideoPlayer | ExecutedFailure>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "Required. The ID of the user whose share view will be detached."
+            },
+            {
+              "name": "element",
+              "type": "string | VideoPlayer",
+              "optional": true,
+              "description": "- Optional. Specifies which element(s) to detach:\n- `undefined` (default): Detach all share views for the user.\n- `string`: A CSS selector passed to `document.querySelector` to find the element to detach.\n- `VideoPlayer`: A specific `VideoPlayer` element to detach."
+            }
+          ],
+          "returns": {
+            "type": "Promise<VideoPlayer | ExecutedFailure>"
+          },
+          "description": "Detaches the share view from all previously attached `VideoPlayer` elements or specific element.",
+          "examples": [
+            "const elements = stream.detachShareView(userId);\nif (Array.isArray(elements)) {\n elements.forEach((e) => e.remove());\n} else {\n elements.remove();\n}"
+          ]
+        },
+        {
+          "name": "switchShareView",
+          "signature": "switchShareView(activeNodeId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "activeNodeId",
+              "type": "number",
+              "optional": false,
+              "description": "Required. Active share user ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Switch to another share content.\n\nWhen there are multiple users sharing the screen in the session,you can have a chance to switch to another one's screen.",
+          "examples": [
+            "const sharingUserList = stream.getShareUserList();\n// click handler of sharing user list menu\nswitchButton.addEventListener('click',(event)=>{\n if(event.dataId!==stream.getActiveShareUserId()){\n  stream.switchShareView(event.dataId);\n }\n})"
+          ]
+        },
+        {
+          "name": "startShareScreen",
+          "signature": "startShareScreen(canvas: HTMLCanvasElement | HTMLVideoElement, options?: ScreenShareOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "canvas",
+              "type": "HTMLCanvasElement | HTMLVideoElement",
+              "optional": false,
+              "description": "Required. The canvas which renders the screen share content."
+            },
+            {
+              "name": "options",
+              "type": "ScreenShareOption",
+              "optional": true,
+              "description": "Optional options for screen share."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise.\n- {type:'INVALID_OPERATION', reason:'required extension', extensionUrl:'url'} : Install the extension before starting share."
+          },
+          "description": "Starts screen share.\n\n- Check the share privilege before starting screen share.\n- If you start screen share, you will stop receiving others' shared content.\n- Users with legacy Chrome browsers need to install a chrome extension before starting screen share. Check the promise return value."
+        },
+        {
+          "name": "startShareCamera",
+          "signature": "startShareCamera(canvas: HTMLCanvasElement | HTMLVideoElement, cameraId: string | MobileVideoFacingMode, hd?: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "canvas",
+              "type": "HTMLCanvasElement | HTMLVideoElement",
+              "optional": false,
+              "description": "Required. The canvas to render the shared camera content. If WebCodecs enabled, use Video element instead of Canvas element."
+            },
+            {
+              "name": "cameraId",
+              "type": "string | MobileVideoFacingMode",
+              "optional": false,
+              "description": "Required. The cameraId of the camera to share."
+            },
+            {
+              "name": "hd",
+              "type": "boolean",
+              "optional": true
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "executed promise.\n- {type:'INVALID_OPERATION',reason:'required extension',extensionUrl:'url'} : Installed the extension before start share"
+          },
+          "description": "Start screen camera.\n- Check the share privilege before starting camera share.\n- To stop the share camera, use stopShareScreen().\n- If you start screen camera, you will stop receiving others' shared content.\n- To pause the share camera, use pauseShareScreen().\n- To resume the share camera, use resumeShareScreen()."
+        },
+        {
+          "name": "pauseShareScreen",
+          "signature": "pauseShareScreen(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Pauses screen share."
+        },
+        {
+          "name": "resumeShareScreen",
+          "signature": "resumeShareScreen(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Resumes screen share."
+        },
+        {
+          "name": "stopShareScreen",
+          "signature": "stopShareScreen(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Stops screen share."
+        },
+        {
+          "name": "lockShare",
+          "signature": "lockShare(isLocked: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "isLocked",
+              "type": "boolean",
+              "optional": false,
+              "description": "Set to `true` to lock share, or `false` to unlock."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Locks the privilege of screen share. Only the host or manager can share.\n- Only the **host** or **manager** has the permission.\n- If a participant (non-host or manager) is sharing the screen, once the host locks screen share, their share will be forcibly stopped.",
+          "examples": [
+            "// host\nstream.lockShare(true);\n// sharing user\nclient.on('passively-stop-share',payload=>{\n if(payload.reason==='PrivilegeChange'){\n console.log('passively stop share because of privilege change')\n }\n})"
+          ]
+        },
+        {
+          "name": "updateSharingCanvasDimension",
+          "signature": "updateSharingCanvasDimension(width: number, height: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "width",
+              "type": "number",
+              "optional": false,
+              "description": "Canvas width."
+            },
+            {
+              "name": "height",
+              "type": "number",
+              "optional": false,
+              "description": "Canvas height."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Sets the dimension of the canvas rendering the received share content."
+        },
+        {
+          "name": "switchSharingSecondaryCamera",
+          "signature": "switchSharingSecondaryCamera(cameraId: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "cameraId",
+              "type": "string",
+              "optional": false,
+              "description": "Camera ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Switches camera for sharing."
+        },
+        {
+          "name": "setSharePrivilege",
+          "signature": "setSharePrivilege(privilege: SharePrivilege): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "privilege",
+              "type": "SharePrivilege",
+              "optional": false,
+              "description": "The privilege"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Sets the privilege of screen share."
+        },
+        {
+          "name": "shareToSubsession",
+          "signature": "shareToSubsession(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Determines whether the shared content is broadcast to subsessions, when screen sharing is started. Available to host or manager."
+        },
+        {
+          "name": "stopShareToSubsession",
+          "signature": "stopShareToSubsession(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Stops broadcasting the shared content to subsessions."
+        },
+        {
+          "name": "enableOptimizeForSharedVideo",
+          "signature": "enableOptimizeForSharedVideo(enable: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "enable",
+              "type": "boolean",
+              "optional": false,
+              "description": "boolean"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Enables or disables video share optimization."
+        },
+        {
+          "name": "updateSharedVideoQuality",
+          "signature": "updateSharedVideoQuality(quality: VideoQuality): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "quality",
+              "type": "VideoQuality",
+              "optional": false,
+              "description": "Quality."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Updates the share quality when video share enabled.\nNote: High resolution will lead to low FPS."
+        },
+        {
+          "name": "subscribeShareStatisticData",
+          "signature": "subscribeShareStatisticData(type?: StatisticOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "type",
+              "type": "StatisticOption",
+              "optional": true,
+              "description": "optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of share to subscribe to."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Subscribes to share statistic data base on the type parameter.\nClient will receive video quality data every second."
+        },
+        {
+          "name": "unsubscribeShareStatisticData",
+          "signature": "unsubscribeShareStatisticData(type?: StatisticOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "type",
+              "type": "StatisticOption",
+              "optional": true,
+              "description": "optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of share to subscribe to."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Unsubscribes to share statistic data bases on the parameter type.\n*"
+        },
+        {
+          "name": "screenshotShareView",
+          "signature": "screenshotShareView(userId?: number): Promise<Blob | ExecutedFailure>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": true,
+              "description": "Optional. The user ID to screenshot. Default - screenshots the active share view."
+            }
+          ],
+          "returns": {
+            "type": "Promise<Blob | ExecutedFailure>",
+            "description": "- Blob.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Take a screenshot of the share view.\nOnce the screenshot is taken, triggers a `share-content-screenshot-taken` event on the target user of the screenshot."
+        },
+        {
+          "name": "updateShareViewQuality",
+          "signature": "updateShareViewQuality(userId: number, quality: ShareViewQuality): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "The user id of the share view to update."
+            },
+            {
+              "name": "quality",
+              "type": "ShareViewQuality",
+              "optional": false,
+              "description": "The share view quality."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Update the share view quality of the specified user when rendering the share view via {@link attachShareView}.\n\nWhen rendering multiple share views simultaneously, all at `Original` quality can cause performance issues. Use this method to lower the quality of a specific share view. The default quality is `Original`.\nNote: high resolution will lead to low fps."
+        },
+        {
+          "name": "isShareLocked",
+          "signature": "isShareLocked(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "Whether screen share is locked."
+          },
+          "description": "Determines whether the host locked the share."
+        },
+        {
+          "name": "getSharePrivilege",
+          "signature": "getSharePrivilege(): SharePrivilege",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "SharePrivilege",
+            "description": "Share privilege."
+          },
+          "description": "Gets the share privilege."
+        },
+        {
+          "name": "getActiveShareUserId",
+          "signature": "getActiveShareUserId(): number",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "number",
+            "description": "Active shared user ID."
+          },
+          "description": "Gets the user ID of the received shared content."
+        },
+        {
+          "name": "getShareStatus",
+          "signature": "getShareStatus(): ShareStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "ShareStatus",
+            "description": "Share status."
+          },
+          "description": "Gets the status of share."
+        },
+        {
+          "name": "getShareUserList",
+          "signature": "getShareUserList(): Array<Participant>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<Participant>",
+            "description": "shared user list"
+          },
+          "description": "Gets the list of users who are screen sharing."
+        },
+        {
+          "name": "isStartShareScreenWithVideoElement",
+          "signature": "isStartShareScreenWithVideoElement(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "boolean"
+          },
+          "description": "Determines whether to use video element to start screen sharing."
+        },
+        {
+          "name": "isOptimizeForSharedVideoEnabled",
+          "signature": "isOptimizeForSharedVideoEnabled(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "* Determines whether video sharing is enabled."
+        },
+        {
+          "name": "isSupportOptimizedForSharedVideo",
+          "signature": "isSupportOptimizedForSharedVideo(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Determines whether the current platform supports video share."
+        },
+        {
+          "name": "getShareStatisticData",
+          "signature": "getShareStatisticData(): { encode?: VideoQosData; decode?: VideoQosData; }",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "{ encode?: VideoQosData; decode?: VideoQosData; }",
+            "description": "data of video statistic.{@link VideoQosData}"
+          },
+          "description": "Gets the share statistic data."
+        },
+        {
+          "name": "getShareStreamSettings",
+          "signature": "getShareStreamSettings(): { width?: number; height?: number; deviceId?: string; displaySurface?: string; }",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "{ width?: number; height?: number; deviceId?: string; displaySurface?: string; }"
+          },
+          "description": "Get the active share stream settings"
+        },
+        {
+          "name": "requestShareCamera",
+          "signature": "requestShareCamera(userId: number, shareSource: MobileVideoFacingMode, startAnnotation: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "userId of the target user to share camera."
+            },
+            {
+              "name": "shareSource",
+              "type": "MobileVideoFacingMode",
+              "optional": false,
+              "description": "Requested camera to share from the remote user. Should be either 'environment' or 'user'."
+            },
+            {
+              "name": "startAnnotation",
+              "type": "boolean",
+              "optional": false,
+              "description": "Whether to enable the startAnnotation() for the remote user. If the value is true, startAnnotation() API need to be used after startShareCamera()."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Request the remote user in to share their camera content."
+        },
+        {
+          "name": "approveShareCamera",
+          "signature": "approveShareCamera(requestId: number, userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "requestId",
+              "type": "number",
+              "optional": false,
+              "description": "requestId from the event 'share-remote-camera-request'."
+            },
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "userId of the request sender from 'share-remote-camera-request'."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Approve the share camera request."
+        },
+        {
+          "name": "declineShareCamera",
+          "signature": "declineShareCamera(requestId: number, userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "requestId",
+              "type": "number",
+              "optional": false,
+              "description": "requestId from the event 'share-remote-camera-request'."
+            },
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "userId of the request sender from 'share-remote-camera-request'."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Decline the share camera request."
+        },
+        {
+          "name": "informShareCameraStatus",
+          "signature": "informShareCameraStatus(requestId: number, userId: number, status: ShareCameraRemoteStatus): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "requestId",
+              "type": "number",
+              "optional": false,
+              "description": "requestId from the event 'share-remote-camera-request'."
+            },
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "userId of the request sender from 'share-remote-camera-request'."
+            },
+            {
+              "name": "status",
+              "type": "ShareCameraRemoteStatus",
+              "optional": false,
+              "description": "execution result of startShareCamera() and/or startAnnotation()."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Inform the request share camera sender about if the request can be fulfilled."
+        },
+        {
+          "name": "getMaxRenderableShareViews",
+          "signature": "getMaxRenderableShareViews(): number",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "number",
+            "description": "The maximum number of simultaneous share views, typically limited by GPU or CPU capabilities."
+          },
+          "description": "Returns the maximum number of concurrent share views supported by the current device."
+        },
+        {
+          "name": "startAnnotation",
+          "signature": "startAnnotation(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Start the annotation feature on shared content.\nTo use the annotation feature, follow these steps:\n1. Wrap the ```<canvas>``` or ```<video>``` to startShareScreen() or startShareView() by a relative positioned container. Don't add any border or padding to the ```<canvas>``` and ```<video>```.\n\n2. The ```<canvas>``` or ```<video>``` style size should have the same aspect ratio as its displayed content. To get the content size, refer to the 'share-content-dimension-change' event.\n\n3. If the share receiver calls startAnnotation(), the share presenter will receive the 'annotation-viewer-draw-request' event and the presenter also must call startAnnotation() to allow the receiver to draw.",
+          "examples": [
+            "<div id=\"share-container\" style=\"position:relative\">\n <video id=\"sending-share-content\"></video>\n <canvas id=\"receiving-share-content\"></canvas>\n</div>",
+            "client.on(\"share-content-dimension-change\", (payload) => {\n const { type, height, width } = payload;\nconst receivingShareCanvas = document.getElementById('receiving-share-content');\nconst container = document.getElementById('share-container');\nconst containerWidth = container.clientWidth;\nconst containerHeight = container.clientHeight;\nconst containerAspectRatio = containerWidth / containerWidth;\n switch (type) {\n  case \"received\":\n   const contentAspectRatio = receivingShareCanvas.clientWidth / receivingShareCanvas.clientHeight;\n    if (containerAspectRatio > contentAspectRatio) {\n    // Container is wider than content — fit by height\n      receivingShareCanvas.style.width = `${containerHeight * contentAspectRatio}px`;\n      receivingShareCanvas.style.height = `${containerHeight}px`;\n    } else {\n     // Container is taller than content — fit by width\n      receivingShareCanvas.style.width = `${containerWidth}px`;\n      receivingShareCanvas.style.height = `${containerWidth / contentAspectRatio}px`;\n    }\n    break;\n  case: \"sended\":\n    // Similar like the \"received\" part\n    break;\n  default:\n   // No default operations\n }\n})",
+            "client.on('annotation-viewer-draw-request', (payload) => {\n stream.startAnnotation();\n})"
+          ]
+        },
+        {
+          "name": "stopAnnotation",
+          "signature": "stopAnnotation(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Stop the annotation on sharing content.\nIn addition to the normal use case to stop the annotation after startAnnotation(), use stopAnnotation() for the following case:\n1. Current screen share is paused.\n2. Current screen share session annotation is disabled by presenter via changeAnnotationPrivilege()"
+        },
+        {
+          "name": "changeAnnotationPrivilege",
+          "signature": "changeAnnotationPrivilege(enable: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "enable",
+              "type": "boolean",
+              "optional": false,
+              "description": "boolean"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Enable or disable the viewer's ability to annotate during your screen-sharing session as the sender."
+        },
+        {
+          "name": "showAnnotatorName",
+          "signature": "showAnnotatorName(enable: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "enable",
+              "type": "boolean",
+              "optional": false,
+              "description": "boolean"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Enable or disable the viewer's name next to the viewer's annotation on the presenter's shared content."
+        },
+        {
+          "name": "canDoAnnotation",
+          "signature": "canDoAnnotation(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Whether you can annotate on the shared content. Use this method after sending share or receiving share started."
+        },
+        {
+          "name": "getAnnotationController",
+          "signature": "getAnnotationController(): AnnotationControllerType",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "AnnotationControllerType"
+          },
+          "description": "Get the annotation control methods."
+        },
+        {
+          "name": "requestFarEndCameraControl",
+          "signature": "requestFarEndCameraControl(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "the controlling user ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Request control on far-end PTZ camera",
+          "examples": [
+            "// UserA\n// request control of UserB's camera\nstream.requestFarEndCameraControl(userBId);\n\n// UserB\nclient.on(\"far-end-camera-request-control\", (payload) => {\n  const { userId, displayName } = payload;\n // popup a confirm window, approve or decline the request\n stream.approveFarEndCameraControl(userId);\n});\n\n// UserA\nlet isFarEndCameraApproved = false;\nlet capability = undefined;\nclient.on(\"far-end-camera-response-control\", (payload) => {\n  const { isApproved, userId, displayName } = payload;\n  isFarEndCameraApproved = isApproved;\n});\n\nclient.on(\"far-end-camera-capability-change\", (payload) => {\n  const { userId, ptz } = payload;\n  capability = ptz;\n  if (capability.pan) {\n    // pan the camera left\n    stream.controlFarEndCamera({\n      userId,\n      cmd: CameraControlCmd.Left,\n      range: 10,\n    });\n  }\n});"
+          ]
+        },
+        {
+          "name": "approveFarEndCameraControl",
+          "signature": "approveFarEndCameraControl(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "the requesting user ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Approves the control request."
+        },
+        {
+          "name": "declineFarEndCameraControl",
+          "signature": "declineFarEndCameraControl(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "The requesting user ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Declines the control request."
+        },
+        {
+          "name": "giveUpFarEndCameraControl",
+          "signature": "giveUpFarEndCameraControl(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "The controlling user ID."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Gives up control of far end camera."
+        },
+        {
+          "name": "controlCamera",
+          "signature": "controlCamera(option: CameraControlOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "option",
+              "type": "CameraControlOption",
+              "optional": false,
+              "description": "The cmd option."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Controls the local camera."
+        },
+        {
+          "name": "controlFarEndCamera",
+          "signature": "controlFarEndCamera(option: FarEndCameraControlOption): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "option",
+              "type": "FarEndCameraControlOption",
+              "optional": false,
+              "description": "The cmd option."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Controls the far-end camera."
+        },
+        {
+          "name": "getFarEndCameraPTZCapability",
+          "signature": "getFarEndCameraPTZCapability(userId: number): PTZCameraCapability",
+          "async": false,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "PTZCameraCapability"
+          },
+          "description": "Gets the capability of the far-end camera."
+        },
+        {
+          "name": "getCameraPTZCapability",
+          "signature": "getCameraPTZCapability(cameraId?: string): PTZCameraCapability",
+          "async": false,
+          "parameters": [
+            {
+              "name": "cameraId",
+              "type": "string",
+              "optional": true,
+              "description": "Default is active camera ID."
+            }
+          ],
+          "returns": {
+            "type": "PTZCameraCapability"
+          },
+          "description": "Gets the capability of the camera on current device."
+        },
+        {
+          "name": "isBrowserSupportPTZ",
+          "signature": "isBrowserSupportPTZ(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Determines whether the current browser supports Pan-Tilt-Zoom (PTZ)."
+        },
+        {
+          "name": "requestRemoteControl",
+          "signature": "requestRemoteControl(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Request remote control from user who is sharing\nThere are two roles in this process.\n- Controlling user: User who is remotely controlling other user\n- Controlled user: User who is sharing and being controlled by other user (called the sharing user when they are not being controlled)\n\nA normal process is like this:\n1. Controlling user initiates a remote control request to the sharing user\n2. Sharing user receives the request, approves the request.\n3. Due to the browser capability limitation, the controlled user is required to download and install a remote control app.\n  3.1 If the app is not installed, the controlled user needs to download and install the app manually.\n  3.2 If the app is installed, the app will be launched automatically.\n4. The controlling user starts remote control.\n5. Both the controlling user and the controlled user can stop the remote control process.",
+          "examples": [
+            "// step 1, On controlling user side\nif (stream.isTargetShareSupportRemoteControl(userId)) {\n  stream.requestRemoteControl();\n}\n// step 2, On controlled user side\nclient.on(\"remote-control-request-change\", (payload) => {\n  const { userId, displayName, isSharingEntireScreen } = payload;\n  // Currently, we only support remote control when the controlled user is sharing the entire screen,\n  // if not, the controlled user must re-select the sharing content.\n  if (isSharingEntireScreen) {\n    stream.approveRemoteControl(userId);\n  }\n});\n// step 3. On controlled user side\nclient.on(\"remote-control-app-status-change\", (payload) => {\n  if (payload === RemoteControlAppStatus.Uninstalled) {\n    // prompt the App download and launch action dialog\n    // if app is downloaded and installed, launch the app\n    stream.launchRemoteControlApp();\n  } else if (payload === RemoteControlAppStatus.Installed) {\n    console.log(\"Remote App is launching\");\n  } else if (payload === RemoteControlAppStatus.Launched) {\n    console.log(\"Remote App is launched\");\n  }\n});\n\n// step 4. On controlling user side\nclient.on(\"remote-control-approved-change\", (payload) => {\n  if (payload.state === ApprovedState.Approved) {\n    stream.startRemoteControl(viewport);\n  }\n});\n\n// step 5. On controlling user side\nstream.giveUpRemoteControl();\n\n// step 5. On controlled user side\nstream.stopRemoteControl();"
+          ]
+        },
+        {
+          "name": "approveRemoteControl",
+          "signature": "approveRemoteControl(userId: number, runAsAdmin?: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "userId"
+            },
+            {
+              "name": "runAsAdmin",
+              "type": "boolean",
+              "optional": true,
+              "description": "runAsAdmin optional. For Windows only: If set, enable the Remote Control App control of all applications."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "The controlled user approves the remote control request.\n> ***Note***: Due to browser capability limitations, the controlled user must download and install a remote control app to enable remote control.\n> If the app is installed, we will try to launch it automatically right after the controlled user approves the request for remote control."
+        },
+        {
+          "name": "declineRemoteControl",
+          "signature": "declineRemoteControl(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "userId"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "The controlled user declines the remote control request"
+        },
+        {
+          "name": "stopRemoteControl",
+          "signature": "stopRemoteControl(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "The controlled user stops the controlling while someone is remotely controlling"
+        },
+        {
+          "name": "giveUpRemoteControl",
+          "signature": "giveUpRemoteControl(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "The controlling user gives up remote control."
+        },
+        {
+          "name": "startRemoteControl",
+          "signature": "startRemoteControl(viewport: HTMLElement): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "viewport",
+              "type": "HTMLElement",
+              "optional": false,
+              "description": "The HTML element that wrapped the canvas element. We recommend the following HTML structure:\n\n```html\n<div class=\"shared-content\">\n<canvas id=\"received-canvas\"></canvas>\n</div>\n```\n\n```css\n#received-canvas{\nwidth:100%;\nheight:100%;\n}\n```\n\n```JavaScript\nconst viewport = document.querySelector(\".shared-content\");\nstream.startRemoteControl(viewport);\n```"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "The controlling user starts remote control."
+        },
+        {
+          "name": "grabRemoteControl",
+          "signature": "grabRemoteControl(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "The controlling user grabs access to remote control\n\nThe controlled user can regain the access to screen control, but the controlling user can use this method to grab the control.\n\nRecommended event handler",
+          "examples": [
+            "client.on(\"remote-control-in-control-change\", (payload) => {\n if (payload.isControlling) {\n   console.log(\"You are controlling the shared content\");\n } else {\n   console.log(\"You lost the control\");\n }\n});",
+            "viewportElement.addEventListener(\"click\", (event) => {\n  event.preventDefault();\n  if (!stream.isControllingUserRemotely()) {\n    stream.grabRemoteControl();\n  }\n});"
+          ]
+        },
+        {
+          "name": "launchRemoteControlApp",
+          "signature": "launchRemoteControlApp(isAutoDeleteApp?: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "isAutoDeleteApp",
+              "type": "boolean",
+              "optional": true,
+              "description": "boolean"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success\n - `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "The controlled user launches the remote control app manually."
+        },
+        {
+          "name": "isRemotelyControlApproved",
+          "signature": "isRemotelyControlApproved(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "boolean"
+          },
+          "description": "Determines whether the controlled user approves remote control and makes it available to the controlling user."
+        },
+        {
+          "name": "isControllingUserRemotely",
+          "signature": "isControllingUserRemotely(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "boolean"
+          },
+          "description": "Determines whether the controlling user is controlling the user."
+        },
+        {
+          "name": "isTargetShareSupportRemoteControl",
+          "signature": "isTargetShareSupportRemoteControl(userId: number): boolean",
+          "async": false,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "boolean",
+            "description": "boolean"
+          },
+          "description": "Determines whether the target user supports remote control."
+        },
+        {
+          "name": "getRemoteControlAppDownloadUrl",
+          "signature": "getRemoteControlAppDownloadUrl(): string",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "string",
+            "description": "string"
+          },
+          "description": "Get the download URL of the remote control app."
+        },
+        {
+          "name": "getRemotelyControllingUser",
+          "signature": "getRemotelyControllingUser(): Participant | null",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Participant | null",
+            "description": "Participant"
+          },
+          "description": "Get the user who is remotely controlling me"
+        },
+        {
+          "name": "isRemoteControlEnabled",
+          "signature": "isRemoteControlEnabled(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "boolean"
+          },
+          "description": "Determines whether remote control is enabled."
+        },
+        {
+          "name": "createProcessor",
+          "signature": "createProcessor(param: ProcessorParams): Promise<Processor>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "param",
+              "type": "ProcessorParams",
+              "optional": false,
+              "description": "Required. Processor parameters."
+            }
+          ],
+          "returns": {
+            "type": "Promise<Processor>",
+            "description": "- `Processor`: Processor instance."
+          },
+          "description": "Create a processor."
+        },
+        {
+          "name": "addProcessor",
+          "signature": "addProcessor(processor: Processor): Promise<''>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "processor",
+              "type": "Processor",
+              "optional": false,
+              "description": "required. The processor instance you want to add."
+            }
+          ],
+          "returns": {
+            "type": "Promise<''>",
+            "description": "- `''`: Success"
+          },
+          "description": "Add the processor to the current media stream."
+        },
+        {
+          "name": "removeProcessor",
+          "signature": "removeProcessor(processor: Processor): Promise<''>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "processor",
+              "type": "Processor",
+              "optional": false,
+              "description": "required. The processor instance you want to remove."
+            }
+          ],
+          "returns": {
+            "type": "Promise<''>",
+            "description": "- `''`: Success"
+          },
+          "description": "Remove the current media stream processor."
+        },
+        {
+          "name": "isSupportVideoProcessor",
+          "signature": "isSupportVideoProcessor(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "Whether the current platform supports the video processor."
+          },
+          "description": "Determines whether the current platform supports the video processor."
+        },
+        {
+          "name": "isSupportAudioProcessor",
+          "signature": "isSupportAudioProcessor(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "Whether the current platform supports the audio processor."
+          },
+          "description": "Determines whether the current platform supports the audio processor."
+        },
+        {
+          "name": "isSupportShareProcessor",
+          "signature": "isSupportShareProcessor(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "`true` if the share processor is supported on the current platform; otherwise, `false`."
+          },
+          "description": "Checks if the current platform supports the share processor."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/media.d.ts"
+    ],
+    "declarationCount": 35
+  }
+}

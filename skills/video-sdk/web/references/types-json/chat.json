@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "chat",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/chat.d.ts",
+  "declarations": [
+    {
+      "kind": "interface",
+      "type": "FileInfo",
+      "description": "File info",
+      "properties": [
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false,
+          "description": "File name"
+        },
+        {
+          "name": "size",
+          "type": "number",
+          "optional": false,
+          "description": "File size"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "optional": false,
+          "description": "File type"
+        },
+        {
+          "name": "fileUrl",
+          "type": "string",
+          "optional": true,
+          "description": "File URL"
+        },
+        {
+          "name": "upload",
+          "type": "{ status: ChatFileUploadStatus; progress: number; }",
+          "optional": true,
+          "description": "Upload status"
+        },
+        {
+          "name": "download",
+          "type": "{ status: ChatFileDownloadStatus; progress: number; }",
+          "optional": true,
+          "description": "Download status"
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "ChatMessage",
+      "description": "Message record.",
+      "properties": [
+        {
+          "name": "id",
+          "type": "string",
+          "optional": true,
+          "description": "Message ID, used to delete or modify the message."
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "optional": true,
+          "description": "Message content."
+        },
+        {
+          "name": "file",
+          "type": "FileInfo",
+          "optional": true,
+          "description": "File info"
+        },
+        {
+          "name": "sender",
+          "type": "{ name: string; userId: number; userGuid?: string; avatar?: string; }",
+          "optional": false,
+          "description": "Sender information."
+        },
+        {
+          "name": "receiver",
+          "type": "{ name: string; userId: number; userGuid?: string; }",
+          "optional": false,
+          "description": "Receiver information."
+        },
+        {
+          "name": "timestamp",
+          "type": "number",
+          "optional": false,
+          "description": "Message timestamp."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "ChatUserItem",
+      "description": "Receiver",
+      "properties": [
+        {
+          "name": "userId",
+          "type": "number",
+          "optional": false,
+          "description": "User ID."
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "optional": false,
+          "description": "Display name."
+        },
+        {
+          "name": "isHost",
+          "type": "boolean",
+          "optional": false,
+          "description": "Indicates whether the user is the host or not."
+        },
+        {
+          "name": "isManager",
+          "type": "boolean",
+          "optional": false,
+          "description": "Indicates whether the user is a manager or not."
+        }
+      ]
+    },
+    {
+      "kind": "type_alias",
+      "type": "FileTransferCancelFunction",
+      "definition": "() => undefined",
+      "description": "File transfer cancel function"
+    },
+    {
+      "kind": "interface",
+      "type": "FileTransferSetting",
+      "description": "File transfer setting",
+      "properties": [
+        {
+          "name": "typeLimit",
+          "type": "string",
+          "optional": true,
+          "description": "Allowed file types in comma-separated suffix format; if empty, the SDK allows you to send any file type"
+        },
+        {
+          "name": "sizeLimit",
+          "type": "number",
+          "optional": true,
+          "description": "Maximum allowed file size that you can send; if empty, the default is 2GB"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "ChatPrivilege",
+      "members": [
+        {
+          "name": "All",
+          "value": "1",
+          "description": "Everyone can send messages."
+        },
+        {
+          "name": "NoOne",
+          "value": "4",
+          "description": "No one can send messages."
+        },
+        {
+          "name": "EveryonePublicly",
+          "value": "5",
+          "description": "Everyone can send public messages, but not private messages."
+        }
+      ],
+      "description": "Chat privileges for users."
+    },
+    {
+      "kind": "enum",
+      "type": "ChatMsgType",
+      "members": [
+        {
+          "name": "All",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "kind": "namespace",
+      "type": "ChatClient",
+      "description": "After joining a session, call `client.getChatClient()` to get the chat client.",
+      "examples": [
+        "const chat = client.getChatClient()"
+      ],
+      "methods": [
+        {
+          "name": "send",
+          "signature": "send(text: string, userId: number): Promise<ChatMessage | Error>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "text",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "Promise<ChatMessage | Error>",
+            "description": "- `ChatMessage`: success\n- `Error`: Failure. Here are the error states and details:\n    - `IMPROPER_MEETING_STATE`: Chat works only when the user is in meeting.\n    - `INSUFFICIENT_PRIVILEGES`: The user does not have the privilege to send the chat.\n    - `INVALID_PARAMETERS`: Issue with the parameter sent."
+          },
+          "description": "Sends a chat message to a specific participant.",
+          "examples": [
+            " chat.send('test', userId)"
+          ]
+        },
+        {
+          "name": "sendToAll",
+          "signature": "sendToAll(text: string): Promise<ChatMessage | Error>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "text",
+              "type": "string",
+              "optional": false,
+              "description": "Message to send."
+            }
+          ],
+          "returns": {
+            "type": "Promise<ChatMessage | Error>",
+            "description": "ExecutedPromise"
+          },
+          "description": "Sends a chat message to all participants."
+        },
+        {
+          "name": "setPrivilege",
+          "signature": "setPrivilege(privilege: ChatPrivilege): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "privilege",
+              "type": "ChatPrivilege",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "executedPromise"
+          },
+          "description": "The host or manager can control chat privileges in the session. The following table shows privilege values and descriptions:\n\n| Value                          | Description                                          |\n|--------------------------------|------------------------------------------------------|\n| ChatPrivilege.All              | The user can chat to everyone.                       |\n| ChatPrivilege.NoOne            | The user can chat to no one.                         |\n| ChatPrivilege.EveryonePublicly | The user can chat to the host, manager, and everyone.|",
+          "examples": [
+            "chat.setPrivilege(ChatPrivilege.All)"
+          ]
+        },
+        {
+          "name": "sendFile",
+          "signature": "sendFile(file: File | string, userId: number): Promise<FileTransferCancelFunction | Error>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "file",
+              "type": "File | string",
+              "optional": false,
+              "description": "file or retryToken"
+            },
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "returns": {
+            "type": "Promise<FileTransferCancelFunction | Error>"
+          },
+          "description": "Send file\nThe file will be securely encrypted and then uploaded to Zoom's file server.\nIt may take some time to encrypt and upload the file. However, you have the option to cancel the upload process by invoking the returned method at any time."
+        },
+        {
+          "name": "downloadFile",
+          "signature": "downloadFile(id: string, fileUrl: string, blob?: boolean): Promise<FileTransferCancelFunction | Error>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "id",
+              "type": "string",
+              "optional": false,
+              "description": "The msg id of the record containing file info."
+            },
+            {
+              "name": "fileUrl",
+              "type": "string",
+              "optional": false,
+              "description": "file URL"
+            },
+            {
+              "name": "blob",
+              "type": "boolean",
+              "optional": true,
+              "description": "Optional default is false.  Determine whether to provide raw data in blob format instead of directly downloading the file. This is useful for displaying images in chat records."
+            }
+          ],
+          "returns": {
+            "type": "Promise<FileTransferCancelFunction | Error>"
+          },
+          "description": "Download the file\nThe file cannot be downloaded directly from the file URL as it is encrypted. To download the file, use this method.\nIt may take some time to decrypt and download the file. However, you have the option to cancel the download process by invoking the returned method at any time."
+        },
+        {
+          "name": "getPrivilege",
+          "signature": "getPrivilege(): ChatPrivilege",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "ChatPrivilege"
+          },
+          "description": "Gets the current chat privilege.",
+          "examples": [
+            "const privilege = chat.getPrivilege();"
+          ]
+        },
+        {
+          "name": "getHistory",
+          "signature": "getHistory(): Array<ChatMessage>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<ChatMessage>"
+          },
+          "description": "Gets the chat list history.",
+          "examples": [
+            "const historyChatList = chat.getHistory();"
+          ]
+        },
+        {
+          "name": "getReceivers",
+          "signature": "getReceivers(): Array<ChatUserItem>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<ChatUserItem>"
+          },
+          "description": "Gets the list of available chat receivers."
+        },
+        {
+          "name": "isFileTransferEnabled",
+          "signature": "isFileTransferEnabled(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean"
+          },
+          "description": "Whether file transfer in meeting chat is enabled"
+        },
+        {
+          "name": "getFileTransferSetting",
+          "signature": "getFileTransferSetting(): FileTransferSetting",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "FileTransferSetting"
+          },
+          "description": "Get file transfer setting"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/chat.d.ts"
+    ],
+    "declarationCount": 8
+  }
+}

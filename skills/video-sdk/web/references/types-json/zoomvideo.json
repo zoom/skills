@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "zoomvideo",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "sourceFile": "types/zoomvideo.d.ts",
+  "declarations": [
+    {
+      "kind": "namespace",
+      "type": "ZoomVideo",
+      "description": "Zoom Video SDK for web platform.",
+      "methods": [
+        {
+          "name": "createClient",
+          "signature": "createClient(): typeof VideoClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof VideoClient"
+          },
+          "description": "Creates a client for managing the session.\nThis method will return a same instance if called multiple times.\nThis is usually the first step of using the Zoom Video SDK for web."
+        },
+        {
+          "name": "checkSystemRequirements",
+          "signature": "checkSystemRequirements(): MediaCompatibility",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "MediaCompatibility",
+            "description": "A `MediaCompatibility` object. The object has following properties:\n- `audio`: boolean, whether the audio is compatible with the current web browser.\n- `video`: boolean, whether the video is compatible with the current web browser.\n- `screen`: boolean, whether the screen is compatible with the current web browser."
+          },
+          "description": "Checks the compatibility of the current browser.\nUse this method before calling {@link init} to check if the SDK is compatible with the web browser."
+        },
+        {
+          "name": "checkFeatureRequirements",
+          "signature": "checkFeatureRequirements(): SupportFeatures",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "SupportFeatures",
+            "description": "A `SupportFeatures` object. The object has following properties:\n- `platform`: string, the browser version info or platform version info.\n- `supportFeatures`: Array<string>, contains all the support features on current platform.\n- `unSupportFeatures`: Array<string>, contains all the unsupport features on current platform."
+          },
+          "description": "Shows which features are supported and not supported on the current browser or platform."
+        },
+        {
+          "name": "getDevices",
+          "signature": "getDevices(skipPermissionCheck?: boolean): Promise<Array<MediaDeviceInfo>>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "skipPermissionCheck",
+              "type": "boolean",
+              "optional": true,
+              "description": "Determines whether to skip the permission check. If you set this parameter as `true`, the SDK does not trigger the request for media device permission. In this case, the retrieved media device information may be inaccurate.\n- `true`: Skip the permission check.\n- `false`: (Default) Do not skip the permission check."
+            }
+          ],
+          "returns": {
+            "type": "Promise<Array<MediaDeviceInfo>>",
+            "description": "- Array&lt;MediaDeviceInfo&gt;, an array of [MediaDeviceInfo](https://developer.mozilla.org/en-US/docs/Web/API/MediaDeviceInfo) objects."
+          },
+          "description": "Enumerates the media input and output devices available, such as microphones, cameras, and headsets.\n\nIf this method call succeeds, the SDK returns a list of media devices in an array of [MediaDeviceInfo](https://developer.mozilla.org/en-US/docs/Web/API/MediaDeviceInfo) objects.\n\n> Calling this method turns on the camera and microphone shortly for the device permission request. On browsers including Chrome 81 or later, Firefox, and Safari, the SDK cannot get accurate device information without permission to use the media device.",
+          "examples": [
+            "ZoomVideo.getDevices().then(devices => {\n console.log(devices);\n}).catch(e => {\n console.log('get devices error!', e);\n})\n\n// Using await...\ntry {\n const devices = await ZoomVideo.getDevices();\n console.log(devices);\n} catch (e) {\n console.log('get devices error!', e);\n}"
+          ]
+        },
+        {
+          "name": "createLocalAudioTrack",
+          "signature": "createLocalAudioTrack(deviceId?: string): LocalAudioTrack",
+          "async": false,
+          "parameters": [
+            {
+              "name": "deviceId",
+              "type": "string",
+              "optional": true,
+              "description": "Optional device ID to use for local capture."
+            }
+          ],
+          "returns": {
+            "type": "LocalAudioTrack"
+          },
+          "description": "Creates a new {@link LocalAudioTrack} to manage local audio capture."
+        },
+        {
+          "name": "createLocalVideoTrack",
+          "signature": "createLocalVideoTrack(deviceId?: string): LocalVideoTrack",
+          "async": false,
+          "parameters": [
+            {
+              "name": "deviceId",
+              "type": "string",
+              "optional": true,
+              "description": "Optional device ID to use for local capture."
+            }
+          ],
+          "returns": {
+            "type": "LocalVideoTrack"
+          },
+          "description": "Creates a new {@link LocalVideoTrack} to start or stop local video capture and playback."
+        },
+        {
+          "name": "destroyClient",
+          "signature": "destroyClient(): Promise<void>",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "Promise<void>"
+          },
+          "description": "Destroys the client."
+        },
+        {
+          "name": "preloadDependentAssets",
+          "signature": "preloadDependentAssets(path?: string): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "path",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "returns": {
+            "type": "void"
+          },
+          "description": "Preloads dependent assets to optimize performance."
+        }
+      ],
+      "properties": [
+        {
+          "name": "VERSION",
+          "type": "string",
+          "description": "The version of the Zoom Video SDK for web."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/zoomvideo.d.ts"
+    ],
+    "declarationCount": 1
+  }
+}

@@ -1,0 +1,1588 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.5.0",
+  "generatedAt": "2026-08-10T05:50:15.369Z",
+  "modules": [
+    {
+      "module": "broadcast-streaming",
+      "file": "broadcast-streaming.json",
+      "declarations": [
+        {
+          "type": "BroadcastStreamingStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "BroadcastStreamingClient",
+          "kind": "namespace",
+          "methods": [
+            "startBroadcast",
+            "stopBroadcast",
+            "getBroadcastStreamingStatus",
+            "isBroadcastStreamingEnable"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "chat",
+      "file": "chat.json",
+      "declarations": [
+        {
+          "type": "FileInfo",
+          "kind": "interface"
+        },
+        {
+          "type": "ChatMessage",
+          "kind": "interface"
+        },
+        {
+          "type": "ChatUserItem",
+          "kind": "interface"
+        },
+        {
+          "type": "FileTransferCancelFunction",
+          "kind": "type_alias"
+        },
+        {
+          "type": "FileTransferSetting",
+          "kind": "interface"
+        },
+        {
+          "type": "ChatPrivilege",
+          "kind": "enum"
+        },
+        {
+          "type": "ChatMsgType",
+          "kind": "enum"
+        },
+        {
+          "type": "ChatClient",
+          "kind": "namespace",
+          "methods": [
+            "send",
+            "sendToAll",
+            "setPrivilege",
+            "sendFile",
+            "downloadFile",
+            "getPrivilege",
+            "getHistory",
+            "getReceivers",
+            "isFileTransferEnabled",
+            "getFileTransferSetting"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "command",
+      "file": "command.json",
+      "declarations": [
+        {
+          "type": "CommandChannelMsg",
+          "kind": "interface"
+        },
+        {
+          "type": "CommandChannelDirectTarget",
+          "kind": "interface"
+        },
+        {
+          "type": "CommandChannelBroadcastTarget",
+          "kind": "interface"
+        },
+        {
+          "type": "CommandChannelTarget",
+          "kind": "type_alias"
+        },
+        {
+          "type": "CommandChannel",
+          "kind": "namespace",
+          "methods": [
+            "send"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "common",
+      "file": "common.json",
+      "declarations": [
+        {
+          "type": "ErrorTypes",
+          "kind": "type_alias"
+        },
+        {
+          "type": "ExecutedFailure",
+          "kind": "interface"
+        },
+        {
+          "type": "ExecutedResult",
+          "kind": "type_alias"
+        },
+        {
+          "type": "Participant",
+          "kind": "interface"
+        },
+        {
+          "type": "SubsessionStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "DialoutState",
+          "kind": "enum"
+        },
+        {
+          "type": "MutedSource",
+          "kind": "enum"
+        },
+        {
+          "type": "LeaveAudioSource",
+          "kind": "enum"
+        },
+        {
+          "type": "AudioChangeAction",
+          "kind": "enum"
+        },
+        {
+          "type": "ReconnectReason",
+          "kind": "enum"
+        },
+        {
+          "type": "VideoQuality",
+          "kind": "enum"
+        },
+        {
+          "type": "ShareViewQuality",
+          "kind": "enum"
+        },
+        {
+          "type": "MobileVideoFacingMode",
+          "kind": "enum"
+        },
+        {
+          "type": "CameraControlCmd",
+          "kind": "enum"
+        },
+        {
+          "type": "PTZCameraCapability",
+          "kind": "interface"
+        },
+        {
+          "type": "FarEndCameraControlDeclinedReason",
+          "kind": "enum"
+        },
+        {
+          "type": "LogLevelLabel",
+          "kind": "type_alias"
+        },
+        {
+          "type": "LogLevelDetail",
+          "kind": "type_alias"
+        },
+        {
+          "type": "LoggerInitOption",
+          "kind": "interface"
+        },
+        {
+          "type": "MediaPlaybackFile",
+          "kind": "interface"
+        },
+        {
+          "type": "ChatFileUploadStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "ChatFileDownloadStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "SummaryStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "MeetingQueryStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "registerProcessor",
+          "kind": "function"
+        },
+        {
+          "type": "CRCReturnCode",
+          "kind": "enum"
+        },
+        {
+          "type": "CRCProtocol",
+          "kind": "enum"
+        },
+        {
+          "type": "ActiveMediaFailedCode",
+          "kind": "enum"
+        },
+        {
+          "type": "MediaType",
+          "kind": "type_alias"
+        },
+        {
+          "type": "Processor",
+          "kind": "interface"
+        },
+        {
+          "type": "ProcessorParams",
+          "kind": "interface"
+        },
+        {
+          "type": "SystemCPUPressureLevel",
+          "kind": "enum"
+        },
+        {
+          "type": "Language",
+          "kind": "interface"
+        },
+        {
+          "type": "RTCStatsTypes",
+          "kind": "type_alias"
+        },
+        {
+          "type": "RTCStatsExtended",
+          "kind": "type_alias"
+        },
+        {
+          "type": "StatsReport",
+          "kind": "type_alias"
+        },
+        {
+          "type": "global",
+          "kind": "namespace"
+        }
+      ]
+    },
+    {
+      "module": "event-callback",
+      "file": "event-callback.json",
+      "declarations": [
+        {
+          "type": "ParticipantPropertiesPayload",
+          "kind": "interface"
+        },
+        {
+          "type": "ConnectionState",
+          "kind": "enum"
+        },
+        {
+          "type": "VideoActiveState",
+          "kind": "enum"
+        },
+        {
+          "type": "VideoCapturingState",
+          "kind": "enum"
+        },
+        {
+          "type": "PassiveStopShareReason",
+          "kind": "enum"
+        },
+        {
+          "type": "ClosedReason",
+          "kind": "type_alias"
+        },
+        {
+          "type": "ConnectionChangePayload",
+          "kind": "interface"
+        },
+        {
+          "type": "ActiveSpeaker",
+          "kind": "interface"
+        },
+        {
+          "type": "MediaSDKEncDecPayload",
+          "kind": "interface"
+        },
+        {
+          "type": "ApprovedState",
+          "kind": "enum"
+        },
+        {
+          "type": "RemoteControlAppStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "RemoteControlSessionStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "event_connection_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_user_add",
+          "kind": "event",
+          "event": "user-added"
+        },
+        {
+          "type": "event_user_update",
+          "kind": "event"
+        },
+        {
+          "type": "event_user_remove",
+          "kind": "event"
+        },
+        {
+          "type": "event_video_active_change",
+          "kind": "event",
+          "event": "video-active-change"
+        },
+        {
+          "type": "event_video_capturing_change",
+          "kind": "event",
+          "event": "video-capturing-change"
+        },
+        {
+          "type": "event_video_dimension_change",
+          "kind": "event",
+          "event": "video-dimension-change"
+        },
+        {
+          "type": "event_peer_video_state_change",
+          "kind": "event",
+          "event": "peer-video-state-change"
+        },
+        {
+          "type": "event_audio_active_speaker",
+          "kind": "event",
+          "event": "active-speaker"
+        },
+        {
+          "type": "event_host_ask_unmute_audio",
+          "kind": "event"
+        },
+        {
+          "type": "event_current_audio_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_auto_play_audio_failed",
+          "kind": "event",
+          "event": "auto-play-audio-failed"
+        },
+        {
+          "type": "event_chat_received_message",
+          "kind": "event"
+        },
+        {
+          "type": "event_chat_privilege_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_command_channel_status",
+          "kind": "event"
+        },
+        {
+          "type": "event_command_channel_message",
+          "kind": "event"
+        },
+        {
+          "type": "event_recording_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_individual_recording_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_device_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_media_sdk_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_active_share_change",
+          "kind": "event",
+          "event": "active-share-change"
+        },
+        {
+          "type": "event_share_content_dimension_change",
+          "kind": "event",
+          "event": "share-content-dimension-change"
+        },
+        {
+          "type": "event_passively_stop_share",
+          "kind": "event"
+        },
+        {
+          "type": "event_peer_share_state_change",
+          "kind": "event",
+          "event": "peer-share-state-change"
+        },
+        {
+          "type": "event_share_content_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_share_privilege_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_dial_out_change",
+          "kind": "event",
+          "event": "dialout-state-change"
+        },
+        {
+          "type": "event_share_audio_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_video_vb_preload_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_audio_statistic_data_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_video_statistic_data_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_video_cell_detailed_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_bo_invite_to_join",
+          "kind": "event"
+        },
+        {
+          "type": "event_bo_room_countdown",
+          "kind": "event"
+        },
+        {
+          "type": "event_bo_room_time_up",
+          "kind": "event"
+        },
+        {
+          "type": "event_bo_closing_room_countdown",
+          "kind": "event"
+        },
+        {
+          "type": "event_bo_broadcast_message",
+          "kind": "event"
+        },
+        {
+          "type": "event_bo_ask_for_help",
+          "kind": "event"
+        },
+        {
+          "type": "AskHostHelpResponse",
+          "kind": "enum"
+        },
+        {
+          "type": "event_bo_ask_for_help_response",
+          "kind": "event"
+        },
+        {
+          "type": "event_bo_room_state_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_bo_main_session_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_caption_status",
+          "kind": "event"
+        },
+        {
+          "type": "event_caption_message",
+          "kind": "event"
+        },
+        {
+          "type": "event_caption_enable",
+          "kind": "event"
+        },
+        {
+          "type": "event_share_can_see_screen",
+          "kind": "event"
+        },
+        {
+          "type": "event_far_end_camera_request",
+          "kind": "event"
+        },
+        {
+          "type": "event_far_end_camera_response",
+          "kind": "event"
+        },
+        {
+          "type": "event_far_end_camera_in_control_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_far_end_camera_capability_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_network_quality_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_share_statistic_data_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_caption_host_disable",
+          "kind": "event"
+        },
+        {
+          "type": "event_remote_control_approved_change",
+          "kind": "event",
+          "event": "remote-control-approved-change"
+        },
+        {
+          "type": "event_remote_control_in_control_change",
+          "kind": "event",
+          "event": "remote-control-in-control-change"
+        },
+        {
+          "type": "event_remote_control_clipboard_change",
+          "kind": "event",
+          "event": "remote-control-clipboard-change"
+        },
+        {
+          "type": "event_remote_control_request_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_remote_control_app_status_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_remote_control_controlled_status_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_live_stream_status",
+          "kind": "event"
+        },
+        {
+          "type": "event_video_aspect_ratio_change",
+          "kind": "event",
+          "event": "video-aspect-ratio-change"
+        },
+        {
+          "type": "event_device_permission_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_chat_file_upload_progress",
+          "kind": "event"
+        },
+        {
+          "type": "event_chat_file_download_progress",
+          "kind": "event"
+        },
+        {
+          "type": "event_smart_summary_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_meeting_query_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_subsession_invite_to_back_to_main_session",
+          "kind": "event"
+        },
+        {
+          "type": "event_subsession_user_update",
+          "kind": "event"
+        },
+        {
+          "type": "event_subsession_broadcast_voice",
+          "kind": "event"
+        },
+        {
+          "type": "event_crc_device_call_state_change",
+          "kind": "event",
+          "event": "crc-call-out-state-change"
+        },
+        {
+          "type": "event_current_audio_level_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_active_media_failed",
+          "kind": "event"
+        },
+        {
+          "type": "event_video_spotlight_change",
+          "kind": "event",
+          "event": "video-spotlight-change"
+        },
+        {
+          "type": "event_video_screenshot_taken",
+          "kind": "event"
+        },
+        {
+          "type": "event_share_content_screenshot_taken",
+          "kind": "event"
+        },
+        {
+          "type": "event_annotation_privilege_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_annotation_redo_status",
+          "kind": "event"
+        },
+        {
+          "type": "event_annotation_undo_status",
+          "kind": "event"
+        },
+        {
+          "type": "event_annotation_viewer_draw_request",
+          "kind": "event"
+        },
+        {
+          "type": "event_broadcast_streaming_status",
+          "kind": "event"
+        },
+        {
+          "type": "event_real_time_media_streams_status_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_share_camera_request",
+          "kind": "event"
+        },
+        {
+          "type": "event_share_camera_approve_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_share_camera_status",
+          "kind": "event"
+        },
+        {
+          "type": "event_caption_language_lock",
+          "kind": "event"
+        },
+        {
+          "type": "event_speaking_while_muted",
+          "kind": "event",
+          "event": "speaking-while-muted"
+        },
+        {
+          "type": "event_system_resource_usage_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_webrtc_stats_report_data_change",
+          "kind": "event",
+          "event": "webrtc-stats-report-data-change"
+        },
+        {
+          "type": "event_whiteboard_status_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_peer_whiteboard_state_change",
+          "kind": "event",
+          "event": "peer-whiteboard-state-change"
+        },
+        {
+          "type": "event_whiteboard_permission_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_passively_stop_whiteboard",
+          "kind": "event"
+        },
+        {
+          "type": "event_voice_translator_started",
+          "kind": "event"
+        },
+        {
+          "type": "event_voice_translator_unsupported_language_pair",
+          "kind": "event",
+          "event": "voice-translator-unsupported-language-pair"
+        },
+        {
+          "type": "event_incoming_live_stream_status",
+          "kind": "event",
+          "event": "incoming-live-stream-status"
+        }
+      ]
+    },
+    {
+      "module": "exception-code",
+      "file": "exception-code.json",
+      "declarations": [
+        {
+          "type": "ExceptionCode",
+          "kind": "enum"
+        }
+      ]
+    },
+    {
+      "module": "incoming-live-stream",
+      "file": "incoming-live-stream.json",
+      "declarations": [
+        {
+          "type": "IncomingLiveStreamStatus",
+          "kind": "interface"
+        },
+        {
+          "type": "IncomingLiveStreamClient",
+          "kind": "namespace",
+          "methods": [
+            "bindIncomingLiveStream",
+            "unbindIncomingLiveStream",
+            "startIncomingLiveStream",
+            "stopIncomingLiveStream",
+            "getIncomingLiveStreamStatus"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "live-stream",
+      "file": "live-stream.json",
+      "declarations": [
+        {
+          "type": "LiveStreamStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "LiveStreamClient",
+          "kind": "namespace",
+          "methods": [
+            "startLiveStream",
+            "stopLiveStream",
+            "isLiveStreamEnabled",
+            "getLiveStreamStatus"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "live-transcription",
+      "file": "live-transcription.json",
+      "declarations": [
+        {
+          "type": "LiveTranscriptionMessageSource",
+          "kind": "enum"
+        },
+        {
+          "type": "LiveTranscriptionLanguageCode",
+          "kind": "enum"
+        },
+        {
+          "type": "LiveTranscriptionLanguage",
+          "kind": "enum"
+        },
+        {
+          "type": "TranscriptionMode",
+          "kind": "enum"
+        },
+        {
+          "type": "LiveTranscriptionMessage",
+          "kind": "interface"
+        },
+        {
+          "type": "LiveTranscriptionStatus",
+          "kind": "interface"
+        },
+        {
+          "type": "LiveTranscriptionClient",
+          "kind": "namespace",
+          "methods": [
+            "startLiveTranscription",
+            "setSpeakingLanguage",
+            "setTranslationLanguage",
+            "disableCaptions",
+            "lockTranscriptionLanguage",
+            "getLiveTranscriptionStatus",
+            "getCurrentTranscriptionLanguage",
+            "getCurrentTranslationLanguage",
+            "getLatestTranscription",
+            "getLatestTranslation",
+            "getFullTranscriptionHistory"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "logger",
+      "file": "logger.json",
+      "declarations": [
+        {
+          "type": "LoggerClient",
+          "kind": "namespace",
+          "methods": [
+            "reportToGlobalTracing",
+            "reportRating"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "media",
+      "file": "media.json",
+      "declarations": [
+        {
+          "type": "MediaDevice",
+          "kind": "interface"
+        },
+        {
+          "type": "PhoneCallCountry",
+          "kind": "interface"
+        },
+        {
+          "type": "MaskRectangle",
+          "kind": "interface"
+        },
+        {
+          "type": "MaskSquare",
+          "kind": "interface"
+        },
+        {
+          "type": "MaskCircle",
+          "kind": "interface"
+        },
+        {
+          "type": "MaskSVG",
+          "kind": "interface"
+        },
+        {
+          "type": "MaskShape",
+          "kind": "type_alias"
+        },
+        {
+          "type": "MaskClip",
+          "kind": "type_alias"
+        },
+        {
+          "type": "MaskOption",
+          "kind": "interface"
+        },
+        {
+          "type": "SharePrivilege",
+          "kind": "enum"
+        },
+        {
+          "type": "AudioOption",
+          "kind": "interface"
+        },
+        {
+          "type": "DialOutOption",
+          "kind": "interface"
+        },
+        {
+          "type": "CaptureVideoOption",
+          "kind": "interface"
+        },
+        {
+          "type": "AudioQosData",
+          "kind": "interface"
+        },
+        {
+          "type": "StatisticOption",
+          "kind": "interface"
+        },
+        {
+          "type": "ScreenShareOption",
+          "kind": "interface"
+        },
+        {
+          "type": "ShareAudioStatus",
+          "kind": "interface"
+        },
+        {
+          "type": "UnderlyingColor",
+          "kind": "interface"
+        },
+        {
+          "type": "VideoQosData",
+          "kind": "interface"
+        },
+        {
+          "type": "VideoStatisticOption",
+          "kind": "interface"
+        },
+        {
+          "type": "VirtualBackgroundStatus",
+          "kind": "interface"
+        },
+        {
+          "type": "ShareStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "ShareCameraSource",
+          "kind": "enum"
+        },
+        {
+          "type": "ShareCameraResponse",
+          "kind": "enum"
+        },
+        {
+          "type": "ShareCameraRemoteStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "LocalCameraControlCmd",
+          "kind": "type_alias"
+        },
+        {
+          "type": "CameraControlOption",
+          "kind": "interface"
+        },
+        {
+          "type": "AnnotationToolType",
+          "kind": "enum"
+        },
+        {
+          "type": "AnnotationClearType",
+          "kind": "enum"
+        },
+        {
+          "type": "AnnotationControllerType",
+          "kind": "interface"
+        },
+        {
+          "type": "FarEndCameraControlOption",
+          "kind": "interface"
+        },
+        {
+          "type": "NetworkQuality",
+          "kind": "interface"
+        },
+        {
+          "type": "DialInNumber",
+          "kind": "interface"
+        },
+        {
+          "type": "CallInInfo",
+          "kind": "interface"
+        },
+        {
+          "type": "Stream",
+          "kind": "namespace",
+          "methods": [
+            "startAudio",
+            "stopAudio",
+            "muteAudio",
+            "unmuteAudio",
+            "inviteByPhone",
+            "cancelInviteByPhone",
+            "hangup",
+            "getCurrentSessionCallinInfo",
+            "muteShareAudio",
+            "unmuteShareAudio",
+            "switchMicrophone",
+            "switchSpeaker",
+            "subscribeAudioStatisticData",
+            "unsubscribeAudioStatisticData",
+            "muteUserAudioLocally",
+            "unmuteUserAudioLocally",
+            "adjustUserAudioVolumeLocally",
+            "enableBackgroundNoiseSuppression",
+            "enableSyncButtonsOnHeadset",
+            "muteAllUserAudioLocally",
+            "unmuteAllUserAudioLocally",
+            "enableOriginalSound",
+            "callCRCDevice",
+            "cancelCallCRCDevice",
+            "startSecondaryAudio",
+            "stopSecondaryAudio",
+            "muteAllAudio",
+            "unmuteAllAudio",
+            "muteAudioUponStartAudio",
+            "allowAudioUnmutedBySelf",
+            "isAudioMuted",
+            "getMicList",
+            "getSpeakerList",
+            "getActiveMicrophone",
+            "getActiveSpeaker",
+            "isSupportPhoneFeature",
+            "getSupportCountryInfo",
+            "getInviteByPhoneStatus",
+            "getShareAudioStatus",
+            "isOthersShareAudioMutedLocally",
+            "getAudioStatisticData",
+            "isUserAudioMutedLocally",
+            "getUserVolumeLocally",
+            "isSupportMicrophoneAndShareAudioSimultaneously",
+            "getAudioMediaPlaybackController",
+            "isAllowAudioUnmutedBySelf",
+            "getSessionSIPAddress",
+            "isSupportBackgroundNoiseSuppression",
+            "getPhoneWelcomeMessageInfoList",
+            "startVideo",
+            "stopVideo",
+            "switchCamera",
+            "renderVideo",
+            "stopRenderVideo",
+            "updateVideoCanvasDimension",
+            "adjustRenderedVideoPosition",
+            "clearVideoCanvas",
+            "mirrorVideo",
+            "enableHardwareAcceleration",
+            "previewVirtualBackground",
+            "updateVirtualBackgroundImage",
+            "stopPreviewVirtualBackground",
+            "previewVideoMask",
+            "updateVideoMask",
+            "stopPreviewVideoMask",
+            "subscribeVideoStatisticData",
+            "unsubscribeVideoStatisticData",
+            "attachVideo",
+            "detachVideo",
+            "spotlightVideo",
+            "removeSpotlightedVideo",
+            "removeAllSpotlightedVideos",
+            "screenshotVideo",
+            "subscribeSystemResourceUsage",
+            "unsubscribeSystemResourceUsage",
+            "subscribeWebRTCStatsReportData",
+            "unsubscribeWebRTCStatsReportData",
+            "isCapturingVideo",
+            "isCameraTaken",
+            "isCaptureForbidden",
+            "getCameraList",
+            "getActiveCamera",
+            "getActiveVideoId",
+            "getVideoMaxQuality",
+            "getReceivedVideoDimension",
+            "isSupportMultipleVideos",
+            "getMaxRenderableVideos",
+            "isSupportHDVideo",
+            "isSupportVirtualBackground",
+            "getVirtualbackgroundStatus",
+            "getVideoStatisticData",
+            "isRenderSelfViewWithVideoElement",
+            "getNetworkQuality",
+            "getCapturedVideoResolution",
+            "getVideoMaskStatus",
+            "isVideoMirrored",
+            "getSpotlightedUserList",
+            "getVideoMediaPlaybackController",
+            "getWebRTCStatsReportData",
+            "startShareView",
+            "stopShareView",
+            "attachShareView",
+            "detachShareView",
+            "switchShareView",
+            "startShareScreen",
+            "startShareCamera",
+            "pauseShareScreen",
+            "resumeShareScreen",
+            "stopShareScreen",
+            "lockShare",
+            "updateSharingCanvasDimension",
+            "switchSharingSecondaryCamera",
+            "setSharePrivilege",
+            "shareToSubsession",
+            "stopShareToSubsession",
+            "enableOptimizeForSharedVideo",
+            "updateSharedVideoQuality",
+            "subscribeShareStatisticData",
+            "unsubscribeShareStatisticData",
+            "screenshotShareView",
+            "updateShareViewQuality",
+            "isShareLocked",
+            "getSharePrivilege",
+            "getActiveShareUserId",
+            "getShareStatus",
+            "getShareUserList",
+            "isStartShareScreenWithVideoElement",
+            "isOptimizeForSharedVideoEnabled",
+            "isSupportOptimizedForSharedVideo",
+            "getShareStatisticData",
+            "getShareStreamSettings",
+            "requestShareCamera",
+            "approveShareCamera",
+            "declineShareCamera",
+            "informShareCameraStatus",
+            "getMaxRenderableShareViews",
+            "startAnnotation",
+            "stopAnnotation",
+            "changeAnnotationPrivilege",
+            "showAnnotatorName",
+            "canDoAnnotation",
+            "getAnnotationController",
+            "requestFarEndCameraControl",
+            "approveFarEndCameraControl",
+            "declineFarEndCameraControl",
+            "giveUpFarEndCameraControl",
+            "controlCamera",
+            "controlFarEndCamera",
+            "getFarEndCameraPTZCapability",
+            "getCameraPTZCapability",
+            "isBrowserSupportPTZ",
+            "requestRemoteControl",
+            "approveRemoteControl",
+            "declineRemoteControl",
+            "stopRemoteControl",
+            "giveUpRemoteControl",
+            "startRemoteControl",
+            "grabRemoteControl",
+            "launchRemoteControlApp",
+            "isRemotelyControlApproved",
+            "isControllingUserRemotely",
+            "isTargetShareSupportRemoteControl",
+            "getRemoteControlAppDownloadUrl",
+            "getRemotelyControllingUser",
+            "isRemoteControlEnabled",
+            "createProcessor",
+            "addProcessor",
+            "removeProcessor",
+            "isSupportVideoProcessor",
+            "isSupportAudioProcessor",
+            "isSupportShareProcessor"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "preview",
+      "file": "preview.json",
+      "declarations": [
+        {
+          "type": "TestSpeakerOption",
+          "kind": "interface"
+        },
+        {
+          "type": "TestSpeakerReturn",
+          "kind": "interface"
+        },
+        {
+          "type": "TestMicrophoneOption",
+          "kind": "interface"
+        },
+        {
+          "type": "TestMicrophoneReturn",
+          "kind": "interface"
+        },
+        {
+          "type": "LocalVideoTrack",
+          "kind": "callback_interface",
+          "methods": [
+            "start",
+            "stop",
+            "switchCamera",
+            "updateVirtualBackground"
+          ]
+        },
+        {
+          "type": "LocalAudioTrack",
+          "kind": "callback_interface",
+          "methods": [
+            "start",
+            "unmute",
+            "mute",
+            "getCurrentVolume",
+            "stop",
+            "testSpeaker",
+            "testMicrophone"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "real-time-media-streams",
+      "file": "real-time-media-streams.json",
+      "declarations": [
+        {
+          "type": "RealTimeMediaStreamsStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "RealTimeMediaStreamsClient",
+          "kind": "namespace",
+          "methods": [
+            "isSupportRealTimeMediaStreams",
+            "canStartRealTimeMediaStreams",
+            "startRealTimeMediaStreams",
+            "pauseRealTimeMediaStreams",
+            "resumeRealTimeMediaStreams",
+            "stopRealTimeMediaStreams",
+            "getRealTimeMediaStreamsStatus"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "recording",
+      "file": "recording.json",
+      "declarations": [
+        {
+          "type": "RecordingStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "RecordingClient",
+          "kind": "namespace",
+          "methods": [
+            "startCloudRecording",
+            "stopCloudRecording",
+            "pauseCloudRecording",
+            "resumeCloudRecording",
+            "getCloudRecordingStatus",
+            "canStartRecording",
+            "acceptIndividualRecording",
+            "declineIndividualRecording"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "subsession",
+      "file": "subsession.json",
+      "declarations": [
+        {
+          "type": "Subsession",
+          "kind": "interface"
+        },
+        {
+          "type": "Subsession2",
+          "kind": "interface"
+        },
+        {
+          "type": "SubsessionOption",
+          "kind": "interface"
+        },
+        {
+          "type": "SubsessionAllocationPattern",
+          "kind": "enum"
+        },
+        {
+          "type": "SubsessionUserStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "SubsessionClient",
+          "kind": "namespace",
+          "methods": [
+            "createSubsessions",
+            "openSubsessions",
+            "joinSubsession",
+            "leaveSubsession",
+            "askForHelp",
+            "postponeHelping",
+            "broadcast",
+            "assignUserToSubsession",
+            "moveUserToSubsession",
+            "closeAllSubsessions",
+            "moveBackToMainSession",
+            "startBroadcastVoice",
+            "stopBroadcastVoice",
+            "getUnassignedUserList",
+            "getSubsessionList",
+            "getUserStatus",
+            "getSubsessionStatus",
+            "getCurrentSubsession",
+            "getSubsessionOptions",
+            "isSubsessionEnabled"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "summary",
+      "file": "summary.json",
+      "declarations": [
+        {
+          "type": "AIClient",
+          "kind": "namespace",
+          "methods": [
+            "startSummary",
+            "stopSummary",
+            "getSummaryStatus",
+            "isSummaryEnabled",
+            "startMeetingQuery",
+            "stopMeetingQuery",
+            "getMeetingQueryStatus",
+            "isMeetingQueryEnabled"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "videoclient",
+      "file": "videoclient.json",
+      "declarations": [
+        {
+          "type": "MediaCompatibility",
+          "kind": "interface"
+        },
+        {
+          "type": "SupportFeatures",
+          "kind": "interface"
+        },
+        {
+          "type": "SessionInfo",
+          "kind": "interface"
+        },
+        {
+          "type": "InitOptions",
+          "kind": "interface"
+        },
+        {
+          "type": "VideoClient",
+          "kind": "namespace",
+          "methods": [
+            "init",
+            "getMediaStream",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "off",
+            "join",
+            "leave",
+            "changeName",
+            "removeUser",
+            "makeHost",
+            "makeManager",
+            "revokeManager",
+            "reclaimHost",
+            "getCurrentUserInfo",
+            "getAllUser",
+            "getUser",
+            "getChatClient",
+            "getCommandClient",
+            "getRecordingClient",
+            "getSubsessionClient",
+            "getLiveTranscriptionClient",
+            "getLoggerClient",
+            "getLiveStreamClient",
+            "getBroadcastStreamingClient",
+            "getRealTimeMediaStreamsClient",
+            "getWhiteboardClient",
+            "getVoiceTranslatorClient",
+            "getIncomingLiveStreamClient",
+            "getSessionInfo",
+            "isHost",
+            "getSessionHost",
+            "isManager",
+            "isOriginalHost"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "voice-translator",
+      "file": "voice-translator.json",
+      "declarations": [
+        {
+          "type": "VoiceTimbre",
+          "kind": "interface"
+        },
+        {
+          "type": "VoiceTranslatorStatus",
+          "kind": "interface"
+        },
+        {
+          "type": "VoiceTranslatorClient",
+          "kind": "namespace",
+          "methods": [
+            "startVoiceTranslator",
+            "stopVoiceTranslator",
+            "setSpeakingLanguage",
+            "setListeningLanguage",
+            "setOriginalAudioBalance",
+            "setTranslatedVoiceStyle",
+            "getVoiceTranslatorStatus",
+            "getCurrentSpeakingLanguage",
+            "getCurrentListeningLanguage",
+            "getCurrentTimbre",
+            "getOriginalAudioBalance"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "whiteboard",
+      "file": "whiteboard.json",
+      "declarations": [
+        {
+          "type": "StartWhiteboardOptions",
+          "kind": "interface"
+        },
+        {
+          "type": "WhiteboardSharePermissionCode",
+          "kind": "enum"
+        },
+        {
+          "type": "WhiteboardInitiatePermissionCode",
+          "kind": "enum"
+        },
+        {
+          "type": "WhiteboardStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "WhiteboardClient",
+          "kind": "namespace",
+          "methods": [
+            "startWhiteboardScreen",
+            "stopWhiteboardScreen",
+            "startWhiteboardView",
+            "stopWhiteboardView",
+            "exportWhiteboard",
+            "isWhiteboardEnabled",
+            "getWhiteboardStatus",
+            "getWhiteboardPresenter",
+            "canStartWhiteboard"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "zoomstreaming",
+      "file": "zoomstreaming.json",
+      "declarations": [
+        {
+          "type": "StreamingWatermark",
+          "kind": "interface"
+        },
+        {
+          "type": "ZoomBroadcastStreamingOptions",
+          "kind": "interface"
+        },
+        {
+          "type": "event_connection_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_video_statistic_data_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_audio_statistic_data_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_auto_play_audio_failed",
+          "kind": "event"
+        },
+        {
+          "type": "VideoQuality",
+          "kind": "enum"
+        }
+      ]
+    },
+    {
+      "module": "zoomvideo",
+      "file": "zoomvideo.json",
+      "declarations": [
+        {
+          "type": "ZoomVideo",
+          "kind": "namespace",
+          "methods": [
+            "createClient",
+            "checkSystemRequirements",
+            "checkFeatureRequirements",
+            "getDevices",
+            "createLocalAudioTrack",
+            "createLocalVideoTrack",
+            "destroyClient",
+            "preloadDependentAssets"
+          ]
+        }
+      ]
+    }
+  ]
+}
