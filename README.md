@@ -154,11 +154,32 @@ https://example.ngrok-free.app/oauth/callback   # OAuth redirect URL
 https://example.ngrok-free.app/webhooks/zoom    # webhook or bot endpoint
 ```
 
-After the tunnel is live, use `zoom-marketplace-helper` MCP to create or update the development
+After the tunnel is live, use `app-builder-for-agents` MCP to create or update the development
 app with the tunnel-derived URLs. Update the development OAuth redirect URL and allow-list entry,
 Home URL, and webhook or bot endpoint as applicable. The redirect URL must match the OAuth request
 exactly. Free tunnel URLs can change after restart, so run the helper update again before testing.
 Do not put temporary tunnel URLs in production fields.
+
+Configure the helper separately in each MCP client:
+
+Codex:
+```bash
+codex mcp add app-builder-for-agents \
+  --url https://d3k9b5xygup21i.cloudfront.net/mcp \
+  --oauth-resource https://d3k9b5xygup21i.cloudfront.net/mcp
+```
+
+Claude Code:
+```bash
+claude mcp add --transport http \
+  app-builder-for-agents \
+  https://6a61-38-99-100-21.ngrok-free.app/mcp
+```
+
+The Claude Code URL is a tunnel endpoint and may change. Re-add or update the server when the
+tunnel URL changes. Do not add this helper to the repository `.mcp.json`; that file contains the
+bundled Zoom product MCP servers, while helper endpoints and client authentication are environment
+specific.
 
 ### Cloudflare Tunnel (alternative)
 
@@ -169,7 +190,7 @@ cloudflared tunnel --url http://localhost:3000
 Use the generated HTTPS URL the same way. A named Cloudflare Tunnel is preferable when you need a
 stable development hostname. In both cases, keep the app in development mode, validate webhook
 signatures, and do not expose client secrets or access tokens through the tunneled app. See the
-[Marketplace local tunnel workflow](skills/rest-api/references/marketplace-apps.md#local-tunnel-workflow-with-zoom-marketplace-helper)
+[Marketplace local tunnel workflow](skills/rest-api/references/marketplace-apps.md#local-tunnel-workflow-with-app-builder-for-agents)
 for the exact update sequence.
 For external REST or MCP connectors and manifest-managed actions/triggers, use the
 [Marketplace feature fragments](skills/rest-api/references/marketplace-connect-actions-triggers.md)

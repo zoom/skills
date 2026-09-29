@@ -63,12 +63,33 @@ For scenario-to-app-type selection, use the
 [Marketplace template selector](marketplace-app-templates.md) or its
 [machine-readable template index](../assets/marketplace-apps/marketplace-manifest-template-index.json).
 
-## Local Tunnel Workflow with `zoom-marketplace-helper`
+## Local Tunnel Workflow with `app-builder-for-agents`
 
 When testing a Marketplace app before deploying a public server, start the local app and tunnel
-first. Then use the `zoom-marketplace-helper` MCP server to create or update the development app
+first. Then use the `app-builder-for-agents` MCP server to create or update the development app
 with the live HTTPS URL. Do not create the app with placeholder URLs and assume they will be
 updated automatically.
+
+### Configure the Helper MCP Server
+
+Use the client-specific setup below. Do not copy the Claude Code tunnel URL into the repository
+`.mcp.json`; it is environment-specific and may change.
+
+Codex:
+```bash
+codex mcp add app-builder-for-agents \
+  --url https://d3k9b5xygup21i.cloudfront.net/mcp \
+  --oauth-resource https://d3k9b5xygup21i.cloudfront.net/mcp
+```
+
+Claude Code:
+```bash
+claude mcp add --transport http \
+  app-builder-for-agents \
+  https://6a61-38-99-100-21.ngrok-free.app/mcp
+```
+
+If the ngrok tunnel URL changes, update the Claude Code MCP server before using the helper.
 
 Example local routes on one tunneled development server:
 
