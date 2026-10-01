@@ -13,7 +13,7 @@ If missing, re-add it using [concepts/oauth-setup.md](concepts/oauth-setup.md).
 
 **2. Tool discovery working?**
 - Confirm the client can see 9 default Zoom MCP tools: `search_meetings`,
-  `create_new_file_with_markdown`, `search_zoom`, `get_meeting_assets`,
+  `create_new_file_with_markdown`, `search`, `get_meeting_assets`,
   `get_recording_resource`, `get_file_content`, `recordings_list`,
   `hub_create_file_from_content`, and `hub_get_file_content`.
 - If your client exposes raw protocol inspection, verify `tools/list` succeeds.
@@ -24,7 +24,7 @@ If missing, re-add it using [concepts/oauth-setup.md](concepts/oauth-setup.md).
 Minimum Zoom MCP scopes for this guide:
 - `meeting:read:search`
 - `meeting:read:assets`
-- `ai_companion:read:search`
+- `agentic_search:read:search`
 - `cloud_recording:read:list_user_recordings`
 - `cloud_recording:read:content`
 - `docs:write:import` if you want Canvas/My Notes file creation
@@ -50,7 +50,7 @@ meeting assets, or transcript-rich recording content to be useful.
 | `-32001 Access token is required` | Header not passed | Re-register the MCP server with a bearer token |
 | `-32001 Invalid access token, does not contain scopes:[meeting:read:search]` | Missing semantic-search scope | Add `meeting:read:search` and mint a new user token |
 | `-32001 Invalid access token, does not contain scopes:[meeting:read:assets,...]` | Missing meeting-assets scope | Add `meeting:read:assets` and mint a new user token |
-| `-32001 Invalid access token, does not contain scopes:[ai_companion:read:search]` | Missing cross-Zoom search scope | Add `ai_companion:read:search` and mint a new user token |
+| `-32001 Invalid access token, does not contain scopes:[agentic_search:read:search]` | Missing cross-Zoom search scope | Add `agentic_search:read:search` and mint a new user token |
 | `-32001 Invalid access token, does not contain scopes:[cloud_recording:read:list_user_recordings,...]` | Missing recordings-list scope | Add `cloud_recording:read:list_user_recordings` |
 | `-32001 Invalid access token, does not contain scopes:[cloud_recording:read:content]` | Missing recording-content scope | Add `cloud_recording:read:content` |
 | `-32001 Invalid access token, does not contain scopes:[docs:read:export]` | Missing Canvas/My Notes export scope | Add `docs:read:export` |

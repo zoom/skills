@@ -90,7 +90,7 @@ The hosted MCP surfaces advertise supported scopes through OAuth protected-resou
 Zoom MCP protected-resource metadata currently exposes:
 - `docs:write:import`
 - `docs:read:export`
-- `ai_companion:read:search`
+- `agentic_search:read:search`
 - `meeting:read:assets`
 - `meeting:read:search`
 - `cloud_recording:read:content`
@@ -147,7 +147,7 @@ Team Chat MCP protected-resource metadata currently exposes:
 `search_meetings` is not just a title filter. It is a semantic retrieval path over meeting
 content, recap-linked assets, and recording-linked artifacts.
 
-`search_zoom` is the cross-Zoom knowledge discovery path for Team Chat messages, Zoom Canvas,
+`search` is the cross-Zoom knowledge discovery path for Team Chat messages, Zoom Canvas,
 and My Notes. Pair it with `get_file_content` when a returned Canvas file or My Notes file must
 be read as Markdown.
 

@@ -28,7 +28,7 @@
           "optional": false
         },
         {
-          "scope": "ai_companion:read:search",
+          "scope": "agentic_search:read:search",
           "optional": false
         },
         {

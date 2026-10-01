@@ -49,7 +49,7 @@ Current default Zoom MCP server tool names verified by `tools/list`:
 - `hub_get_file_content`
 - `recordings_list`
 - `search_meetings`
-- `search_zoom`
+- `search`
 
 Some MCP clients namespace server tools in the UI, for example `zoom-mcp:recordings_list`.
 Treat the raw tool names above as authoritative.
@@ -99,7 +99,7 @@ claude mcp add --transport http zoom-mcp \
 
 **4. Verify discovery:**
 - Confirm the client can see 9 default Zoom MCP tools: `search_meetings`,
-  `create_new_file_with_markdown`, `search_zoom`, `get_meeting_assets`,
+  `create_new_file_with_markdown`, `search`, `get_meeting_assets`,
   `get_recording_resource`, `get_file_content`, `recordings_list`,
   `hub_create_file_from_content`, and `hub_get_file_content`.
 - If the client exposes raw protocol inspection, `tools/list` is the authoritative discovery source.
@@ -131,7 +131,7 @@ The Zoom MCP scope set is not the same as the older broad REST scopes.
 The key scopes for this surface are:
 - `meeting:read:search`
 - `meeting:read:assets`
-- `ai_companion:read:search`
+- `agentic_search:read:search`
 - `cloud_recording:read:list_user_recordings`
 - `cloud_recording:read:content`
 - `docs:write:import` for Canvas/My Notes file creation
@@ -152,7 +152,7 @@ requests to [whiteboard/SKILL.md](whiteboard/SKILL.md).
 
 **5. Team Chat tools are a separate MCP surface**
 
-The default Zoom MCP server includes read-only `search_zoom` for Team Chat and Canvas search.
+The default Zoom MCP server includes read-only `search` for Team Chat and Canvas search.
 The Team Chat MCP server is separate and exposes read, search, write, and update tools for
 messages, files, contacts, channels, and channel members. Route Team Chat MCP requests to
 [team-chat/SKILL.md](team-chat/SKILL.md).
@@ -207,12 +207,30 @@ Two result families matter most:
 - **Recap-oriented results**: AI summary, meeting-linked documents, recordings, and related assets
 - **Recording-oriented results**: cloud recording references and transcript-capable resources
 
-Use `search_zoom` instead of `search_meetings` when the task is cross-Zoom knowledge discovery
-over Team Chat messages, Zoom Canvas, or My Notes. Use `get_file_content` after `search_zoom`
+Use `search` instead of `search_meetings` when the task is cross-Zoom knowledge discovery
+over Team Chat messages, Zoom Canvas, or My Notes. Use `get_file_content` after `search`
 when the user asks to inspect the Markdown content of a returned Canvas file or My Notes file.
 
 Use [examples/transcript-retrieval.md](examples/transcript-retrieval.md) for the main retrieval
 workflow.
+
+## Search Migration
+
+The canonical cross-Zoom Search contract is now:
+
+- Tool: `search`
+- OAuth scope: `agentic_search:read:search`
+
+Do not request or call the deprecated `search_zoom` tool with
+`ai_companion:read:search`. Existing integrations must rename the tool call and
+request a newly minted token containing `agentic_search:read:search`. Keep
+`search_meetings` separate; it remains the meeting-specific search tool and uses
+`meeting:read:search`.
+
+Use the [Zoom MCP changelog](https://developers.zoom.us/changelog/) and the
+[MCP Server documentation](https://developers.zoom.us/docs/mcp/zoom-mcp-server/)
+for platform migration notices. The public contract does not promise continued
+support or a grace period for the deprecated tool and scope.
 
 ## Tool Catalog
 
@@ -226,7 +244,7 @@ workflow.
 | `hub_get_file_content` | file identifier* and `format` | `hub:read:content` |
 | `recordings_list` | `from`, `to`, `meeting_id`, `trash`, `trash_type`, `page_size`, `next_page_token` | `cloud_recording:read:list_user_recordings` |
 | `search_meetings` | `q`, `from`, `to`, `include_zoom_my_notes`, `page_size`, `next_page_token` | `meeting:read:search` |
-| `search_zoom` | `search_entities`*, `query`, `page_size` | `ai_companion:read:search` |
+| `search` | `search_entities`*, `query`, `page_size` | `agentic_search:read:search` |
 
 \* Required parameter
 
@@ -262,7 +280,7 @@ create_new_file_with_markdown
 
 **Search Zoom Chat or Canvas, then read a returned file:**
 ```text
-search_zoom
+search
   query: "Q4 planning decisions"
   search_entities:
     - entity_type: "zoom_doc"

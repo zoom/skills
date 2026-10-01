@@ -36,9 +36,9 @@ for the tool you called.
 
 **Server-required scope:** `meeting:read:assets`
 
-### `search_zoom` fails on scope
+### `search` fails on scope
 
-**Server-required scope:** `ai_companion:read:search`
+**Server-required scope:** `agentic_search:read:search`
 
 ### `recordings_list` fails on scope
 
@@ -76,10 +76,10 @@ Common causes:
 - try shorter search terms
 - fall back to `recordings_list`
 
-### `search_zoom` returns no useful chat/docs results
+### `search` returns no useful chat/docs results
 
 Common causes:
-- missing `ai_companion:read:search`
+- missing `agentic_search:read:search`
 - `search_entities` omitted or set to the wrong `entity_type`
 - local time references were not converted to ISO 8601 UTC
 - `doc_view` is too narrow, such as `notes` when the user wanted all Docs

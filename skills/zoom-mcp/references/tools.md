@@ -21,7 +21,7 @@ The default Zoom MCP server currently exposes 9 tools:
 - `hub_get_file_content`
 - `recordings_list`
 - `search_meetings`
-- `search_zoom`
+- `search`
 
 The server did **not** expose older inferred tool names such as `list_meetings`,
 `get_meeting`, `create_meeting`, `get_user_profile`, `list_available_tools`, or
@@ -32,7 +32,7 @@ The server did **not** expose older inferred tool names such as `list_meetings`,
 Protected-resource metadata for Zoom MCP advertised these scope families:
 - `docs:write:import`
 - `docs:read:export`
-- `ai_companion:read:search`
+- `agentic_search:read:search`
 - `meeting:read:assets`
 - `meeting:read:search`
 - `cloud_recording:read:content`
@@ -66,7 +66,7 @@ Read a Zoom Canvas or My Notes file as Markdown.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `fileId` | string | **Yes** | Unique Canvas file identifier, commonly returned as `file_id` from `search_zoom` |
+| `fileId` | string | **Yes** | Unique Canvas file identifier, commonly returned as `file_id` from `search` |
 
 Successful calls return:
 - file name
@@ -125,11 +125,11 @@ Read-only search tool for semantic meeting discovery.
 
 ## Cross-Zoom Search
 
-### `search_zoom`
+### `search`
 
 Read-only keyword and semantic search across Team Chat messages and Zoom Canvas/My Notes.
 
-**Verified scope:** `ai_companion:read:search`
+**Verified scope:** `agentic_search:read:search`
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|

@@ -45,7 +45,7 @@ Add the MCP-specific granular scopes required by the tools you want to use.
 |-------|------------|
 | `meeting:read:search` | `search_meetings` |
 | `meeting:read:assets` | `get_meeting_assets` |
-| `ai_companion:read:search` | `search_zoom` |
+| `agentic_search:read:search` | `search` |
 | `cloud_recording:read:list_user_recordings` | `recordings_list` |
 | `cloud_recording:read:content` | `get_recording_resource` |
 | `docs:write:import` | `create_new_file_with_markdown` |
@@ -104,7 +104,7 @@ claude mcp add --transport http zoom-mcp \
 
 Verification:
 - confirm the client can see 9 default Zoom MCP tools: `search_meetings`,
-  `create_new_file_with_markdown`, `search_zoom`, `get_meeting_assets`,
+  `create_new_file_with_markdown`, `search`, `get_meeting_assets`,
   `get_recording_resource`, `get_file_content`, `recordings_list`,
   `hub_create_file_from_content`, and `hub_get_file_content`
 - if your client exposes protocol inspection, use `tools/list` as the authority for the live catalog

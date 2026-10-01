@@ -17,7 +17,7 @@ behind a tool call.
 | Tool | Exact missing-scope error |
 |------|---------------------------|
 | `search_meetings` | `meeting:read:search` |
-| `search_zoom` | `ai_companion:read:search` |
+| `search` | `agentic_search:read:search` |
 | `get_meeting_assets` | `meeting:read:assets` or `meeting:read:assets:admin` |
 | `recordings_list` | `cloud_recording:read:list_user_recordings` or admin/master variants |
 | `get_recording_resource` | `cloud_recording:read:content` |

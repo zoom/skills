@@ -5,13 +5,13 @@ Zoom Canvas, or Zoom AI Companion notes/My Notes.
 
 ## Prerequisites
 
-- `ai_companion:read:search` for `search_zoom`
+- `agentic_search:read:search` for `search`
 - `docs:read:export` for `get_file_content` when reading returned Canvas/My Notes content
 
 ## Search Team Chat Messages
 
 ```text
-search_zoom
+search
   query: "customer escalation"
   search_entities:
     - entity_type: "chat"
@@ -31,7 +31,7 @@ Notes:
 ## Search Zoom Canvas
 
 ```text
-search_zoom
+search
   query: "launch checklist"
   search_entities:
     - entity_type: "zoom_doc"
@@ -54,7 +54,7 @@ AI-generated notes. Do not force `notes` for generic Canvas searches.
 
 ## Read a Returned Doc
 
-After `search_zoom` returns a Zoom Doc result, pass the returned `file_id` to
+After `search` returns a Zoom Doc result, pass the returned `file_id` to
 `get_file_content`.
 
 ```text
@@ -69,6 +69,6 @@ The tool returns the file name and Markdown content.
 | User asks for | Use |
 |---------------|-----|
 | Meeting by topic, attendee, summary, transcript, or meeting time | `search_meetings` |
-| Team Chat messages | `search_zoom` with `entity_type: "chat"` |
-| Zoom Canvas or My Notes | `search_zoom` with `entity_type: "zoom_doc"` |
+| Team Chat messages | `search` with `entity_type: "chat"` |
+| Zoom Canvas or My Notes | `search` with `entity_type: "zoom_doc"` |
 | Markdown content of a returned doc/note | `get_file_content` |

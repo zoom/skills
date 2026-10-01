@@ -4,7 +4,7 @@ Current catalog for `https://mcp.zoom.us/mcp/chat/streamable`. The older
 `/mcp/team_chat/streamable` route remains a runtime alias.
 
 This is a read/write MCP surface for Zoom Team Chat. It is separate from the default Zoom MCP
-server's broader `search_zoom` tool.
+server's broader `search` tool.
 
 ## Tool Catalog
 
@@ -155,5 +155,5 @@ Notes:
 ## Routing Notes
 
 - Use `zoom-mcp/team-chat` for agent-driven read/search/write/update Team Chat actions.
-- Use the default `zoom-mcp` `search_zoom` tool for read-only Team Chat and Zoom Canvas search.
+- Use the default `zoom-mcp` `search` tool for read-only Team Chat and Zoom Canvas search.
 - Use `team-chat` REST skill for deterministic production integrations, bulk jobs, webhooks, and custom retry/audit requirements.
