@@ -106,5 +106,6 @@ Reference: [references/tools.md](references/tools.md)
 
 ## References
 
+- [Official Zoom Whiteboard MCP Server documentation](https://developers.zoom.us/docs/mcp/zoom-whiteboard-mcp-server/)
 - [references/authentication-and-identifiers.md](references/authentication-and-identifiers.md) - Auth behavior and Whiteboard ID mapping.
 - [references/tools.md](references/tools.md) - Whiteboard MCP tool catalog.
