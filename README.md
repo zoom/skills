@@ -226,6 +226,9 @@ and merge them into a complete General App manifest rather than submitting them 
 | [zoom-mcp/canvas](skills/zoom-mcp/canvas/) | Canvas file, block, collaborator, and content tools |
 | [zoom-mcp/tasks](skills/zoom-mcp/tasks/) | Task, comment, assignee, collaborator, and step workflows |
 | [zoom-mcp/revenue-accelerator](skills/zoom-mcp/revenue-accelerator/) | ZRA conversations, transcripts, analyses, deals, customers, and coaching data |
+| [zoom-mcp/admin](skills/zoom-mcp/admin/) | Account settings, groups, users, and permissions |
+| [zoom-mcp/productivity](skills/zoom-mcp/productivity/) | AI Productivity Suite Sheets tools |
+| [zoom-mcp/contact-center-admin](skills/zoom-mcp/contact-center-admin/) | Contact Center user administration tools |
 | [zoom-mcp/team-chat](skills/zoom-mcp/team-chat/) | Team Chat message, file, contact, session, channel, and member tools |
 | [zoom-mcp/whiteboard](skills/zoom-mcp/whiteboard/) | Whiteboard creation, retrieval, and collaborator tools |
 
@@ -243,6 +246,9 @@ contracts; run `tools/list` before relying on a cached inventory.
 | Tasks MCP | `https://mcp.zoom.us/mcp/tasks/streamable` |
 | Whiteboard MCP | `https://mcp.zoom.us/mcp/whiteboard/streamable` |
 | Revenue Accelerator MCP | `https://mcp.zoom.us/mcp/revenue_accelerator/streamable` |
+| Admin MCP | `https://mcp.zoom.us/mcp/admin/streamable` |
+| AI Productivity Suite MCP | `https://mcp.zoom.us/mcp/productivity/streamable` |
+| Contact Center User Administration MCP | `https://mcp.zoom.us/mcp/i_4E4145455B2bd9FE/streamable` |
 
 ## Common Use Cases
 
@@ -327,7 +333,10 @@ zoom-general (HUB)
            ├── meetings
            ├── canvas
            ├── tasks
-           └── revenue-accelerator
+           ├── revenue-accelerator
+           ├── admin
+           ├── productivity
+           └── contact-center-admin
 ```
 
 ## Directory Structure
@@ -376,7 +385,10 @@ repo/
 │       ├── meetings/
 │       ├── docs/
 │       ├── tasks/
-│       └── revenue-accelerator/
+│       ├── revenue-accelerator/
+│       ├── admin/
+│       ├── productivity/
+│       └── contact-center-admin/
 ```
 
 ## Resources

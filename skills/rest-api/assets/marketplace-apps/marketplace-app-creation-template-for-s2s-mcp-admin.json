@@ -1,0 +1,20 @@
+{
+  "app_type": "s2s_oauth",
+  "app_name": "Zoom Admin MCP Service",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "active": true,
+  "scopes": [
+    "account:read:lock_settings:master",
+    "account:read:settings:admin",
+    "account:update:settings:master",
+    "group:read:list_members:admin",
+    "group:read:settings:admin",
+    "group:read:list_groups:admin",
+    "user:read:user:admin",
+    "user:read:list_permissions:admin",
+    "user:read:settings:admin",
+    "user:read:list_users:admin"
+  ]
+}

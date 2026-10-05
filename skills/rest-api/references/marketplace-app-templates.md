@@ -90,6 +90,9 @@ An MCP client must check `app_type`, `usage`, `unsupported_app_types`, and
 | Revenue Accelerator MCP server | [marketplace-manifest-template-for-mcp-revenue-accelerator.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-revenue-accelerator.json) | General App, user-managed with PKCE | [Revenue Accelerator MCP](../../zoom-mcp/revenue-accelerator/SKILL.md) |
 | Team Chat MCP server | [marketplace-manifest-template-for-mcp-team-chat.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-team-chat.json) | General App, user-managed with PKCE | [Team Chat MCP](../../zoom-mcp/team-chat/SKILL.md) |
 | Whiteboard MCP server | [marketplace-manifest-template-for-mcp-whiteboard.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-whiteboard.json) | General App, user-managed with PKCE | [Whiteboard MCP](../../zoom-mcp/whiteboard/SKILL.md) |
+| Admin MCP server | [marketplace-app-creation-template-for-s2s-mcp-admin.json](../assets/marketplace-apps/marketplace-app-creation-template-for-s2s-mcp-admin.json) | S2S OAuth, account-level | [Admin MCP](../../zoom-mcp/admin/SKILL.md) |
+| AI Productivity Suite MCP server | [marketplace-manifest-template-for-mcp-productivity.json](../assets/marketplace-apps/marketplace-manifest-template-for-mcp-productivity.json) | General App, user-managed with PKCE | [AI Productivity Suite MCP](../../zoom-mcp/productivity/SKILL.md) |
+| Contact Center User Administration MCP server | [marketplace-app-creation-template-for-s2s-mcp-contact-center-user-administration.json](../assets/marketplace-apps/marketplace-app-creation-template-for-s2s-mcp-contact-center-user-administration.json) | S2S OAuth, account-level | [Contact Center User Administration MCP](../../zoom-mcp/contact-center-admin/SKILL.md) |
 
 ## Feature Fragment Selector
 

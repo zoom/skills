@@ -26,6 +26,10 @@ triggers:
   - "zoom team chat mcp"
   - "zoom transcript via mcp"
   - "meeting transcript via mcp"
+  - "zoom admin mcp"
+  - "zoom productivity mcp"
+  - "zoom sheets mcp"
+  - "zoom contact center user administration mcp"
 ---
 
 # Zoom MCP Server
@@ -57,8 +61,14 @@ Treat the raw tool names above as authoritative.
 Product-specific MCP work is split into child skills for
 [Whiteboard](whiteboard/SKILL.md), [Team Chat](team-chat/SKILL.md),
 [Meetings](meetings/SKILL.md), [Canvas](canvas/SKILL.md), [Tasks](tasks/SKILL.md), and
-[Revenue Accelerator](revenue-accelerator/SKILL.md).
+[Revenue Accelerator](revenue-accelerator/SKILL.md), [Admin](admin/SKILL.md),
+[AI Productivity Suite](productivity/SKILL.md), and [Contact Center User Administration](contact-center-admin/SKILL.md).
 The old [Docs alias](docs/SKILL.md) routes legacy "Docs MCP" requests to Canvas.
+
+The required Marketplace app model depends on the server. Use the child skill and the
+machine-readable template index before creating credentials: Admin and Contact Center User
+Administration are account-level S2S services; Productivity Suite is documented as a
+user-level General App. Do not reuse a user OAuth manifest for an account-level server.
 
 > **Marketplace-first skill chain:** Before connecting to any Zoom MCP server, route to
 > [Marketplace app management](../rest-api/references/marketplace-apps.md) and the
@@ -174,10 +184,13 @@ route to [../rest-api/SKILL.md](../rest-api/SKILL.md).
 | Zoom Tasks MCP Server | `https://mcp.zoom.us/mcp/tasks/streamable` | 20 | [Tasks](tasks/SKILL.md) |
 | Zoom Whiteboard MCP Server | `https://mcp.zoom.us/mcp/whiteboard/streamable` | 11 | [Whiteboard](whiteboard/SKILL.md) |
 | Zoom Revenue Accelerator MCP Server | `https://mcp.zoom.us/mcp/revenue_accelerator/streamable` | 15 | [Revenue Accelerator](revenue-accelerator/SKILL.md) |
+| Zoom Admin MCP Server | `https://mcp.zoom.us/mcp/admin/streamable` | 10 | [Admin](admin/SKILL.md) |
+| Zoom AI Productivity Suite MCP | `https://mcp.zoom.us/mcp/productivity/streamable` | 8 | [AI Productivity Suite](productivity/SKILL.md) |
+| Zoom Contact Center User Administration MCP | `https://mcp.zoom.us/mcp/i_4E4145455B2bd9FE/streamable` | 39 | [Contact Center User Administration](contact-center-admin/SKILL.md) |
 
 The tool counts are observations from Zoom's current official server metadata, not API
 contracts. Always run `tools/list` before making routing or authorization decisions. This
-catalog was last checked on 2026-07-28. The current official catalog documents Streamable
+catalog was last checked on 2026-10-05. The current official catalog documents Streamable
 HTTP; do not assume an SSE fallback exists.
 
 Zoom's general MCP page also describes broader Workplace use cases such as Calendar, Clips,
@@ -324,6 +337,9 @@ Full error reference: [references/error-codes.md](references/error-codes.md)
 - [canvas/SKILL.md](canvas/SKILL.md) — Dedicated Canvas MCP child skill
 - [tasks/SKILL.md](tasks/SKILL.md) — Tasks MCP child skill
 - [revenue-accelerator/SKILL.md](revenue-accelerator/SKILL.md) — Revenue Accelerator MCP child skill
+- [admin/SKILL.md](admin/SKILL.md) — Admin MCP child skill
+- [productivity/SKILL.md](productivity/SKILL.md) — AI Productivity Suite MCP child skill
+- [contact-center-admin/SKILL.md](contact-center-admin/SKILL.md) — Contact Center User Administration MCP child skill
 
 ### Troubleshooting
 - [troubleshooting/common-errors.md](troubleshooting/common-errors.md) — Scope failures, endpoint mixups, search/recording issues

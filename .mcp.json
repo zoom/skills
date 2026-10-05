@@ -27,6 +27,18 @@
     "zoom-tasks-mcp": {
       "type": "http",
       "url": "https://mcp.zoom.us/mcp/tasks/streamable"
+    },
+    "zoom-admin-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/admin/streamable"
+    },
+    "zoom-productivity-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/productivity/streamable"
+    },
+    "zoom-contact-center-admin-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/i_4E4145455B2bd9FE/streamable"
     }
   }
 }

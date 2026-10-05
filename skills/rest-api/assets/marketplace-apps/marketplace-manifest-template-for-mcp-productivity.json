@@ -1,0 +1,31 @@
+{
+  "app_type": "general",
+  "app_name": "Zoom AI Productivity Suite MCP Connector",
+  "contact_name": "Example Developer",
+  "contact_email": "developer@example.com",
+  "company_name": "Example Company",
+  "manifest": {
+    "display_information": {
+      "display_name": "AI Productivity Suite MCP Connector",
+      "description": "Authorizes Sheets read, create, edit, rename, and delete workflows through Productivity Suite MCP."
+    },
+    "oauth_information": {
+      "usage": "USER_OPERATION",
+      "development_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "production_redirect_uri": "https://mcp-client.example.com/oauth/callback",
+      "oauth_allow_list": ["https://mcp-client.example.com/oauth/callback"],
+      "strict_mode": true,
+      "subdomain_strict_mode": true,
+      "scopes": [
+        { "scope": "sheets:read:content", "optional": false },
+        { "scope": "sheets:write:content", "optional": false },
+        { "scope": "sheets:update:content", "optional": false },
+        { "scope": "sheets:delete:content", "optional": false }
+      ],
+      "scope_description": "Use the documented AI Productivity Suite Sheets MCP tools for the authorizing user.",
+      "enable_private_pkce_client": true,
+      "enable_public_pkce_client": false
+    },
+    "features": { "products": [] }
+  }
+}

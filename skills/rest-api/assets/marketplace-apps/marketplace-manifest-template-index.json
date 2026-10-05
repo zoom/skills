@@ -68,6 +68,35 @@
       "tool_count_observed": 15,
       "child_skill": "zoom-mcp/revenue-accelerator/SKILL.md",
       "official_docs": "https://developers.zoom.us/docs/mcp/zoom-revenue-accelerator-mcp-server/"
+    },
+    {
+      "id": "zoom-admin",
+      "official_name": "Zoom Admin MCP Server",
+      "endpoint": "https://mcp.zoom.us/mcp/admin/streamable",
+      "transport": "streamable_http",
+      "tool_count_observed": 10,
+      "child_skill": "zoom-mcp/admin/SKILL.md",
+      "official_docs": "https://developers.zoom.us/docs/mcp/zoom-admin-mcp-server/"
+    },
+    {
+      "id": "zoom-productivity",
+      "official_name": "Zoom AI Productivity Suite MCP",
+      "endpoint": "https://mcp.zoom.us/mcp/productivity/streamable",
+      "transport": "streamable_http",
+      "tool_count_observed": 8,
+      "child_skill": "zoom-mcp/productivity/SKILL.md",
+      "official_docs": "https://developers.zoom.us/docs/mcp/zoom-ai-productivity-suite/",
+      "availability_note": "Cataloged endpoint currently returns instance not found during unauthenticated probe; verify authenticated initialize/tools/list before use."
+    },
+    {
+      "id": "zoom-contact-center-user-administration",
+      "official_name": "Zoom Contact Center User Administration MCP",
+      "endpoint": "https://mcp.zoom.us/mcp/i_4E4145455B2bd9FE/streamable",
+      "transport": "streamable_http",
+      "tool_count_observed": 39,
+      "child_skill": "zoom-mcp/contact-center-admin/SKILL.md",
+      "official_docs": "https://developers.zoom.us/docs/mcp/zoom-contact-center-user-administration-mcp-server/",
+      "instance_specific_endpoint": true
     }
   ],
   "selection_rules": [
@@ -356,6 +385,41 @@
       "requires_pkce": true,
       "required_settings": ["ZRA scopes", "ZRA entitlement", "MCP client redirect URI"],
       "unsupported_app_types": ["s2s_oauth", "meeting_sdk"]
+    },
+    {
+      "id": "mcp-admin",
+      "file": "marketplace-app-creation-template-for-s2s-mcp-admin.json",
+      "kind": "s2s_oauth_create",
+      "app_type": "s2s_oauth",
+      "scope_mode": "account",
+      "supports_manifest_update": false,
+      "requires_pkce": false,
+      "required_settings": ["account-level Admin MCP scopes", "client credentials"],
+      "unsupported_app_types": ["general", "meeting_sdk"]
+    },
+    {
+      "id": "mcp-productivity",
+      "file": "marketplace-manifest-template-for-mcp-productivity.json",
+      "kind": "manifest",
+      "app_type": "general",
+      "usage": "USER_OPERATION",
+      "scope_mode": "user",
+      "supports_manifest_update": true,
+      "requires_pkce": true,
+      "required_settings": ["Sheets scopes", "MCP client redirect URI"],
+      "unsupported_app_types": ["s2s_oauth", "meeting_sdk"],
+      "availability_note": "The documented endpoint currently reports instance not found during unauthenticated probing."
+    },
+    {
+      "id": "mcp-contact-center-user-administration",
+      "file": "marketplace-app-creation-template-for-s2s-mcp-contact-center-user-administration.json",
+      "kind": "s2s_oauth_create",
+      "app_type": "s2s_oauth",
+      "scope_mode": "account",
+      "supports_manifest_update": false,
+      "requires_pkce": false,
+      "required_settings": ["Contact Center and number-management admin scopes", "client credentials"],
+      "unsupported_app_types": ["general", "meeting_sdk"]
     },
     {
       "id": "s2s-api",

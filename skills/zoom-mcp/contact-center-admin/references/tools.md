@@ -1,0 +1,43 @@
+# Contact Center User Administration MCP Tools
+
+| Tool | Scope |
+|---|---|
+| `assign_queue_agents` | `contact_center:write:queue_agent` |
+| `assign_queue_supervisors` | `contact_center:write:queue_agent` |
+| `assign_role_users` | `contact_center:write:role_user` |
+| `assign_user_skills` | `contact_center:write:user_skill` |
+| `batch_create_users` | `contact_center:write:batch_users:admin` |
+| `batch_opt_in_or_out_user_queues` | `contact_center:update:user:admin` |
+| `batch_update_user_status` | `contact_center:update:batch_users:admin` |
+| `batch_update_users` | `contact_center:update:batch_users:admin` |
+| `create_user` | `contact_center:write:user:admin` |
+| `delete_user` | `contact_center:delete:user:admin` |
+| `get_agent_routing_profile` | `contact_center:read:agent_routing_profile:admin` |
+| `get_phone_number` | `number_management:read:numbers:admin` |
+| `get_queue` | `contact_center:read:queue:admin` |
+| `get_role` | `contact_center:read:role:admin` |
+| `get_role_users` | `contact_center:read:list_role_users:admin` |
+| `get_skill` | `contact_center:read:skill:admin` |
+| `get_user` | `contact_center:read:user:admin` |
+| `get_user_template` | `contact_center_user_template:read:admin` |
+| `list_agent_routing_profiles` | `contact_center:read:agent_routing_profile:admin` |
+| `list_inboxes` | `contact_center:read:list_inboxes:admin` |
+| `list_phone_numbers` | `number_management:read:list_numbers:admin` |
+| `list_queue_agents` | `contact_center:read:list_queue_agents:admin` |
+| `list_queue_supervisors` | `contact_center:read:list_queue_agents:admin` |
+| `list_queues` | `contact_center:read:list_queues:admin` |
+| `list_roles` | `contact_center:read:list_roles:admin` |
+| `list_skill_categories` | `contact_center:read:list_skill_categories:admin` |
+| `list_skill_users` | `contact_center:read:list_skill_users:admin` |
+| `list_skills` | `contact_center:read:list_skills:admin` |
+| `list_system_statuses` | `contact_center:read:list_system_statues:admin` |
+| `list_user_queues` | `contact_center:read:list_user_queues:admin` |
+| `list_user_skills` | `contact_center:read:list_user_skills:admin` |
+| `list_user_templates` | `contact_center_user_template:read:admin` |
+| `list_users` | `contact_center:read:list_users:admin` |
+| `unassign_queue_agent` | `contact_center:delete:queue_agent:admin` |
+| `unassign_queue_supervisor` | `contact_center:delete:queue_supervisor:admin` |
+| `unassign_role_user` | `contact_center:delete:role_user:admin` |
+| `unassign_user_skill` | `contact_center:delete:user_skill:admin` |
+| `update_user` | `contact_center:update:user:admin` |
+| `update_user_status` | `contact_center:update:user:admin` |

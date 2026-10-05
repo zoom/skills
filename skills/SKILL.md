@@ -53,6 +53,9 @@ This repository contains skills for building with Zoom SDKs, APIs, MCP servers, 
 | **[zoom-mcp/canvas](zoom-mcp/canvas/SKILL.md)** | Canvas file, block, collaborator, and content tools |
 | **[zoom-mcp/tasks](zoom-mcp/tasks/SKILL.md)** | Task, comment, assignee, collaborator, and step tools |
 | **[zoom-mcp/revenue-accelerator](zoom-mcp/revenue-accelerator/SKILL.md)** | ZRA conversation intelligence, deals, customers, and coaching data |
+| **[zoom-mcp/admin](zoom-mcp/admin/SKILL.md)** | Account settings, groups, users, and permissions through Admin MCP |
+| **[zoom-mcp/productivity](zoom-mcp/productivity/SKILL.md)** | AI Productivity Suite Sheets tools |
+| **[zoom-mcp/contact-center-admin](zoom-mcp/contact-center-admin/SKILL.md)** | Contact Center user, queue, role, skill, and number administration |
 
 ## How to Use
 
@@ -129,6 +132,9 @@ Use `zoom-general` when:
 | Manage Zoom Canvas files, blocks, collaborators, or sharing through MCP | **zoom-mcp/canvas** |
 | Manage Zoom Tasks through MCP tools | **zoom-mcp/tasks** |
 | Retrieve ZRA conversation and deal intelligence through MCP | **zoom-mcp/revenue-accelerator** |
+| Administer Zoom account users, groups, permissions, or settings through MCP | **zoom-mcp/admin** |
+| Edit or manage AI Productivity Suite Sheets through MCP | **zoom-mcp/productivity** |
+| Administer Contact Center users, queues, roles, skills, or numbers through MCP | **zoom-mcp/contact-center-admin** |
 | Build enterprise AI workflows with stable API core + AI tool layer | **zoom-rest-api + zoom-mcp** |
 | General/cross-product guidance | **zoom-general** |
 
