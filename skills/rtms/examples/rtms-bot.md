@@ -44,9 +44,9 @@ RTMS bots are invisible read-only services that subscribe to meeting media strea
                              │
                              ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│ 4. Connect: Media WebSocket (Subscribe to Streams)                  │
-│    └── Subscribe to: audio, video, transcription, share, chat       │
-│    └── Send keep-alive pings                                        │
+│ 4. Connect: Split Media WebSockets                                  │
+│    └── Open one socket per selected concrete media type             │
+│    └── Send each data handshake and handle keep-alives              │
 └────────────────────────────┬────────────────────────────────────────┘
                              │
                              ▼
@@ -390,17 +390,34 @@ function connectSignalingSocket(signalingUrl, sessionKey) {
 }
 ```
 
-## Step 4: Connect to Media WebSocket
+## Step 4: Connect to Split Media WebSockets
+
+Unified media sockets are deprecated. Never use `server_urls.all`, `media_type: 32`, or a combined wire value. Use the matching URL and exactly one concrete type in each data handshake.
 
 ```javascript
-async function connectMediaWithRetry(mediaUrl, signalingWs) {
+const selectedMedia = [
+    { name: 'audio', type: 1, params: { audio: audioParams } },
+    { name: 'transcript', type: 8, params: { transcript: transcriptParams } }
+];
+
+async function connectSelectedMedia(serverUrls, handshakeContext) {
+    return Promise.all(selectedMedia.map((media) =>
+        connectMediaWithRetry(serverUrls[media.name], media, handshakeContext)
+    ));
+}
+
+async function connectMediaWithRetry(mediaUrl, media, handshakeContext) {
     for (let attempt = 1; attempt <= config.connection_max_attempts; attempt++) {
-        console.log(`[MEDIA] Attempt ${attempt}/${config.connection_max_attempts}`);
+        console.log(`[${media.name}] Attempt ${attempt}/${config.connection_max_attempts}`);
         
         try {
-            const ws = await connectMediaSocket(mediaUrl);
-            console.log('[MEDIA] Connected successfully');
-            subscribeToStreams(ws);
+            const ws = await connectMediaSocket(mediaUrl, {
+                ...handshakeContext,
+                msg_type: 3,
+                media_type: media.type,
+                media_params: media.params
+            });
+            console.log(`[${media.name}] Connected successfully`);
             setupKeepAlive(ws);
             return ws;
         } catch (error) {
@@ -415,20 +432,12 @@ async function connectMediaWithRetry(mediaUrl, signalingWs) {
     }
     
     throw new Error(
-        `Failed to connect media WebSocket after ${config.connection_max_attempts} attempts`
+        `Failed to connect ${media.name} WebSocket after ${config.connection_max_attempts} attempts`
     );
 }
-
-function subscribeToStreams(mediaWs) {
-    // Subscribe to all available streams
-    mediaWs.send(JSON.stringify({
-        type: 'subscribe',
-        streams: ['audio', 'video', 'transcription', 'share', 'chat']
-    }));
-    
-    console.log('[MEDIA] Subscribed to: audio, video, transcription, share, chat');
-}
 ```
+
+See [Manual WebSocket](manual-websocket.md) for complete data-handshake parameters and readiness sequencing.
 
 ## Step 5: Keep-Alive Management
 

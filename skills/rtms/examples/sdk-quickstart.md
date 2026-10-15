@@ -51,7 +51,9 @@ rtms.onWebhookEvent(({ event, payload }) => {
 });
 ```
 
-## Complete Example with All Media Types
+## Complete Example with Multiple Media Types
+
+The SDK owns the transport details. When configuring lower-level libraries, ensure any multi-type selection is expanded into one data socket per concrete media type; unified wire-level media handshakes are deprecated.
 
 ```javascript
 import rtms from "@zoom/rtms";

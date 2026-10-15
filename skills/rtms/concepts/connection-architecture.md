@@ -24,10 +24,10 @@ RTMS uses a **two-phase WebSocket design** to separate control plane from data p
 ┌─────────────────────────────────────────────────────────────┐
 │                      Your Server                             │
 │  ┌─────────────────────┐    ┌─────────────────────────────┐ │
-│  │  Signaling Socket   │    │     Media Socket            │ │
-│  │  - Handshake        │    │     - Audio data            │ │
-│  │  - Start/Stop       │    │     - Video data            │ │
-│  │  - Heartbeat        │    │     - Transcript            │ │
+│  │  Signaling Socket   │    │     Media Sockets           │ │
+│  │  - Handshake        │    │     - One per media type    │ │
+│  │  - Start/Stop       │    │                             │ │
+│  │  - Heartbeat        │    │                             │ │
 │  └─────────────────────┘    └─────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -62,7 +62,7 @@ Client                          Signaling Server
   │                                    │
 ```
 
-### Phase 2: Media WebSocket (Data Plane)
+### Phase 2: Media WebSockets (Data Plane)
 
 **Purpose**: Actual audio, video, transcript, chat, screen share data
 
@@ -72,7 +72,7 @@ Client                          Signaling Server
 | Media Streaming | Receive binary media data |
 | Heartbeat | Keep connection alive (msg_type 12/13) |
 
-**URL Source**: From signaling handshake response (`media_server.server_urls.all`)
+**URL Source**: From the signaling handshake response. Use the URL matching each concrete media type: `media_server.server_urls.audio`, `.video`, `.deskshare`, `.transcript`, or `.chat`.
 
 **Message Flow**:
 ```
@@ -81,11 +81,7 @@ Client                          Media Server
   │──── Media Handshake Request (3) ──>│  <- With media_params
   │<─── Media Handshake Response (4) ──│
   │                                    │
-  │<─── Audio Data (14) ───────────────│
-  │<─── Video Data (15) ───────────────│
-  │<─── Screen Share Data (16) ────────│
-  │<─── Transcript Data (17) ──────────│
-  │<─── Chat Data (18) ────────────────│
+  │<─── One selected media type ───────│
   │                                    │
   │<─── Keep Alive Request (12) ───────│
   │──── Keep Alive Response (13) ─────>│
@@ -101,11 +97,9 @@ Client                          Media Server
 | **Fault Isolation** | Media reconnection doesn't require re-auth |
 | **Split Mode Support** | Each media type can have its own connection |
 
-## Connection Modes
+## Split Media Connections
 
-### Split Mode (Recommended)
-
-Each media type gets its own dedicated WebSocket connection:
+Each requested media type gets its own dedicated WebSocket connection:
 
 ```
 Signaling WS ─────┬───> Audio WS
@@ -119,17 +113,7 @@ Signaling WS ─────┬───> Audio WS
 - Better reliability
 - Fault isolation
 
-### Unified Mode
-
-One media WebSocket for all media types:
-
-```
-Signaling WS ─────> Media WS (all types)
-```
-
-**When to use**:
-- Real-time audio+video muxing where sync matters
-- Simpler implementation for small projects
+> **Deprecated:** Do not use unified media socket mode, `server_urls.all`, `media_type: 32`, or combined data-handshake values such as `3`, `5`, or `9`. Send exactly one of `1`, `2`, `4`, `8`, or `16` in each data handshake and include only that type's `media_params`.
 
 ## Signature Generation
 

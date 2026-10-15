@@ -55,6 +55,9 @@ No heartbeat handling means unexpected disconnects.
 ## 6) Confirm Media Subscription/Gating
 
 - Ensure requested media types match your processing path.
+- Open one data WebSocket per selected concrete media type using the matching signaling-response URL.
+- Send exactly one of audio `1`, video `2`, deskshare `4`, transcript `8`, or chat `16` in each data handshake.
+- Reject deprecated unified configuration: `server_urls.all`, combined wire values, and `media_type: 32`.
 - Reject/ignore media packets for inactive sessions.
 - Expose pipeline status endpoint for observability.
 

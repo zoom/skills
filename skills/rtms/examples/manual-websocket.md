@@ -7,9 +7,11 @@ Full RTMS protocol implementation without the SDK. Use this for:
 
 ## Overview
 
-RTMS requires two WebSocket connections:
+RTMS requires one signaling WebSocket and one or more media WebSockets:
 1. **Signaling WebSocket** - Control plane (handshake, heartbeat, start/stop)
-2. **Media WebSocket** - Data plane (audio, video, transcript, chat, share)
+2. **Media WebSockets** - One data-plane connection per selected media type
+
+> **Deprecated:** Do not use a unified media socket, `server_urls.all`, `media_type: 32`, or combined data-handshake values such as `3`, `5`, or `9`.
 
 ## Complete Implementation
 
@@ -26,9 +28,39 @@ const CLIENT_ID = process.env.ZOOM_CLIENT_ID;
 const CLIENT_SECRET = process.env.ZOOM_CLIENT_SECRET;
 const SECRET_TOKEN = process.env.ZOOM_SECRET_TOKEN;
 
+const SELECTED_MEDIA = [
+  {
+    name: 'audio',
+    type: 1,
+    params: {
+      audio: {
+        content_type: 2,            // RAW_AUDIO
+        sample_rate: 1,             // 16kHz
+        channel: 1,                 // Mono
+        codec: 1,                   // L16 (PCM)
+        data_opt: 1,                // Mixed stream
+        send_rate: 20               // 20ms chunks
+      }
+    }
+  },
+  {
+    name: 'transcript',
+    type: 8,
+    params: {
+      transcript: {
+        content_type: 5,            // TEXT
+        src_language: 9,            // English
+        enable_lid: false           // Fixed language, no auto-switch
+      }
+    }
+  }
+];
+
 // Active connections
 const signalingConnections = new Map();
 const mediaConnections = new Map();
+const readyMedia = new Map();
+const clientReadySent = new Set();
 const activeSessions = new Map();
 const activeVideoUsers = new Map();
 
@@ -52,11 +84,8 @@ const RTMS_EVENTS = ['meeting.rtms_started', 'webinar.rtms_started', 'session.rt
 const RTMS_STOP_EVENTS = ['meeting.rtms_stopped', 'webinar.rtms_stopped', 'session.rtms_stopped'];
 
 app.post('/webhook', (req, res) => {
-  // CRITICAL: Respond 200 IMMEDIATELY before any processing!
-  res.status(200).send();
-  
   const { event, payload } = req.body;
-  
+
   // Handle URL validation challenge
   if (event === 'endpoint.url_validation') {
     const hash = crypto
@@ -68,6 +97,9 @@ app.post('/webhook', (req, res) => {
       encryptedToken: hash 
     });
   }
+
+  // CRITICAL: Respond 200 IMMEDIATELY before RTMS processing!
+  res.status(200).send();
   
   // Handle RTMS events (meetings, webinars, and Video SDK)
   if (RTMS_EVENTS.includes(event)) {
@@ -122,8 +154,7 @@ function connectToSignaling(idValue, streamId, serverUrl) {
       rtms_stream_id: streamId,
       sequence: Math.floor(Math.random() * 1000000),
       signature: signature,
-      buffer_data: false,             // Use false for live streaming; true preserves startup audio
-      media_type: 9                   // AUDIO(1) | TRANSCRIPT(8)
+      buffer_data: false              // Use false for live streaming; true preserves startup audio
     }));
   });
   
@@ -149,9 +180,18 @@ function handleSignalingMessage(msg, idValue, streamId) {
       if (msg.status_code === 0) {
         console.log('Signaling handshake success');
         
-        // Extract media server URL and connect
-        const mediaUrl = msg.media_server.server_urls.all;
-        connectToMedia(idValue, streamId, mediaUrl);
+        // Open one data socket per selected concrete media type.
+        const serverUrls = msg.media_server.server_urls;
+        const missingMedia = SELECTED_MEDIA.find((media) => !serverUrls[media.name]);
+        if (missingMedia) {
+          console.error(`No media URL returned for ${missingMedia.name}`);
+          break;
+        }
+
+        readyMedia.set(streamId, new Set());
+        for (const media of SELECTED_MEDIA) {
+          connectToMedia(idValue, streamId, serverUrls[media.name], media);
+        }
       } else {
         console.error('Signaling handshake failed:', msg.status_code);
       }
@@ -220,13 +260,14 @@ function handleEventUpdate(msg, streamId) {
 // MEDIA WEBSOCKET
 // ============================================
 
-function connectToMedia(idValue, streamId, mediaUrl) {
-  console.log('Connecting to media:', mediaUrl);
+function connectToMedia(idValue, streamId, mediaUrl, media) {
+  console.log(`Connecting to ${media.name}:`, mediaUrl);
   
   const signature = generateSignature(CLIENT_ID, idValue, streamId, CLIENT_SECRET);
   const ws = new WebSocket(mediaUrl);
   
-  mediaConnections.set(streamId, ws);
+  const connectionKey = `${streamId}:${media.name}`;
+  mediaConnections.set(connectionKey, ws);
   
   ws.on('open', () => {
     console.log('Media connected, sending handshake');
@@ -237,34 +278,21 @@ function connectToMedia(idValue, streamId, mediaUrl) {
       meeting_uuid: idValue,          // Works for both meeting_uuid and session_id
       rtms_stream_id: streamId,
       signature: signature,
-      media_type: 9,                  // AUDIO(1) | TRANSCRIPT(8)
+      media_type: media.type,         // Exactly one concrete media type
       payload_encryption: false,
-      media_params: {
-        audio: {
-          content_type: 2,            // RAW_AUDIO
-          sample_rate: 1,             // 16kHz
-          channel: 1,                 // Mono
-          codec: 1,                   // L16 (PCM)
-          data_opt: 1,                // Mixed stream
-          send_rate: 20               // 20ms chunks
-        },
-        transcript: {
-          content_type: 5,            // TEXT
-          src_language: 9,            // English
-          enable_lid: false           // Fixed language, no auto-switch
-        }
-      }
+      media_params: media.params
     }));
   });
   
   ws.on('message', (data) => {
     const msg = JSON.parse(data.toString());
-    handleMediaMessage(msg, streamId);
+    handleMediaMessage(msg, streamId, media.name);
   });
   
   ws.on('close', (code, reason) => {
     console.log('Media closed:', code, reason.toString());
-    mediaConnections.delete(streamId);
+    mediaConnections.delete(connectionKey);
+    readyMedia.get(streamId)?.delete(media.name);
   });
   
   ws.on('error', (error) => {
@@ -272,15 +300,18 @@ function connectToMedia(idValue, streamId, mediaUrl) {
   });
 }
 
-function handleMediaMessage(msg, streamId) {
+function handleMediaMessage(msg, streamId, mediaName) {
   switch (msg.msg_type) {
     case 4:  // DATA_HAND_SHAKE_RESP
       if (msg.status_code === 0) {
-        console.log('Media handshake success, sending client ready');
-        
-        // Tell signaling we're ready to receive
+        console.log(`${mediaName} handshake success`);
+        const ready = readyMedia.get(streamId);
+        ready?.add(mediaName);
+
+        // Tell signaling only after every selected media socket is ready.
         const signalingWs = signalingConnections.get(streamId);
-        if (signalingWs) {
+        if (signalingWs && ready?.size === SELECTED_MEDIA.length && !clientReadySent.has(streamId)) {
+          clientReadySent.add(streamId);
           signalingWs.send(JSON.stringify({
             msg_type: 7,              // CLIENT_READY_ACK
             rtms_stream_id: streamId
@@ -292,7 +323,7 @@ function handleMediaMessage(msg, streamId) {
       break;
       
     case 12:  // KEEP_ALIVE_REQ
-      const mediaWs = mediaConnections.get(streamId);
+      const mediaWs = mediaConnections.get(`${streamId}:${mediaName}`);
       if (mediaWs) {
         mediaWs.send(JSON.stringify({
           msg_type: 13,               // KEEP_ALIVE_RESP
@@ -393,14 +424,18 @@ function handleRTMSStopped(payload) {
   
   // Close connections
   const signalingWs = signalingConnections.get(streamId);
-  const mediaWs = mediaConnections.get(streamId);
-  
   if (signalingWs) signalingWs.close();
-  if (mediaWs) mediaWs.close();
+  for (const [key, mediaWs] of mediaConnections) {
+    if (key.startsWith(`${streamId}:`)) {
+      mediaWs.close();
+      mediaConnections.delete(key);
+    }
+  }
   
   // Cleanup
   signalingConnections.delete(streamId);
-  mediaConnections.delete(streamId);
+  readyMedia.delete(streamId);
+  clientReadySent.delete(streamId);
   activeSessions.delete(streamId);
 }
 

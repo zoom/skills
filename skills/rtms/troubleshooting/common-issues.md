@@ -8,7 +8,7 @@ Troubleshooting guide for Zoom RTMS.
 |---------|--------------|----------|
 | Connection fails | Invalid signature | Check signature generation |
 | Duplicate connections | Slow webhook response | Respond 200 immediately |
-| No data received | Wrong media type | Check media_type bitmask |
+| No data received | Wrong media type or URL | Match one concrete `media_type` to its media server URL |
 | Connection closes | Missing heartbeat | Respond to msg_type 12 |
 | Segmentation fault | Old Node.js | Upgrade to 20.3.0+ |
 
@@ -18,7 +18,7 @@ Troubleshooting guide for Zoom RTMS.
 
 **Problem**: Random disconnections, duplicate connections
 
-**Cause**: If your webhook handler takes too long to respond, Zoom retries. The retry creates a second connection, which kicks out the first (only 1 connection allowed per stream).
+**Cause**: If your webhook handler takes too long to respond, Zoom retries. The retry can create a duplicate signaling session that kicks out the first session. This does not prohibit the separate media sockets required for each selected media type.
 
 **Solution**: Respond 200 IMMEDIATELY before any processing:
 
@@ -140,12 +140,13 @@ ws.on('message', (data) => {
 4. Unsupported audio parameter combination rejected by the media server
 
 **Solution**:
-1. Verify media_type includes AUDIO (1):
+1. Open the audio data socket with the `audio` URL and AUDIO (`1`):
    ```javascript
-   media_type: 1  // Just audio
-   media_type: 9  // Audio + Transcript
-   media_type: 32 // All media
+   const mediaWs = new WebSocket(serverUrls.audio);
+   // DATA_HAND_SHAKE_REQ
+   media_type: 1
    ```
+   Open a separate transcript socket with `serverUrls.transcript` and `media_type: 8` if transcripts are also required. Do not use combined values or `32`.
 2. Wait for participant to speak
 3. Check meeting audio settings
 4. Validate the full audio parameter combination against the supported matrix:
@@ -228,7 +229,7 @@ audio: {
 4. Individual video mode enabled but no participant subscription sent
 
 **Solution**:
-1. Include VIDEO (2) in media_type
+1. Open `serverUrls.video` and send VIDEO (`2`) as the only `media_type` in that data handshake
 2. Use H.264 for fps > 5:
    ```javascript
    video: {
@@ -248,12 +249,14 @@ audio: {
 
 **Cause**: Screen share is SEPARATE from video
 
-**Solution**: Include DESKSHARE (4) in media_type:
+**Solution**: Open a dedicated screen-share socket using `serverUrls.deskshare` and DESKSHARE (`4`):
 ```javascript
-media_type: 4   // Just screen share
-media_type: 5   // Audio + screen share
-media_type: 32  // All media
+const mediaWs = new WebSocket(serverUrls.deskshare);
+// DATA_HAND_SHAKE_REQ
+media_type: 4
 ```
+
+Audio, if needed, uses a separate socket and `media_type: 1`.
 
 ### Transcript Language Delay
 

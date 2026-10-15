@@ -2,24 +2,29 @@
 
 Audio, video, transcript, chat, and screen share data formats.
 
-## Media Type Bitmask
+## Concrete Media Types
 
-Use bitwise OR to combine types:
+Use exactly one concrete type in each data handshake:
 
-| Type | Value | Event Name | Description |
-|------|-------|------------|-------------|
-| Audio | 1 | `audio` | PCM audio samples |
-| Video | 2 | `video` | H.264 encoded frames |
-| Screen Share | 4 | `sharescreen` | **Separate from video!** |
-| Transcript | 8 | `transcript` | Real-time speech-to-text |
-| Chat | 16 | `chat` | In-meeting chat messages |
-| All | 32 | all events | All media types |
+| Type | Value | URL key | Event Name | Description |
+|------|-------|---------|------------|-------------|
+| Audio | 1 | `audio` | `audio` | PCM audio samples |
+| Video | 2 | `video` | `video` | H.264 encoded frames |
+| Screen Share | 4 | `deskshare` | `sharescreen` | **Separate from video!** |
+| Transcript | 8 | `transcript` | `transcript` | Real-time speech-to-text |
+| Chat | 16 | `chat` | `chat` | In-meeting chat messages |
 
-**Example**: Audio + Transcript = `1 | 8` = `9`
+> **Deprecated:** Unified media sockets and `media_type: 32` must not be used. Do not send combined values such as `3`, `5`, or `9` in `DATA_HAND_SHAKE_REQ`.
 
 ```javascript
-const mediaTypes = RTMSManager.MEDIA.AUDIO | RTMSManager.MEDIA.TRANSCRIPT;  // 9
+const selectedMedia = ['audio', 'transcript'];
+
+for (const name of selectedMedia) {
+  openMediaSocket(serverUrls[name]);
+}
 ```
+
+Some SDKs or libraries may accept an internal selection bitmask. That is configuration only: the implementation must expand the selection into separate media sockets and use one concrete wire value per handshake.
 
 ## Audio
 

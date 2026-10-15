@@ -219,8 +219,7 @@ signalingWs.on('open', () => {
     meeting_uuid: idValue,
     rtms_stream_id: payload.rtms_stream_id,
     signature: signature,
-    buffer_data: false,             // Use false for live streaming; true preserves startup audio
-    media_type: 9                   // Audio(1) + Transcript(8)
+    buffer_data: false              // Use false for live streaming; true preserves startup audio
   }));
 });
 ```
@@ -238,15 +237,42 @@ Use `true` for recording, compliance, and "do not miss the opening sentence" wor
 ### Step 3: Handle Signaling Response
 
 ```javascript
+const selectedMedia = [
+  {
+    name: 'audio',
+    type: 1,
+    params: {
+      audio: {
+        content_type: 2,
+        sample_rate: 1,
+        channel: 1,
+        codec: 1,
+        data_opt: 1,
+        send_rate: 20
+      }
+    }
+  },
+  {
+    name: 'transcript',
+    type: 8,
+    params: {
+      transcript: { content_type: 5, src_language: 9, enable_lid: false }
+    }
+  }
+];
+
 signalingWs.on('message', (data) => {
   const msg = JSON.parse(data);
   
   switch (msg.msg_type) {
     case 2:  // Handshake response
       if (msg.status_code === 0) {
-        // Extract media server URL
-        const mediaUrl = msg.media_server.server_urls.all;
-        connectToMediaServer(mediaUrl);
+        for (const media of selectedMedia) {
+          connectToMediaServer(
+            msg.media_server.server_urls[media.name],
+            media
+          );
+        }
       } else {
         console.error('Handshake failed:', msg.status_code);
       }
@@ -262,10 +288,14 @@ signalingWs.on('message', (data) => {
 });
 ```
 
-### Step 4: Connect to Media WebSocket
+### Step 4: Connect to Media WebSockets
+
+Unified media sockets are deprecated. Open one socket for each selected type, use its matching URL, and include only that type's parameters.
 
 ```javascript
-function connectToMediaServer(mediaUrl) {
+const readyMedia = new Set();
+
+function connectToMediaServer(mediaUrl, media) {
   const mediaWs = new WebSocket(mediaUrl);
   
   mediaWs.on('open', () => {
@@ -275,44 +305,35 @@ function connectToMediaServer(mediaUrl) {
       meeting_uuid: idValue,        // meeting_uuid or session_id
       rtms_stream_id: streamId,
       signature: signature,
-      media_type: 9,                // Audio + Transcript
+      media_type: media.type,       // Exactly one of 1, 2, 4, 8, or 16
       payload_encryption: false,
-      media_params: {
-        audio: {
-          content_type: 2,          // RAW_AUDIO
-          sample_rate: 1,           // 16kHz
-          channel: 1,               // Mono
-          codec: 1,                 // L16 (PCM)
-          data_opt: 1,              // Mixed stream
-          send_rate: 20             // 20ms chunks
-        },
-        transcript: {
-          content_type: 5,          // TEXT
-          src_language: 9,          // English
-          enable_lid: false         // Fixed language, no auto-switch
-        }
-      }
+      media_params: media.params
     }));
+  });
+
+  mediaWs.on('message', (data) => {
+    const msg = JSON.parse(data);
+    if (msg.msg_type === 4 && msg.status_code === 0) {
+      markMediaReady(media.name);
+    }
   });
 }
 ```
 
 ### Step 5: Start Streaming
 
-After media handshake succeeds, tell signaling you're ready:
+After every selected media handshake succeeds, tell signaling you're ready:
 
 ```javascript
-mediaWs.on('message', (data) => {
-  const msg = JSON.parse(data);
-  
-  if (msg.msg_type === 4 && msg.status_code === 0) {
-    // Media handshake success - tell signaling we're ready
+function markMediaReady(mediaName) {
+  readyMedia.add(mediaName);
+  if (readyMedia.size === selectedMedia.length) {
     signalingWs.send(JSON.stringify({
       msg_type: 7,                  // Client ready
       rtms_stream_id: streamId
     }));
   }
-});
+}
 ```
 
 ### Step 6: Receive Media Data

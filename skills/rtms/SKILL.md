@@ -66,6 +66,7 @@ Use RTMS for media/data plane, and use frontend frameworks/Zoom Apps for present
 - **[Webhooks](references/webhooks.md)** - Event subscription details
 - **[Environment Variables](references/environment-variables.md)** - credential modes and runtime knobs
 - **[Quickstart Notes](references/quickstart.md)** - Secondary quickstart guide
+- **[Changelog](CHANGELOG.md)** - RTMS skill documentation changes
 - **Integrated Index** - see the section below in this file
 
 **Having issues?**
@@ -109,6 +110,10 @@ RTMS is a data pipeline that gives your app access to live media from Zoom meeti
 - **Audio buffer control in signaling handshake**: signaling handshakes now support optional `buffer_data`. Default is `true`, which delivers up to 60 seconds of initial audio buffered while signaling/media sockets are established. For live streaming pipelines, set `buffer_data: false` to drop the startup backlog and start from live audio once connected.
 - **Media payload length field**: audio, video, and screen share media data events can include `content.length`, the original binary length before base64 encoding.
 - **ZCC Voice enum update**: `CONFERENCE_PARTICIPANT_LEFT = 29` was added to `RTMS_ZCC_VOICE_EVENT_TYPE`.
+
+### Media Socket Deprecation
+
+> **Deprecated:** Unified media socket mode and `media_type: 32` must not be used. Open a separate data connection for each required media type and send exactly one concrete media type per data handshake: audio (`1`), video (`2`), screen share (`4`), transcript (`8`), or chat (`16`). Do not send combined values such as `3`, `5`, or `9` on the wire.
 
 ### Two Approaches
 
@@ -211,8 +216,7 @@ function connectToRTMS(payload) {
       meeting_uuid: idValue,
       rtms_stream_id,
       signature,
-      buffer_data: false, // Use false for live streaming; true preserves startup audio
-      media_type: 9  // AUDIO(1) | TRANSCRIPT(8)
+      buffer_data: false // Use false for live streaming; true preserves startup audio
     }));
   });
   
@@ -222,26 +226,26 @@ function connectToRTMS(payload) {
 
 **See**: [Manual WebSocket Guide](examples/manual-websocket.md) for complete implementation.
 
-## Media Type Bitmask
+## Media Data Connections
 
-Combine types with bitwise OR:
+Select the media needed by the application, then open one data WebSocket for each selected type using the matching URL from the signaling response:
 
-| Type | Value | Description |
-|------|-------|-------------|
-| Audio | 1 | PCM audio samples |
-| Video | 2 | H.264/JPG video frames |
-| Screen Share | 4 | **Separate from video!** |
-| Transcript | 8 | Real-time speech-to-text |
-| Chat | 16 | In-meeting chat messages |
-| All | 32 | All media types |
+| Type | Wire value | Server URL |
+|------|------------|------------|
+| Audio | 1 | `server_urls.audio` |
+| Video | 2 | `server_urls.video` |
+| Screen Share | 4 | `server_urls.deskshare` |
+| Transcript | 8 | `server_urls.transcript` |
+| Chat | 16 | `server_urls.chat` |
 
-**Example**: Audio + Transcript = `1 | 8` = `9`
+For generic sample configuration, prefer readable names such as `RTMS_MEDIA_TYPES=audio,video,transcript`. An SDK or library may accept an internal selection bitmask, but it must expand that selection into separate connections. Never send a selection mask, a combined value, or `32` as the data-handshake `media_type`.
 
 ## Critical Gotchas
 
 | Issue | Solution |
 |-------|----------|
-| **Only 1 connection allowed** | New connections kick out existing ones. Track active sessions! |
+| **Only 1 signaling session allowed** | A duplicate signaling connection can kick out the existing session. Track active sessions; each session still needs one media socket per selected type |
+| **Split media sockets required** | Use one data WebSocket per concrete media type. Unified mode, `server_urls.all`, combined `media_type` values, and `media_type: 32` are deprecated |
 | **Respond 200 immediately** | If webhook delays, Zoom retries creating duplicate connections |
 | **Heartbeat mandatory** | Respond to msg_type 12 with msg_type 13, or connection dies |
 | **Reconnection is YOUR job** | RTMS doesn't auto-reconnect. Media keep-alive tolerance is now about **65s**; signaling remains around **60s** |
@@ -496,9 +500,9 @@ rtms/
 ### 1. Connection Architecture (CRITICAL)
 **[concepts/connection-architecture.md](concepts/connection-architecture.md)**
 
-RTMS uses **two separate WebSocket connections**:
+RTMS uses **one signaling WebSocket plus one media WebSocket per selected media type**:
 - **Signaling WebSocket**: Authentication, control, heartbeats
-- **Media WebSocket**: Actual audio/video/transcript data
+- **Media WebSockets**: Separate audio/video/share/transcript/chat data connections
 
 ### 2. SDK vs Manual (DECISION POINT)
 **[examples/sdk-quickstart.md](examples/sdk-quickstart.md)** vs **[examples/manual-websocket.md](examples/manual-websocket.md)**
@@ -514,7 +518,7 @@ RTMS uses **two separate WebSocket connections**:
 **[troubleshooting/common-issues.md](troubleshooting/common-issues.md)**
 
 1. **Respond 200 immediately** - Delayed webhook responses cause duplicates
-2. **Only 1 connection per stream** - New connections kick out existing
+2. **Only 1 signaling session per stream** - Duplicate signaling joins can kick out the existing session; split media sockets are still required
 3. **Heartbeat required** - Must respond to keep-alive or connection dies
 4. **Track active sessions** - Prevent duplicate join attempts
 
@@ -547,9 +551,10 @@ RTMS uses **two separate WebSocket connections**:
    - Required for both signaling and media handshakes
    - See: [Manual WebSocket](examples/manual-websocket.md#signature-generation)
 
-5. **Media Types are Bitmasks**
-   - Audio=1, Video=2, Share=4, Transcript=8, Chat=16, All=32
-   - Combine with OR: Audio+Transcript = 1|8 = 9
+5. **Media Uses Split Data Connections**
+   - Audio=1, Video=2, Share=4, Transcript=8, Chat=16
+   - Open one data WebSocket per selected media type using its matching URL
+   - Never send combined values or the deprecated `media_type: 32` in a data handshake
    - See: [Media Types](references/media-types.md)
 
 6. **Startup Audio Buffering is a Signaling Choice**

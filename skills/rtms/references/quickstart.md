@@ -45,7 +45,7 @@ await RTMSManager.init({
       secretToken: process.env.ZOOM_SECRET_TOKEN,
     }
   },
-  // Use bitmask: AUDIO(1) | TRANSCRIPT(8) = 9
+  // Library selection mask only. The manager must create separate wire handshakes.
   mediaTypes: RTMSManager.MEDIA.AUDIO | RTMSManager.MEDIA.TRANSCRIPT,
   logging: 'info'
 });
@@ -126,6 +126,8 @@ rtms.onWebhookEvent(({ event, payload }) => {
   client.join(payload);
 });
 ```
+
+> The `mediaTypes` value above is an internal library selection mask, not a wire-level `media_type`. Unified media mode is deprecated. The manager must open separate audio and transcript sockets using concrete handshake values `1` and `8`; it must never send `9` or `32` in a data handshake.
 
 ## Zoom App Setup Steps
 

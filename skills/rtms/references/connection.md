@@ -97,19 +97,21 @@ Choose `true` when missing the opening audio is unacceptable. Choose `false` for
 
 ## Critical Gotchas
 
-### 1. Only ONE Connection Per Stream!
+### 1. Only One Signaling Session Per Stream
 
 ```javascript
-// WRONG - Connecting twice kicks out first connection
+// WRONG - Starting signaling twice can kick out the first session
 connectToRTMS(serverUrl, streamId);  // Connection 1
 connectToRTMS(serverUrl, streamId);  // Connection 2 - kicks out Connection 1!
 
-// CORRECT - Only connect once
+// CORRECT - Start signaling once, then open split media sockets
 if (!activeConnections.has(streamId)) {
   connectToRTMS(serverUrl, streamId);
   activeConnections.set(streamId, ws);
 }
 ```
+
+This restriction does not mean one total WebSocket. The active signaling session must open one data WebSocket for each selected concrete media type.
 
 ### 2. Heartbeat is MANDATORY
 
@@ -260,12 +262,11 @@ Expect:
 
 Use this when your app wants deterministic teardown instead of waiting for a stop webhook or socket failure.
 
-## Split vs Unified Mode
+## Split Media Connections
 
-| Mode | Description | Best For |
-|------|-------------|----------|
-| **Split** | One connection per media type | Most use cases. Media server supports multiple connections with different media types |
-| **Unified** | One connection for all media | Real-time audio+video streaming/muxing where sync matters |
+Open one data connection per required media type. Select `server_urls.audio`, `.video`, `.deskshare`, `.transcript`, or `.chat`, then send the matching concrete `media_type` value in that connection's data handshake.
+
+> **Deprecated:** Do not use unified mode, `server_urls.all`, `media_type: 32`, or combined wire values such as `3`, `5`, or `9`. A library may use a bitmask to represent the user's selection internally, but it must expand that selection into separate data handshakes.
 
 ## Low-Level Connection Example
 
@@ -301,8 +302,7 @@ async function connectRTMS(webhookPayload) {
       meeting_uuid: idValue,          // Works for both meeting_uuid and session_id
       rtms_stream_id: rtms_stream_id,
       signature: signature,
-      buffer_data: false,             // Use false for live streaming; true preserves startup audio
-      media_type: 9  // AUDIO(1) | TRANSCRIPT(8)
+      buffer_data: false              // Use false for live streaming; true preserves startup audio
     }));
   });
   
@@ -311,8 +311,9 @@ async function connectRTMS(webhookPayload) {
     
     switch (msg.msg_type) {
       case 2:  // Handshake response
-        // Connect to media server from msg.media_server_url
-        connectMediaServer(msg.media_server_url);
+        // Open one socket per selected type using the matching URL.
+        connectMediaServer(msg.media_server.server_urls.audio, 1);
+        connectMediaServer(msg.media_server.server_urls.transcript, 8);
         break;
       case 12:  // Keep alive request
         signalingWs.send(JSON.stringify({ msg_type: 13, timestamp: msg.timestamp }));

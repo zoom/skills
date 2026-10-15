@@ -13,6 +13,7 @@
 
 ## Connection tuning (optional)
 
+- `RTMS_MEDIA_TYPES=audio,video,transcript` - comma-separated readable media names; valid names are `audio`, `video`, `deskshare`, `transcript`, and `chat`
 - `RTMS_CONNECTION_TIMEOUT_MS`
 - `RTMS_CONNECTION_MAX_ATTEMPTS`
 - `RTMS_CONNECTION_RETRY_DELAY_MS`
@@ -24,3 +25,4 @@
 ## Notes
 
 - Choose one credential mode per deployment: OAuth or Video SDK credentials.
+- Expand `RTMS_MEDIA_TYPES` into one data WebSocket and one concrete handshake per selected name. Never convert the list to a combined wire-level `media_type`, and never use deprecated `media_type: 32`.

@@ -99,7 +99,7 @@ Complete reference for all RTMS enums and constants.
 | 12 | STATUS_MEDIA_TYPE_TRANSCRIPT_NOT_SUPPORT | Transcript stream not supported |
 | 13 | STATUS_MEDIA_TYPE_CHAT_NOT_SUPPORT | Chat stream not supported |
 | 14 | STATUS_MEDIA_TYPE_INVALID_VALUE | Invalid media type value |
-| 15 | STATUS_MEDIA_DATA_ALL_CONNECTION_EXIST | All media data connections already exist |
+| 15 | STATUS_MEDIA_DATA_ALL_CONNECTION_EXIST | Legacy aggregate-media connection already exists (deprecated behavior) |
 | 16 | STATUS_DUPLICATE_MEDIA_DATA_CONNECTION | Duplicate media data connection |
 | 17 | STATUS_INVALID_MEDIA_PARAMS | Invalid media params |
 | 18 | STATUS_INVALID_MEDIA_AUDIO_PARAMS | Invalid audio params |
@@ -133,7 +133,7 @@ Complete reference for all RTMS enums and constants.
 
 ## Media Data Types (MEDIA_DATA_TYPE)
 
-Use bitwise OR to combine:
+Use exactly one concrete value per data handshake:
 
 | Value | Name | Constant |
 |-------|------|----------|
@@ -142,12 +142,8 @@ Use bitwise OR to combine:
 | 4 | DESKSHARE | 0x01 << 2 |
 | 8 | TRANSCRIPT | 0x01 << 3 |
 | 16 | CHAT | 0x01 << 4 |
-| 32 | ALL | 0x01 << 5 |
 
-**Common combinations**:
-- Audio + Transcript: `1 | 8 = 9`
-- Audio + Video: `1 | 2 = 3`
-- All media: `32`
+Unified/aggregate media and `ALL` (`32`) are deprecated. Never send `32` or a combined value such as `3`, `5`, or `9` as the wire-level `media_type`. Open one data connection per required media type. If a library exposes a selection bitmask, expand it into separate concrete data handshakes.
 
 ## Content Types (MEDIA_CONTENT_TYPE)
 

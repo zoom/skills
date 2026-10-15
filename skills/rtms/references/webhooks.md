@@ -6,7 +6,7 @@ RTMS-related webhook events and configuration.
 
 **The #1 cause of random disconnects:**
 
-If your webhook handler takes too long to respond, Zoom assumes failure and retries. The retry creates a second connection, which kicks out your first connection (only 1 connection allowed per stream).
+If your webhook handler takes too long to respond, Zoom assumes failure and retries. The retry can create a duplicate signaling session that kicks out the first session. This is separate from the required split media sockets within one session.
 
 ```javascript
 // CORRECT: Respond first, process async
