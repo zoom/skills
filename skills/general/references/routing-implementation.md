@@ -36,6 +36,7 @@ export type SkillId =
   | 'scribe'
   | 'summarizer'
   | 'translator'
+  | 'decisions'
   | 'zoom-rtms'
   | 'zoom-team-chat'
   | 'contact-center'
@@ -80,6 +81,7 @@ interface Signals {
   scribe: boolean;
   summarizer: boolean;
   translator: boolean;
+  decisions: boolean;
   oauth: boolean;
   rtms: boolean;
   teamChat: boolean;
@@ -136,6 +138,7 @@ export function detectSignals(rawQuery: string): Signals {
     scribe: hasAny(q, ['scribe', 'transcribe file', 'transcribe recording', 'batch transcription', 'aiservices/scribe']),
     summarizer: hasAny(q, ['summarizer', 'summarize transcript', 'meeting recap api', 'action items', 'aiservices/summarizer']),
     translator: hasAny(q, ['translator', 'translate text', 'batch translation', 'target_languages', 'aiservices/translator']),
+    decisions: hasAny(q, ['zoom decisions', 'decisions api', 'decision probability', 'predicate classification', 'boolean choice', 'compare two images', 'ordered score', 'aiservices/decisions', 'zoom-decisions-standard', 'zoom-decisions-pro']),
     oauth: hasAny(q, ['oauth', 'pkce', 'authorization code', 'account_credentials', 'token refresh']),
     rtms: hasAny(q, ['rtms', 'real-time media streams', 'live transcript stream', 'audio stream']),
     teamChat: hasAny(q, ['team chat', 'chatbot', 'chat card', 'chat message']),
@@ -164,6 +167,7 @@ function pickPrimarySkill(s: Signals): SkillId {
   if (s.contactCenter) return 'contact-center';
   if (s.zoomApps) return 'zoom-apps-sdk';
   if (s.rtms) return 'zoom-rtms';
+  if (s.decisions) return 'decisions';
   if (s.summarizer) return 'summarizer';
   if (s.translator) return 'translator';
   if (s.scribe) return 'scribe';
@@ -215,7 +219,7 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   if (primary === 'translator' && s.summarizer) chain.add('summarizer');
   if (primary === 'summarizer' && s.translator) chain.add('translator');
 
-  if (s.scribe || s.summarizer || s.translator) {
+  if (s.scribe || s.summarizer || s.translator || s.decisions) {
     chain.add('zoom-rest-api');
   }
 
@@ -277,6 +281,10 @@ function buildResourceHints(primary: SkillId, s: Signals): string[] {
   if (primary === 'zoom-plugin-sdk-windows' || s.pluginWindows) {
     hints.push('plugin-sdk/windows/capabilities.md');
     hints.push('plugin-sdk/windows/references/package-and-api-map.md');
+  }
+  if (primary === 'decisions' || s.decisions) {
+    hints.push('decisions/references/api-contract.md');
+    hints.push('rest-api/references/ai-services.md');
   }
 
   return hints;

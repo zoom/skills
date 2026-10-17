@@ -36,6 +36,7 @@ This repository contains skills for building with Zoom SDKs, APIs, MCP servers, 
 | **[scribe](scribe/SKILL.md)** | Zoom AI Services Scribe for synchronous and batch transcription of uploaded or stored media |
 | **[summarizer](summarizer/SKILL.md)** | Zoom AI Services Summarizer for transcript recaps, summaries, and action items |
 | **[translator](translator/SKILL.md)** | Zoom AI Services Translator for plain-text and batch file translation |
+| **[decisions](decisions/SKILL.md)** | Zoom AI Services Decisions for predicates, constrained choices, ordered scores, probabilities, and image comparisons |
 | **[zoom-rtms](rtms/SKILL.md)** | Real-Time Media Streams (live audio/video/transcripts) |
 | **[zoom-team-chat](team-chat/SKILL.md)** | Team Chat messaging and channels |
 | **[virtual-agent](virtual-agent/SKILL.md)** | Virtual Agent web/mobile chat embeds and KB sync workflows |
@@ -118,6 +119,7 @@ Use `zoom-general` when:
 | Transcribe uploaded or stored media files into text | **scribe** |
 | Summarize transcript text into recaps, summaries, or action items | **summarizer** |
 | Translate plain text or stored text files | **translator** |
+| Evaluate predicates, classify into fixed choices, score ordered levels, or compare images | **decisions** |
 | Build Team Chat integrations | **zoom-team-chat** |
 | Build Virtual Agent chat/campaign experiences | **virtual-agent** |
 | Build Contact Center integrations (apps/web/mobile) | **contact-center** |

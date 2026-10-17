@@ -120,6 +120,7 @@ The **general** skill acts as a router and directs to the appropriate specialize
 | "Set up OAuth authentication" | oauth |
 | "Summarize this transcript" | summarizer |
 | "Translate this text" | translator |
+| "Classify this with probabilities" | decisions |
 | "Build AI-agent meeting search tools" | zoom-mcp |
 | "Manage Zoom Tasks from an AI agent" | zoom-mcp/tasks |
 | "Analyze Revenue Accelerator conversations" | zoom-mcp/revenue-accelerator |
@@ -211,6 +212,7 @@ and merge them into a complete General App manifest rather than submitting them 
 | [scribe](skills/scribe/) | AI Services Scribe for uploaded-file and batch archive transcription |
 | [summarizer](skills/summarizer/) | AI Services Summarizer for transcript recaps, summaries, and action items |
 | [translator](skills/translator/) | AI Services Translator for plain-text and batch file translation |
+| [decisions](skills/decisions/) | AI Services Decisions for predicates, constrained classification, ordered scoring, and image comparison |
 | [zoom-rtms](skills/rtms/) | Real-time Media Streams (live audio/video/transcripts) |
 | [zoom-team-chat](skills/team-chat/) | Team Chat APIs and integrations |
 | [virtual-agent](skills/virtual-agent/) | Virtual Agent web embeds, Android/iOS wrappers, and KB sync workflows |
@@ -231,6 +233,19 @@ and merge them into a complete General App manifest rather than submitting them 
 | [zoom-mcp/contact-center-admin](skills/zoom-mcp/contact-center-admin/) | Contact Center user administration tools |
 | [zoom-mcp/team-chat](skills/zoom-mcp/team-chat/) | Team Chat message, file, contact, session, channel, and member tools |
 | [zoom-mcp/whiteboard](skills/zoom-mcp/whiteboard/) | Whiteboard creation, retrieval, and collaborator tools |
+
+### Decisions API key
+
+Retrieve the production `x-api-key` from a Zoom Build Platform project. Build Platform was
+previously known as the Video SDK account, and the project can belong to any of these account
+paths:
+
+- a CPaaS account under a Zoom Meetings account
+- a standalone Build Platform account through [marketplace.zoom.us](https://marketplace.zoom.us/)
+- a CPaaS account through [aiservice.zoom.us](https://aiservice.zoom.us/)
+
+Store the key server-side as `ZOOM_AI_SERVICES_API_KEY`; never embed it in browser code or
+commit it to the repository.
 
 ### Current Zoom MCP Servers
 
@@ -264,6 +279,7 @@ contracts; run `tools/list` before relying on a cached inventory.
 | Batch or on-demand media transcription | scribe |
 | Transcript summarization and action items | summarizer |
 | Text translation and localization | translator |
+| Typed probabilities, fixed classifications, scoring, and image comparisons | decisions |
 | In-meeting collaborative apps | zoom-apps-sdk |
 | Team Chat integrations | zoom-team-chat |
 | Virtual Agent campaign/chat flows (web + mobile wrappers) | virtual-agent + contact-center |
@@ -317,6 +333,7 @@ zoom-general (HUB)
        ├── scribe
        ├── summarizer
        ├── translator
+       ├── decisions
        ├── zoom-rtms
        ├── zoom-team-chat
        ├── virtual-agent
@@ -369,6 +386,7 @@ repo/
 │   ├── scribe/
 │   ├── summarizer/
 │   ├── translator/
+│   ├── decisions/
 │   ├── rtms/
 │   ├── team-chat/
 │   ├── contact-center/
