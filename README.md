@@ -279,7 +279,7 @@ contracts; run `tools/list` before relying on a cached inventory.
 | Batch or on-demand media transcription | scribe |
 | Transcript summarization and action items | summarizer |
 | Text translation and localization | translator |
-| Typed probabilities, fixed classifications, scoring, and image comparisons | decisions |
+| [Typed probabilities, fixed classifications, scoring, and image comparisons](skills/general/use-cases/decisions-classification-scoring.md) | decisions |
 | In-meeting collaborative apps | zoom-apps-sdk |
 | Team Chat integrations | zoom-team-chat |
 | Virtual Agent campaign/chat flows (web + mobile wrappers) | virtual-agent + contact-center |

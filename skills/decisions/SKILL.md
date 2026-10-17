@@ -66,7 +66,7 @@ The response may report `zoom-decisions` after `zoom-decisions-standard` was req
 - No separate `confidence` field was observed. Never rename the winning probability to `confidence`.
 - `reference_id` was accepted but not echoed in observed production responses.
 
-Read [references/api-contract.md](references/api-contract.md) before implementing payload validation, image input, retries, or response normalization.
+Read [references/api-contract.md](references/api-contract.md) before implementing payload validation, image input, retries, or response normalization. Read [scenarios/high-level-scenarios.md](scenarios/high-level-scenarios.md) when choosing among escalation, routing, scoring, image comparison, multi-question, or media-to-decision patterns.
 
 ## Production Wrapper Requirements
 
@@ -81,6 +81,7 @@ Read [references/api-contract.md](references/api-contract.md) before implementin
 
 ## Chaining
 
+- Cross-product use case → [Decisions Classification and Scoring](../general/use-cases/decisions-classification-scoring.md)
 - Media to transcript to classification → [Scribe](../scribe/SKILL.md) + `decisions`
 - Transcript recap plus typed escalation decision → [Summarizer](../summarizer/SKILL.md) + `decisions`
 - Deterministic API wrapper and service inventory → `decisions` + [REST API](../rest-api/SKILL.md)
