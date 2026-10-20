@@ -81,7 +81,7 @@ Official docs:
 - Endpoint: `wss://api.zoom.us/v2/aiservices/scribe/live`
 - Subprotocol: `live-asr`
 - Required key scope: `aiservices:write:live_transcribe:admin`
-- Authenticate upstream with `Authorization: Bearer <Zoom AI Services JWT>` as the official docs require. An AI Services API key sent as `x-api-key` or as a bearer token also completed a live handshake on 2026-10-20. A browser WebSocket cannot set headers, so use a server-side relay.
+- Authenticate upstream with `Authorization: Bearer <Zoom AI Services JWT>` as the official docs require. A Zoom AI Services JWT, an API key sent as `x-api-key`, and an API key sent as bearer each completed a live handshake on 2026-10-20. A browser WebSocket cannot set headers, so use a server-side relay.
 - After the relay connects, send `session.update` with settings under `config`:
 
   ```json

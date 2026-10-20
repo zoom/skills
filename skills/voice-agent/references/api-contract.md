@@ -10,7 +10,7 @@ Sec-WebSocket-Protocol: voice-agent.zoom.v2
 x-api-key: ZOOM_AI_SERVICES_API_KEY
 ```
 
-The API reference also accepts bearer authentication. The browser cannot set either header on a native `WebSocket`, so terminate the browser connection at a trusted server relay and authenticate the upstream socket there.
+Bearer authentication is also accepted; both an API key and a Zoom AI Services JWT completed handshakes on 2026-10-20. The browser cannot set either header on a native `WebSocket`, so terminate the browser connection at a trusted server relay and authenticate the upstream socket there.
 
 ## Supported surfaces and routes
 

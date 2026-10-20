@@ -47,7 +47,7 @@ Two subprotocols are live on that route, and they are not interchangeable:
 
 The documented upgrade path `wss://api.zoom.us/v2/aiservices/voice-agent/live` (without `/ws/`) returned HTTP `404` on 2026-10-20 for every subprotocol tried, including `voice-agent.zoom.v1`. The OpenAPI catalog lists `GET /aiservices/voice-agent/live`, but both working sockets are under `/v2/ws/aiservices/...`.
 
-V1 accepts `Authorization: Bearer <API key or Zoom AI Services JWT>`. V2 was verified with `x-api-key` and also accepts bearer auth. The official sample reads the credential from `ZOOM_API_KEY`; this skill uses `ZOOM_AI_SERVICES_API_KEY` to distinguish it from Build-platform JWT pairs. Use one name in your deployment.
+Both surfaces accept `Authorization: Bearer` with either an API key or a Zoom AI Services JWT; V2 was also verified with `x-api-key`. The official sample reads the credential from `ZOOM_API_KEY`; this skill uses `ZOOM_AI_SERVICES_API_KEY` to distinguish it from Build-platform JWT pairs. Use one name in your deployment.
 
 Keep the key server-side. A browser `WebSocket` cannot set `x-api-key`, so use a server-side relay:
 

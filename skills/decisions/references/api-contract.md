@@ -131,7 +131,7 @@ A missing `name` is the trap worth calling out: the docs mark it optional, the g
 | Choice and score answers include `confidence` | No `confidence` field |
 | Score probabilities include `label` | Only `value` and `probability` |
 | Boolean choice returns a boolean rather than a string | `choice` is boolean; `probabilities[].value` is `"true"` / `"false"` |
-| Authenticate with a JWT bearer token | `x-api-key` and bearer with the API key both return 200 |
+| Authenticate with a JWT bearer token | `x-api-key`, bearer with the API key, and bearer with a Zoom AI Services JWT all return 200 |
 
 Model echo observed: an explicit `zoom-decisions-standard` request returns `"model": "zoom-decisions"`, `zoom-decisions-pro` returns `"model": "zoom-decisions-pro"`, and `zoom-decisions` returns `"model": "zoom-decisions"`. `reference_id` was accepted and not echoed in every test.
 

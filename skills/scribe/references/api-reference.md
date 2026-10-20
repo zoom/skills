@@ -32,7 +32,7 @@ Subprotocol: `live-asr`.
 
 Granular scope: `aiservices:write:live_transcribe:admin`.
 
-Authenticate upstream with `Authorization: Bearer <Zoom AI Services JWT>` per the official docs. An AI Services API key sent as `x-api-key` or as a bearer token also completed a live handshake on 2026-10-20. A browser client should use a server-side relay.
+Authenticate upstream with `Authorization: Bearer <Zoom AI Services JWT>` per the official docs. A Zoom AI Services JWT, an API key sent as `x-api-key`, and an API key sent as bearer each completed a live handshake on 2026-10-20. A browser client should use a server-side relay.
 
 Initial JSON frame:
 
