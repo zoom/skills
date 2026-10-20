@@ -73,6 +73,7 @@ description: |
 - `general`, `rest-api`, `webhooks`, `websockets`, `meeting-sdk`, `video-sdk`, `zoom-apps-sdk`
 - `rtms`, `team-chat`, `ui-toolkit`, `cobrowse-sdk`, `oauth`, `zoom-mcp`
 - `contact-center`, `virtual-agent`, `phone`, `rivet-sdk`, `probe-sdk`
+- `scribe`, `summarizer`, `translator`, `decisions`, `speech-summarization`, `voice-agent`
 
 ### Markdown Linking Rules (Required)
 
