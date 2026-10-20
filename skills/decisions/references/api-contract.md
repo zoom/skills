@@ -108,3 +108,31 @@ Mixed predicate, choice, and score questions work in one request and observed an
 ## Error and retry handling
 
 Typical service errors contain `code`, `reason`, `message`, and `metadata`. Retry only transient `429`, `503`, and `529` failures, cap attempts, and honor server retry timing. Treat invalid JSON or an answer count/name/type mismatch as an upstream contract error and retain the request ID for diagnosis.
+
+Observed validation responses on 2026-10-20:
+
+| Condition | Status | `reason` | Message |
+|---|---|---|---|
+| Question missing `name` | 400 | `INVALID_INPUT` | `the request was rejected; please verify the payload matches the Decisions API spec` |
+| Duplicate question names | 400 | `INVALID_INPUT` | `duplicate question name "x"` |
+| One choice value | 400 | `INVALID_INPUT` | `questions[0]: choice requires at least 2 choices` |
+| Empty `input` | 400 | `INVALID_INPUT` | `"input" must not be empty` |
+| Missing `instructions` | 400 | `VALIDATION_MISSING_FIELD` | `questions[0].instructions is required` |
+| Unsupported type | 400 | `INVALID_INPUT` | `questions[0]: unsupported type "ranking" (want predicate|choice|score)` |
+| Image without opt-in | 400 | `INVALID_INPUT` | `input_image requires "enable_image_input": true` |
+
+A missing `name` is the trap worth calling out: the docs mark it optional, the generic message does not identify it, and local validation is the only cheap way to catch it.
+
+## Docs versus observed production
+
+| Claim in docs | Observed production behavior |
+|---|---|
+| `name` is optional | Required; omission returns 400 |
+| Choice and score answers include `confidence` | No `confidence` field |
+| Score probabilities include `label` | Only `value` and `probability` |
+| Boolean choice returns a boolean rather than a string | `choice` is boolean; `probabilities[].value` is `"true"` / `"false"` |
+| Authenticate with a JWT bearer token | `x-api-key` and bearer with the API key both return 200 |
+
+Model echo observed: an explicit `zoom-decisions-standard` request returns `"model": "zoom-decisions"`, `zoom-decisions-pro` returns `"model": "zoom-decisions-pro"`, and `zoom-decisions` returns `"model": "zoom-decisions"`. `reference_id` was accepted and not echoed in every test.
+
+Responses include `request_id` and `usage` with `input_units`, `output_units`, `unit_type`, and an optional `details` object. One observed response included `details.cached_input_tokens`; do not assume `details` is always empty.

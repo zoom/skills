@@ -40,7 +40,7 @@ Required key scope: `aiservices:write:decide:admin`.
 
 Retrieve the production `x-api-key` from a **Zoom Build Platform** project. Build Platform was previously known as the **Video SDK account**, and the project can be associated with a CPaaS account under a Zoom Meetings account, a standalone Build Platform account through `marketplace.zoom.us`, or a CPaaS account through `aiservice.zoom.us`. The `zoom.ai` entry point may route users into the same project setup. Keep the key server-side and never expose it to browser code, logs, source control, or agent output.
 
-Use a full endpoint override only when the operator explicitly targets another environment. Internal environments may use bearer authentication, but do not silently send a production key to an internal host or an internal token to production.
+Use a full endpoint override only when the operator explicitly targets another environment. Production accepts both `x-api-key` and `Authorization: Bearer` with the same API key; the docs describe a Zoom AI Services JWT bearer token. Do not silently send a production key to an internal host or an internal token to production.
 
 Observed model inputs:
 
@@ -49,6 +49,18 @@ Observed model inputs:
 - `zoom-decisions` — accepted service alias.
 
 The response may report `zoom-decisions` after `zoom-decisions-standard` was requested. Treat that as alias normalization, not a failed model selection.
+
+## Docs versus production
+
+Rechecked 2026-10-20 against the docs and live requests. The docs are wrong or incomplete on these points:
+
+- `name` is documented as optional. A question without `name` returns `400 INVALID_INPUT` with a generic payload message, so always send a unique name.
+- `confidence` appears in the documented choice and score responses. Production responses contain no `confidence` field.
+- Documented score probabilities include `label`. Production returns only `value` and `probability`.
+- The docs say a Boolean choice returns a boolean. `choice` is boolean, but `probabilities[].value` is the string `"true"` or `"false"`.
+- The docs describe JWT bearer auth only. `x-api-key` works in production and was verified, as does bearer with the API key.
+
+The docs are accurate on question types, question independence, image opt-in, score as a weighted average, `reference_id` not being echoed, and the 400 error envelope.
 
 ## Core Workflow
 
@@ -64,7 +76,7 @@ The response may report `zoom-decisions` after `zoom-decisions-standard` was req
 
 - Predicate `probability` is the likelihood that the predicate is true.
 - Choice returns one `choice` plus a probability for every allowed value.
-- Score returns a probability-weighted, zero-based level index and probabilities keyed by numeric indexes.
+- Score returns a probability-weighted average of zero-based level indices; it may fall between levels and is not a selected index. Probabilities are keyed by numeric index.
 - No separate `confidence` field was observed. Never rename the winning probability to `confidence`.
 - `reference_id` was accepted but not echoed in observed production responses.
 
@@ -93,6 +105,8 @@ Read [references/api-contract.md](references/api-contract.md) before implementin
 
 ## Sources and Tracking
 
+- Docs: https://developers.zoom.us/docs/ai-services/decisions/fast-mode/
+- Catalog: https://developers.zoom.us/api/zoap/ai-services/methods/
 - AI Services quickstart: https://github.com/zoom/ai-services-quickstart/tree/wave-4
 - Required question names: https://github.com/zoom/ai-services-quickstart/issues/4
 - Type-specific validation: https://github.com/zoom/ai-services-quickstart/issues/5

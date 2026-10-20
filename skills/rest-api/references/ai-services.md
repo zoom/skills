@@ -104,13 +104,18 @@ Current OpenAPI inventory for Zoom AI Services, rechecked on 2026-10-20.
 |--------|----------|---------|-------------|
 | GET | `/aiservices/voice-agent/live` | Live Voice Agent WebSocket | `liveVoiceAgent` |
 
-The public upgrade operation is listed above, but the verified V2 WebSocket endpoint is:
+The catalog upgrade operation is listed above, but both working sockets are under:
 
 ```text
 wss://api.zoom.us/v2/ws/aiservices/voice-agent/live
 ```
 
-Use the `voice-agent.zoom.v2` subprotocol and server-side `x-api-key` authentication.
+The documented `/v2/aiservices/voice-agent/live` path returns 404. Two subprotocols work on the `/v2/ws/` route:
+
+- `voice-agent.zoom.v2` — official sample; `listen` / `think` / `speak` body; flat events.
+- `voice-agent.zoom.v1` — docs live-mode page; OpenAI-style `audio.input` / `audio.output` body; `{type, payload}` events.
+
+Match the body to the subprotocol and authenticate server-side with `x-api-key` or bearer.
 
 ## Granular scopes
 

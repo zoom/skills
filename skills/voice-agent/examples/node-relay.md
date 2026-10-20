@@ -1,6 +1,6 @@
-# Minimal Node.js relay
+# Minimal Node.js relay (V2)
 
-Use a server-side relay because browser WebSocket clients cannot set `x-api-key`.
+Use a server-side relay because browser WebSocket clients cannot set `x-api-key`. This example speaks the V2 surface: `voice-agent.zoom.v2` with the `listen` / `think` / `speak` session body.
 
 ```js
 import { createServer } from 'node:http';

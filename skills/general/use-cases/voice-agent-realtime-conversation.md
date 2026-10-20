@@ -32,7 +32,7 @@ The browser cannot attach `x-api-key` to a native WebSocket. The relay injects t
 
 ## Guardrails
 
-- Do not use the older OpenAI-style `audio.input` / `audio.output` shape with the V2 sample.
+- Match the session body to the subprotocol: V2 uses `listen` / `think` / `speak`; V1 uses `audio.input` / `audio.output` and returns `{type, payload}` events.
 - Do not expose the API key to browser JavaScript.
 - Do not send microphone frames before `session.updated`.
 - Do not treat cancelled, failed, or incomplete responses as successful playback.
