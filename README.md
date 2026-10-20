@@ -256,7 +256,8 @@ paid AI Services calls require available project credits; a correct request can 
 when the project is not provisioned for Build Account or Universal Credit access.
 
 Check the plan and credit balance in [Platform Studio](https://platform.zoom.us/). A new project
-key under an account whose credits are exhausted will not clear a `402`.
+key under an account without Speech Summarization credits will not clear a `402`, and other
+AI Services can keep working on the same key.
 
 ### Current Zoom MCP Servers
 

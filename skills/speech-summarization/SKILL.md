@@ -70,7 +70,7 @@ The stream uses these events:
 ## Failure Handling
 
 - `401`: invalid key or missing `aiservices:write:transcribe-summarize:admin` scope.
-- `402 QUOTA_EXCEEDED`: observed when no AI Services credits are available. The catalog does not list `402`; treat it as an entitlement signal, not a schema error. Two different API keys returned the same 402 on 2026-10-20, so rotating credentials does not necessarily clear it, and the response carries no `Retry-After`, so retrying will not either.
+- `402 QUOTA_EXCEEDED`: observed when the plan has no available Speech Summarization credits. The catalog does not list `402`; treat it as an entitlement signal, not a schema error. Two different API keys returned the same 402 on 2026-10-20, so rotating credentials does not necessarily clear it, and the response carries no `Retry-After`, so retrying will not either.
 - `405`: wrong HTTP method; this operation is `POST` only.
 - `413`: file exceeds 50 MB.
 - `415`: unsupported media type.
@@ -78,7 +78,7 @@ The stream uses these events:
 - `502`: upstream transcription or summary failure.
 - `503`: summary API is not configured.
 
-Do not treat `402` as a malformed request. The request shape can be correct while the project lacks credits. Check the plan and credit balance in [Platform Studio](https://platform.zoom.us/); a new project key under an exhausted account will not clear the 402.
+Do not treat `402` as a malformed request. The request shape can be correct while the plan lacks Speech Summarization credits. Check the plan and credit balance in [Platform Studio](https://platform.zoom.us/); a new project key under an account without those credits will not clear the 402. Decisions, Voice Agent, and Scribe Live still succeeded on the same key, so a 402 here does not make the key unusable elsewhere.
 
 ## Chaining
 
