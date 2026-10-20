@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Marketplace. This file mirrors the official
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/marketplace/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/marketplace/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 
@@ -315,7 +315,7 @@ Official schema sources:
 - Triggers: https://developers.zoom.us/docs/build-flow/manifests/schema/trigger/
 - Marketplace app APIs: https://developers.zoom.us/docs/api/marketplace/
 - Marketplace master app APIs: https://developers.zoom.us/docs/api/marketplace/ma/
-- Marketplace API inventory: https://developers.zoom.us/api-hub/marketplace/methods/endpoints.json
+- Marketplace API inventory: https://developers.zoom.us/api/zoap/marketplace/methods/
 
 For reusable request bodies, use [Marketplace App Templates](marketplace-app-templates.md).
 Select the closest scenario, replace every `example.com` value, reduce scopes to the exact

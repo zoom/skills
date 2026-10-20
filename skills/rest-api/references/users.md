@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Users. This file mirrors the official Zoom 
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/users/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/users/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

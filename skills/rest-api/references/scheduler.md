@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Scheduler. This file mirrors the official Z
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/scheduler/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/scheduler/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

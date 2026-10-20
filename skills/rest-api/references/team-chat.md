@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Chat. This file mirrors the official Zoom A
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/chat/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/chat/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

@@ -4,7 +4,7 @@ Authoritative endpoint inventory for AI Companion. This file mirrors the officia
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/ai-companion/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/ai-companion/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

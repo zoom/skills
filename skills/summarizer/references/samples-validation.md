@@ -3,7 +3,7 @@
 Validated against:
 - https://github.com/zoom/ai-services-quickstart/
 - official Summarizer docs under `docs/ai-services/summarizer/`
-- AI Services OpenAPI inventory at `api-hub/ai-services/methods/endpoints.json`
+- AI Services OpenAPI inventory at `api/zoap/ai-services/methods/`
 - Zoom blog: `extract-intelligence-from-transcripts-with-summarizer`
 
 ## Sample Age

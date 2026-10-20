@@ -1,7 +1,7 @@
 # Zoom AI Services Scribe API Reference
 
 Canonical sources:
-- OpenAPI JSON: https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/ai-services/methods/
 - Docs overview: https://developers.zoom.us/docs/ai-services/scribe/
 - Base URL: `https://api.zoom.us/v2`
 

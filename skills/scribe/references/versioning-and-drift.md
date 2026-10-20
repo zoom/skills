@@ -57,6 +57,6 @@ Watch for changes in:
 ## Review Trigger
 
 Re-review this skill when:
-- `api-hub/ai-services/methods/endpoints.json` changes
+- `api/zoap/ai-services/methods/` changes
 - AI Services docs rename Build/API credentials again
 - quickstart sample changes webhook or upload patterns

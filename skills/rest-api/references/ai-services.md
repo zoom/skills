@@ -4,7 +4,7 @@ Authoritative OpenAPI endpoint inventory for Scribe, Summarizer, and Translator,
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/ai-services/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Product skills: [../../scribe/SKILL.md](../../scribe/SKILL.md), [../../summarizer/SKILL.md](../../summarizer/SKILL.md), [../../translator/SKILL.md](../../translator/SKILL.md), [../../decisions/SKILL.md](../../decisions/SKILL.md)
 - Authentication details: [authentication.md](authentication.md)

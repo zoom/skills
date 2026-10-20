@@ -70,5 +70,5 @@ Batch mode limits:
 - https://developers.zoom.us/docs/ai-services/summarizer/
 - https://developers.zoom.us/docs/ai-services/summarizer/fast-mode/
 - https://developers.zoom.us/docs/ai-services/summarizer/batch-mode/
-- https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json
+- https://developers.zoom.us/api/zoap/ai-services/methods/
 - https://github.com/zoom/ai-services-quickstart/

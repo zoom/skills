@@ -4,7 +4,7 @@ Authoritative endpoint inventory for SCIM2. This file mirrors the official Zoom 
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/scim2/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/scim2/methods/
 - Base URL: `https://api.zoom.us`
 - Authentication details: [authentication.md](authentication.md)
 

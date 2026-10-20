@@ -37,9 +37,9 @@ triggers:
 
 Expert guidance for building server-side integrations with the Zoom REST API. This API provides 600+ endpoints for managing meetings, users, webinars, recordings, reports, and all Zoom platform resources programmatically.
 
-**Official Documentation**: https://developers.zoom.us/api-hub/
-**API Hub Reference**: https://developers.zoom.us/api-hub/meetings/
-**OpenAPI Inventories**: `https://developers.zoom.us/api-hub/<domain>/methods/endpoints.json`
+**Official Documentation**: https://developers.zoom.us/docs/api/
+**API Reference**: https://developers.zoom.us/api/zoap/meetings/methods/
+**OpenAPI Inventories**: `https://developers.zoom.us/api/zoap/<domain>/methods/`
 
 ## Quick Links
 
@@ -352,7 +352,7 @@ This skill includes comprehensive guides organized by category:
 
 ## Resources
 
-- **API Reference**: https://developers.zoom.us/api-hub/
+- **API Reference**: https://developers.zoom.us/docs/api/
 - **GraphQL Playground**: https://nws.zoom.us/graphql/playground
 - **Postman Collection**: https://marketplace.zoom.us/docs/api-reference/postman
 - **Developer Forum**: https://devforum.zoom.us/

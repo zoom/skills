@@ -1,7 +1,7 @@
 # Zoom AI Services Summarizer API Reference
 
 Canonical sources:
-- OpenAPI JSON: https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/ai-services/methods/
 - Docs overview: https://developers.zoom.us/docs/ai-services/summarizer/
 - Fast mode docs: https://developers.zoom.us/docs/ai-services/summarizer/fast-mode/
 - Batch mode docs: https://developers.zoom.us/docs/ai-services/summarizer/batch-mode/

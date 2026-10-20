@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Rooms. This file mirrors the official Zoom 
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/rooms/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/rooms/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

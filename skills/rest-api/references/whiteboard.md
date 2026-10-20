@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Whiteboard. This file mirrors the official 
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/whiteboard/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/whiteboard/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

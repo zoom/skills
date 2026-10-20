@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Cobrowse SDK. This file mirrors the officia
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/cobrowse-sdk/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/cobrowse-sdk/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

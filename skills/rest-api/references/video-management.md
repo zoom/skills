@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Video Management. This file mirrors the off
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/video-management/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/video-management/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

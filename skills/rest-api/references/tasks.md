@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Tasks. This file mirrors the official Zoom 
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/tasks/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/tasks/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

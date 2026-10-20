@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Mail. This file mirrors the official Zoom A
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/mail/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/mail/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

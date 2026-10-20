@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Auto Dialer. This file mirrors the official
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/auto-dialer/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/auto-dialer/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

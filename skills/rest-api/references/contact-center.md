@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Contact Center. This file mirrors the offic
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/contact-center/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/contact-center/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

@@ -3,7 +3,7 @@
 Validated against:
 - https://github.com/zoom/ai-services-quickstart/
 - official docs pages under `docs/ai-services/`
-- AI Services OpenAPI inventory at `api-hub/ai-services/methods/endpoints.json`
+- AI Services OpenAPI inventory at `api/zoap/ai-services/methods/`
 - Zoom blog context:
   - `introducing-zoom-ai-services`
   - `voice-insights-modernize-customer-support-with-scribe`

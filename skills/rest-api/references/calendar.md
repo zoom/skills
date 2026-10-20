@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Calendar. This file mirrors the official Zo
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/calendar/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/calendar/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

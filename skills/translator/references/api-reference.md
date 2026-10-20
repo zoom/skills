@@ -1,7 +1,7 @@
 # Zoom AI Services Translator API Reference
 
 Canonical sources:
-- OpenAPI JSON: https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/ai-services/methods/
 - Docs overview: https://developers.zoom.us/docs/ai-services/translator/
 - Fast mode docs: https://developers.zoom.us/docs/ai-services/translator/fast-mode/
 - Batch mode docs: https://developers.zoom.us/docs/ai-services/translator/batch-mode/

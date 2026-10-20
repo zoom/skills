@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Phone. This file mirrors the official Zoom 
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/phone/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/phone/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

@@ -82,7 +82,7 @@ Use this before deep debugging.
 
 - https://developers.zoom.us/docs/ai-services/
 - https://developers.zoom.us/docs/ai-services/scribe/
-- https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json
+- https://developers.zoom.us/api/zoap/ai-services/methods/
 
 ### Raw docs in repo tooling output
 

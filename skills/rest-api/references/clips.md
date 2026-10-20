@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Clips. This file mirrors the official Zoom 
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/clips/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/clips/methods/
 - Base URL: `https://api.zoom.us/`
 - Authentication details: [authentication.md](authentication.md)
 

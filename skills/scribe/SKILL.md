@@ -28,7 +28,7 @@ Official docs:
 - https://developers.zoom.us/docs/ai-services/
 - https://developers.zoom.us/docs/ai-services/scribe/
 - https://developers.zoom.us/docs/api/ai-services/
-- https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json
+- https://developers.zoom.us/api/zoap/ai-services/methods/
 - Quickstart sample: https://github.com/zoom/ai-services-quickstart/
 
 ## Routing Guardrail

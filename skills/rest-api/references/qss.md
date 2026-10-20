@@ -4,7 +4,7 @@ Authoritative endpoint inventory for QSS. This file mirrors the official Zoom AP
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/qss/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/qss/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

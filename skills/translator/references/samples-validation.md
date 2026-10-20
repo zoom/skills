@@ -3,7 +3,7 @@
 Validated against:
 - https://github.com/zoom/ai-services-quickstart/
 - official Translator docs under `docs/ai-services/translator/`
-- AI Services OpenAPI inventory at `api-hub/ai-services/methods/endpoints.json`
+- AI Services OpenAPI inventory at `api/zoap/ai-services/methods/`
 - Zoom blog: `build-multilingual-experiences-with-zoom-translator-api`
 
 ## Sample Age

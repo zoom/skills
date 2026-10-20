@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Workforce Management. This file mirrors the
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/workforce-management/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/workforce-management/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 

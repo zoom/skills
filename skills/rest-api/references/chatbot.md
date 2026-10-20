@@ -4,7 +4,7 @@ Authoritative endpoint inventory for Chatbot. This file mirrors the official Zoo
 
 ## Canonical Source
 
-- OpenAPI JSON: https://developers.zoom.us/api-hub/chatbot/methods/endpoints.json
+- OpenAPI JSON: https://developers.zoom.us/api/zoap/chatbot/methods/
 - Base URL: `https://api.zoom.us/v2`
 - Authentication details: [authentication.md](authentication.md)
 
