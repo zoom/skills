@@ -135,3 +135,12 @@ Scopes below come from each operation's `x-granular-scopes`. Request only what a
 | Voice Agent | `GET /aiservices/voice-agent/live` | `aiservices:read:voice-agent:admin` |
 
 Batch read, list, and cancel operations each declare their own `aiservices:read:*:admin` or `aiservices:delete:*:admin` scope. Read them from the catalog instead of assuming one shared batch scope.
+
+## Clinical Notes (documented, not in this catalog)
+
+The AI Services docs also cover a Clinical Notes API:
+
+- `POST /aiservices/clinical_notes/generate` for synchronous file or URL input
+- `POST /aiservices/clinical_notes/job` and `GET /aiservices/clinical_notes/job/{job_id}` for asynchronous jobs
+
+It supports `SOAP`, `GENERAL_MEDICINE`, and `GENERAL_BEHAVIORAL_HEALTH` templates. It does not appear in the current `ai-services` OpenAPI catalog, so treat the docs as its source until an operation appears here.

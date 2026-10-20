@@ -58,11 +58,18 @@ Official docs:
 
 ## Core Workflow
 
-1. Get Build-platform credentials and generate an HS256 JWT.
+1. Get Build-platform credentials — an API key for `x-api-key`/bearer, or an HS256 JWT.
 2. Choose **fast mode** for one short file or **batch mode** for stored archives / large sets.
 3. Submit the transcription request.
 4. For batch jobs, poll job/file status or receive webhook notifications.
 5. Persist and post-process transcript JSON.
+
+## Optional Enrichment
+
+- `config.model` selects the recognition model.
+- `config.language_detection` supports `once` or `continuous` with candidate languages.
+- `config.vocabulary.phrases` (maximum 100) or `config.vocabulary_id` adds custom terms; use one, not both.
+- `outputs.text_polishing.enabled` returns `outputs.text_polishing.text`.
 
 ## Hosted Fast-Mode Guardrail
 

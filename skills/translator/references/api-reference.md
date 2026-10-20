@@ -37,6 +37,8 @@ Constraints:
 Response keys:
 - `request_id`
 - `result.translations`
+- `model`
+- `usage`
 
 ## Batch Request Shape
 

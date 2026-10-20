@@ -63,7 +63,7 @@ Required top-level fields:
 - `file`
 - `config`
 
-Common config fields:
+Config fields:
 - `language`
 - `word_time_offsets`
 - `channel_separation`
@@ -71,12 +71,20 @@ Common config fields:
 - `output_format`
 - `profanity_filter`
 - `diarization`
+- `model`
+- `language_detection.mode` (`once` or `continuous`)
+- `language_detection.candidate_languages`
+- `vocabulary.phrases` (maximum 100) or `vocabulary_id`
+
+Optional top-level:
+- `outputs.text_polishing.enabled` — returns `outputs.text_polishing.text`
 
 Response keys:
 - `request_id`
 - `duration_sec`
 - `model`
 - `result`
+- `outputs.text_polishing.text` when text polishing is enabled
 
 ### `POST /aiservices/scribe/jobs`
 
@@ -110,9 +118,14 @@ Config subfields:
 - `profanity_filter`
 - `output_format`
 - `segmentation_mode`
+- `model`
+- `language_detection.mode` (`once` or `continuous`)
+- `language_detection.candidate_languages`
+- `vocabulary.phrases` or `vocabulary_id`
 
 Optional:
 - `reference_id`
+- `outputs.text_polishing.enabled`
 - `notifications.webhook_url`
 - `notifications.secret`
 

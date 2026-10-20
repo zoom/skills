@@ -250,14 +250,14 @@ Store the key server-side as `ZOOM_AI_SERVICES_API_KEY`; never embed it in brows
 commit it to the repository.
 
 The same key model applies to Speech Summarization, Voice Agent, Decisions, Scribe, Summarizer,
-and Translator, subject to the permissions attached to the key. Speech Summarization and other
-paid AI Services calls require available project credits; a correct request can still return
-`402 QUOTA_EXCEEDED`. Live WebSocket surfaces such as Voice Agent can return `404` on upgrade
+and Translator, subject to the permissions attached to the key. Paid AI Services calls require
+available credits; a correct request can still return `402 QUOTA_EXCEEDED`. On 2026-10-20,
+Speech Summarization and Scribe fast mode both returned it while Decisions and Voice Agent
+turns still worked. Live WebSocket surfaces such as Voice Agent can return `404` on upgrade
 when the project is not provisioned for Build Account or Universal Credit access.
 
 Check the plan and credit balance in [Platform Studio](https://platform.zoom.us/). A new project
-key under an account without Speech Summarization credits will not clear a `402`, and other
-AI Services can keep working on the same key.
+key under the same account will not clear a `402`.
 
 ### Current Zoom MCP Servers
 

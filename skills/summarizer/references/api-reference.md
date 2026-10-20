@@ -31,6 +31,7 @@ Common config fields:
 - `summary_type`: currently `conversation`
 - `task`: `recap`, `summary`, `action_items`, `full_summary`
 - `language`: BCP-47 output locale code
+- `output_format`
 
 Optional:
 - `reference_id`
@@ -40,6 +41,7 @@ Response keys:
 - `task`
 - `result.text`
 - `model`
+- `usage`
 
 ## Batch Request Shape
 
