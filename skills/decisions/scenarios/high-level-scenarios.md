@@ -62,9 +62,10 @@ Give every question a unique non-empty name. Verify answer count, order, name, a
 
 Use this chain when the original evidence is audio or video:
 
-1. Transcribe with [Scribe](../../scribe/SKILL.md).
-2. Optionally summarize long conversational input with [Summarizer](../../summarizer/SKILL.md).
-3. Send the transcript or summary to Decisions for a typed outcome.
-4. Store raw and normalized results with request IDs for operational review.
+1. If one media file must produce both transcript and summary, start with [Speech Summarization](../../speech-summarization/SKILL.md).
+2. Otherwise transcribe with [Scribe](../../scribe/SKILL.md).
+3. Optionally summarize long conversational input with [Summarizer](../../summarizer/SKILL.md).
+4. Send the transcript or summary to Decisions for a typed outcome.
+5. Store raw and normalized results with request IDs for operational review.
 
 Avoid repeatedly calling Decisions on the same successful input; calls consume AI Services usage.

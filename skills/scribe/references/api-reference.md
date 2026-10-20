@@ -10,6 +10,7 @@ Canonical sources:
 | Method | Endpoint | Summary | Operation ID |
 |--------|----------|---------|-------------|
 | POST | `/aiservices/scribe/transcribe` | Scribe (Synchronous) | `createFastAsr` |
+| GET | `/aiservices/scribe/live` | Live Scribe WebSocket | `liveTranscribe` |
 | POST | `/aiservices/scribe/jobs` | Submit Batch Scribe Job | `submitBatchAsr` |
 | GET | `/aiservices/scribe/jobs` | List Batch Jobs | `listBatchJobs` |
 | GET | `/aiservices/scribe/jobs/{jobId}` | Get Batch Job Status | `getBatchJobStatus` |
@@ -18,6 +19,43 @@ Canonical sources:
 | GET | `/aiservices/scribe/jobs/{jobId}/files/{fileId}` | Get Batch Scribe Job File | `getBatchScribeJobFile` |
 
 ## Request Shapes
+
+### `GET /aiservices/scribe/live`
+
+WebSocket URL:
+
+```text
+wss://api.zoom.us/v2/aiservices/scribe/live
+```
+
+Subprotocol: `live-asr`.
+
+Granular scope: `aiservices:write:live_transcribe:admin`.
+
+Authenticate upstream with `Authorization: Bearer <Zoom AI Services JWT>` per the official docs. An AI Services API key sent as `x-api-key` or as a bearer token also completed a live handshake on 2026-10-20. A browser client should use a server-side relay.
+
+Initial JSON frame:
+
+```json
+{
+  "type": "session.update",
+  "config": {
+    "language": "en-US",
+    "interim_results": true,
+    "diarization": false,
+    "model": "zoom-scribe-multilingual"
+  },
+  "audio": { "format": "pcm16" }
+}
+```
+
+`config.language`, `config.model`, `config.interim_results`, `config.diarization`, `config.profanity_filter`, `config.vocabulary`, `config.vocabulary_id`, `outputs.text_polishing`, and `reference_id` are supported. Use either `config.vocabulary` or `config.vocabulary_id`, not both.
+
+Stream signed little-endian 16 kHz mono PCM16 as binary frames of about 100 ms, or `audio.format: "opus"`. Do not add a WAV header or base64-encode binary audio. To attach a source timestamp or participant metadata, send an `input_audio_buffer.append` JSON text frame immediately followed by exactly one binary audio frame.
+
+Handle `session.created`, `session.updated`, `input_audio_buffer.speech_started`, `input_audio_buffer.speech_stopped`, `transcription.delta`, `transcription.completed`, `error`, and `session.closed`. Send `{"type":"session.close"}` to stop and keep reading until `session.closed` arrives.
+
+Session limits: 120 minutes maximum and a 30 second idle timeout without audio events.
 
 ### `POST /aiservices/scribe/transcribe`
 

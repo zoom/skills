@@ -62,7 +62,10 @@ Common route outcomes:
 - In-client apps -> `zoom-apps-sdk`
 - Uploaded/stored media transcription -> `scribe`
 - Transcript summarization and action items -> `summarizer`
+- One-shot audio/video transcript plus summary -> `speech-summarization`
 - Plain-text and batch file translation -> `translator`
+- Typed decisions and probabilities -> `decisions`
+- Real-time microphone conversation -> `voice-agent`
 - Live media streams -> `rtms`
 - Contact Center -> `contact-center`
 - Virtual Agent web/mobile chat and KB sync -> `virtual-agent`
@@ -97,7 +100,10 @@ repo/
 │   ├── zoom-apps-sdk/
 │   ├── scribe/
 │   ├── summarizer/
+│   ├── speech-summarization/
 │   ├── translator/
+│   ├── decisions/
+│   ├── voice-agent/
 │   ├── rtms/
 │   ├── team-chat/
 │   ├── contact-center/
@@ -164,7 +170,10 @@ Platform-heavy spokes (examples):
 | `zoom-apps-sdk` | Build apps inside Zoom client surfaces |
 | `scribe` | Zoom AI Services Scribe for synchronous and batch transcription of uploaded or stored media |
 | `summarizer` | Zoom AI Services Summarizer for transcript recaps, summaries, and action items |
+| `speech-summarization` | Zoom AI Services Speech Summarization for one-shot audio/video transcript plus summary over SSE |
 | `translator` | Zoom AI Services Translator for plain-text and batch file translation |
+| `decisions` | Zoom AI Services Decisions for predicates, constrained choices, ordered scores, and image comparison |
+| `voice-agent` | Zoom AI Services Voice Agent V2 for real-time microphone conversations, VAD, audio streaming, and tools |
 | `rtms` | Real-time media streams |
 | `team-chat` | Team Chat integrations |
 | `contact-center` | Contact Center app/web/mobile integrations |

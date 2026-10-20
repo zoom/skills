@@ -4,8 +4,8 @@ Use this before deep debugging.
 
 ## 1) Confirm the Right Product
 
-- File-based or storage-based transcription -> stay on `scribe`.
-- Live meeting media stream or botless live transcription -> use `rtms` instead.
+- File-based, storage-based, or microphone-stream transcription -> stay on `scribe`.
+- Live meeting media stream with meeting metadata or participant identity -> use `rtms` instead.
 - Meeting bot that joins and records before transcription -> chain Meeting SDK Linux first.
 
 ## 2) Confirm Credentials
@@ -19,7 +19,8 @@ Use this before deep debugging.
 
 - **Fast mode** for one short file and immediate JSON response.
 - **Batch mode** for many files, long recordings, or archive-style processing.
-- **Browser microphone pseudo-streaming** for short repeated chunks uploaded through the async fast-mode wrapper.
+- **Live mode** (`wss://api.zoom.us/v2/aiservices/scribe/live`, subprotocol `live-asr`) for real-time microphone or telephony transcription through a server-side relay.
+- **Browser microphone pseudo-streaming** only when Live is unavailable; short repeated chunks uploaded through the async fast-mode wrapper.
 - Fast mode current limits from the API spec:
   - maximum file size: `100 MB`
   - maximum duration: `2 hours`
@@ -41,8 +42,8 @@ Use this before deep debugging.
   This gives incremental transcript updates without trying to hold a single long browser request open.
 - For browser mic capture, rotate the recorder per chunk so each uploaded blob is a standalone file.
   Do not assume `MediaRecorder.start(timeslice)` later chunks will always be independently transcribable.
-- Do not treat this as the default production solution for live transcription.
-  Prefer `rtms` when the user actually needs a live-audio product instead of a browser demo.
+- Do not treat pseudo-streaming as the default production solution for live transcription.
+  Prefer Live mode for microphone audio and `rtms` when the source is live meeting media.
 
 ## 4) Confirm Storage / Webhook Inputs
 

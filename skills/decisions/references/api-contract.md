@@ -1,6 +1,6 @@
 # Decisions API contract and observed workarounds
 
-This reference records production behavior live-tested on 2026-10-17. Reconcile it with the public specification when Decisions appears in the AI Services OpenAPI inventory.
+This reference records production behavior live-tested on 2026-10-17 and rechecked against the public AI Services OpenAPI catalog on 2026-10-20. The endpoint is now part of the published catalog.
 
 ## Minimal request
 

@@ -69,9 +69,25 @@ Guardrail:
 - keep `scribe` focused on transcription
 - do sentiment analysis, keyword detection, or scoring in downstream services after transcript generation
 
-## Scenario 6: Browser Microphone Incremental Transcript
+## Scenario 6: Live Microphone Transcription
 
-Use when a web page should capture microphone audio and show transcript updates every few seconds without switching to RTMS.
+Use Scribe Live when a web or native app should stream microphone audio and receive transcription events in real time.
+
+Flow:
+1. Browser captures 16 kHz mono PCM16 audio.
+2. A server-side relay opens `wss://api.zoom.us/v2/aiservices/scribe/live` with `live-asr` and authenticates with a Zoom AI Services JWT bearer token, or an AI Services API key.
+3. Relay sends `session.update` with `config.language`, optional `config.interim_results`, and `audio.format`, then forwards binary PCM16 frames.
+4. Forward `transcription.delta` (only when interim results are enabled), `transcription.completed`, `session.closed`, and `error` events to the client.
+5. On stop, send `session.close` and keep reading until `session.closed` arrives.
+
+Guardrail:
+- use RTMS instead when meeting metadata, participants, or meeting-scoped media are required
+- use Voice Agent instead when the system must respond with speech
+- replace accumulated `transcription.delta` text per `item_id` instead of appending it
+
+## Scenario 7: Browser Microphone Incremental Transcript Fallback
+
+Use pseudo-streaming only when Scribe Live is unavailable or the deployment cannot support a WebSocket relay.
 
 Flow:
 1. Browser captures microphone audio with `MediaRecorder`.
@@ -82,5 +98,5 @@ Flow:
 Guardrail:
 - this is pseudo-streaming over repeated file uploads
 - this is best kept as a lightweight demo or constrained fallback
-- do not choose it first for a true live-transcription product
+- prefer Scribe Live for a true live-transcription product
 - if the requirement is truly live media stream ingestion or lower-latency continuous audio, route to `rtms`

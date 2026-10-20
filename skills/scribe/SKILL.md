@@ -14,13 +14,13 @@ triggers:
 
 # Zoom AI Services Scribe
 
-**Current API audit:** Official docs and OpenAPI were rechecked on 2026-07-10. The May 18, 2026
-release added `GET /aiservices/scribe/jobs/{jobId}/files/{fileId}`; it is included below.
+**Current API audit:** Official docs and the OpenAPI catalog were rechecked on 2026-10-20. Scribe Live is available at `GET /aiservices/scribe/live`; the verified WebSocket URL is `wss://api.zoom.us/v2/aiservices/scribe/live` with the `live-asr` subprotocol.
 
 Implementation guidance for Zoom AI Services Scribe across:
 - synchronous single-file transcription (`POST /aiservices/scribe/transcribe`)
 - asynchronous batch jobs (`/aiservices/scribe/jobs*`)
-- browser microphone pseudo-streaming via repeated short file uploads
+- real-time microphone transcription over the Scribe Live WebSocket
+- browser microphone pseudo-streaming via repeated short file uploads when Live is unavailable
 - webhook-driven batch status updates
 - Build-platform JWT generation and credential handling
 
@@ -34,9 +34,12 @@ Official docs:
 ## Routing Guardrail
 
 - If the user needs **uploaded or stored media transcribed into text**, route here first.
-- If the user needs **transcript text summarized**, route to [../summarizer/SKILL.md](../summarizer/SKILL.md).
+- If the user needs **real-time microphone transcription**, use Scribe Live.
+- If one uploaded media file needs **transcript plus summary**, route to [Speech Summarization](../speech-summarization/SKILL.md) instead of chaining Scribe and Summarizer.
+- If the user needs **transcript text summarized**, route to [Summarizer](../summarizer/SKILL.md).
 - If the user needs **plain text translated**, route to [../translator/SKILL.md](../translator/SKILL.md).
-- If the user needs **live meeting media** without file-based upload/batch jobs, route to [../rtms/SKILL.md](../rtms/SKILL.md).
+- If the user needs **live meeting media** with meeting metadata, participant identity, or meeting-scoped streams, route to [RTMS](../rtms/SKILL.md).
+- If the user needs an **interactive spoken response**, route to [Voice Agent](../voice-agent/SKILL.md).
 - If the user needs **Zoom REST API inventory** for AI Services paths, chain [../rest-api/SKILL.md](../rest-api/SKILL.md).
 - If the user needs webhook signature patterns or generic HMAC receiver hardening, optionally chain [../webhooks/SKILL.md](../webhooks/SKILL.md).
 
@@ -73,10 +76,31 @@ Official docs:
 - For hosted UIs, prefer an async request/polling wrapper for fast mode instead of holding the browser open for the full upstream response.
 - For larger or less predictable media, prefer batch mode even when the file is still within the formal fast-mode size limit.
 
-## Browser Microphone Pattern
+## Live Scribe
 
-- `scribe` does not expose a documented real-time streaming API surface.
-- If you want a browser microphone experience, use pseudo-streaming:
+- Endpoint: `wss://api.zoom.us/v2/aiservices/scribe/live`
+- Subprotocol: `live-asr`
+- Required key scope: `aiservices:write:live_transcribe:admin`
+- Authenticate upstream with `Authorization: Bearer <Zoom AI Services JWT>` as the official docs require. An AI Services API key sent as `x-api-key` or as a bearer token also completed a live handshake on 2026-10-20. A browser WebSocket cannot set headers, so use a server-side relay.
+- After the relay connects, send `session.update` with settings under `config`:
+
+  ```json
+  {
+    "type": "session.update",
+    "config": { "language": "en-US", "interim_results": true },
+    "audio": { "format": "pcm16" }
+  }
+  ```
+
+- Stream signed little-endian 16 kHz mono PCM16 as binary frames of roughly 100 ms. Do not add a WAV header and do not base64-encode binary audio.
+- `transcription.delta` events arrive only when `config.interim_results` is `true`. Each delta carries accumulated partial text for its `item_id`; replace the displayed partial instead of appending it.
+- `transcription.completed` carries `item_id`, `transcript`, timing, and `speaker` when diarization is enabled.
+- Close with `{"type":"session.close"}` and keep reading until pending transcript items drain and `session.closed` arrives.
+- Session limits: 120 minutes maximum duration and a 30 second idle timeout with no audio events.
+
+## Browser Microphone Fallback
+
+- If Live is unavailable, pseudo-stream short chunks through the fast-mode file endpoint:
   1. capture microphone audio in short chunks
   2. upload each chunk through the async fast-mode wrapper
   3. poll for completion
@@ -86,6 +110,7 @@ Official docs:
   - acceptable range: `5-10 seconds`
   - in-flight chunk requests: `2-3`
 - This is a practical UI pattern for incremental transcript updates, not a substitute for `rtms`.
+- Prefer Scribe Live for a true live-transcription product; keep pseudo-streaming as a fallback.
 - Treat this as a fallback demo pattern, not the preferred production architecture.
 - It adds repeated upload overhead, chunk-boundary drift, browser codec/container variability, and transcript stitching complexity.
 - If the user asks for actual live stream ingestion, low-latency continuous media, or server-push media transport, route to [../rtms/SKILL.md](../rtms/SKILL.md) instead.
@@ -95,6 +120,7 @@ Official docs:
 | Mode | Method | Path | Use |
 |------|--------|------|-----|
 | Fast | `POST` | `/aiservices/scribe/transcribe` | Synchronous transcription for one file |
+| Live | `GET` | `/aiservices/scribe/live` | Real-time WebSocket transcription (`live-asr`) |
 | Batch | `POST` | `/aiservices/scribe/jobs` | Submit asynchronous batch job |
 | Batch | `GET` | `/aiservices/scribe/jobs` | List jobs |
 | Batch | `GET` | `/aiservices/scribe/jobs/{jobId}` | Inspect job summary/state |
@@ -113,10 +139,12 @@ Official docs:
 ## Chaining
 
 - Stored Zoom recordings -> [../rest-api/SKILL.md](../rest-api/SKILL.md) + `scribe`
-- Transcribe then summarize -> `scribe` + [../summarizer/SKILL.md](../summarizer/SKILL.md)
+- Transcribe then summarize -> `scribe` + [Summarizer](../summarizer/SKILL.md)
+- One media file to transcript plus summary -> [Speech Summarization](../speech-summarization/SKILL.md)
 - Transcribe then translate -> `scribe` + [../translator/SKILL.md](../translator/SKILL.md)
 - Webhook verification hardening -> [../webhooks/SKILL.md](../webhooks/SKILL.md)
 - Real-time live transcript/media -> [../rtms/SKILL.md](../rtms/SKILL.md)
+- Interactive spoken response -> [Voice Agent](../voice-agent/SKILL.md)
 - Cross-product routing -> [../general/SKILL.md](../general/SKILL.md)
 
 ## Operations

@@ -60,16 +60,21 @@ Choose fast mode when:
 - user uploads one file
 - latency matters more than throughput
 - file size and duration are manageable
-- you are building pseudo-streaming over short microphone chunks from a browser UI
+- the input is a completed file rather than a live microphone stream
+
+Choose live mode when:
+- a microphone or telephony source must be transcribed as it is spoken
+- the client can hold a WebSocket through a server-side relay
+- incremental `transcription.delta` events fit the UI better than one completed transcript
 
 Choose batch mode when:
 - many files must be processed
 - transcripts can arrive later
 - storage-centric workflows fit better than direct upload
 
-## Browser Microphone Pseudo-Streaming
+## Browser Microphone Pseudo-Streaming (Fallback)
 
-Scribe is file-oriented, so a browser microphone UX should be modeled as repeated short uploads, not a long-lived stream.
+Use Scribe Live when you need a long-lived microphone stream. Fall back to repeated short uploads only when the deployment cannot support the WebSocket relay.
 
 Recommended pattern:
 1. capture browser microphone audio with `MediaRecorder`
@@ -89,7 +94,7 @@ Why this works:
 
 Guardrail:
 - this is pseudo-streaming over file uploads
-- this is not the preferred production design for live audio capture
+- Live mode is the preferred production design for live audio capture
 - use it only when a lightweight browser demo or rough incremental transcript is acceptable
 - avoid it when you need stable low-latency live transcription, lower overhead, or stronger continuity across utterances
-- for true live media streams, low-latency server ingest, or continuous in-meeting audio, use `rtms`
+- for live meeting media, low-latency server ingest, or continuous in-meeting audio, use `rtms`

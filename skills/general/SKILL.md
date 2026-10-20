@@ -43,6 +43,8 @@ type SkillId =
   | 'summarizer'
   | 'translator'
   | 'decisions'
+  | 'speech-summarization'
+  | 'voice-agent'
   | 'zoom-meeting-sdk-web-component-view'
   | 'zoom-video-sdk'
   | 'zoom-plugin-sdk'
@@ -70,6 +72,8 @@ function detectSignals(rawQuery: string) {
     summarizer: hasAny(q, ['summarizer', 'summarize transcript', 'meeting recap api', 'action items']),
     translator: hasAny(q, ['translator', 'translate text', 'batch translation', 'target_languages']),
     decisions: hasAny(q, ['zoom decisions', 'decisions api', 'decision probability', 'predicate classification', 'boolean choice', 'compare two images', 'ordered score', 'zoom-decisions-standard', 'zoom-decisions-pro']),
+    speechSummarization: hasAny(q, ['speech summarization', 'speech summary', 'summarize audio file', 'summarize video file', 'transcribe and summarize', 'speech-summarization api']),
+    voiceAgent: hasAny(q, ['voice agent', 'realtime voice agent', 'real-time voice agent', 'speech to speech', 'speech-to-speech', 'voice-agent.zoom.v2', 'live microphone agent']),
     mcp: hasAny(q, ['zoom mcp', 'agentic retrieval', 'tools/list', 'semantic meeting search', 'search zoom', 'zoom docs search', 'zoom chat search']),
     teamChatMcp: hasAny(q, ['team chat mcp', 'zoom chat mcp', 'send zoom chat via mcp', 'zoom_chat_message_send']),
     whiteboardMcp: hasAny(q, ['whiteboard mcp', 'zoom whiteboard mcp']),
@@ -91,6 +95,8 @@ function pickPrimarySkill(s: ReturnType<typeof detectSignals>): SkillId {
   if (s.canvasMcp || s.docsMcp) return 'zoom-mcp/canvas';
   if (s.tasksMcp) return 'zoom-mcp/tasks';
   if (s.revenueMcp) return 'zoom-mcp/revenue-accelerator';
+  if (s.voiceAgent) return 'voice-agent';
+  if (s.speechSummarization) return 'speech-summarization';
   if (s.mcp) return 'zoom-mcp';
   if (s.decisions) return 'decisions';
   if (s.summarizer) return 'summarizer';
@@ -142,8 +148,10 @@ For the full TypeScript implementation and handoff contract, use
 | Build an app that runs inside Zoom client | **[zoom-apps-sdk](../zoom-apps-sdk/SKILL.md)** |
 | Transcribe uploaded or stored media with AI Services Scribe | **[scribe](../scribe/SKILL.md)** |
 | Summarize transcript text with AI Services Summarizer | **[summarizer](../summarizer/SKILL.md)** |
+| Transcribe and summarize one audio/video file with Speech Summarization | **[speech-summarization](../speech-summarization/SKILL.md)** |
 | Translate plain text or text files with AI Services Translator | **[translator](../translator/SKILL.md)** |
 | Evaluate probabilities, predicates, closed-set choices, ordered scores, or image comparisons | **[decisions](../decisions/SKILL.md)** |
+| Build a real-time microphone voice agent with spoken responses | **[voice-agent](../voice-agent/SKILL.md)** |
 | Access live audio/video/transcripts from meetings | **[zoom-rtms](../rtms/SKILL.md)** |
 | Enable collaborative browsing for support | **[zoom-cobrowse-sdk](../cobrowse-sdk/SKILL.md)** |
 | Build Contact Center apps and channel integrations | **[contact-center](../contact-center/SKILL.md)** |
@@ -252,6 +260,8 @@ Both receive event notifications, but differ in approach:
 | [Scribe Transcription Pipeline](use-cases/scribe-transcription-pipeline.md) | Transcribe uploaded files or S3 archives with AI Services Scribe using fast mode or batch jobs | [scribe](../scribe/SKILL.md) + optional [zoom-rest-api](../rest-api/SKILL.md) + optional [zoom-webhooks](../webhooks/SKILL.md) |
 | [AI Services Text Intelligence](use-cases/ai-services-text-intelligence.md) | Chain Scribe, Summarizer, and Translator for transcript summary and localization workflows | [scribe](../scribe/SKILL.md) + [summarizer](../summarizer/SKILL.md) + [translator](../translator/SKILL.md) |
 | [Decisions Classification and Scoring](use-cases/decisions-classification-scoring.md) | Return typed probabilities, fixed classifications, ordered scores, or image comparisons | [decisions](../decisions/SKILL.md) + optional [zoom-rest-api](../rest-api/SKILL.md) |
+| [Speech Summarization](use-cases/speech-summarization-media-to-summary.md) | Transcribe and summarize one uploaded audio/video file over SSE | [speech-summarization](../speech-summarization/SKILL.md) + optional [decisions](../decisions/SKILL.md) |
+| [Voice Agent](use-cases/voice-agent-realtime-conversation.md) | Build a real-time microphone conversation with VAD, interruption, tools, and spoken output | [voice-agent](../voice-agent/SKILL.md) + optional [zoom-rest-api](../rest-api/SKILL.md) |
 | [APIs vs MCP Routing](use-cases/apis-vs-mcp-routing.md) | Decide whether to route to deterministic Zoom APIs, AI-driven MCP, or a hybrid design | [zoom-rest-api](../rest-api/SKILL.md) and/or [zoom-mcp](../zoom-mcp/SKILL.md) |
 | [Custom Meeting UI (Web)](use-cases/custom-meeting-ui-web.md) | Build a custom video UI for a real Zoom meeting in a web app using Meeting SDK Component View | [zoom-meeting-sdk-web-component-view](../meeting-sdk/web/component-view/SKILL.md) + [zoom-oauth](../oauth/SKILL.md) |
 | [Meeting Automation](use-cases/meeting-automation.md) | Schedule, update, delete meetings programmatically | [zoom-rest-api](../rest-api/SKILL.md) |
@@ -283,8 +293,10 @@ Both receive event notifications, but differ in approach:
 - [APIs vs MCP Routing](use-cases/apis-vs-mcp-routing.md): choose API-only, MCP-only, or hybrid routing using official Zoom criteria.
 - [AI Companion Integration](use-cases/ai-companion-integration.md): connect Zoom AI Companion capabilities into your app workflow.
 - [AI Integration](use-cases/ai-integration.md): add summarization, transcription, or assistant logic using Zoom data surfaces.
-- [AI Services Text Intelligence](use-cases/ai-services-text-intelligence.md): use Scribe, Summarizer, and Translator together for transcript, summary, action item, and localization pipelines.
+- [AI Services Text Intelligence](use-cases/ai-services-text-intelligence.md): route media, transcript, summary, translation, decisions, and real-time voice workflows across AI Services.
 - [Decisions Classification and Scoring](use-cases/decisions-classification-scoring.md): use AI Services Decisions for typed predicates, constrained classifications, ordered levels, probabilities, and image comparisons.
+- [Speech Summarization](use-cases/speech-summarization-media-to-summary.md): transcribe and summarize one uploaded audio/video file in a single SSE request.
+- [Voice Agent](use-cases/voice-agent-realtime-conversation.md): build a real-time microphone conversation with VAD, interruption handling, tools, and spoken output.
 - [Backend Automation (S2S OAuth)](use-cases/backend-automation-s2s-oauth.md): run server-side jobs with account-level OAuth credentials.
 - [Collaborative Apps](use-cases/collaborative-apps.md): build shared in-meeting app state and interactions.
 - [Contact Center Integration](use-cases/contact-center-integration.md): connect Zoom Contact Center signals into external systems.

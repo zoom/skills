@@ -1,38 +1,59 @@
 # Zoom AI Services API
 
-Authoritative OpenAPI endpoint inventory for Scribe, Summarizer, and Translator, plus a separately identified Decisions surface that is not yet represented in that inventory.
+Current OpenAPI inventory for Zoom AI Services, rechecked on 2026-10-20.
 
 ## Canonical Source
 
 - OpenAPI JSON: https://developers.zoom.us/api/zoap/ai-services/methods/
+- API reference: https://developers.zoom.us/docs/api/ai-services/
 - Base URL: `https://api.zoom.us/v2`
-- Product skills: [../../scribe/SKILL.md](../../scribe/SKILL.md), [../../summarizer/SKILL.md](../../summarizer/SKILL.md), [../../translator/SKILL.md](../../translator/SKILL.md), [../../decisions/SKILL.md](../../decisions/SKILL.md)
+- Product skills: [Scribe](../../scribe/SKILL.md), [Summarizer](../../summarizer/SKILL.md), [Speech Summarization](../../speech-summarization/SKILL.md), [Translator](../../translator/SKILL.md), [Decisions](../../decisions/SKILL.md), [Voice Agent](../../voice-agent/SKILL.md)
 - Authentication details: [authentication.md](authentication.md)
 
 ## Notes
 
-- Current OpenAPI surface includes Scribe transcription, Summarizer transcript summarization, and Translator text translation.
-- Decisions was live-tested separately at `POST /aiservices/decisions/decide` on 2026-10-17. Do not count it as part of the OpenAPI coverage metrics below until the canonical document includes it; use the [Decisions skill](../../decisions/SKILL.md) for its observed contract and workarounds.
-- Auth uses Build-platform JWT, which differs from the standard OAuth-centric paths in most REST API product areas.
-- Use this file for endpoint discovery and inventory. Use the product skills for workflow, webhook, and mode-selection guidance.
+- AI Services accepts an API key through `x-api-key` or `Authorization: Bearer`, and Build-platform key/secret HS256 JWTs remain supported.
+- Speech Summarization and Voice Agent are now present in the public OpenAPI catalog.
+- The Voice Agent catalog operation is `GET /aiservices/voice-agent/live`, but the official V2 WebSocket sample uses `wss://api.zoom.us/v2/ws/aiservices/voice-agent/live` with `voice-agent.zoom.v2`. Follow the [Voice Agent skill](../../voice-agent/SKILL.md) for the live wire contract.
+- A correct request can still fail for project entitlements or credits: `402 QUOTA_EXCEEDED` means no available credits, and a Voice Agent upgrade `404` can mean the project lacks Build Account or Universal Credit provisioning.
+- Use this file for endpoint discovery and inventory. Use the product skills for request shapes, streaming semantics, webhooks, and mode selection.
 
 ## Coverage
 
 | Metric | Value |
 |--------|-------|
-| Endpoint operations | 21 |
-| Path templates | 15 |
-| Tags | 3 |
+| Endpoint operations | 29 |
+| Path templates | 21 |
+| Tags | 7 |
 
 ## Tag Index
 
 | Tag | Operations |
 |-----|------------|
-| Scribe | 7 |
+| Asset | 4 |
+| Decisions | 1 |
+| Scribe | 8 |
+| Speech Summarization | 1 |
 | Summarizer | 7 |
 | Translator | 7 |
+| VoiceAgent | 1 |
 
 ## Endpoints by Tag
+
+### Asset
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/aiservices/assets/vocabularies` | List Vocabularies | `ListVocabularies` |
+| POST | `/aiservices/assets/vocabularies` | Create Custom Vocabulary | `CreateCustomVocabulary` |
+| GET | `/aiservices/assets/vocabularies/{vocabularyId}` | Get Vocabulary | `GetVocabulary` |
+| DELETE | `/aiservices/assets/vocabularies/{vocabularyId}` | Delete Vocabulary | `DeleteVocabulary` |
+
+### Decisions
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/aiservices/decisions/decide` | Evaluate decision questions | `decideDecisions` |
 
 ### Scribe
 
@@ -44,7 +65,14 @@ Authoritative OpenAPI endpoint inventory for Scribe, Summarizer, and Translator,
 | DELETE | `/aiservices/scribe/jobs/{jobId}` | Cancel Batch Job | `cancelBatchJob` |
 | GET | `/aiservices/scribe/jobs/{jobId}/files` | List Batch Job Files | `listBatchJobFiles` |
 | GET | `/aiservices/scribe/jobs/{jobId}/files/{fileId}` | Get Batch Scribe Job File | `getBatchScribeJobFile` |
+| GET | `/aiservices/scribe/live` | Live Scribe WebSocket | `liveTranscribe` |
 | POST | `/aiservices/scribe/transcribe` | Scribe (Synchronous) | `createFastAsr` |
+
+### Speech Summarization
+
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| POST | `/aiservices/speech-summarization/summarize` | Transcribe and summarize one media file over SSE | `transcribeAndSummarizeStream` |
 
 ### Summarizer
 
@@ -70,10 +98,35 @@ Authoritative OpenAPI endpoint inventory for Scribe, Summarizer, and Translator,
 | GET | `/aiservices/translator/jobs/{jobId}/files/{fileId}` | Get Batch Translator Job File | `getBatchTranslatorJobFile` |
 | POST | `/aiservices/translator/translate` | Translate (Synchronous) | `translate` |
 
-## Separately audited Decisions surface
+### VoiceAgent
 
-| Method | Endpoint | Summary | Status |
-|--------|----------|---------|--------|
-| POST | `/aiservices/decisions/decide` | Typed predicate, choice, score, and image decisions | Live-tested production behavior; not present in the current OpenAPI inventory |
+| Method | Endpoint | Summary | Operation ID |
+|--------|----------|---------|-------------|
+| GET | `/aiservices/voice-agent/live` | Live Voice Agent WebSocket | `liveVoiceAgent` |
 
-Production Decisions authentication was observed using `x-api-key` from a Zoom Build Platform project. Build Platform was previously known as the Video SDK account. The project can be associated with a CPaaS account under a Zoom Meetings account, a standalone Build Platform account through `marketplace.zoom.us`, or a CPaaS account through `aiservice.zoom.us`. This differs from the Build-platform JWT guidance recorded for the OpenAPI-listed services. Keep credentials server-side and read the [Decisions skill](../../decisions/SKILL.md) before implementing model selection, request validation, retries, Boolean normalization, or score-label mapping.
+The public upgrade operation is listed above, but the verified V2 WebSocket endpoint is:
+
+```text
+wss://api.zoom.us/v2/ws/aiservices/voice-agent/live
+```
+
+Use the `voice-agent.zoom.v2` subprotocol and server-side `x-api-key` authentication.
+
+## Granular scopes
+
+Scopes below come from each operation's `x-granular-scopes`. Request only what a workflow needs.
+
+| Surface | Operation | Scope |
+|---------|-----------|-------|
+| Decisions | `POST /aiservices/decisions/decide` | `aiservices:write:decide:admin` |
+| Scribe | `POST /aiservices/scribe/transcribe` | `aiservices:write:transcribe:admin` |
+| Scribe | `POST /aiservices/scribe/jobs` | `aiservices:write:scribe_batch_job:admin` |
+| Scribe | `GET /aiservices/scribe/live` | `aiservices:write:live_transcribe:admin` |
+| Speech Summarization | `POST /aiservices/speech-summarization/summarize` | `aiservices:write:transcribe-summarize:admin` |
+| Summarizer | `POST /aiservices/summarizer/summarize` | `aiservices:write:summarize:admin` |
+| Summarizer | `POST /aiservices/summarizer/jobs` | `aiservices:write:summarizer_batch_job:admin` |
+| Translator | `POST /aiservices/translator/translate` | `aiservices:write:translate:admin` |
+| Translator | `POST /aiservices/translator/jobs` | `aiservices:write:translator_batch_job:admin` |
+| Voice Agent | `GET /aiservices/voice-agent/live` | `aiservices:read:voice-agent:admin` |
+
+Batch read, list, and cancel operations each declare their own `aiservices:read:*:admin` or `aiservices:delete:*:admin` scope. Read them from the catalog instead of assuming one shared batch scope.

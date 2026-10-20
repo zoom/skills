@@ -73,7 +73,7 @@ Curated list of official repositories from Zoom for development. Organized by pr
 
 | Repository | Stars | Description |
 |------------|-------|-------------|
-| [ai-services-quickstart](https://github.com/zoom/ai-services-quickstart) | - | Node.js/Express + React playground for Scribe, Summarizer, and Translator |
+| [ai-services-quickstart](https://github.com/zoom/ai-services-quickstart) | - | Node.js/Express + React playground for Scribe, Summarizer, and Translator; current docs samples remain authoritative for Speech Summarization, Voice Agent, and Decisions |
 
 ---
 

@@ -12,7 +12,9 @@ Integrate AI/ML capabilities with Zoom meetings using real-time media streams fo
 - **zoom-meeting-sdk** (Linux) - For meeting bots
 - **scribe** - File or archive transcription after media capture/export
 - **summarizer** - Transcript recap, summary, and action item extraction
+- **speech-summarization** - One-shot audio/video transcript plus summary over SSE
 - **translator** - Plain text and transcript translation
+- **voice-agent** - Real-time microphone conversation with spoken or text responses
 
 ## AI Use Cases
 
@@ -21,6 +23,8 @@ Integrate AI/ML capabilities with Zoom meetings using real-time media streams fo
 | Transcription | Audio stream | Real-time text |
 | Sentiment | Audio/transcript | Mood indicators |
 | Summarization | Transcript | Meeting summary or action items |
+| Media summary | Audio/video file | Transcript plus summary |
+| Voice conversation | Microphone stream | Spoken or text agent response |
 | Action items | Transcript | Task list |
 | Translation | Audio/transcript | Multi-language |
 

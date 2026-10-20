@@ -37,7 +37,8 @@ Official docs:
 ## Routing Guardrail
 
 - If the user already has **transcript or dialogue text** and needs a recap, summary, action items, or full summary, route here first.
-- If the user has **audio/video media** and needs text first, route to [../scribe/SKILL.md](../scribe/SKILL.md), then chain here.
+- If one uploaded **audio/video file** needs both a transcript and a summary, route to [Speech Summarization](../speech-summarization/SKILL.md) instead of chaining Scribe and Summarizer.
+- If the user has **audio/video media** but only needs a transcript, route to [Scribe](../scribe/SKILL.md), then chain here if summarization is also required.
 - If the user needs **plain text translated**, route to [../translator/SKILL.md](../translator/SKILL.md).
 - If the user needs **live meeting media** before summarization, route to [../rtms/SKILL.md](../rtms/SKILL.md).
 - If the user needs the raw AI Services endpoint inventory, chain [../rest-api/SKILL.md](../rest-api/SKILL.md).
@@ -83,7 +84,8 @@ Official docs:
 | Many `.vtt`, `.srt`, or `.txt` transcript files in S3 | Batch mode |
 | Summary immediately in app UI | Fast mode |
 | Archive or compliance pipeline | Batch mode plus polling/webhooks |
-| Audio/video input | `scribe` first, then `summarizer` |
+| Audio/video input requiring both transcript and summary | `speech-summarization` |
+| Audio/video input requiring transcript only | `scribe` |
 
 ## Output Contract
 
@@ -95,7 +97,8 @@ Summarizer returns rendered text in `result.text`. Treat it as display-ready tex
 
 ## Chaining
 
-- Media to transcript to summary -> [../scribe/SKILL.md](../scribe/SKILL.md) + `summarizer`
+- One media file to transcript plus summary -> [Speech Summarization](../speech-summarization/SKILL.md)
+- Transcript to summary -> `summarizer`
 - Summary to localized output -> `summarizer` + [../translator/SKILL.md](../translator/SKILL.md)
 - Batch webhook receiver -> `summarizer` + [../webhooks/SKILL.md](../webhooks/SKILL.md)
 - Raw endpoint discovery -> [../rest-api/SKILL.md](../rest-api/SKILL.md)

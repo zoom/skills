@@ -1,7 +1,7 @@
 {
   "name": "zoom-skills",
-  "description": "Skills for the Zoom Developer Platform: REST APIs, SDKs, AI Services including Decisions, MCP servers, webhooks, Team Chat, Phone, Contact Center, and authentication workflows",
-  "version": "1.0.0",
+  "description": "Skills for the Zoom Developer Platform: REST APIs, SDKs, AI Services including Speech Summarization, Voice Agent, and Decisions, MCP servers, webhooks, Team Chat, Phone, Contact Center, and authentication workflows",
+  "version": "1.1.0",
   "author": {
     "name": "Zoom",
     "url": "https://github.com/zoom/skills"

@@ -20,9 +20,11 @@ Scribe sits under `AI Services`, but related Zoom products may point users towar
 - blog or marketing material that frames Scribe inside broader speech/insights workflows
 
 Keep the guardrail clear:
-- `scribe` = file/storage transcription service
+- `scribe` = file, batch, and live transcription service
 - `summarizer` = transcript summarization service
+- `speech-summarization` = one-shot media transcript plus summary service
 - `translator` = plain-text translation service
+- `voice-agent` = real-time spoken conversation service
 - `rtms` = live media stream ingestion
 - Meeting SDK Linux = participant bot capture / raw recording
 
@@ -41,9 +43,10 @@ These are valid architectural use cases, but they do not expand the current docu
 Implementation rule:
 - use `scribe` for transcript generation
 - use `summarizer` for transcript recap, summary, and action item workflows
+- use `speech-summarization` when one uploaded media file needs transcript plus summary
 - use `translator` for text localization workflows
 - use your own downstream pipeline for sentiment, classification, or QA scoring
-- do not infer undocumented real-time or analytics endpoints from blog phrasing alone
+- use Scribe Live for real-time microphone transcription; do not infer analytics endpoints from blog phrasing alone
 
 ## API Surface Drift Watchpoints
 
