@@ -23,7 +23,7 @@ Use one request with multiple named questions when the same input needs independ
 
 ## Production Flow
 
-1. Retrieve an `x-api-key` from a Zoom Build Platform project associated with a CPaaS account under a Zoom Meetings account, a standalone Build Platform account through `marketplace.zoom.us`, or a CPaaS account through `aiservice.zoom.us`.
+1. Retrieve an `x-api-key` from a Zoom Build Platform project associated with a CPaaS account under a Zoom Meetings account, a standalone Build Platform account through `marketplace.zoom.us`, or a CPaaS account through [Platform Studio](https://platform.zoom.us/).
 2. Store the key server-side as `ZOOM_AI_SERVICES_API_KEY`.
 3. Validate non-empty input and type-specific question fields locally.
 4. Call `POST https://api.zoom.us/v2/aiservices/decisions/decide` with `zoom-decisions-standard` unless evaluation justifies `zoom-decisions-pro`.

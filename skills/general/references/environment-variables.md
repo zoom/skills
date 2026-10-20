@@ -13,7 +13,7 @@ Use this file as a normalization map. Product-specific details are maintained in
 | `ZOOM_WEBHOOK_SECRET` / `WEBHOOK_SECRET_TOKEN` | Webhooks and event validation | Zoom Marketplace -> Event Subscriptions -> Secret Token |
 | `ZOOM_SDK_KEY` / `ZOOM_SDK_SECRET` | Meeting SDK or SDK-based products | Zoom Marketplace -> SDK app credentials |
 | `ZOOM_VIDEO_SDK_KEY` / `ZOOM_VIDEO_SDK_SECRET` | Video SDK and UI Toolkit | Zoom Marketplace -> Video SDK app credentials |
-| `ZOOM_API_KEY` / `ZOOM_API_SECRET` | AI Services Scribe, Summarizer, Translator, Speech Summarization, Decisions, Voice Agent | Zoom Build Platform API keys area |
+| `ZOOM_API_KEY` / `ZOOM_API_SECRET` | AI Services Scribe, Summarizer, Translator, Speech Summarization, Decisions, Voice Agent | Platform Studio (platform.zoom.us) |
 | `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` / `AWS_SESSION_TOKEN` | AI Services batch jobs using S3 | AWS IAM or STS |
 | `PROBE_JS_URL` / `PROBE_WASM_URL` | Probe SDK | Your app/CDN hosted Probe SDK assets (or bundler output paths) |
 | `PROBE_DOMAIN` / `PROBE_CONNECT_TIMEOUT_MS` | Probe SDK | Product policy + Probe SDK diagnostics configuration |

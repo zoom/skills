@@ -78,7 +78,7 @@ The stream uses these events:
 - `502`: upstream transcription or summary failure.
 - `503`: summary API is not configured.
 
-Do not treat `402` as a malformed request. The request shape can be correct while the project lacks credits.
+Do not treat `402` as a malformed request. The request shape can be correct while the project lacks credits. Check the plan and credit balance in [Platform Studio](https://platform.zoom.us/); a new project key under an exhausted account will not clear the 402.
 
 ## Chaining
 

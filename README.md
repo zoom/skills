@@ -244,7 +244,7 @@ paths:
 
 - a CPaaS account under a Zoom Meetings account
 - a standalone Build Platform account through [marketplace.zoom.us](https://marketplace.zoom.us/)
-- a CPaaS account through [aiservice.zoom.us](https://aiservice.zoom.us/)
+- a CPaaS account through [Platform Studio](https://platform.zoom.us/)
 
 Store the key server-side as `ZOOM_AI_SERVICES_API_KEY`; never embed it in browser code or
 commit it to the repository.
@@ -254,6 +254,9 @@ and Translator, subject to the permissions attached to the key. Speech Summariza
 paid AI Services calls require available project credits; a correct request can still return
 `402 QUOTA_EXCEEDED`. Live WebSocket surfaces such as Voice Agent can return `404` on upgrade
 when the project is not provisioned for Build Account or Universal Credit access.
+
+Check the plan and credit balance in [Platform Studio](https://platform.zoom.us/). A new project
+key under an account whose credits are exhausted will not clear a `402`.
 
 ### Current Zoom MCP Servers
 

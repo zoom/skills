@@ -38,7 +38,7 @@ Content-Type: application/json
 
 Required key scope: `aiservices:write:decide:admin`.
 
-Retrieve the production `x-api-key` from a **Zoom Build Platform** project. Build Platform was previously known as the **Video SDK account**, and the project can be associated with a CPaaS account under a Zoom Meetings account, a standalone Build Platform account through `marketplace.zoom.us`, or a CPaaS account through `aiservice.zoom.us`. The `zoom.ai` entry point may route users into the same project setup. Keep the key server-side and never expose it to browser code, logs, source control, or agent output.
+Retrieve the production `x-api-key` from a **Zoom Build Platform** project. Build Platform was previously known as the **Video SDK account**, and the project can be associated with a CPaaS account under a Zoom Meetings account, a standalone Build Platform account through `marketplace.zoom.us`, or a CPaaS account through [Platform Studio](https://platform.zoom.us/). The `zoom.ai` entry point may route users into the same project setup. Keep the key server-side and never expose it to browser code, logs, source control, or agent output.
 
 Use a full endpoint override only when the operator explicitly targets another environment. Production accepts `x-api-key`, bearer with the API key, and bearer with a Zoom AI Services JWT; all three returned 200 on 2026-10-20. Do not silently send a production key to an internal host or an internal token to production.
 
