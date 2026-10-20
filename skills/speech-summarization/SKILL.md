@@ -15,7 +15,7 @@ triggers:
 
 Use Speech Summarization when one uploaded audio or video file must produce both a transcript and a summary in a single streaming request.
 
-**Current API audit:** The production endpoint, multipart request, SSE events, and official Node.js sample were verified on 2026-10-20.
+**Current API audit:** The production endpoint and multipart request were verified on 2026-10-20. Live calls were accepted but returned `402 QUOTA_EXCEEDED` before streaming, so the SSE event sequence below comes from the API reference and official sample rather than an observed end-to-end run.
 
 ## Routing Guardrail
 
@@ -70,7 +70,7 @@ The stream uses these events:
 ## Failure Handling
 
 - `401`: invalid key or missing `aiservices:write:transcribe-summarize:admin` scope.
-- `402 QUOTA_EXCEEDED`: observed when the project has no available AI Services credits. The catalog does not list `402`; treat it as an entitlement signal, not a schema error.
+- `402 QUOTA_EXCEEDED`: observed when no AI Services credits are available. The catalog does not list `402`; treat it as an entitlement signal, not a schema error. Two different API keys returned the same 402 on 2026-10-20, so rotating credentials does not necessarily clear it.
 - `405`: wrong HTTP method; this operation is `POST` only.
 - `413`: file exceeds 50 MB.
 - `415`: unsupported media type.
