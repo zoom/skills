@@ -70,7 +70,7 @@ The stream uses these events:
 ## Failure Handling
 
 - `401`: invalid key or missing `aiservices:write:transcribe-summarize:admin` scope.
-- `402 QUOTA_EXCEEDED`: observed when no AI Services credits are available. The catalog does not list `402`; treat it as an entitlement signal, not a schema error. Two different API keys returned the same 402 on 2026-10-20, so rotating credentials does not necessarily clear it.
+- `402 QUOTA_EXCEEDED`: observed when no AI Services credits are available. The catalog does not list `402`; treat it as an entitlement signal, not a schema error. Two different API keys returned the same 402 on 2026-10-20, so rotating credentials does not necessarily clear it, and the response carries no `Retry-After`, so retrying will not either.
 - `405`: wrong HTTP method; this operation is `POST` only.
 - `413`: file exceeds 50 MB.
 - `415`: unsupported media type.
