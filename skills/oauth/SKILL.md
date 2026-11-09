@@ -474,13 +474,48 @@ const authUrl = `https://zoom.us/oauth/authorize?` +
 
 ### Token Exchange with PKCE
 
-```bash
-POST https://zoom.us/oauth/token?grant_type=authorization_code&code={CODE}&redirect_uri={REDIRECT_URI}&code_verifier={VERIFIER}
+Two variants exist; pick by client type:
 
-Headers:
-Authorization: Basic {Base64(ClientID:ClientSecret)}
+**Public client (recommended for desktop/mobile/SPA - no secret anywhere):**
+
+```
+POST https://zoom.us/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code
+&code={CODE}
+&client_id={CLIENT_ID}
+&redirect_url={REDIRECT_URL}
+&code_verifier={VERIFIER}
 ```
 
+No `Authorization` header at all - the `code_verifier` IS the proof of
+possession, and the `client_id` travels in the form body.
+
+**Confidential client (server-side, has a secret):**
+
+```
+POST https://zoom.us/oauth/token
+Headers:
+Authorization: Basic {Base64(ClientID:ClientSecret)}
+
+grant_type=authorization_code&code={CODE}&redirect_uri={REDIRECT_URI}
+```
+
+### PKCE Gotchas (live-verified)
+
+1. **redirect_uri must be byte-identical** - query string included - between
+   the authorize request and the token exchange. Mismatch => HTTP 400
+   `invalid_client` (Zoom's generic wrapper; dedicated code 4709).
+2. **Authorization codes are single-use and expire in ~2 minutes.** Any retry
+   after a failed exchange needs fresh user consent.
+3. **A 200 from `/oauth/authorize` proves nothing** - Zoom returns the sign-in
+   page for any syntactically valid client id. Validate credentials at the
+   token endpoint, not the authorize page.
+4. **Marketplace Meeting SDK apps**: the PKCE-slot client id (issued when
+   "public client OAuth" is enabled) is required for header-less exchanges;
+   the classic dev client id is confidential and rejects them. See
+   [meeting-sdk/windows PKCE example](../meeting-sdk/windows/examples/pkce-public-client-auth.md).
 ---
 
 ## Deauthorization

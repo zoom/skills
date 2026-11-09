@@ -28,6 +28,7 @@ Embed Zoom meeting capabilities into Windows desktop applications for native C++
 
 1. **[SDK Architecture Pattern](concepts/sdk-architecture-pattern.md)** - Learn the universal pattern that works for ALL 35+ features
 2. **[Authentication Pattern](examples/authentication-pattern.md)** - Get a working bot joining meetings
+3. **[PKCE Public-Client Auth](examples/pkce-public-client-auth.md)** - OAuth PKCE without JWT or secret (verified)
 3. **[Windows Message Loop](troubleshooting/windows-message-loop.md)** - Fix the #1 reason callbacks don't fire
 
 **Building a Custom UI?**
@@ -699,6 +700,7 @@ The SDK has **35+ feature controllers** (audio, video, chat, recording, particip
 
 ### 📚 Complete Examples
 - **[examples/authentication-pattern.md](examples/authentication-pattern.md)** - Complete working authentication with JWT tokens
+- **[examples/pkce-public-client-auth.md](examples/pkce-public-client-auth.md)** - OAuth PKCE public-client auth: no JWT/secret, host-join passcode path, live-verified
 - **[examples/raw-video-capture.md](examples/raw-video-capture.md)** - YUV420 video capture with detailed format explanation
 
 ### 🔧 Troubleshooting Guides
