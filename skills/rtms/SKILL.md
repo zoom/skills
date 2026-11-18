@@ -569,6 +569,15 @@ RTMS uses **one signaling WebSocket plus one media WebSocket per selected media 
    - Must subscribe separately
    - See: [Media Types](references/media-types.md#screen-share)
 
+8. **Every Webhook Delivery Is Untrusted Input**
+   - Verify `x-zm-signature` (HMAC-SHA256 of `v0:timestamp:rawBody`, constant-time compare) on every delivery before processing
+   - Ack `200` after verification, never before; ack-first ordering blocks rejections and crashes later checks (`ERR_HTTP_HEADERS_SENT`)
+   - See: [Webhooks](../webhooks/SKILL.md)
+
+9. **Never Leave RTMS Inputs Unverified or Unescaped**
+   - `rtms_stream_id`, `meeting_uuid`, `user_id` arrive via webhooks: allowlist-sanitize (`[A-Za-z0-9._-]`) before using them in file or folder names
+   - Before any CLI/subprocess call (ffmpeg, sox, ...), pass argv arrays via `execFile`/`spawn`; do not interpolate ids into shell strings - shell metacharacters in ids are a proven RCE vector (see `rtms-meeting-assistant-starter-kit` fix `ead1b79`)
+
 ---
 
 ## Quick Reference

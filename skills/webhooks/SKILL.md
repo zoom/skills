@@ -52,7 +52,11 @@ app.post('/webhook', (req, res) => {
   const hash = crypto.createHmac('sha256', WEBHOOK_SECRET)
     .update(payload).digest('hex');
   
-  if (signature !== `v0=${hash}`) {
+  const expected = `v0=${hash}`;
+  const valid = typeof signature === 'string' &&
+    signature.length === expected.length &&
+    crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+  if (!valid) {
     return res.status(401).send('Invalid signature');
   }
 
@@ -63,6 +67,19 @@ app.post('/webhook', (req, res) => {
   res.status(200).send();
 });
 ```
+
+## Hard Rules
+
+1. **Verify on every delivery.** Authenticate each request with `x-zm-signature`
+   (HMAC-SHA256 over `v0:{timestamp}:{rawBody}`, constant-time compare, ~5 min
+   timestamp window) *before* reading the payload. Retries are untrusted too.
+2. **Ack after verifying, not before.** Send `200` only once the signature
+   checks out. Ack-first ordering makes rejections impossible and crashes any
+   rejection added later with `ERR_HTTP_HEADERS_SENT`.
+3. **Treat payload fields as untrusted.** Values like `meeting_uuid`,
+   `rtms_stream_id`, or `user_id` are attacker-reachable text: allowlist-sanitize
+   them before use in file paths, and never interpolate them into shell command
+   strings (pass argv arrays to `execFile`/`spawn` instead).
 
 ## Common Events
 
