@@ -40,6 +40,7 @@ This repository contains skills for building with Zoom SDKs, APIs, MCP servers, 
 | **[decisions](decisions/SKILL.md)** | Zoom AI Services Decisions for predicates, constrained choices, ordered scores, probabilities, and image comparisons |
 | **[voice-agent](voice-agent/SKILL.md)** | Zoom AI Services Voice Agent V2 for real-time microphone conversations, VAD, audio streaming, and tools |
 | **[tts](tts/SKILL.md)** | Zoom AI Services Text-to-Speech for streamed plain-text speech synthesis |
+| **[interpreter](interpreter/SKILL.md)** | Zoom AI Services Interpreter for live speech translation and translated audio |
 | **[zoom-rtms](rtms/SKILL.md)** | Real-Time Media Streams (live audio/video/transcripts) |
 | **[zoom-team-chat](team-chat/SKILL.md)** | Team Chat messaging and channels |
 | **[virtual-agent](virtual-agent/SKILL.md)** | Virtual Agent web/mobile chat embeds and KB sync workflows |
@@ -126,6 +127,7 @@ Use `zoom-general` when:
 | Evaluate predicates, classify into fixed choices, score ordered levels, or compare images | **decisions** |
 | Build a real-time microphone conversation with spoken responses | **voice-agent** |
 | Convert plain text into streamed speech | **tts** |
+| Translate live speech and play the translation | **interpreter** |
 | Build Team Chat integrations | **zoom-team-chat** |
 | Build Virtual Agent chat/campaign experiences | **virtual-agent** |
 | Build Contact Center integrations (apps/web/mobile) | **contact-center** |

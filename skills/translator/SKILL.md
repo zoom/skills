@@ -36,6 +36,7 @@ Official docs:
 ## Routing Guardrail
 
 - If the user needs **plain text translated**, route here first.
+- If the user needs **live speech translated while it is spoken**, route to [../interpreter/SKILL.md](../interpreter/SKILL.md).
 - If the user needs **audio/video transcribed before translation**, route to [../scribe/SKILL.md](../scribe/SKILL.md), then chain here.
 - If the user needs **summaries or action items**, route to [../summarizer/SKILL.md](../summarizer/SKILL.md).
 - If the user needs **live meeting media** before translation, route to [../rtms/SKILL.md](../rtms/SKILL.md).
@@ -94,6 +95,7 @@ Official docs:
 ## Chaining
 
 - Media to transcript to translation -> [../scribe/SKILL.md](../scribe/SKILL.md) + `translator`
+- Live speech to translated speech -> [../interpreter/SKILL.md](../interpreter/SKILL.md)
 - Summary to localized output -> [../summarizer/SKILL.md](../summarizer/SKILL.md) + `translator`
 - Batch webhook receiver -> `translator` + [../webhooks/SKILL.md](../webhooks/SKILL.md)
 - Raw endpoint discovery -> [../rest-api/SKILL.md](../rest-api/SKILL.md)

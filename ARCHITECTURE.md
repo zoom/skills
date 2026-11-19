@@ -67,6 +67,7 @@ Common route outcomes:
 - Typed decisions and probabilities -> `decisions`
 - Real-time microphone conversation -> `voice-agent`
 - Plain-text speech synthesis -> `tts`
+- Live speech translation -> `interpreter`
 - Live media streams -> `rtms`
 - Contact Center -> `contact-center`
 - Virtual Agent web/mobile chat and KB sync -> `virtual-agent`
@@ -176,6 +177,7 @@ Platform-heavy spokes (examples):
 | `decisions` | Zoom AI Services Decisions for predicates, constrained choices, ordered scores, and image comparison |
 | `voice-agent` | Zoom AI Services Voice Agent V2 for real-time microphone conversations, VAD, audio streaming, and tools |
 | `tts` | Zoom AI Services Text-to-Speech for streamed plain-text speech synthesis |
+| `interpreter` | Zoom AI Services Interpreter for live speech translation and translated audio |
 | `rtms` | Real-time media streams |
 | `team-chat` | Team Chat integrations |
 | `contact-center` | Contact Center app/web/mobile integrations |

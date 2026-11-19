@@ -40,6 +40,7 @@ export type SkillId =
   | 'speech-summarization'
   | 'voice-agent'
   | 'tts'
+  | 'interpreter'
   | 'zoom-rtms'
   | 'zoom-team-chat'
   | 'contact-center'
@@ -88,6 +89,7 @@ interface Signals {
   speechSummarization: boolean;
   voiceAgent: boolean;
   tts: boolean;
+  interpreter: boolean;
   oauth: boolean;
   rtms: boolean;
   teamChat: boolean;
@@ -148,6 +150,7 @@ export function detectSignals(rawQuery: string): Signals {
     speechSummarization: hasAny(q, ['speech summarization', 'speech summary', 'summarize audio file', 'summarize video file', 'transcribe and summarize', 'aiservices/speech-summarization']),
     voiceAgent: hasAny(q, ['voice agent', 'realtime voice agent', 'real-time voice agent', 'speech to speech', 'speech-to-speech', 'voice-agent.zoom.v2', 'live microphone agent']),
     tts: hasAny(q, ['text to speech', 'text-to-speech', 'tts', 'synthesize speech', 'speech synthesis', 'aiservices/tts']),
+    interpreter: hasAny(q, ['interpreter', 'live translation', 'speech translation', 'real-time translator', 'translate live audio', 'aiservices/interpreter']),
     oauth: hasAny(q, ['oauth', 'pkce', 'authorization code', 'account_credentials', 'token refresh']),
     rtms: hasAny(q, ['rtms', 'real-time media streams', 'live transcript stream', 'audio stream']),
     teamChat: hasAny(q, ['team chat', 'chatbot', 'chat card', 'chat message']),
@@ -178,6 +181,7 @@ function pickPrimarySkill(s: Signals): SkillId {
   if (s.rtms) return 'zoom-rtms';
   if (s.voiceAgent) return 'voice-agent';
   if (s.tts) return 'tts';
+  if (s.interpreter) return 'interpreter';
   if (s.speechSummarization) return 'speech-summarization';
   if (s.decisions) return 'decisions';
   if (s.summarizer) return 'summarizer';
@@ -235,7 +239,7 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   if (primary === 'voice-agent' && s.decisions) chain.add('decisions');
   if (primary === 'voice-agent' && s.speechSummarization) chain.add('speech-summarization');
 
-  if (s.scribe || s.summarizer || s.translator || s.decisions || s.speechSummarization || s.voiceAgent || s.tts) {
+  if (s.scribe || s.summarizer || s.translator || s.decisions || s.speechSummarization || s.voiceAgent || s.tts || s.interpreter) {
     chain.add('zoom-rest-api');
   }
 
