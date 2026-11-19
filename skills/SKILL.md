@@ -52,7 +52,11 @@ This repository contains skills for building with Zoom SDKs, APIs, MCP servers, 
 | **[zoom-ui-toolkit](ui-toolkit/SKILL.md)** | Pre-built React components for Video SDK |
 | **[zoom-cobrowse-sdk](cobrowse-sdk/SKILL.md)** | Collaborative browsing for support |
 | **[zoom-oauth](oauth/SKILL.md)** | OAuth authentication flows (all 4 grant types) |
-| **[zoom-mcp](zoom-mcp/SKILL.md)** | Parent router for the unified Zoom MCP Server and dedicated product MCP servers |
+| **[zoom-mcp](zoom-mcp/SKILL.md)** | Parent router for Zoom Workspace and dedicated product MCP servers |
+| **[zoom-mcp/phone](zoom-mcp/phone/SKILL.md)** | Zoom Phone administration through MCP |
+| **[zoom-mcp/rooms](zoom-mcp/rooms/SKILL.md)** | Zoom Rooms, devices, locations, tags, and calendar resources through MCP |
+| **[zoom-mcp/workflows](zoom-mcp/workflows/SKILL.md)** | Workflow Builder deployment and execution through MCP |
+| **[zoom-mcp/workspaces](zoom-mcp/workspaces/SKILL.md)** | Workspace reservations and related context through MCP |
 | **[zoom-mcp/whiteboard](zoom-mcp/whiteboard/SKILL.md)** | Whiteboard creation, retrieval, and collaborator tools |
 | **[zoom-mcp/team-chat](zoom-mcp/team-chat/SKILL.md)** | Team Chat message, file, contact, session, channel, and member tools |
 | **[zoom-mcp/meetings](zoom-mcp/meetings/SKILL.md)** | Meeting search, assets, recordings, and recording resources |
@@ -140,6 +144,10 @@ Use `zoom-general` when:
 | Enable co-browsing for support | **zoom-cobrowse-sdk** |
 | Implement OAuth authentication | **zoom-oauth** |
 | Build AI-driven meeting search, meeting-asset retrieval, recording-resource retrieval, or Zoom Canvas workflows | **zoom-mcp** |
+| Administer Zoom Phone through MCP | **zoom-mcp/phone** |
+| Manage Zoom Rooms, devices, locations, or tags through MCP | **zoom-mcp/rooms** |
+| Deploy or monitor Zoom Workflow Builder automations through MCP | **zoom-mcp/workflows** |
+| Reserve rooms or workspaces through MCP | **zoom-mcp/workspaces** |
 | Search, send, edit, or administer Zoom Team Chat through MCP tools | **zoom-mcp/team-chat** |
 | Manage Zoom Canvas files, blocks, collaborators, or sharing through MCP | **zoom-mcp/canvas** |
 | Manage Zoom Tasks through MCP tools | **zoom-mcp/tasks** |
@@ -166,8 +174,9 @@ Source: https://developers.zoom.us/docs/mcp/apis-vs-mcp/
 
 - Zoom acts as MCP server and exposes Zoom platform tools/data to external AI clients.
 - MCP access is OAuth-scoped and governed.
-- The current product-scoped MCP servers are Meetings, Chat, Canvas, Tasks, Whiteboard, and
-  Revenue Accelerator. The unified Zoom MCP Server is a separate all-in-one surface.
+- The current product-scoped MCP servers include Docs, Meetings, Chat, Canvas, Tasks, Phone,
+  Rooms, Workflows, Workspaces, Whiteboard, and Revenue Accelerator. The Workspace server
+  (`zoom-workspace`, formerly the unified Zoom MCP Server) is the separate general surface.
 - Use `zoom-mcp` as the parent entry point, then chain Marketplace app creation -> user OAuth
   token acquisition -> the product-specific MCP child skill. Select the matching app template
   from [Marketplace app templates](rest-api/references/marketplace-app-templates.md).

@@ -54,6 +54,10 @@ Common route outcomes:
 - Zoom Docs creation/retrieval through dedicated MCP -> `zoom-mcp/docs`
 - Task management through MCP -> `zoom-mcp/tasks`
 - Revenue Accelerator intelligence through MCP -> `zoom-mcp/revenue-accelerator`
+- Zoom Phone administration through MCP -> `zoom-mcp/phone`
+- Zoom Rooms and facilities management through MCP -> `zoom-mcp/rooms`
+- Workflow Builder lifecycle through MCP -> `zoom-mcp/workflows`
+- Room/workspace reservations through MCP -> `zoom-mcp/workspaces`
 - Enterprise AI systems requiring stable API core + AI tool layer -> `rest-api` + `zoom-mcp`
 - Event notifications -> `webhooks` or `websockets`
 - Embedded meetings -> `meeting-sdk`
@@ -122,6 +126,10 @@ repo/
 │   │   ├── team-chat/
 │   │   ├── meetings/
 │   │   ├── docs/
+│   │   ├── phone/
+│   │   ├── rooms/
+│   │   ├── workflows/
+│   │   ├── workspaces/
 │   │   ├── tasks/
 │   │   └── revenue-accelerator/
 │   └── ...

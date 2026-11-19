@@ -1,8 +1,8 @@
 ---
 name: zoom-mcp/docs
 description: |
-  Legacy compatibility route for requests that call the current Zoom Canvas MCP server
-  "Docs MCP". Route new work to zoom-mcp/canvas and use the Canvas endpoint, scopes, and tools.
+  Zoom Docs MCP guidance and legacy router. Use the dedicated Docs endpoint for Zoom Docs and
+  notes; route older "Docs MCP" requests that expect Canvas tools to zoom-mcp/canvas.
 triggers:
   - "zoom docs mcp"
   - "create zoom doc mcp"
@@ -10,20 +10,34 @@ triggers:
   - "create_file_with_content"
 ---
 
-# Legacy Zoom Docs MCP Alias
+# Zoom Docs MCP
 
-Zoom's current official server is **Zoom Canvas MCP Server**, not a separate Docs MCP server.
-Use [../canvas/SKILL.md](../canvas/SKILL.md) for new implementations. This file remains only
-so older prompts and skill references containing "Docs MCP" continue to route correctly.
+Zoom has a dedicated Docs MCP server and a separate Canvas MCP server. Use Docs for creating or
+reading Zoom Docs and notes as Markdown. Use Canvas for file, block, collaborator, and content
+operations.
+
+## Dedicated Docs Server
+
+Registry identity: `io.github.zoom/zoom-docs`, version 1.0.2 in the 2026-11-17 snapshot.
 
 ## Current Route
+
+```text
+https://mcp.zoom.us/mcp/docs/streamable
+```
+
+The repo MCP bundle registers it as `zoom-docs-mcp` in [../../../.mcp.json](../../../.mcp.json).
+Call `tools/list` for the current names and scopes.
+
+## Legacy Canvas Alias
+
+Some existing prompts call the Canvas server "Docs MCP." For those flows, use
+[../canvas/SKILL.md](../canvas/SKILL.md) and its endpoint:
 
 ```text
 https://mcp.zoom.us/mcp/canvas/streamable
 ```
 
-See the [Canvas tool catalog](../canvas/references/tools.md) for current names and scopes.
-
 ## Official Source
 
-https://developers.zoom.us/docs/mcp/zoom-canvas-mcp-server/
+https://developers.zoom.us/docs/mcp/zoom-docs-mcp-server/
