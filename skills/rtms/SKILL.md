@@ -2,7 +2,8 @@
 name: zoom-rtms
 description: |
   Zoom Realtime Media Streams (RTMS) for accessing live audio, video, transcript, chat, and
-  screen share from Zoom meetings, webinars, Video SDK sessions, and Zoom Contact Center Voice.
+  screen share from Zoom meetings, webinars, Video SDK sessions, Zoom Contact Center Voice, and
+  Zoom Phone.
   WebSocket-based protocol using open web standards. Use when building AI/ML applications, live
   transcription, recording, streaming, or real-time meeting/webinar/session/contact-center analysis.
 triggers:
@@ -19,6 +20,8 @@ triggers:
   - "streaming video"
   - "meeting bot media"
   - "contact center voice media"
+  - "zoom phone rtms"
+  - "phone call audio stream"
   - "participant video on"
   - "participant video off"
   - "single individual video stream"
@@ -26,7 +29,7 @@ triggers:
 
 # Zoom Realtime Media Streams (RTMS)
 
-Expert guidance for accessing live audio, video, transcript, chat, and screen share data from Zoom meetings, webinars, Video SDK sessions, and Zoom Contact Center Voice in real-time. RTMS uses a WebSocket-based protocol with open standards and does not require a meeting bot to capture the media plane.
+Expert guidance for accessing live audio, video, transcript, chat, and screen share data from Zoom meetings, webinars, Video SDK sessions, Zoom Contact Center Voice, and Zoom Phone in real-time. RTMS uses a WebSocket-based protocol with open standards and does not require a meeting bot to capture the media plane.
 
 ## Read This First (Critical)
 
@@ -64,6 +67,7 @@ Use RTMS for media/data plane, and use frontend frameworks/Zoom Apps for present
 - **[Lifecycle Flow](concepts/lifecycle-flow.md)** - Complete webhook-to-streaming flow
 - **[Data Types](references/data-types.md)** - All enums and constants
 - **[Webhooks](references/webhooks.md)** - Event subscription details
+- **[Phone RTMS](references/phone-rtms.md)** - Zoom Phone calls, events, and recovery
 - **[Environment Variables](references/environment-variables.md)** - credential modes and runtime knobs
 - **[Quickstart Notes](references/quickstart.md)** - Secondary quickstart guide
 - **[Changelog](CHANGELOG.md)** - RTMS skill documentation changes
@@ -83,8 +87,9 @@ Use RTMS for media/data plane, and use frontend frameworks/Zoom Apps for present
 | **Webinars** | `webinar.rtms_started` / `webinar.rtms_stopped` | `meeting_uuid` (same!) | User-managed General App |
 | **Video SDK** | `session.rtms_started` / `session.rtms_stopped` | `session_id` | Video SDK App |
 | **Zoom Contact Center Voice** | `contact_center.voice_rtms_started` / `contact_center.voice_rtms_stopped` | Product-specific stream/session identifiers | General user/admin or S2S, based on scopes |
+| **Zoom Phone** | `phone.call_rtms_started` / `phone.call_rtms_stopped` | `call_id` | General OAuth app; per-user Phone policy enablement |
 
-Once connected, the core signaling/media socket model is shared across products. Meetings, webinars, and Video SDK sessions use the familiar start/stop webhooks. Zoom Contact Center Voice adds its own RTMS/ZCC Voice event family and should be treated as the same transport model with product-specific event payloads.
+Once connected, the core signaling/media socket model is shared across products. Meetings, webinars, and Video SDK sessions use the familiar start/stop webhooks. Zoom Contact Center Voice and Zoom Phone add product-specific event families and must be treated as the same transport model with product-specific payloads. Phone requires protocol version 2, signs `call_id`, and streams only audio and transcript; see [Phone RTMS](references/phone-rtms.md).
 
 ## RTMS Overview
 
@@ -350,6 +355,7 @@ ZOOM_SECRET_TOKEN=your_webhook_token   # For webhook validation
 - **[Data Types](references/data-types.md)** - All enums and constants
 - **[Connection](references/connection.md)** - WebSocket protocol details
 - **[Webhooks](references/webhooks.md)** - Event subscription
+- **[Phone RTMS](references/phone-rtms.md)** - Zoom Phone calls, events, and recovery
 
 ### Troubleshooting
 - **[Common Issues](troubleshooting/common-issues.md)** - FAQ and solutions
