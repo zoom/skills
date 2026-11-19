@@ -41,6 +41,7 @@ export type SkillId =
   | 'voice-agent'
   | 'tts'
   | 'interpreter'
+  | 'clinical-notes'
   | 'zoom-rtms'
   | 'zoom-team-chat'
   | 'contact-center'
@@ -90,6 +91,7 @@ interface Signals {
   voiceAgent: boolean;
   tts: boolean;
   interpreter: boolean;
+  clinicalNotes: boolean;
   oauth: boolean;
   rtms: boolean;
   teamChat: boolean;
@@ -151,6 +153,7 @@ export function detectSignals(rawQuery: string): Signals {
     voiceAgent: hasAny(q, ['voice agent', 'realtime voice agent', 'real-time voice agent', 'speech to speech', 'speech-to-speech', 'voice-agent.zoom.v2', 'live microphone agent']),
     tts: hasAny(q, ['text to speech', 'text-to-speech', 'tts', 'synthesize speech', 'speech synthesis', 'aiservices/tts']),
     interpreter: hasAny(q, ['interpreter', 'live translation', 'speech translation', 'real-time translator', 'translate live audio', 'aiservices/interpreter']),
+    clinicalNotes: hasAny(q, ['clinical notes', 'clinical note', 'soap note', 'medical note', 'behavioral health note', 'aiservices/clinical_notes']),
     oauth: hasAny(q, ['oauth', 'pkce', 'authorization code', 'account_credentials', 'token refresh']),
     rtms: hasAny(q, ['rtms', 'real-time media streams', 'live transcript stream', 'audio stream']),
     teamChat: hasAny(q, ['team chat', 'chatbot', 'chat card', 'chat message']),
@@ -182,6 +185,7 @@ function pickPrimarySkill(s: Signals): SkillId {
   if (s.voiceAgent) return 'voice-agent';
   if (s.tts) return 'tts';
   if (s.interpreter) return 'interpreter';
+  if (s.clinicalNotes) return 'clinical-notes';
   if (s.speechSummarization) return 'speech-summarization';
   if (s.decisions) return 'decisions';
   if (s.summarizer) return 'summarizer';
@@ -239,7 +243,7 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   if (primary === 'voice-agent' && s.decisions) chain.add('decisions');
   if (primary === 'voice-agent' && s.speechSummarization) chain.add('speech-summarization');
 
-  if (s.scribe || s.summarizer || s.translator || s.decisions || s.speechSummarization || s.voiceAgent || s.tts || s.interpreter) {
+  if (s.scribe || s.summarizer || s.translator || s.decisions || s.speechSummarization || s.voiceAgent || s.tts || s.interpreter || s.clinicalNotes) {
     chain.add('zoom-rest-api');
   }
 
