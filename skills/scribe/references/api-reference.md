@@ -17,6 +17,10 @@ Canonical sources:
 | DELETE | `/aiservices/scribe/jobs/{jobId}` | Cancel Batch Job | `cancelBatchJob` |
 | GET | `/aiservices/scribe/jobs/{jobId}/files` | List Batch Job Files | `listBatchJobFiles` |
 | GET | `/aiservices/scribe/jobs/{jobId}/files/{fileId}` | Get Batch Scribe Job File | `getBatchScribeJobFile` |
+| POST | `/aiservices/assets/vocabularies` | Create Custom Vocabulary | `CreateCustomVocabulary` |
+| GET | `/aiservices/assets/vocabularies` | List Vocabularies | `ListVocabularies` |
+| GET | `/aiservices/assets/vocabularies/{vocabularyId}` | Get Vocabulary | `GetVocabulary` |
+| DELETE | `/aiservices/assets/vocabularies/{vocabularyId}` | Delete Vocabulary | `DeleteVocabulary` |
 
 ## Request Shapes
 

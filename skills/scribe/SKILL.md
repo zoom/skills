@@ -51,11 +51,12 @@ Official docs:
 4. [examples/batch-webhook-pipeline.md](examples/batch-webhook-pipeline.md)
 5. [references/api-reference.md](references/api-reference.md)
 6. [references/text-polishing.md](references/text-polishing.md)
-7. [references/environment-variables.md](references/environment-variables.md)
-8. [references/samples-validation.md](references/samples-validation.md)
-9. [references/versioning-and-drift.md](references/versioning-and-drift.md)
-10. [troubleshooting/common-drift-and-breaks.md](troubleshooting/common-drift-and-breaks.md)
-11. [RUNBOOK.md](RUNBOOK.md)
+7. [references/custom-vocabulary.md](references/custom-vocabulary.md)
+8. [references/environment-variables.md](references/environment-variables.md)
+9. [references/samples-validation.md](references/samples-validation.md)
+10. [references/versioning-and-drift.md](references/versioning-and-drift.md)
+11. [troubleshooting/common-drift-and-breaks.md](troubleshooting/common-drift-and-breaks.md)
+12. [RUNBOOK.md](RUNBOOK.md)
 
 ## Core Workflow
 
@@ -70,6 +71,7 @@ Official docs:
 - `config.model` selects the recognition model.
 - `config.language_detection` supports `once` or `continuous` with candidate languages.
 - `config.vocabulary.phrases` (maximum 100) or `config.vocabulary_id` adds custom terms; use one, not both.
+- `config.vocabulary_id` may reference an immutable, account-scoped Vocabulary Asset; see [custom vocabulary](references/custom-vocabulary.md).
 - `outputs.text_polishing.enabled` returns `outputs.text_polishing.text`.
 - Text Polishing is `en-US`-only and cannot be combined with `language_detection`; see [text polishing](references/text-polishing.md).
 
