@@ -4,6 +4,10 @@
       "type": "http",
       "url": "https://mcp.zoom.us/mcp/zoom/streamable"
     },
+    "zoom-docs-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/docs/streamable"
+    },
     "zoom-whiteboard-mcp": {
       "type": "http",
       "url": "https://mcp.zoom.us/mcp/whiteboard/streamable"
@@ -35,6 +39,22 @@
     "zoom-productivity-mcp": {
       "type": "http",
       "url": "https://mcp.zoom.us/mcp/productivity/streamable"
+    },
+    "zoom-phone-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/phone/streamable"
+    },
+    "zoom-rooms-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/rooms/streamable"
+    },
+    "zoom-workflows-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/workflow/streamable"
+    },
+    "zoom-workspaces-mcp": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/workspace/streamable"
     },
     "zoom-contact-center-admin-mcp": {
       "type": "http",

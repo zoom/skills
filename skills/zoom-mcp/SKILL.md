@@ -1,8 +1,8 @@
 ---
 name: zoom-mcp
 description: |
-  Official Zoom MCP Server guidance for AI-agent access to the unified Zoom MCP Server and
-  dedicated Meetings, Chat, Canvas, Tasks, Whiteboard, and Revenue Accelerator servers. Use
+  Official Zoom MCP guidance for AI-agent access to Zoom Workspace and
+  dedicated Docs, Meetings, Chat, Canvas, Tasks, Phone, Rooms, Workflows, Workspaces, Whiteboard, and Revenue Accelerator servers. Use
   for Zoom-hosted MCP endpoints, tools/list, tools/call, OAuth scopes, or server selection.
   Route product-specific work to the matching zoom-mcp child skill.
 triggers:
@@ -34,7 +34,8 @@ triggers:
 
 # Zoom MCP Server
 
-Zoom hosts an MCP server at `mcp.zoom.us` for AI-agent access to:
+Zoom hosts MCP servers at `mcp.zoom.us`. The registry entry formerly published as the unified
+Zoom MCP Server is now `io.github.zoom/zoom-workspace`; its endpoint is unchanged. It provides:
 
 - semantic meeting search
 - cross-Zoom search over Team Chat messages and Zoom Canvas content
@@ -60,10 +61,11 @@ Treat the raw tool names above as authoritative.
 
 Product-specific MCP work is split into child skills for
 [Whiteboard](whiteboard/SKILL.md), [Team Chat](team-chat/SKILL.md),
-[Meetings](meetings/SKILL.md), [Canvas](canvas/SKILL.md), [Tasks](tasks/SKILL.md), and
+[Meetings](meetings/SKILL.md), [Canvas](canvas/SKILL.md), [Docs](docs/SKILL.md),
+[Phone](phone/SKILL.md), [Rooms](rooms/SKILL.md), [Workflows](workflows/SKILL.md),
+[Workspaces](workspaces/SKILL.md), [Tasks](tasks/SKILL.md),
 [Revenue Accelerator](revenue-accelerator/SKILL.md), [Admin](admin/SKILL.md),
 [AI Productivity Suite](productivity/SKILL.md), and [Contact Center User Administration](contact-center-admin/SKILL.md).
-The old [Docs alias](docs/SKILL.md) routes legacy "Docs MCP" requests to Canvas.
 
 The required Marketplace app model depends on the server. Use the child skill and the
 machine-readable template index before creating credentials: Admin and Contact Center User
@@ -177,21 +179,30 @@ route to [../rest-api/SKILL.md](../rest-api/SKILL.md).
 
 | Official server | Streamable HTTP endpoint | Current tools | Child skill |
 |-----------------|---------------------------|---------------|-------------|
-| Zoom MCP Server (Zoom All-in-One) | `https://mcp.zoom.us/mcp/zoom/streamable` | 9 | This skill |
+| Zoom Workspace (`io.github.zoom/zoom-workspace`; formerly the unified Zoom MCP Server) | `https://mcp.zoom.us/mcp/zoom/streamable` | 9 | This skill |
+| Zoom Docs MCP Server | `https://mcp.zoom.us/mcp/docs/streamable` | `tools/list` | [Docs](docs/SKILL.md) |
 | Zoom Meetings MCP Server | `https://mcp.zoom.us/mcp/meeting/streamable` | 4 | [Meetings](meetings/SKILL.md) |
 | Zoom Chat MCP Server | `https://mcp.zoom.us/mcp/chat/streamable` | 20 | [Team Chat](team-chat/SKILL.md) |
 | Zoom Canvas MCP Server | `https://mcp.zoom.us/mcp/canvas/streamable` | 18 | [Canvas](canvas/SKILL.md) |
 | Zoom Tasks MCP Server | `https://mcp.zoom.us/mcp/tasks/streamable` | 20 | [Tasks](tasks/SKILL.md) |
 | Zoom Whiteboard MCP Server | `https://mcp.zoom.us/mcp/whiteboard/streamable` | 11 | [Whiteboard](whiteboard/SKILL.md) |
+| Zoom Phone MCP Server | `https://mcp.zoom.us/mcp/phone/streamable` | `tools/list` | [Phone](phone/SKILL.md) |
+| Zoom Rooms MCP Server | `https://mcp.zoom.us/mcp/rooms/streamable` | `tools/list` | [Rooms](rooms/SKILL.md) |
+| Zoom Workflows MCP Server | `https://mcp.zoom.us/mcp/workflow/streamable` | `tools/list` | [Workflows](workflows/SKILL.md) |
+| Zoom Workspaces MCP Server | `https://mcp.zoom.us/mcp/workspace/streamable` | `tools/list` | [Workspaces](workspaces/SKILL.md) |
 | Zoom Revenue Accelerator MCP Server | `https://mcp.zoom.us/mcp/revenue_accelerator/streamable` | 15 | [Revenue Accelerator](revenue-accelerator/SKILL.md) |
 | Zoom Admin MCP Server | `https://mcp.zoom.us/mcp/admin/streamable` | 10 | [Admin](admin/SKILL.md) |
 | Zoom AI Productivity Suite MCP | `https://mcp.zoom.us/mcp/productivity/streamable` | 8 | [AI Productivity Suite](productivity/SKILL.md) |
 | Zoom Contact Center User Administration MCP | `https://mcp.zoom.us/mcp/i_4E4145455B2bd9FE/streamable` | 39 | [Contact Center User Administration](contact-center-admin/SKILL.md) |
 
-The tool counts are observations from Zoom's current official server metadata, not API
-contracts. Always run `tools/list` before making routing or authorization decisions. This
-catalog was last checked on 2026-10-05. The current official catalog documents Streamable
-HTTP; do not assume an SSE fallback exists.
+The tool counts are observations, not API contracts, and `tools/list` entries mean the count
+must be discovered at runtime. Always run `tools/list` before making routing or authorization
+decisions. Registry metadata was refreshed from `zoom/mcp-registry` commit `c4ed0af`
+(2026-11-17); its versions are Workspace 1.0.3, Docs and Whiteboard 1.0.2, Revenue
+Accelerator/Team Chat/Meetings/Phone/Rooms 1.0.1, and Tasks/Admin/Canvas/Productivity/
+Workflows/Workspaces 1.0.0. Contact Center User Administration remains a documented Zoom
+endpoint outside that registry snapshot. The official catalog documents Streamable HTTP; do
+not assume an SSE fallback exists.
 
 Zoom's general MCP page also describes broader Workplace use cases such as Calendar, Clips,
 and Email. No separate remote endpoint for those surfaces is listed in the current official
@@ -207,6 +218,11 @@ Team Chat child skill:
 Other dedicated child skills:
 - [meetings/SKILL.md](meetings/SKILL.md)
 - [canvas/SKILL.md](canvas/SKILL.md)
+- [docs/SKILL.md](docs/SKILL.md)
+- [phone/SKILL.md](phone/SKILL.md)
+- [rooms/SKILL.md](rooms/SKILL.md)
+- [workflows/SKILL.md](workflows/SKILL.md)
+- [workspaces/SKILL.md](workspaces/SKILL.md)
 - [tasks/SKILL.md](tasks/SKILL.md)
 - [revenue-accelerator/SKILL.md](revenue-accelerator/SKILL.md)
 
