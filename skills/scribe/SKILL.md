@@ -40,6 +40,7 @@ Official docs:
 - If the user needs **plain text translated**, route to [../translator/SKILL.md](../translator/SKILL.md).
 - If the user needs **live meeting media** with meeting metadata, participant identity, or meeting-scoped streams, route to [RTMS](../rtms/SKILL.md).
 - If the user needs an **interactive spoken response**, route to [Voice Agent](../voice-agent/SKILL.md).
+- If the user needs **plain text spoken aloud**, route to [Text-to-Speech](../tts/SKILL.md).
 - If the user needs **Zoom REST API inventory** for AI Services paths, chain [../rest-api/SKILL.md](../rest-api/SKILL.md).
 - If the user needs webhook signature patterns or generic HMAC receiver hardening, optionally chain [../webhooks/SKILL.md](../webhooks/SKILL.md).
 
@@ -156,6 +157,7 @@ Official docs:
 - Webhook verification hardening -> [../webhooks/SKILL.md](../webhooks/SKILL.md)
 - Real-time live transcript/media -> [../rtms/SKILL.md](../rtms/SKILL.md)
 - Interactive spoken response -> [Voice Agent](../voice-agent/SKILL.md)
+- Plain text to spoken audio -> [Text-to-Speech](../tts/SKILL.md)
 - Cross-product routing -> [../general/SKILL.md](../general/SKILL.md)
 
 ## Operations

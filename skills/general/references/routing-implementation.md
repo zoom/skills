@@ -39,6 +39,7 @@ export type SkillId =
   | 'decisions'
   | 'speech-summarization'
   | 'voice-agent'
+  | 'tts'
   | 'zoom-rtms'
   | 'zoom-team-chat'
   | 'contact-center'
@@ -86,6 +87,7 @@ interface Signals {
   decisions: boolean;
   speechSummarization: boolean;
   voiceAgent: boolean;
+  tts: boolean;
   oauth: boolean;
   rtms: boolean;
   teamChat: boolean;
@@ -145,6 +147,7 @@ export function detectSignals(rawQuery: string): Signals {
     decisions: hasAny(q, ['zoom decisions', 'decisions api', 'decision probability', 'predicate classification', 'boolean choice', 'compare two images', 'ordered score', 'aiservices/decisions', 'zoom-decisions-standard', 'zoom-decisions-pro']),
     speechSummarization: hasAny(q, ['speech summarization', 'speech summary', 'summarize audio file', 'summarize video file', 'transcribe and summarize', 'aiservices/speech-summarization']),
     voiceAgent: hasAny(q, ['voice agent', 'realtime voice agent', 'real-time voice agent', 'speech to speech', 'speech-to-speech', 'voice-agent.zoom.v2', 'live microphone agent']),
+    tts: hasAny(q, ['text to speech', 'text-to-speech', 'tts', 'synthesize speech', 'speech synthesis', 'aiservices/tts']),
     oauth: hasAny(q, ['oauth', 'pkce', 'authorization code', 'account_credentials', 'token refresh']),
     rtms: hasAny(q, ['rtms', 'real-time media streams', 'live transcript stream', 'audio stream']),
     teamChat: hasAny(q, ['team chat', 'chatbot', 'chat card', 'chat message']),
@@ -174,6 +177,7 @@ function pickPrimarySkill(s: Signals): SkillId {
   if (s.zoomApps) return 'zoom-apps-sdk';
   if (s.rtms) return 'zoom-rtms';
   if (s.voiceAgent) return 'voice-agent';
+  if (s.tts) return 'tts';
   if (s.speechSummarization) return 'speech-summarization';
   if (s.decisions) return 'decisions';
   if (s.summarizer) return 'summarizer';
@@ -231,7 +235,7 @@ function buildChain(primary: SkillId, s: Signals): SkillId[] {
   if (primary === 'voice-agent' && s.decisions) chain.add('decisions');
   if (primary === 'voice-agent' && s.speechSummarization) chain.add('speech-summarization');
 
-  if (s.scribe || s.summarizer || s.translator || s.decisions || s.speechSummarization || s.voiceAgent) {
+  if (s.scribe || s.summarizer || s.translator || s.decisions || s.speechSummarization || s.voiceAgent || s.tts) {
     chain.add('zoom-rest-api');
   }
 

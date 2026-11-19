@@ -19,6 +19,8 @@ Use Voice Agent for an interactive microphone conversation where the service tra
 
 ## Routing Guardrail
 
+- For one-shot plain-text synthesis outside a live conversation, route to [Text-to-Speech](../tts/SKILL.md).
+
 - Real-time microphone conversation → use this skill.
 - One uploaded audio/video file needs transcript plus summary → use [Speech Summarization](../speech-summarization/SKILL.md).
 - Live meeting audio/video with meeting metadata → use [RTMS](../rtms/SKILL.md).

@@ -45,6 +45,7 @@ type SkillId =
   | 'decisions'
   | 'speech-summarization'
   | 'voice-agent'
+  | 'tts'
   | 'zoom-meeting-sdk-web-component-view'
   | 'zoom-video-sdk'
   | 'zoom-plugin-sdk'
@@ -74,6 +75,7 @@ function detectSignals(rawQuery: string) {
     decisions: hasAny(q, ['zoom decisions', 'decisions api', 'decision probability', 'predicate classification', 'boolean choice', 'compare two images', 'ordered score', 'zoom-decisions-standard', 'zoom-decisions-pro']),
     speechSummarization: hasAny(q, ['speech summarization', 'speech summary', 'summarize audio file', 'summarize video file', 'transcribe and summarize', 'speech-summarization api']),
     voiceAgent: hasAny(q, ['voice agent', 'realtime voice agent', 'real-time voice agent', 'speech to speech', 'speech-to-speech', 'voice-agent.zoom.v2', 'live microphone agent']),
+    tts: hasAny(q, ['text to speech', 'text-to-speech', 'tts', 'synthesize speech', 'speech synthesis', 'aiservices/tts']),
     mcp: hasAny(q, ['zoom mcp', 'agentic retrieval', 'tools/list', 'semantic meeting search', 'search zoom', 'zoom docs search', 'zoom chat search']),
     teamChatMcp: hasAny(q, ['team chat mcp', 'zoom chat mcp', 'send zoom chat via mcp', 'zoom_chat_message_send']),
     whiteboardMcp: hasAny(q, ['whiteboard mcp', 'zoom whiteboard mcp']),
@@ -96,6 +98,7 @@ function pickPrimarySkill(s: ReturnType<typeof detectSignals>): SkillId {
   if (s.tasksMcp) return 'zoom-mcp/tasks';
   if (s.revenueMcp) return 'zoom-mcp/revenue-accelerator';
   if (s.voiceAgent) return 'voice-agent';
+  if (s.tts) return 'tts';
   if (s.speechSummarization) return 'speech-summarization';
   if (s.mcp) return 'zoom-mcp';
   if (s.decisions) return 'decisions';
@@ -152,6 +155,7 @@ For the full TypeScript implementation and handoff contract, use
 | Translate plain text or text files with AI Services Translator | **[translator](../translator/SKILL.md)** |
 | Evaluate probabilities, predicates, closed-set choices, ordered scores, or image comparisons | **[decisions](../decisions/SKILL.md)** |
 | Build a real-time microphone voice agent with spoken responses | **[voice-agent](../voice-agent/SKILL.md)** |
+| Convert plain text into streamed speech with Text-to-Speech | **[tts](../tts/SKILL.md)** |
 | Access live audio/video/transcripts from meetings | **[zoom-rtms](../rtms/SKILL.md)** |
 | Enable collaborative browsing for support | **[zoom-cobrowse-sdk](../cobrowse-sdk/SKILL.md)** |
 | Build Contact Center apps and channel integrations | **[contact-center](../contact-center/SKILL.md)** |
