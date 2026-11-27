@@ -252,6 +252,7 @@ For generic sample configuration, prefer readable names such as `RTMS_MEDIA_TYPE
 | **Only 1 signaling session allowed** | A duplicate signaling connection can kick out the existing session. Track active sessions; each session still needs one media socket per selected type |
 | **Split media sockets required** | Use one data WebSocket per concrete media type. Unified mode, `server_urls.all`, combined `media_type` values, and `media_type: 32` are deprecated |
 | **Respond 200 immediately** | If webhook delays, Zoom retries creating duplicate connections |
+| **One start event per same-account meeting** | A host and participant under the same account starting the same RTMS app produce a single `meeting.rtms_started` by design; with host auto-start, the host's user ID (`object.host_id`) is always in the payload. See [Common Issues](troubleshooting/common-issues.md#one-meetingrtms_started-per-meeting-by-design) |
 | **Heartbeat mandatory** | Respond to msg_type 12 with msg_type 13, or connection dies |
 | **Reconnection is YOUR job** | RTMS doesn't auto-reconnect. Media keep-alive tolerance is now about **65s**; signaling remains around **60s** |
 | **Transcript language drift** | Use `src_language` plus `enable_lid: false` when you want fixed-language transcription instead of automatic language switching |
@@ -593,6 +594,9 @@ RTMS uses **one signaling WebSocket plus one media WebSocket per selected media 
 
 ### "Duplicate connections"
 -> [Webhook timing](troubleshooting/common-issues.md#webhook-response-timing)
+
+### "Only one meeting.rtms_started / where is the second event?"
+-> [One start event per meeting](troubleshooting/common-issues.md#one-meetingrtms_started-per-meeting-by-design)
 
 ### "No audio/video data"
 -> [Media Types](references/media-types.md) - Check configuration

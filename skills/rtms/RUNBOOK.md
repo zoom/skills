@@ -85,6 +85,7 @@ Expected: healthy service JSON and correct active pipeline visibility.
 
 - **No media at all** -> lifecycle event not received or wrong webhook route.
 - **Duplicate streams** -> delayed webhook response or no active-session guard.
+- **Only one `meeting.rtms_started` for several users** -> by design: same-account host and participant starting the same RTMS app share one event/stream; see [Common Issues](troubleshooting/common-issues.md#one-meetingrtms_started-per-meeting-by-design).
 - **Handshake/auth errors** -> wrong credential pair or wrong session ID field.
 - **First audio appears backfilled or delayed** -> `buffer_data` defaulted to `true`; set `false` for live-only startup.
 - **Missing first seconds of audio** -> `buffer_data: false` or slow connection setup; use default `true` when completeness matters.

@@ -80,6 +80,8 @@ Sent when RTMS stream is ready for a meeting.
 }
 ```
 
+> **Deduplication (by design)**: When a host and a participant under the same account start the same RTMS Marketplace app in one meeting, Zoom sends only one `meeting.rtms_started` event. If the original host configured auto-start, the host's user ID is always in the payload as `object.host_id`. See [One `meeting.rtms_started` per Meeting](../troubleshooting/common-issues.md#one-meetingrtms_started-per-meeting-by-design).
+
 ### meeting.rtms_stopped
 
 Sent when RTMS stream ends.

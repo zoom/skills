@@ -66,6 +66,16 @@ function handleRTMSStopped(payload) {
 }
 ```
 
+### One `meeting.rtms_started` per Meeting (By Design)
+
+**Question**: "A host and a participant are in the same meeting, under the same account, and both start the same RTMS Marketplace app. Why do I get only one `meeting.rtms_started` event? Is Zoom deduplicating my streams?"
+
+**Answer**: This is expected, by-design behavior. When a host and a participant under the same account start the same RTMS Marketplace app for the same meeting, Zoom sends a single `meeting.rtms_started` event and one stream. It is not a dropped webhook, so do not add retries or polling to "recover" a second event, and do not expect one event per user.
+
+**Host identity in the payload**: If the original host configured auto-start for the app, the host's user ID is always present in the webhook payload (`payload.object.host_id`), even when a participant is the one who started the app. This is expected. Do not use `host_id` to infer which user triggered the stream, and key your sessions on `rtms_stream_id` (and `meeting_uuid`), not on user ID.
+
+This is separate from the webhook-retry duplicates described above, which come from slow `200` responses and are handled with the active-session guard.
+
 ### Invalid Signature
 
 **Problem**: Handshake fails with status_code 3
